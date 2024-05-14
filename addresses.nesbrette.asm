@@ -4,3 +4,13 @@
 ; FUNCTION_DIVIDE
 .define FUNCTION_DIVIDE_NUMERATOR   $00 ; ZP 1 byte
 .define FUNCTION_DIVIDE_DENOMINATOR $01 ; ZP 1 byte
+
+; FUNCTION_ROOT
+.define FUNCTION_ROOT_ROOT          $02 ; ZP 1 byte
+.define FUNCTION_ROOT_REM           $03 ; ZP 1 byte
+.define FUNCTION_ROOT_IN_HIGH       $00 ; ZP 1 byte
+.define FUNCTION_ROOT_IN_LOW        $01 ; ZP 1 byte
+
+; FUNCTION_HYPOTENUSES
+.define FUNCTION_HYPOTENUSE_A       $00 ; ZP 1 byte
+.define FUNCTION_HYPOTENUSE_O       FUNCTION_HYPOTENUSE_A + 1 ; ZP 1 byte

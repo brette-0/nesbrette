@@ -453,7 +453,7 @@
         jsr @temp
         @temp: rti
         .endproc
-.endif
+    .endif
 
 .scope function
     .if EXCLUDE_DIVIDE = 0
@@ -476,15 +476,15 @@
             dex             ; decrease to reverse initial increment
 
             .endproc
-    .endif
+        .endif
 
     .if EXCLUDE_ROOT = 0
         .proc root
             
-            root    = $00
-            rem     = $01
-            numh    = $02
-            numl    = $03
+            root    = FUNCTION_ROOT_ROOT
+            rem     = FUNCTION_ROOT_REM
+            numh    = FUNCTION_ROOT_IN_HIGH
+            numl    = FUNCTION_ROOT_IN_LOW
 
             lda #$00
             sta root
@@ -515,15 +515,28 @@
             
             rts        
             .endproc
-    .endif
+        .endif
 
     .if (EXCLUDE_SQUARE_TABLE) = 0
+        ; big endian
         SQUARE_TABLE:
             .byte $00, $01, $04, $09, $10, $19, $24, $31, $40, $51, $64, $79, $90, $a9, $c4
-    .endif
+        .endif
     .if (EXCLUDE_EXTENDED_SQUARE_TABLE) = 0
-            ; .words
-    .endif
+            .word $09c4, $0a29, $0a90, $0af9, $0b64, $0bd1, $0c40, $0cb1, $0d24, $0d99, $0e10, $0e89, $0f04, $0f81, $1000, $1081
+            .word $1104, $1189, $1210, $1299, $1324, $13b1, $1440, $14d1, $1564, $15f9, $1690, $1729, $17c4, $1861, $1900, $19a1
+            .word $1a44, $1ae9, $1b90, $1c39, $1ce4, $1d91, $1e40, $1ef1, $1fa4, $2059, $2110, $21c9, $2284, $2341, $2400, $24c1
+            .word $2584, $2649, $2710, $27d9, $28a4, $2971, $2a40, $2b11, $2be4, $2cb9, $2d90, $2e69, $2f44, $3021, $3100, $31e1
+            .word $32c4, $33a9, $3490, $3579, $3664, $3751, $3840, $3931, $3a24, $3b19, $3c10, $3d09, $3e04, $3f01, $4000, $4101
+            .word $4204, $4309, $4410, $4519, $4624, $4731, $4840, $4951, $4a64, $4b79, $4c90, $4da9, $4ec4, $4fe1, $5100, $5221
+            .word $5344, $5469, $5590, $56b9, $57e4, $5911, $5a40, $5b71, $5ca4, $5dd9, $5f10, $6049, $6184, $62c1, $6400, $6541
+            .word $6684, $67c9, $6910, $6a59, $6ba4, $6cf1, $6e40, $6f91, $70e4, $7239, $7390, $74e9, $7644, $77a1, $7900, $7a61
+            .word $7bc4, $7d29, $7e90, $7ff9, $8164, $82d1, $8440, $85b1, $8724, $8899, $8a10, $8b89, $8d04, $8e81, $9000, $9181
+            .word $9304, $9489, $9610, $9799, $9924, $9ab1, $9c40, $9dd1, $9f64, $a0f9, $a290, $a429, $a5c4, $a761, $a900, $aaa1
+            .word $ac44, $ade9, $af90, $b139, $b2e4, $b491, $b640, $b7f1, $b9a4, $bb59, $bd10, $bec9, $c084, $c241, $c400, $c5c1
+            .word $c784, $c949, $cb10, $ccd9, $cea4, $d071, $d240, $d411, $d5e4, $d7b9, $d990, $db69, $dd44, $df21, $e100, $e2e1
+            .word $e4c4, $e6a9, $e890, $ea79, $ec64, $ee51, $f040, $f231, $f424, $f619, $f810, $fa09, $fc04, $fe01
+        .endif
 
     .if EXCLUDE_MMC5 = 0
         .macro mmc5_square
@@ -531,7 +544,7 @@
             sta $5205
             sta $5206
             .endmacro 
-    .endif            
+        .endif            
 
     .if (EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE) = 0
         .proc hypotenuse
@@ -540,47 +553,80 @@
 
             ldy #$01
             loop:
-                lax $00, y
-                lda SQUARE_TABLE, x
-                pha
-                dey
-                bpl loop
-            pla
-            sta $00
-            pla ; $01
-            clc
-            adc $00
+                lax FUNCTION_HYPOTENUSE_A, y
+                cmp #$16
+                bcc @use_short_table
+                .if EXCLUDE_EXTENDED_SQUARE_TABLE = 1
+                    brk                     ; if this crash is triggered, you need to disable the EST exclude
+                .else
+                    clc
+                    sbc #16
+                    clc ;? redundant
+                    asl
+                    adc #16
+                    tax
+                    lda SQUARE_TABLE+1, x
+                    pha
+                    lda SQUARE_TABLE, x
+                    pha
+                    bne @next_target
+                .endif
 
-            ; aw shucks, how do square root :v
-        .endproc
-    .endif
+                @use_short_table:
+                    lda SQUARE_TABLE, x
+                    pha
+                    lda #$00
+                    pha
+                
+                @next_target:
+                    dey
+                    bpl loop
+            pla
+            sta FUNCTION_ROOT_IN_HIGH
+            pla
+            sta FUNCTION_ROOT_IN_LOW
+            pla
+            clc
+            adc FUNCTION_ROOT_IN_HIGH
+            sta FUNCTION_ROOT_IN_HIGH
+            pla
+            clc
+            adc FUNCTION_ROOT_IN_LOW
+            sta FUNCTION_ROOT_IN_LOW
+
+            jsr function::root
+            rts
+
+            .endproc
+        .endif
 
     .if (EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5 + EXCLUDE_MCC5) = 0
         .proc hypotenuse_mmc5
             ldy #$00
-            lda $00, y
+            lda FUNCTION_HYPOTENUSE_A, y
             loop:
                 mmc5_square
-                lda $5205
-                pha
                 lda $5206
+                pha
+                lda $5205
                 pha
                 dey
                 bpl loop
             pla
-            sta $01
+            sta FUNCTION_ROOT_IN_HIGH
             pla
-            sta $00
-            pla
-            clc
-            adc $01
-            sta $01
+            sta FUNCTION_ROOT_IN_LOW
             pla
             clc
-            adc $00
-            sta $00
+            adc FUNCTION_ROOT_IN_HIGH
+            sta FUNCTION_ROOT_IN_HIGH
+            pla
+            clc
+            adc FUNCTION_ROOT_IN_LOW
+            sta FUNCTION_ROOT_IN_LOW
 
-            ; needs root
-    .endif
+            jsr function::root
+            rts
+        .endif
 
     .endscope
