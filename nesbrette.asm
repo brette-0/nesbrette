@@ -477,4 +477,110 @@
 
             .endproc
     .endif
+
+    .if EXCLUDE_ROOT = 0
+        .proc root
+            
+            root    = $00
+            rem     = $01
+            numh    = $02
+            numl    = $03
+
+            lda #$00
+            sta root
+            sta rem
+            tax
+
+            loop1: 
+                sec
+                lda numh
+                sbc #$40
+                tay
+                lda rem
+                sbc root
+                bcc loop2
+                sty numh
+                sta rem
+
+            loop2: 
+                rol root
+                asl numl
+                rol numh
+                rol rem
+                asl numl
+                rol numh
+                rol rem
+                dex
+                bne loop1
+            
+            rts        
+            .endproc
+    .endif
+
+    .if (EXCLUDE_SQUARE_TABLE) = 0
+        SQUARE_TABLE:
+            .byte $00, $01, $04, $09, $10, $19, $24, $31, $40, $51, $64, $79, $90, $a9, $c4
+    .endif
+    .if (EXCLUDE_EXTENDED_SQUARE_TABLE) = 0
+            ; .words
+    .endif
+
+    .if EXCLUDE_MMC5 = 0
+        .macro mmc5_square
+            ; a = base
+            sta $5205
+            sta $5206
+            .endmacro 
+    .endif            
+
+    .if (EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE) = 0
+        .proc hypotenuse
+            ; $00 adjacent
+            ; $01 opposite
+
+            ldy #$01
+            loop:
+                lax $00, y
+                lda SQUARE_TABLE, x
+                pha
+                dey
+                bpl loop
+            pla
+            sta $00
+            pla ; $01
+            clc
+            adc $00
+
+            ; aw shucks, how do square root :v
+        .endproc
+    .endif
+
+    .if (EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5 + EXCLUDE_MCC5) = 0
+        .proc hypotenuse_mmc5
+            ldy #$00
+            lda $00, y
+            loop:
+                mmc5_square
+                lda $5205
+                pha
+                lda $5206
+                pha
+                dey
+                bpl loop
+            pla
+            sta $01
+            pla
+            sta $00
+            pla
+            clc
+            adc $01
+            sta $01
+            pla
+            clc
+            adc $00
+            sta $00
+
+            ; needs root
+    .endif
+
     .endscope

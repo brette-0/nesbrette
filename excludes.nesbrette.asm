@@ -5,6 +5,16 @@
 .define EXCLUDE_SNES_POLL_FAST_SINGLE   0
 .define EXCLUDE_UNSAFE_SET_FLAGS        1
 .define EXCLUDE_DIVIDE                  0
+.define EXCLUDE_ROOT                    0
+.define EXCLUDE_HYPOTENUSE              1   ; set to 0 when EXTENDED_TABLE works
+.define EXCLUDE_HYPOTENUSE_MMC5         0
+
+; TABLES
+.define EXCLUDE_SQUARE_TABLE            0
+.define EXCLUDE_EXTENDED_SQUARE_TABLE   1
+
+; MMC5
+.define EXCLUDE_MMC5                    1
 
 ; TODO - add routine copy macros
 ;   .macro pull_snes_poll_fast
@@ -17,3 +27,9 @@
 ;       .endproc
 ;   ----------------------------
 ; Effect:   nesbretter routines can be defined dynamically.
+
+
+; TODO - change ifs to warn if disabled instead of not being used
+; TODO - add addresses for new functions
+; TODO - add root to Hypotenuse functions
+; TODO - write extneded tables
