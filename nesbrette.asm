@@ -628,5 +628,45 @@
             jsr function::root
             rts
         .endif
+    .endscope
 
+
+.scope raycast
+    .proc get_xy_interval_fractions
+        
+        interval        = $04   ; immediate constant
+        
+        .if (EXCLUDE_MMC5 + EXCLUDE_HYPOTENUSE_MMC5) = 1
+            jsr #function::hypotenuse
+        .else
+            jsr #function::hypotenuse_mmc5
+        .endif
+
+        lda FUNCTION_ROOT_ROOT  ; ? redundant
+        sta FUNCTION_DIVIDE_NUMERATOR
+        lda #interval
+        sta FUNCTION_DIVIDE_DENOMINATOR
+        jsr #function::divide
+        cmp #(interval >> 1)    ; remaider above half dividend
+        bcc @noround
+        inx                     ; round up divident
+        @noround:
+        txa
+        pha
+
+        lda FUNCTION_HYPOTENUSE_A
+        sta FUNCTION_DIVIDE_NUMERATOR
+        stx FUNCTION_DIVIDE_DENOMINATOR
+        jsr #function::divide
+
+        stx FUNCTION_HYPOTENUSE_A
+        pla
+        tax
+        lda FUNCTION_HYPOTENUSE_O
+        sta FUNCTION_DIVIDE_NUMERATOR
+        stx FUNCTION_DIVIDE_DENOMINATOR
+        jsr #function::divide
+        stx FUNCTION_HYPOTENUSE_O
+        rts
+        .endproc
     .endscope
