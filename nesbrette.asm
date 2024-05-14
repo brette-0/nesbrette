@@ -72,45 +72,42 @@
     .endmacro
 
 .macro rshift dist
-    _dist = dist .mod 9
-    .if _dist = 0
+    .if dist .mod 9 = 0
         .exitmacro
     .endif
-    .if _dist > 5
-        .repeat 9 - _dist
+    .if dist .mod 9 > 5
+        .repeat 9 - dist .mod 9
             rol
         .endrepeat
-        .if _dist = 6
+        .if dist .mod 9 = 6
             and #%00000011
-        .elseif _dist = 7
+        .elseif dist .mod 9 = 7
             and #%00000001
         .else                   ; msb becomes carry
             lda #$00
         .endif
     .else
-        .repeat _dist
+        .repeat dist .mod 9
             lsr
         .endrepeat
     .endif
     .endmacro
 
 .macro lshift dist
-    _dist = dist .mod 9
-    .if _dist = 0
         .exitmacro
-    .if _dist > 5
-        .repeat 9 - _dist
+    .if dist .mod 9 > 5
+        .repeat 9 - dist .mod 9
             ror
         .endrepeat
-        .if _dist = 6
+        .if dist .mod 9 = 6
             and #%00000011
-        .elseif _dist = 7
+        .elseif dist .mod 9 = 7
             and #%00000001
         .else                   ; lsb becomes carry
             lda #$00
         .endif
     .else
-        .repeat _dist
+        .repeat dist .mod 9
             asl
         .endrepeat
     .endif
@@ -460,24 +457,26 @@
 .endif
 
 .scope function
-    .proc divide
-        ; $00 - numerator       n
-        ; $01 - denominator     d
-        ; returns:
-        ;   x - divident
-        ;   a - modulo
+    .if EXCLUDE_DIVIDE = 0
+        .proc divide
+            ; $00 - numerator       n
+            ; $01 - denominator     d
+            ; returns:
+            ;   x - divident
+            ;   a - modulo
 
-        n = $00
-        d = $01
+            n = $00
+            d = $01
 
-        ldx #$00        ; initialize x
-        txa             ; initialize a
-        loop:
-            inx         ; d fits into n (x + 1) times --> modify x
-            clc
-            sbc d       ; subtract demoninator from current
-            bpl loop    ; check if underflow, if not repeat
-        dex             ; decrease to reverse initial increment
+            ldx #$00        ; initialize x
+            lda n           ; load numerator
+            loop:
+                inx         ; d fits into n (x + 1) times --> modify x
+                clc
+                sbc d       ; subtract demoninator from current
+                bpl loop    ; check if underflow, if not repeat
+            dex             ; decrease to reverse initial increment
 
-        .endproc
+            .endproc
+    .endif
     .endscope

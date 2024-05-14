@@ -4,6 +4,7 @@
 .define EXCLUDE_SNES_POLL_FAST          0
 .define EXCLUDE_SNES_POLL_FAST_SINGLE   0
 .define EXCLUDE_UNSAFE_SET_FLAGS        1
+.define EXCLUDE_DIVIDE                  0
 
 ; TODO - add routine copy macros
 ;   .macro pull_snes_poll_fast
