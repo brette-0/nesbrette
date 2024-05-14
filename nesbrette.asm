@@ -1,8 +1,8 @@
 ; NESBRETTE - 2024
 
-.include "excludes.nesbrette.asm"
-.include "adresses.nesbrette.asm"
-
+.include  "excludes.nesbrette.asm"
+.include  "adresses.nesbrette.asm"
+.include "constants.nesbrette.asm"
 .define long_branchless_delay_warning           ; comment out to disable this warning
 
 .macro phx
@@ -538,7 +538,7 @@
             .word $e4c4, $e6a9, $e890, $ea79, $ec64, $ee51, $f040, $f231, $f424, $f619, $f810, $fa09, $fc04, $fe01
         .endif
 
-    .if EXCLUDE_MMC5 = 0
+    .if MAPPER = 5
         .macro mmc5_square
             ; a = base
             sta $5205
@@ -600,7 +600,7 @@
             .endproc
         .endif
 
-    .if (EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5 + EXCLUDE_MCC5) = 0
+    .if ((EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5) = 0) and (MAPPER = 5)
         .proc hypotenuse_mmc5
             ldy #$00
             lda FUNCTION_HYPOTENUSE_A, y
@@ -632,41 +632,45 @@
 
 
 .scope raycast
-    .proc get_xy_interval_fractions
-        
-        interval        = $04   ; immediate constant
-        
-        .if (EXCLUDE_MMC5 + EXCLUDE_HYPOTENUSE_MMC5) = 1
-            jsr #function::hypotenuse
-        .else
-            jsr #function::hypotenuse_mmc5
-        .endif
+    .if EXCLUDE_RAYCAST_CALCULATE = 0
+        .proc calculate
+            
+            interval        = RAYCAST_FIXED_INTERVAL
+            
+            .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) and (MAPPER = 5)
+                jsr #function::hypotenuse
+            .else
+                jsr #function::hypotenuse_mmc5
+            .endif
 
-        lda FUNCTION_ROOT_ROOT  ; ? redundant
-        sta FUNCTION_DIVIDE_NUMERATOR
-        lda #interval
-        sta FUNCTION_DIVIDE_DENOMINATOR
-        jsr #function::divide
-        cmp #(interval >> 1)    ; remaider above half dividend
-        bcc @noround
-        inx                     ; round up divident
-        @noround:
-        txa
-        pha
+            lda FUNCTION_ROOT_ROOT  ; ? redundant
+            sta FUNCTION_DIVIDE_NUMERATOR
+            lda #interval
+            sta FUNCTION_DIVIDE_DENOMINATOR
+            jsr #function::divide
+            cmp #(interval >> 1)    ; remaider above half dividend
+            bcc @noround
+            inx                     ; round up divident
+            @noround:
+            txa
+            pha
 
-        lda FUNCTION_HYPOTENUSE_A
-        sta FUNCTION_DIVIDE_NUMERATOR
-        stx FUNCTION_DIVIDE_DENOMINATOR
-        jsr #function::divide
+            lda FUNCTION_HYPOTENUSE_A
+            sta FUNCTION_DIVIDE_NUMERATOR
+            stx FUNCTION_DIVIDE_DENOMINATOR
+            jsr #function::divide
 
-        stx FUNCTION_HYPOTENUSE_A
-        pla
-        tax
-        lda FUNCTION_HYPOTENUSE_O
-        sta FUNCTION_DIVIDE_NUMERATOR
-        stx FUNCTION_DIVIDE_DENOMINATOR
-        jsr #function::divide
-        stx FUNCTION_HYPOTENUSE_O
-        rts
-        .endproc
+            stx RAYCAST_A_COARSE
+            sta RAYCAST_A_FINE
+            pla
+            tax
+            lda FUNCTION_HYPOTENUSE_O
+            sta FUNCTION_DIVIDE_NUMERATOR
+            stx FUNCTION_DIVIDE_DENOMINATOR
+            jsr #function::divide
+            stx RAYCAST_O_COARSE
+            sta RAYCAST_O_FINE
+            rts
+            .endproc
+    .endif
     .endscope

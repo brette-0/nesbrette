@@ -14,3 +14,9 @@
 ; FUNCTION_HYPOTENUSES
 .define FUNCTION_HYPOTENUSE_A       $06 ; ZP 1 byte
 .define FUNCTION_HYPOTENUSE_O       FUNCTION_HYPOTENUSE_A + 1 ; ZP 1 byte
+
+; RAYCAST_CALCULATE
+.define RAYCAST_A_COARSE            $09
+.define RAYCAST_A_FINE              $0a
+.define RAYCAST_O_COARSE            $0b
+.define RAYCAST_O_FINE              $0c

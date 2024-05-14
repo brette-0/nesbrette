@@ -13,8 +13,10 @@
 .define EXCLUDE_EXTENDED_SQUARE_TABLE   1
 
 ; MMC5
-.define EXCLUDE_MMC5                    1
-.define EXCLUDE_HYPOTENUSE_MMC5         0
+.define EXCLUDE_HYPOTENUSE_MMC5         1
+
+; RAYCASTING
+.define EXCLUDE_RAYCAST_CALCULATE       1
 
 ; TODO - add routine copy macros
 ;   .macro pull_snes_poll_fast
