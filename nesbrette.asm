@@ -1,8 +1,7 @@
 ; NESBRETTE - 2024
 
-
-.define external_excludes 0                         ; enable this if you want to use a local file to exclude sapce consuming from assembly
 .include "excludes.nesbrette.asm"
+.include "adresses.nesbrette.asm"
 
 .define long_branchless_delay_warning           ; comment out to disable this warning
 
@@ -459,14 +458,13 @@
 .scope function
     .if EXCLUDE_DIVIDE = 0
         .proc divide
-            ; $00 - numerator       n
-            ; $01 - denominator     d
+            ; PARAMS SET IN ADDRESS FILE
             ; returns:
             ;   x - divident
             ;   a - modulo
 
-            n = $00
-            d = $01
+            n = FUNCTION_DIVIDE_NUMERATOR
+            d = FUNCTION_DIVIDE_DENOMINATOR
 
             ldx #$00        ; initialize x
             lda n           ; load numerator
