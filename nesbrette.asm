@@ -325,22 +325,22 @@
 
         ; ASIN_TABLE[x] = asin(x / 256)
         ASIN_TABLE:
-            .byte    $00, $01, $01, $01, $01, $02, $02, $02, $02, $03, $03, $03, $03, $03, $04, $04
-            .byte    $04, $04, $05, $05, $05, $05, $05, $06, $06, $06, $06, $07, $07, $07, $07, $07
-            .byte    $08, $08, $08, $08, $09, $09, $09, $09, $09, $10, $10, $10, $10, $11, $11, $11
-            .byte    $11, $12, $12, $12, $12, $12, $13, $13, $13, $13, $14, $14, $14, $14, $15, $15
-            .byte    $15, $15, $15, $16, $16, $16, $16, $17, $17, $17, $17, $18, $18, $18, $18, $18
-            .byte    $19, $19, $19, $19, $20, $20, $20, $20, $21, $21, $21, $21, $22, $22, $22, $22
-            .byte    $23, $23, $23, $23, $23, $24, $24, $24, $24, $25, $25, $25, $25, $26, $26, $26
-            .byte    $26, $27, $27, $27, $27, $28, $28, $28, $28, $29, $29, $29, $29, $30, $30, $30
-            .byte    $31, $31, $31, $31, $32, $32, $32, $32, $33, $33, $33, $33, $34, $34, $34, $34
-            .byte    $35, $35, $35, $36, $36, $36, $36, $37, $37, $37, $37, $38, $38, $38, $39, $39
-            .byte    $39, $39, $40, $40, $40, $41, $41, $41, $42, $42, $42, $42, $43, $43, $43, $44
-            .byte    $44, $44, $45, $45, $45, $45, $46, $46, $46, $47, $47, $47, $48, $48, $48, $49
-            .byte    $49, $49, $50, $50, $50, $51, $51, $52, $52, $52, $53, $53, $53, $54, $54, $54
-            .byte    $55, $55, $56, $56, $56, $57, $57, $58, $58, $58, $59, $59, $60, $60, $61, $61
-            .byte    $62, $62, $62, $63, $63, $64, $64, $65, $65, $66, $67, $67, $68, $68, $69, $70
-            .byte    $70, $71, $71, $72, $73, $74, $74, $75, $76, $77, $78, $79, $80, $82, $83, $85
+            .byte $00, $00, $00, $01, $01, $01, $01, $02, $02, $02, $02, $02, $03, $03, $03, $03
+            .byte $04, $04, $04, $04, $04, $05, $05, $05, $05, $06, $06, $06, $06, $07, $07, $07
+            .byte $07, $07, $08, $08, $08, $08, $09, $09, $09, $09, $09, $0a, $0a, $0a, $0a, $0b
+            .byte $0b, $0b, $0b, $0c, $0c, $0c, $0c, $0c, $0d, $0d, $0d, $0d, $0e, $0e, $0e, $0e
+            .byte $0f, $0f, $0f, $0f, $0f, $10, $10, $10, $10, $11, $11, $11, $11, $12, $12, $12
+            .byte $12, $13, $13, $13, $13, $13, $14, $14, $14, $14, $15, $15, $15, $15, $16, $16
+            .byte $16, $16, $17, $17, $17, $17, $18, $18, $18, $18, $19, $19, $19, $19, $1a, $1a
+            .byte $1a, $1a, $1b, $1b, $1b, $1b, $1c, $1c, $1c, $1c, $1d, $1d, $1d, $1d, $1e, $1e
+            .byte $1e, $1e, $1f, $1f, $1f, $1f, $20, $20, $20, $20, $21, $21, $21, $22, $22, $22
+            .byte $22, $23, $23, $23, $23, $24, $24, $24, $25, $25, $25, $25, $26, $26, $26, $27
+            .byte $27, $27, $27, $28, $28, $28, $29, $29, $29, $2a, $2a, $2a, $2a, $2b, $2b, $2b
+            .byte $2c, $2c, $2c, $2d, $2d, $2d, $2e, $2e, $2e, $2f, $2f, $2f, $2f, $30, $30, $31
+            .byte $31, $31, $32, $32, $32, $33, $33, $33, $34, $34, $34, $35, $35, $36, $36, $36
+            .byte $37, $37, $37, $38, $38, $39, $39, $39, $3a, $3a, $3b, $3b, $3c, $3c, $3d, $3d
+            .byte $3d, $3e, $3e, $3f, $3f, $40, $40, $41, $41, $42, $43, $43, $44, $44, $45, $46
+            .byte $46, $47, $48, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f, $50, $51, $53, $55, $5a
     .endif
 
     .if EXCLUDE_DIVIDE = 0
@@ -352,6 +352,7 @@
 
             n = FUNCTION_DIVIDE_NUMERATOR
             d = FUNCTION_DIVIDE_DENOMINATOR
+            t = FUNCTION_DIVIDE_TEMP
 
             ldx #$00        ; initialize x
             lda d
@@ -376,7 +377,7 @@
                 pha
                     lda d
 
-                    t = FUNCTION_DIVIDE_TEMP
+                    
                     stx t           ; initialize numerator count
 
                     @loop:
@@ -548,7 +549,7 @@
 
     .if ((EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5) = 0) .and (MAPPER = 5)
         .proc hypotenuse_mmc5
-            ldy #$00
+            ldy #$01
             lda FUNCTION_HYPOTENUSE_A, y
             loop:
                 mmc5_square
@@ -584,9 +585,9 @@
             interval        = RAYCAST_FIXED_INTERVAL
             
             .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
-                jsr function::hypotenuse
+                jsr function::hypotenuse_mcc5
             .else
-                jsr function::hypotenuse_mmc5
+                jsr function::hypotenuse
             .endif
 
             lda FUNCTION_ROOT_ROOT  ; ? redundant
@@ -616,6 +617,21 @@
             jsr function::divide_8
             stx RAYCAST_O_COARSE
             sta RAYCAST_O_FINE
+
+            .if RAYCAST_THETA_COEFFICIENT
+                lda FUNCTION_ROOT_ROOT  ; access original hypotenuse
+                sta FUNCTION_DIVIDE_DENOMINATOR
+                lda #255                ; end denominator
+                sta FUNCTION_DIVIDE_NUMERATOR
+                jsr function::divide_8
+                lda FUNCTION_HYPOTENUSE_O
+                jsr function::multiply_8
+                tay
+                lda ASIN_TABLE, y;
+                
+
+
+            .endif
             rts
             .endproc
     .endif

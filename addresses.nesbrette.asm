@@ -4,6 +4,7 @@
 ; FUNCTION_DIVIDE
 .define FUNCTION_DIVIDE_NUMERATOR   $07 ; ZP 1 byte
 .define FUNCTION_DIVIDE_DENOMINATOR $08 ; ZP 1 byte
+.define FUNCTION_DIVIDE_TEMP        $11 ; ZP 1 byte
 
 ; FUNCTION_ROOT
 .define FUNCTION_ROOT_ROOT          $02 ; ZP 1 byte
