@@ -581,6 +581,9 @@
 .scope raycast
     .if EXCLUDE_RAYCAST_CALCULATE = 0
         .proc calculate
+            ; accessing interval quantity is erroneous if theta coefficient is enabled
+            ; modifying theta coefficicient is only reccomended if the code is well understood
+            ; it can cause performance issues or unexpected flaws in collision code if done incorrectly
             
             interval        = RAYCAST_FIXED_INTERVAL
             
@@ -592,7 +595,13 @@
 
             lda FUNCTION_ROOT_ROOT  ; ? redundant
             sta FUNCTION_DIVIDE_NUMERATOR
+            .if USE_FIXED_INTERVAL = 0
             lda #interval
+            
+            .if USE_FIXED_INTERVAL = 1
+                sta RAYCAST_INTERVAL_ADDR
+            .endif
+            
             sta FUNCTION_DIVIDE_DENOMINATOR
             jsr function::divide_8
             cmp #(interval >> 1)    ; remaider above half dividend
@@ -626,11 +635,19 @@
                 jsr function::divide_8
                 lda FUNCTION_HYPOTENUSE_O
                 jsr function::multiply_8
+                eor #$7f
+                and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
                 tay
-                lda ASIN_TABLE, y;
-                
+                lda ASIN_TABLE, y
 
-
+                ; use X MSB of available information
+                rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
+                sta RAYCAST_TEMP
+                lda RAYCAST_INTERVAL_ADDR
+                sec
+                sbc RAYCAST_TEMP
+                sta RAYCAST_INTERVAL_ADDR
+                ; update interval period
             .endif
             rts
             .endproc

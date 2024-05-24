@@ -29,3 +29,9 @@
 ; FUNCTION_ASIN_DECIMAL
 .define ASIN_DECIMAL_NUMERATOR      $0f ; ZP 1 byte
 .define ASIN_DECIMAL_DENOMINATOR    $10 ; ZP 1 byte
+
+; RAYCAST
+.if USE_FIXED_INTERVAL = 0
+    .define RAYCAST_INTERVAL_ADDR   $13 ; ZP 1 byte     ;; this address should be read from, instead of lda #RAYCAST_FIXED_INTERVAL if USE_FIXED_INTERVAL is disabled
+    .define RAYCAST_TEMP            $12 ; ZP 1 byte
+.endif
