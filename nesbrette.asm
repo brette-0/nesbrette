@@ -634,7 +634,14 @@
                 sta FUNCTION_DIVIDE_NUMERATOR
                 jsr function::divide_8
                 lda FUNCTION_HYPOTENUSE_O
-                jsr function::multiply_8
+                .if (MAPPER = 5)
+                    sta $5205
+                    txa
+                    sta $5206
+                    lda $5205
+                .else
+                    jsr function::multiply_8
+                .endif
                 eor #$7f
                 and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
                 tay
