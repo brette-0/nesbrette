@@ -626,37 +626,39 @@
             jsr function::divide_8
             stx RAYCAST_O_COARSE
             sta RAYCAST_O_FINE
-
-            .if RAYCAST_THETA_COEFFICIENT
-                lda FUNCTION_ROOT_ROOT  ; access original hypotenuse
-                sta FUNCTION_DIVIDE_DENOMINATOR
-                lda #255                ; end denominator
-                sta FUNCTION_DIVIDE_NUMERATOR
-                jsr function::divide_8
-                lda FUNCTION_HYPOTENUSE_O
-                .if (MAPPER = 5)
-                    sta $5205
-                    txa
-                    sta $5206
-                    lda $5205
-                .else
-                    jsr function::multiply_8
-                .endif
-                eor #$7f
-                and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
-                tay
-                lda ASIN_TABLE, y
-
-                ; use X MSB of available information
-                rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
-                sta RAYCAST_TEMP
-                lda RAYCAST_INTERVAL_ADDR
-                sec
-                sbc RAYCAST_TEMP
-                sta RAYCAST_INTERVAL_ADDR
-                ; update interval period
-            .endif
             rts
             .endproc
+
+        .if USE_FIXED_INTERVAL = 0
+            .proc theta_coefficient
+                lda FUNCTION_ROOT_ROOT  ; access original hypotenuse
+                    sta FUNCTION_DIVIDE_DENOMINATOR
+                    lda #255                ; end denominator
+                    sta FUNCTION_DIVIDE_NUMERATOR
+                    jsr function::divide_8
+                    lda FUNCTION_HYPOTENUSE_O
+                    .if (MAPPER = 5)
+                        sta $5205
+                        txa
+                        sta $5206
+                        lda $5205
+                    .else
+                        jsr function::multiply_8
+                    .endif
+                    eor #$7f
+                    and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
+                    tay
+                    lda ASIN_TABLE, y
+
+                    ; use X MSB of available information
+                    rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
+                    sta RAYCAST_TEMP
+                    lda RAYCAST_INTERVAL_ADDR
+                    sec
+                    sbc RAYCAST_TEMP
+                    sta RAYCAST_INTERVAL_ADDR
+                rts
+                .endproc
+        .endproc
     .endif
     .endscope
