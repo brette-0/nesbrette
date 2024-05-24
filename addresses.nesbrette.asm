@@ -16,7 +16,15 @@
 .define FUNCTION_HYPOTENUSE_O       FUNCTION_HYPOTENUSE_A + 1 ; ZP 1 byte
 
 ; RAYCAST_CALCULATE
-.define RAYCAST_A_COARSE            $09
-.define RAYCAST_A_FINE              $0a
-.define RAYCAST_O_COARSE            $0b
-.define RAYCAST_O_FINE              $0c
+.define RAYCAST_A_COARSE            $09 ; ZP 1 byte
+.define RAYCAST_A_FINE              $0a ; ZP 1 byte
+.define RAYCAST_O_COARSE            $0b ; ZP 1 byte
+.define RAYCAST_O_FINE              $0c ; ZP 1 byte
+
+; FUNCITON_MULITPLY
+.define FUNCTION_MULTIPLY_FIRST     $0d ; ZP 1 byte
+.define FUNCTION_MULTIPLY_OUT_HIGH  $0e ; ZP 1 byte
+
+; FUNCTION_ASIN_DECIMAL
+.define ASIN_DECIMAL_NUMERATOR      $0f ; ZP 1 byte
+.define ASIN_DECIMAL_DENOMINATOR    $10 ; ZP 1 byte

@@ -7,10 +7,14 @@
 .define EXCLUDE_DIVIDE                  0
 .define EXCLUDE_ROOT                    0
 .define EXCLUDE_HYPOTENUSE              0
+.define EXCLUDE_MULTIPLY_8              1
+.define EXCLUDE_MULTIPLY_16             0
+.define EXCLUDE_ASIN_DECIMAL            1
 
 ; TABLES
 .define EXCLUDE_SQUARE_TABLE            0
 .define EXCLUDE_EXTENDED_SQUARE_TABLE   1
+.define EXCLUDE_ASIN_TABLE              1
 
 ; MMC5
 .define EXCLUDE_HYPOTENUSE_MMC5         1

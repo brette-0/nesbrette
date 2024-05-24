@@ -185,147 +185,6 @@
 
     .endmacro
 
-.macro rne target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            beq @temp
-                rts
-            @temp:
-        .else
-            bne target
-        .endif
-    .else
-        .local @temp
-        beq @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-.macro rcs target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bcc @temp
-                rts
-            @temp:
-        .else
-            bcs target
-        .endif
-    .else
-        .local @temp
-        bcc @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-.macro rcc target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bcs @temp
-                rts
-            @temp:
-        .else
-            bcc target
-        .endif
-    .else
-        .local @temp
-        bcc @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-.macro rpl target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bmi @temp
-                rts
-            @temp:
-        .else
-            bpl target
-        .endif
-    .else
-        .local @temp
-        bmi @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-.macro rmi target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bpl @temp
-                rts
-            @temp:
-        .else
-            bmi target
-        .endif
-    .else
-        .local @temp
-        bpl @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-.macro rvc target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bvs @temp
-                rts
-            @temp:
-        .else
-            bvc target
-        .endif
-    .else
-        .local @temp
-        bvs @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-.macro rvs target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bvc @temp
-                rts
-            @temp:
-        .else
-            bvc target
-        .endif
-    .else
-        .local @temp
-        bvc @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
-
-
 .macro jeq target
     .local @temp
         bne @temp
@@ -381,70 +240,7 @@
             jmp target
         @temp:
     .endmacro
-.macro abeq target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jeq target
-    .else
-        beq target
-    .endif
-    .endmacro
-.macro abne target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jne target
-    .else
-        bne target
-    .endif
-    .endmacro
-.macro abpl target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jpl target
-    .else
-        bpl target
-    .endif
-    .endmacro
-.macro abmi target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jmi target
-    .else
-        bmi target
-    .endif
-    .endmacro
-.macro abcc target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jcc target
-    .else
-        bcc target
-    .endif
-    .endmacro
-.macro abcs target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jcs target
-    .else
-        bcs target
-    .endif
-    .endmacro
-.macro abvc target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jvc target
-    .else
-        bvs target
-    .endif
-    .endmacro
-.macro abvs target
-    .feature force_range    ; allow negative integer literals
-    .if (target - *) > 128 || (target - *) < -127
-        #common::jvs target
-    .else
-        bvc target
-    .endif
-    .endmacro
+
 
 .if EXCLUDE_UNSAFE_SET_FLAGS = 0
     .proc set_flags
@@ -456,8 +252,99 @@
     .endif
 
 .scope function
+    
+    .if EXCLUDE_MULTIPLY_8 = 0
+        .proc multiply_8
+            ; a = base
+            ; x = iter
+            ; returns a with low byte
+            
+            base = FUNCTION_MULTIPLY_FIRST
+            
+            sta base
+            clc
+            loop:
+                adc base
+                dex
+                bne loop
+            rts
+            .endproc
+    .endif
+    
+    .if EXCLUDE_MULTIPLY_16 = 0
+        .proc multiply_16
+            ; a = base
+            ; x = iter
+            ; returns FUNCTION_MULTIPLY_OUT_HIGH as high byte
+            ; returns a with low byte
+
+            base = FUNCTION_MULTIPLY_FIRST
+            high = FUNCTION_MULTIPLY_OUT_HIGH
+
+            sta base
+            clc
+            loop:
+                adc base
+                bcc skip:
+                    inc $01
+                skip: dex
+                bne loop
+            rts 
+
+            .endproc
+    .endif
+
+    .if EXCLUDE_ASIN_TABLE + EXCLUDE_ASIN_DECIMAL = 0
+        .proc asin_decimal
+            ; returns a as degrees
+            numerator   = ASIN_DECIMAL_NUMERATOR
+            denominator = ASIN_DECIMAL_DENOMINATOR
+
+            lda #-1
+            sta FUNCTION_DIVIDE_NUMERATOR
+            lda demoninator
+            sta FUNCTION_DIVIDE_DENOMINATOR
+            jsr divide_8
+            lda numerator
+            .if MAPPER = 5
+                sta MMC5_MULT_WRITE_HIGH
+                stx MMC5_MULT_WRITE_LOW
+                lda MMC5_MULT_READ_LOW
+            .else
+                sta FUNCTION_MULTIPLY_FIRST
+                jsr multiply_8  ; return a with low value from multiplacation
+            .endif
+            tay
+            lda ASIN_TABLE, y
+            rts
+            .endproc
+    .endif
+
+    .if EXCLUDE_ASIN_TABLE = 0
+
+
+        ; ASIN_TABLE[x] = asin(x / 256)
+        ASIN_TABLE:
+            .byte    $00, $01, $01, $01, $01, $02, $02, $02, $02, $03, $03, $03, $03, $03, $04, $04
+            .byte    $04, $04, $05, $05, $05, $05, $05, $06, $06, $06, $06, $07, $07, $07, $07, $07
+            .byte    $08, $08, $08, $08, $09, $09, $09, $09, $09, $10, $10, $10, $10, $11, $11, $11
+            .byte    $11, $12, $12, $12, $12, $12, $13, $13, $13, $13, $14, $14, $14, $14, $15, $15
+            .byte    $15, $15, $15, $16, $16, $16, $16, $17, $17, $17, $17, $18, $18, $18, $18, $18
+            .byte    $19, $19, $19, $19, $20, $20, $20, $20, $21, $21, $21, $21, $22, $22, $22, $22
+            .byte    $23, $23, $23, $23, $23, $24, $24, $24, $24, $25, $25, $25, $25, $26, $26, $26
+            .byte    $26, $27, $27, $27, $27, $28, $28, $28, $28, $29, $29, $29, $29, $30, $30, $30
+            .byte    $31, $31, $31, $31, $32, $32, $32, $32, $33, $33, $33, $33, $34, $34, $34, $34
+            .byte    $35, $35, $35, $36, $36, $36, $36, $37, $37, $37, $37, $38, $38, $38, $39, $39
+            .byte    $39, $39, $40, $40, $40, $41, $41, $41, $42, $42, $42, $42, $43, $43, $43, $44
+            .byte    $44, $44, $45, $45, $45, $45, $46, $46, $46, $47, $47, $47, $48, $48, $48, $49
+            .byte    $49, $49, $50, $50, $50, $51, $51, $52, $52, $52, $53, $53, $53, $54, $54, $54
+            .byte    $55, $55, $56, $56, $56, $57, $57, $58, $58, $58, $59, $59, $60, $60, $61, $61
+            .byte    $62, $62, $62, $63, $63, $64, $64, $65, $65, $66, $67, $67, $68, $68, $69, $70
+            .byte    $70, $71, $71, $72, $73, $74, $74, $75, $76, $77, $78, $79, $80, $82, $83, $85
+    .endif
+
     .if EXCLUDE_DIVIDE = 0
-        .proc divide
+        .proc divide_8
             ; PARAMS SET IN ADDRESS FILE
             ; returns:
             ;   x - divident
@@ -467,13 +354,72 @@
             d = FUNCTION_DIVIDE_DENOMINATOR
 
             ldx #$00        ; initialize x
+            lda d
+            
+            .if RELEASE = 1 ; if release, prevent hard crashes
+                bne nonzero ; if a nonzero leave
+                dex         ; otherwise store max int
+                txa         ; and max numerator
+                rts         ; leave with no calculations
+            nonzero:
+            .endif
+            
+            sec
+            sbc #$01
+            bne not_one
+            .if DIVIDE_FAST_POWER_OF_TWO    ; probably only useful with high numerators and frequent power of two denominators
+                
+                and d
+                bne @not_power
+                ; denominator is a power of 2, shifting is faster
+                lda n
+                pha
+                    lda d
+
+                    t = FUNCTION_DIVIDE_TEMP
+                    stx t           ; initialize numerator count
+
+                    @loop:
+                        inx         ; log shifts
+                        lsr n       ; shift numerator (divide by 2) --> store lost bit into carry
+                        ror t       ; roll carry bit into numerator
+                        lsr         ; shift denominator right (divide by 2)
+                        bcc @loop   ; carry is clear when denominator is empty
+                    ; x will always be at least 1, maximum of 8?
+                    dex             ; decrease x to reverse /1 affects
+                    rol t           ; roll back numerator
+                    asl n           ; roll back integer
+                    ldy t           ; save numerator
+                    stx t           ; log shift into temp
+                    lda #$08        ; load max shift
+                    sec
+                    sbc t           ; subtract unneeded shifts
+                    tax             ; store in x
+                    sty t           ; restore numerator
+                    @_loop:
+                        lsr t       ; shift numerator
+                        dex         ; decrease shift count
+                        bpl @_loop  ; repeat until shift complete
+                    ldx n           ; load n (integer) into integer return
+                pla
+                sta n           ; restore original numerator
+                lda t           ; load t (numerator) into numerator return
+                rts
+
+            @not_power:
+            .endif
+            
+            not_one:
+
             lda n           ; load numerator
+            sec
             loop:
                 inx         ; d fits into n (x + 1) times --> modify x
-                clc
                 sbc d       ; subtract demoninator from current
-                bpl loop    ; check if underflow, if not repeat
+                bcs loop    ; check if underflow, if not repeat
             dex             ; decrease to reverse initial increment
+            adc d           ; add with carry d to get numerator
+            rts
 
             .endproc
         .endif
@@ -600,7 +546,7 @@
             .endproc
         .endif
 
-    .if ((EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5) = 0) and (MAPPER = 5)
+    .if ((EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5) = 0) .and (MAPPER = 5)
         .proc hypotenuse_mmc5
             ldy #$00
             lda FUNCTION_HYPOTENUSE_A, y
@@ -637,17 +583,17 @@
             
             interval        = RAYCAST_FIXED_INTERVAL
             
-            .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) and (MAPPER = 5)
-                jsr #function::hypotenuse
+            .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
+                jsr function::hypotenuse
             .else
-                jsr #function::hypotenuse_mmc5
+                jsr function::hypotenuse_mmc5
             .endif
 
             lda FUNCTION_ROOT_ROOT  ; ? redundant
             sta FUNCTION_DIVIDE_NUMERATOR
             lda #interval
             sta FUNCTION_DIVIDE_DENOMINATOR
-            jsr #function::divide
+            jsr function::divide_8
             cmp #(interval >> 1)    ; remaider above half dividend
             bcc @noround
             inx                     ; round up divident
@@ -658,7 +604,7 @@
             lda FUNCTION_HYPOTENUSE_A
             sta FUNCTION_DIVIDE_NUMERATOR
             stx FUNCTION_DIVIDE_DENOMINATOR
-            jsr #function::divide
+            jsr function::divide_8
 
             stx RAYCAST_A_COARSE
             sta RAYCAST_A_FINE
@@ -667,7 +613,7 @@
             lda FUNCTION_HYPOTENUSE_O
             sta FUNCTION_DIVIDE_NUMERATOR
             stx FUNCTION_DIVIDE_DENOMINATOR
-            jsr #function::divide
+            jsr function::divide_8
             stx RAYCAST_O_COARSE
             sta RAYCAST_O_FINE
             rts
