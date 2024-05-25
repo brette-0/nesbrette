@@ -584,8 +584,7 @@
             ; accessing interval quantity is erroneous if theta coefficient is enabled
             ; modifying theta coefficicient is only reccomended if the code is well understood
             ; it can cause performance issues or unexpected flaws in collision code if done incorrectly
-            
-            interval        = RAYCAST_FIXED_INTERVAL
+            ; leaks into _calculate@body
             
             .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
                 jsr function::hypotenuse_mcc5
@@ -593,14 +592,19 @@
                 jsr function::hypotenuse
             .endif
 
-            lda FUNCTION_ROOT_ROOT  ; ? redundant
-            sta FUNCTION_DIVIDE_NUMERATOR
-            .if USE_FIXED_INTERVAL = 0
             lda #interval
             
             .if USE_FIXED_INTERVAL = 1
                 sta RAYCAST_INTERVAL_ADDR
             .endif
+
+            .endproc
+
+        .proc _calculate@body:
+            interval        = RAYCAST_FIXED_INTERVAL
+
+            lda FUNCTION_ROOT_ROOT  ; ? redundant
+            sta FUNCTION_DIVIDE_NUMERATOR
             
             sta FUNCTION_DIVIDE_DENOMINATOR
             jsr function::divide_8
@@ -631,7 +635,22 @@
 
         .if USE_FIXED_INTERVAL = 0
             .proc theta_coefficient
-                lda FUNCTION_ROOT_ROOT  ; access original hypotenuse
+                ; doesn't apply theta coefficient to any raycast values, storage is handled seperately
+                ; must be called after calculating raycast core
+                
+                lda #interval
+            
+                .if USE_FIXED_INTERVAL = 1
+                    sta RAYCAST_INTERVAL_ADDR
+                .endif
+
+                .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
+                    jsr function::hypotenuse_mcc5
+                .else
+                    jsr function::hypotenuse
+                .endif
+
+                lda FUNCTION_ROOT_ROOT  ; access original hypotenuse (? redundant)
                     sta FUNCTION_DIVIDE_DENOMINATOR
                     lda #255                ; end denominator
                     sta FUNCTION_DIVIDE_NUMERATOR
@@ -651,13 +670,17 @@
                     lda ASIN_TABLE, y
 
                     ; use X MSB of available information
-                    rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
+                    .if 5 - THETA_COEFFICIENT_COMPLEXITY
+                        rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
+                    .endif
+
                     sta RAYCAST_TEMP
                     lda RAYCAST_INTERVAL_ADDR
                     sec
                     sbc RAYCAST_TEMP
                     sta RAYCAST_INTERVAL_ADDR
-                rts
+                    
+                    jmp _calculate@body     ; return after calculating splits
                 .endproc
         .endproc
     .endif
