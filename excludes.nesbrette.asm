@@ -1,18 +1,18 @@
 ; NESBRETTE EXCLUDES LISTING
 ; TOGGLING THESE DEFINES VALUE TO NON-ZERO WILL REMOVE THESE ROUTINES FROM YOUR OUTPUT
 
-.define EXCLUDE_SNES_POLL_FAST          0
-.define EXCLUDE_SNES_POLL_FAST_SINGLE   0
+.define EXCLUDE_SNES_POLL_FAST          1
+.define EXCLUDE_SNES_POLL_FAST_SINGLE   1
 .define EXCLUDE_UNSAFE_SET_FLAGS        1
 
 .define EXCLUDE_DIVIDE                  0
-    .define DIVIDE_FAST_POWER_OF_TWO    0
+    .define DIVIDE_FAST_POWER_OF_TWO    !RELEASE
 
 .define EXCLUDE_ROOT                    0
 .define EXCLUDE_HYPOTENUSE              0
 .define EXCLUDE_MULTIPLY_8              1
 .define EXCLUDE_MULTIPLY_16             0
-.define EXCLUDE_ASIN_DECIMAL            1
+.define EXCLUDE_ASIN_FRAC               1
 
 ; TABLES
 .define EXCLUDE_SQUARE_TABLE            0

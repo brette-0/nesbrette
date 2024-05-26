@@ -1,7 +1,7 @@
 ; NESBRETTE - 2024
 
 .include  "excludes.nesbrette.asm"
-.include  "adresses.nesbrette.asm"
+.include  "addresses.nesbrette.asm"
 .include "constants.nesbrette.asm"
 .define long_branchless_delay_warning           ; comment out to disable this warning
 
@@ -165,25 +165,6 @@
             rts
             .endproc
     .endif
-.macro req target
-    .ifdef target
-        .feature force_range
-        .if (target - *) > 128 || (target - *) < -127
-            .local @temp
-            bne @temp
-                rts
-            @temp:
-        .else
-            beq target
-        .endif
-    .else
-        .local @temp
-        bne @temp
-            rts
-        @temp:
-    .endif
-
-    .endmacro
 
 .macro jeq target
     .local @temp
@@ -247,7 +228,8 @@
         ; a = flags
         pha
         jsr @temp
-        @temp: rti
+        rts
+ @temp: rti
         .endproc
     .endif
 
@@ -294,8 +276,8 @@
             .endproc
     .endif
 
-    .if EXCLUDE_ASIN_TABLE + EXCLUDE_ASIN_DECIMAL = 0
-        .proc asin_decimal
+    .if EXCLUDE_ASIN_TABLE + EXCLUDE_ASIN_FRAC = 0
+        .proc asin_frac
             ; returns a as degrees
             numerator   = ASIN_DECIMAL_NUMERATOR
             denominator = ASIN_DECIMAL_DENOMINATOR
@@ -323,7 +305,7 @@
     .if EXCLUDE_ASIN_TABLE = 0
 
 
-        ; ASIN_TABLE[x] = asin(x / 256)
+        ; ASIN_TABLE[x] = asin(x / 255)
         ASIN_TABLE:
             .byte $00, $00, $00, $01, $01, $01, $01, $02, $02, $02, $02, $02, $03, $03, $03, $03
             .byte $04, $04, $04, $04, $04, $05, $05, $05, $05, $06, $06, $06, $06, $07, $07, $07
@@ -352,7 +334,9 @@
 
             n = FUNCTION_DIVIDE_NUMERATOR
             d = FUNCTION_DIVIDE_DENOMINATOR
-            t = FUNCTION_DIVIDE_TEMP
+            .if DIVIDE_FAST_POWER_OF_TWO = 0
+                t = FUNCTION_DIVIDE_TEMP
+            .endif
 
             ldx #$00        ; initialize x
             lda d
@@ -368,7 +352,7 @@
             sec
             sbc #$01
             bne not_one
-            .if DIVIDE_FAST_POWER_OF_TWO    ; probably only useful with high numerators and frequent power of two denominators
+            .if DIVIDE_FAST_POWER_OF_TWO = 0    ; probably only useful with high numerators and frequent power of two denominators
                 
                 and d
                 bne @not_power
@@ -574,6 +558,8 @@
 
             jsr function::root
             rts
+
+            .endproc
         .endif
     .endscope
 
@@ -599,8 +585,9 @@
             .endif
 
             .endproc
-
-        .proc _calculate@body:
+    .endif
+    .if !(EXCLUDE_THETA_COEFFICIENT .and EXCLUDE_RAYCAST_CALCULATE)
+        .proc _calculate_body
             interval        = RAYCAST_FIXED_INTERVAL
 
             lda FUNCTION_ROOT_ROOT  ; ? redundant
@@ -632,12 +619,13 @@
             sta RAYCAST_O_FINE
             rts
             .endproc
+    .endif
 
-        .if USE_FIXED_INTERVAL = 0
+        .if EXCLUDE_THETA_COEFFICIENT = 0
             .proc theta_coefficient
                 ; doesn't apply theta coefficient to any raycast values, storage is handled seperately
                 ; must be called after calculating raycast core
-                
+                interval        = RAYCAST_FIXED_INTERVAL
                 lda #interval
             
                 .if USE_FIXED_INTERVAL = 1
@@ -645,43 +633,42 @@
                 .endif
 
                 .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
-                    jsr function::hypotenuse_mcc5
+                    jsr function::hypotenuse_mmc5
                 .else
                     jsr function::hypotenuse
                 .endif
 
                 lda FUNCTION_ROOT_ROOT  ; access original hypotenuse (? redundant)
-                    sta FUNCTION_DIVIDE_DENOMINATOR
-                    lda #255                ; end denominator
-                    sta FUNCTION_DIVIDE_NUMERATOR
-                    jsr function::divide_8
-                    lda FUNCTION_HYPOTENUSE_O
-                    .if (MAPPER = 5)
-                        sta $5205
-                        txa
-                        sta $5206
-                        lda $5205
-                    .else
-                        jsr function::multiply_8
-                    .endif
-                    eor #$7f
-                    and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
-                    tay
-                    lda ASIN_TABLE, y
+                sta FUNCTION_DIVIDE_DENOMINATOR
+                lda #255                ; end denominator
+                sta FUNCTION_DIVIDE_NUMERATOR
+                jsr function::divide_8
+                lda FUNCTION_HYPOTENUSE_O
+                .if (MAPPER = 5)
+                    sta $5205
+                    txa
+                    sta $5206
+                    lda $5205
+                .else
+                    jsr function::multiply_8
+                .endif
+                eor #$7f
+                and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
+                tay
+                lda function::ASIN_TABLE, y
 
-                    ; use X MSB of available information
-                    .if 5 - THETA_COEFFICIENT_COMPLEXITY
-                        rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
-                    .endif
+                ; use X MSB of available information
+                .if 5 - THETA_COEFFICIENT_COMPLEXITY
+                    rshift (5 - THETA_COEFFICIENT_COMPLEXITY)        
+                .endif
 
-                    sta RAYCAST_TEMP
-                    lda RAYCAST_INTERVAL_ADDR
-                    sec
-                    sbc RAYCAST_TEMP
-                    sta RAYCAST_INTERVAL_ADDR
-                    
-                    jmp _calculate@body     ; return after calculating splits
-                .endproc
-        .endproc
+                sta RAYCAST_TEMP
+                lda RAYCAST_INTERVAL_ADDR
+                sec
+                sbc RAYCAST_TEMP
+                sta RAYCAST_INTERVAL_ADDR
+
+                jmp _calculate_body     ; return after calculating splits
+            .endproc
     .endif
     .endscope

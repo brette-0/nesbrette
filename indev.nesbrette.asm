@@ -62,6 +62,25 @@
         bvc target
     .endif
     .endmacro
+.macro req target
+    .ifdef target
+        .feature force_range
+        .if (target - *) > 128 || (target - *) < -127
+            .local @temp
+            bne @temp
+                rts
+            @temp:
+        .else
+            beq target
+        .endif
+    .else
+        .local @temp
+        bne @temp
+            rts
+        @temp:
+    .endif
+
+    .endmacro
 .macro rne target
     .ifdef target
         .feature force_range
