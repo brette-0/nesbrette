@@ -1,116 +1,10 @@
 ; NESBRETTE - 2024
-
+.include    "macros.nesbrette,asn"
 .include  "excludes.nesbrette.asm"
-.include  "addresses.nesbrette.asm"
+.include "addresses.nesbrette.asm"
 .include "constants.nesbrette.asm"
 .define long_branchless_delay_warning           ; comment out to disable this warning
 
-.macro phx
-    sta $00
-    txa
-    pha
-    lda $00
-    .endmacro
-
-.macro plx
-    sta $00
-    pla
-    tax
-    lda $00
-    .endmacro
-
-.macro phy
-    sta $00
-    tya
-    pha
-    lda $00
-    .endmacro
-
-.macro ply
-    sta $00
-    pla
-    tay
-    lda $00
-    .endmacro
-
-
-.macro delay cycles
-    .setcpu "6502x"             ; enables illegal opcodes
-    .ifblank cycles
-        .byte $04, $00          ; just NOP for 2 cycles! I'm not the weird one here you are :P
-        .exitmacro              ; default = 3 cycles
-    .elseif (cycles > 4)
-        .ifdef long_branchless_delay_warning
-            .warning "A Solution with branches will yield a more size efficient solution"
-        .endif
-    .endif
-
-    .if (cycles & 1)
-        .if (cycles & 2)
-            .byte $04, $00
-            .repeat ((cycles - 3) >> 2)
-                .byte $14, $00 
-            .endrepeat
-
-            .if ((cycles - 3) & 2)
-                nop
-            .endif
-            
-        .else
-            .error "No legal or illegal opcode can delay by a singular cycle! Perhaps change prior memory adress modes or use an illegal variant!"
-        .endif
-    .else
-        .repeat (cycles >> 2)
-            .byte $14, $00 
-        .endrepeat
-
-        .if (cycles & 2)
-            nop
-        .endif
-    .endif
-    .endmacro
-
-.macro rshift dist
-    .if dist .mod 9 = 0
-        .exitmacro
-    .endif
-    .if dist .mod 9 > 5
-        .repeat 9 - dist .mod 9
-            rol
-        .endrepeat
-        .if dist .mod 9 = 6
-            and #%00000011
-        .elseif dist .mod 9 = 7
-            and #%00000001
-        .else                   ; msb becomes carry
-            lda #$00
-        .endif
-    .else
-        .repeat dist .mod 9
-            lsr
-        .endrepeat
-    .endif
-    .endmacro
-
-.macro lshift dist
-        .exitmacro
-    .if dist .mod 9 > 5
-        .repeat 9 - dist .mod 9
-            ror
-        .endrepeat
-        .if dist .mod 9 = 6
-            and #%00000011
-        .elseif dist .mod 9 = 7
-            and #%00000001
-        .else                   ; lsb becomes carry
-            lda #$00
-        .endif
-    .else
-        .repeat dist .mod 9
-            asl
-        .endrepeat
-    .endif
-    .endmacro
 
     .define Dpad_UP     $08
     .define Dpad_Down   $04
@@ -165,63 +59,6 @@
             rts
             .endproc
     .endif
-
-.macro jeq target
-    .local @temp
-        bne @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jne target
-    .local @temp
-        beq @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jcc target
-    .local @temp
-        bcs @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jcs target
-    .local @temp
-        bcc @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jpl target
-    .local @temp
-        bmi @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jmi target
-    .local @temp
-        bpl @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jvs target
-    .local @temp
-        bvc @temp
-            jmp target
-        @temp:
-    .endmacro
-
-.macro jvc target
-    .local @temp
-        bvs @temp
-            jmp target
-        @temp:
-    .endmacro
-
 
 .if EXCLUDE_UNSAFE_SET_FLAGS = 0
     .proc set_flags
@@ -303,8 +140,6 @@
     .endif
 
     .if EXCLUDE_ASIN_TABLE = 0
-
-
         ; ASIN_TABLE[x] = asin(x / 255)
         ASIN_TABLE:
             .byte $00, $00, $00, $01, $01, $01, $01, $02, $02, $02, $02, $02, $03, $03, $03, $03
@@ -323,6 +158,27 @@
             .byte $37, $37, $37, $38, $38, $39, $39, $39, $3a, $3a, $3b, $3b, $3c, $3c, $3d, $3d
             .byte $3d, $3e, $3e, $3f, $3f, $40, $40, $41, $41, $42, $43, $43, $44, $44, $45, $46
             .byte $46, $47, $48, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f, $50, $51, $53, $55, $5a
+    .endif
+
+    .if EXCLUDE_INVERSE_TABLE = 0
+        ; INV_TABLE[x] = 256 / x
+        INV_TABLE:
+            .byte $ff, $ff, $80, $55, $40, $33, $2a, $24, $20, $1c, $19, $17, $15, $13, $12, $11
+            .byte $10, $0f, $0e, $0d, $0c, $0c, $0b, $0b, $0a, $0a, $09, $09, $09, $08, $08, $08
+            .byte $08, $07, $07, $07, $07, $06, $06, $06, $06, $06, $06, $05, $05, $05, $05, $05
+            .byte $05, $05, $05, $05, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04
+            .byte $04, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03
+            .byte $03, $03, $03, $03, $03, $03, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+            .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+            .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+            .byte $02, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
     .endif
 
     .if EXCLUDE_DIVIDE = 0

@@ -18,6 +18,7 @@
 .define EXCLUDE_SQUARE_TABLE            0
 .define EXCLUDE_EXTENDED_SQUARE_TABLE   1
 .define EXCLUDE_ASIN_TABLE              1
+.define EXCLUDE_INVERSE_TABLE           (MAPPER = 5)
 
 ; MMC5
 .define EXCLUDE_HYPOTENUSE_MMC5         1
