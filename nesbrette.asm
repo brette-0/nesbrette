@@ -1,8 +1,8 @@
 ; NESBRETTE - 2024
-.include    "macros.nesbrette,asn"
-.include  "excludes.nesbrette.asm"
-.include "addresses.nesbrette.asm"
-.include "constants.nesbrette.asm"
+.if mapper = 5
+    .include "mmc5/constants.nesbrette.asm"     ; if using mmc5 register, include constants (register aliases)
+.endif
+
 .define long_branchless_delay_warning           ; comment out to disable this warning
 
 
@@ -116,13 +116,13 @@
     .if EXCLUDE_ASIN_TABLE + EXCLUDE_ASIN_FRAC = 0
         .proc asin_frac
             ; returns a as degrees
-            numerator   = ASIN_DECIMAL_NUMERATOR
-            denominator = ASIN_DECIMAL_DENOMINATOR
+            numerator   = ASIN_DECIMAL_DENOMINATOR
+            denominator = ASIN_DECIMAL_DIVISOR
 
             lda #-1
-            sta FUNCTION_DIVIDE_NUMERATOR
-            lda demoninator
             sta FUNCTION_DIVIDE_DENOMINATOR
+            lda demoninator
+            sta FUNCTION_DIVIDE_DIVISOR
             jsr divide_8
             lda numerator
             .if MAPPER = 5
@@ -188,8 +188,8 @@
             ;   x - divident
             ;   a - modulo
 
-            n = FUNCTION_DIVIDE_NUMERATOR
-            d = FUNCTION_DIVIDE_DENOMINATOR
+            n = FUNCTION_DIVIDE_DENOMINATOR
+            d = FUNCTION_DIVIDE_DIVISOR
             .if DIVIDE_FAST_POWER_OF_TWO = 0
                 t = FUNCTION_DIVIDE_TEMP
             .endif
@@ -447,9 +447,9 @@
             interval        = RAYCAST_FIXED_INTERVAL
 
             lda FUNCTION_ROOT_ROOT  ; ? redundant
-            sta FUNCTION_DIVIDE_NUMERATOR
-            
             sta FUNCTION_DIVIDE_DENOMINATOR
+            
+            sta FUNCTION_DIVIDE_DIVISOR
             jsr function::divide_8
             cmp #(interval >> 1)    ; remaider above half dividend
             bcc @noround
@@ -459,8 +459,8 @@
             pha
 
             lda FUNCTION_HYPOTENUSE_A
-            sta FUNCTION_DIVIDE_NUMERATOR
-            stx FUNCTION_DIVIDE_DENOMINATOR
+            sta FUNCTION_DIVIDE_DENOMINATOR
+            stx FUNCTION_DIVIDE_DIVISOR
             jsr function::divide_8
 
             stx RAYCAST_A_COARSE
@@ -468,8 +468,8 @@
             pla
             tax
             lda FUNCTION_HYPOTENUSE_O
-            sta FUNCTION_DIVIDE_NUMERATOR
-            stx FUNCTION_DIVIDE_DENOMINATOR
+            sta FUNCTION_DIVIDE_DENOMINATOR
+            stx FUNCTION_DIVIDE_DIVISOR
             jsr function::divide_8
             stx RAYCAST_O_COARSE
             sta RAYCAST_O_FINE
@@ -495,9 +495,9 @@
                 .endif
 
                 lda FUNCTION_ROOT_ROOT  ; access original hypotenuse (? redundant)
-                sta FUNCTION_DIVIDE_DENOMINATOR
+                sta FUNCTION_DIVIDE_DIVISOR
                 lda #255                ; end denominator
-                sta FUNCTION_DIVIDE_NUMERATOR
+                sta FUNCTION_DIVIDE_DENOMINATOR
                 jsr function::divide_8
                 lda FUNCTION_HYPOTENUSE_O
                 .if (MAPPER = 5)
