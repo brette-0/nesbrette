@@ -5,7 +5,7 @@
 .define EXCLUDE_SNES_POLL_FAST_SINGLE   1
 .define EXCLUDE_UNSAFE_SET_FLAGS        1
 
-.define EXCLUDE_DIVIDE                  0
+.define EXCLUDE_2A03_DIVIDE             1
     .define DIVIDE_FAST_POWER_OF_TWO    !RELEASE
 
 .define EXCLUDE_ROOT                    0
@@ -22,6 +22,7 @@
 
 ; MMC5
 .define EXCLUDE_HYPOTENUSE_MMC5         1
+.define EXCLUDE_MMC5_DIVIDE             0
 
 ; RAYCASTING
 .define EXCLUDE_RAYCAST_CALCULATE       1

@@ -1,78 +1,66 @@
 ; NESBRETTE - 2024
 .if mapper = 5
     .include "mmc5/constants.nesbrette.asm"     ; if using mmc5 register, include constants (register aliases)
+    .ifndef _MMC5_MACROS_included
+        .include "mmc5/macros.nesbrette.asm"    ; add in needed macros
+    .endif
 .endif
 
 .define long_branchless_delay_warning           ; comment out to disable this warning
 
+.scope tables
 
-    .define Dpad_UP     $08
-    .define Dpad_Down   $04
-    .define Dpad_Left   $02
-    .define Dpad_Right  $01
-
-    .define Select      $20
-    .define Start       $10
-    
-    .define Y_Button    $40
-    .define B_Button    $80
-    .define X_Button    $04
-    .define A_Button    $08
-
-    .define L_Button    $02
-    .define R_Button    $01
-
-    .macro alligned_poll    ; macro because it cant be branched to (I think?)
-        .local @poll_inputs
-
-        @poll_inputs:
-        lda $4017           ; put get put GET
-        and #$03            ; put get
-        cmp #$01            ; put get
-        rol $fd, x          ; put get put get put get
-        lda $4016           ; put get put GET
-        and #3              ; put get
-        cmp #1              ; put get
-        rol $fb, x          ; put get put get put get
-        #common::delay 3    ; put get put
-        bcc @poll_inputs    ; get put [get]
-        #common::delay 3    ; put get put
-        dex                 ; put get
-        bpl @poll_inputs    ; get put [get]                 ; this can't be on a zp boundary because logic
-        
-        .endmacro
-    .if EXCLUDE_SNES_POLL_FAST_SINGLE = 0
-        .proc poll              ; optimize because we can
-            @poll_inputs:
-            lda $4017           ; put get put GET
-            and #$03            ; put get
-            cmp #$01            ; put get
-            rol $fd, x          ; put get put get put get
-            lda $4016           ; put get put GET
-            and #3              ; put get
-            cmp #1              ; put get
-            rol $fb, x          ; put get put get put get
-            bcc @poll_inputs    ; get put [get]
-            dex                 ; put get
-            bpl @poll_inputs    ; get put [get]                 ; this can't be on a zp boundary because logic
-            
-            rts
-            .endproc
+    .if EXCLUDE_ASIN_TABLE = 0
+        ; ASIN_TABLE[x] = asin(x / 255)
+        asin:
+            .byte $00, $00, $00, $01, $01, $01, $01, $02, $02, $02, $02, $02, $03, $03, $03, $03
+            .byte $04, $04, $04, $04, $04, $05, $05, $05, $05, $06, $06, $06, $06, $07, $07, $07
+            .byte $07, $07, $08, $08, $08, $08, $09, $09, $09, $09, $09, $0a, $0a, $0a, $0a, $0b
+            .byte $0b, $0b, $0b, $0c, $0c, $0c, $0c, $0c, $0d, $0d, $0d, $0d, $0e, $0e, $0e, $0e
+            .byte $0f, $0f, $0f, $0f, $0f, $10, $10, $10, $10, $11, $11, $11, $11, $12, $12, $12
+            .byte $12, $13, $13, $13, $13, $13, $14, $14, $14, $14, $15, $15, $15, $15, $16, $16
+            .byte $16, $16, $17, $17, $17, $17, $18, $18, $18, $18, $19, $19, $19, $19, $1a, $1a
+            .byte $1a, $1a, $1b, $1b, $1b, $1b, $1c, $1c, $1c, $1c, $1d, $1d, $1d, $1d, $1e, $1e
+            .byte $1e, $1e, $1f, $1f, $1f, $1f, $20, $20, $20, $20, $21, $21, $21, $22, $22, $22
+            .byte $22, $23, $23, $23, $23, $24, $24, $24, $25, $25, $25, $25, $26, $26, $26, $27
+            .byte $27, $27, $27, $28, $28, $28, $29, $29, $29, $2a, $2a, $2a, $2a, $2b, $2b, $2b
+            .byte $2c, $2c, $2c, $2d, $2d, $2d, $2e, $2e, $2e, $2f, $2f, $2f, $2f, $30, $30, $31
+            .byte $31, $31, $32, $32, $32, $33, $33, $33, $34, $34, $34, $35, $35, $36, $36, $36
+            .byte $37, $37, $37, $38, $38, $39, $39, $39, $3a, $3a, $3b, $3b, $3c, $3c, $3d, $3d
+            .byte $3d, $3e, $3e, $3f, $3f, $40, $40, $41, $41, $42, $43, $43, $44, $44, $45, $46
+            .byte $46, $47, $48, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f, $50, $51, $53, $55, $5a
     .endif
 
-.if EXCLUDE_UNSAFE_SET_FLAGS = 0
-    .proc set_flags
-        ; a = flags
-        pha
-        jsr @temp
-        rts
- @temp: rti
-        .endproc
+    .if EXCLUDE_INVERSE_TABLE = 0
+        ; INV_TABLE[x] = 256 / x
+        invert:
+            .byte $ff, $ff, $80, $55, $40, $33, $2a, $24, $20, $1c, $19, $17, $15, $13, $12, $11
+            .byte $10, $0f, $0e, $0d, $0c, $0c, $0b, $0b, $0a, $0a, $09, $09, $09, $08, $08, $08
+            .byte $08, $07, $07, $07, $07, $06, $06, $06, $06, $06, $06, $05, $05, $05, $05, $05
+            .byte $05, $05, $05, $05, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04
+            .byte $04, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03
+            .byte $03, $03, $03, $03, $03, $03, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+            .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+            .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+            .byte $02, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
+            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
     .endif
+.endscope
 
 .scope function
-    
-    .if EXCLUDE_MULTIPLY_8 = 0
+
+    .if (MAPPER = 5)
+        .include "mmc5/nesbrette.asm"
+    .endif
+
+
+    .if (EXCLUDE_MULTIPLY_8 = 0) .and !(MAPPER = 5)
         .proc multiply_8
             ; a = base
             ; x = iter
@@ -90,7 +78,7 @@
             .endproc
     .endif
     
-    .if EXCLUDE_MULTIPLY_16 = 0
+    .if (EXCLUDE_MULTIPLY_16 = 0) .and !(MAPPER = 5)
         .proc multiply_16
             ; a = base
             ; x = iter
@@ -134,55 +122,24 @@
                 jsr multiply_8  ; return a with low value from multiplacation
             .endif
             tay
-            lda ASIN_TABLE, y
+            lda tables::asin, y
             rts
             .endproc
     .endif
 
-    .if EXCLUDE_ASIN_TABLE = 0
-        ; ASIN_TABLE[x] = asin(x / 255)
-        ASIN_TABLE:
-            .byte $00, $00, $00, $01, $01, $01, $01, $02, $02, $02, $02, $02, $03, $03, $03, $03
-            .byte $04, $04, $04, $04, $04, $05, $05, $05, $05, $06, $06, $06, $06, $07, $07, $07
-            .byte $07, $07, $08, $08, $08, $08, $09, $09, $09, $09, $09, $0a, $0a, $0a, $0a, $0b
-            .byte $0b, $0b, $0b, $0c, $0c, $0c, $0c, $0c, $0d, $0d, $0d, $0d, $0e, $0e, $0e, $0e
-            .byte $0f, $0f, $0f, $0f, $0f, $10, $10, $10, $10, $11, $11, $11, $11, $12, $12, $12
-            .byte $12, $13, $13, $13, $13, $13, $14, $14, $14, $14, $15, $15, $15, $15, $16, $16
-            .byte $16, $16, $17, $17, $17, $17, $18, $18, $18, $18, $19, $19, $19, $19, $1a, $1a
-            .byte $1a, $1a, $1b, $1b, $1b, $1b, $1c, $1c, $1c, $1c, $1d, $1d, $1d, $1d, $1e, $1e
-            .byte $1e, $1e, $1f, $1f, $1f, $1f, $20, $20, $20, $20, $21, $21, $21, $22, $22, $22
-            .byte $22, $23, $23, $23, $23, $24, $24, $24, $25, $25, $25, $25, $26, $26, $26, $27
-            .byte $27, $27, $27, $28, $28, $28, $29, $29, $29, $2a, $2a, $2a, $2a, $2b, $2b, $2b
-            .byte $2c, $2c, $2c, $2d, $2d, $2d, $2e, $2e, $2e, $2f, $2f, $2f, $2f, $30, $30, $31
-            .byte $31, $31, $32, $32, $32, $33, $33, $33, $34, $34, $34, $35, $35, $36, $36, $36
-            .byte $37, $37, $37, $38, $38, $39, $39, $39, $3a, $3a, $3b, $3b, $3c, $3c, $3d, $3d
-            .byte $3d, $3e, $3e, $3f, $3f, $40, $40, $41, $41, $42, $43, $43, $44, $44, $45, $46
-            .byte $46, $47, $48, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f, $50, $51, $53, $55, $5a
+    .if (MAPPER = 5) .and (EXCLUDE_INVERSE_TABLE = 0)
+        .if EXCLUDE_MMC5_DIVIDE = 0
+            .define divide_8 mmc5::divide_8
+        .elseif EXCLUDE_2A03_DIVIDE = 0
+            .define divide_8 2a03_divide_8
+        .endif
+    .elseif EXCLUDE_2A03_DIVIDE = 0
+        .define divide_8 2a03_divide_8
     .endif
 
-    .if EXCLUDE_INVERSE_TABLE = 0
-        ; INV_TABLE[x] = 256 / x
-        INV_TABLE:
-            .byte $ff, $ff, $80, $55, $40, $33, $2a, $24, $20, $1c, $19, $17, $15, $13, $12, $11
-            .byte $10, $0f, $0e, $0d, $0c, $0c, $0b, $0b, $0a, $0a, $09, $09, $09, $08, $08, $08
-            .byte $08, $07, $07, $07, $07, $06, $06, $06, $06, $06, $06, $05, $05, $05, $05, $05
-            .byte $05, $05, $05, $05, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04, $04
-            .byte $04, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03
-            .byte $03, $03, $03, $03, $03, $03, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
-            .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
-            .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
-            .byte $02, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-            .byte $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01, $01
-    .endif
-
-    .if EXCLUDE_DIVIDE = 0
-        .proc divide_8
+    
+    .if EXCLUDE_2A03_DIVIDE = 0
+        .proc 2a03_divide_8
             ; PARAMS SET IN ADDRESS FILE
             ; returns:
             ;   x - divident
@@ -323,17 +280,9 @@
             .word $ac44, $ade9, $af90, $b139, $b2e4, $b491, $b640, $b7f1, $b9a4, $bb59, $bd10, $bec9, $c084, $c241, $c400, $c5c1
             .word $c784, $c949, $cb10, $ccd9, $cea4, $d071, $d240, $d411, $d5e4, $d7b9, $d990, $db69, $dd44, $df21, $e100, $e2e1
             .word $e4c4, $e6a9, $e890, $ea79, $ec64, $ee51, $f040, $f231, $f424, $f619, $f810, $fa09, $fc04, $fe01
-        .endif
+        .endif       
 
-    .if MAPPER = 5
-        .macro mmc5_square
-            ; a = base
-            sta $5205
-            sta $5206
-            .endmacro 
-        .endif            
-
-    .if (EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE) = 0
+    .if EXCLUDE_HYPOTENUSE = 0
         .proc hypotenuse
             ; $00 adjacent
             ; $01 opposite
@@ -385,38 +334,7 @@
             rts
 
             .endproc
-        .endif
-
-    .if ((EXCLUDE_DIVIDE + EXCLUDE_HYPOTENUSE_MMC5) = 0) .and (MAPPER = 5)
-        .proc hypotenuse_mmc5
-            ldy #$01
-            lda FUNCTION_HYPOTENUSE_A, y
-            loop:
-                mmc5_square
-                lda $5206
-                pha
-                lda $5205
-                pha
-                dey
-                bpl loop
-            pla
-            sta FUNCTION_ROOT_IN_HIGH
-            pla
-            sta FUNCTION_ROOT_IN_LOW
-            pla
-            clc
-            adc FUNCTION_ROOT_IN_HIGH
-            sta FUNCTION_ROOT_IN_HIGH
-            pla
-            clc
-            adc FUNCTION_ROOT_IN_LOW
-            sta FUNCTION_ROOT_IN_LOW
-
-            jsr function::root
-            rts
-
-            .endproc
-        .endif
+        .endif    
     .endscope
 
 
@@ -428,8 +346,8 @@
             ; it can cause performance issues or unexpected flaws in collision code if done incorrectly
             ; leaks into _calculate@body
             
-            .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
-                jsr function::hypotenuse_mcc5
+            .ifdef mmc5::hypotenuse
+                jsr function::mmc5::hypotenuse
             .else
                 jsr function::hypotenuse
             .endif
@@ -488,8 +406,8 @@
                     sta RAYCAST_INTERVAL_ADDR
                 .endif
 
-                .if (EXCLUDE_HYPOTENUSE_MMC5 = 0) .and (MAPPER = 5)
-                    jsr function::hypotenuse_mmc5
+                .ifdef function::mmc5::hypotenuse
+                    jsr function::mmc5::hypotenuse
                 .else
                     jsr function::hypotenuse
                 .endif
@@ -511,7 +429,7 @@
                 eor #$7f
                 and #$7f                ; mirror up to half access (higher the number --> closer to 45 degrees)
                 tay
-                lda function::ASIN_TABLE, y
+                lda tables::asin, y
 
                 ; use X MSB of available information
                 .if 5 - THETA_COEFFICIENT_COMPLEXITY
@@ -528,3 +446,13 @@
             .endproc
     .endif
     .endscope
+
+.if EXCLUDE_UNSAFE_SET_FLAGS = 0
+    .proc set_flags
+        ; a = flags
+        pha
+        jsr @temp
+        rts
+ @temp: rti
+        .endproc
+    .endif
