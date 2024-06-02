@@ -5,11 +5,11 @@
             ldy tables::inverse, x		; 256/x
             sty MMC5_Mult_Low
             ldy MMC5_Mult_High
-            sty Q
+            sty Quotient
             stx MMC5_Mult_Low
             clc
             sbc MMC5_Mult_Low
-            sta R 
+            sta Remainder
             rts
 
             .endproc

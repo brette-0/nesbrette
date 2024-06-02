@@ -142,81 +142,73 @@
         .proc 2a03_divide_8
             ; PARAMS SET IN ADDRESS FILE
             ; returns:
-            ;   x - divident
-            ;   a - modulo
+            ;   x - quotient
+            ;   a - remainder
 
-            n = FUNCTION_DIVIDE_DENOMINATOR
-            d = FUNCTION_DIVIDE_DIVISOR
+            denominator = FUNCTION_DIVIDE_DENOMINATOR
+            divisor     = FUNCTION_DIVIDE_DIVISOR
             .if DIVIDE_FAST_POWER_OF_TWO = 0
-                t = FUNCTION_DIVIDE_TEMP
+                temp    = FUNCTION_DIVIDE_TEMP
             .endif
 
-            ldx #$00        ; initialize x
-            lda d
-            
-            .if RELEASE = 1 ; if release, prevent hard crashes
-                bne nonzero ; if a nonzero leave
-                dex         ; otherwise store max int
-                txa         ; and max numerator
-                rts         ; leave with no calculations
-            nonzero:
+            ldx #$00            ; initialize x
+            lda divisor
+            .if CHECK_FOR_ZERODIVISIONERROR = 1
+                .if BREAK_ON_ZERODIVISIONERROR = 0
+                    bne nonzero ; if a nonzero leave
+                    dex         ; otherwise store max int
+                    txa         ; and max numerator
+                    rts         ; leave with no calculations
+                nonzero:
+                .else
+                    brk
+                .endif
             .endif
             
             sec
             sbc #$01
-            bne not_one
-            .if DIVIDE_FAST_POWER_OF_TWO = 0    ; probably only useful with high numerators and frequent power of two denominators
-                
-                and d
-                bne @not_power
-                ; denominator is a power of 2, shifting is faster
-                lda n
-                pha
-                    lda d
-
-                    
-                    stx t           ; initialize numerator count
-
-                    @loop:
-                        inx         ; log shifts
-                        lsr n       ; shift numerator (divide by 2) --> store lost bit into carry
-                        ror t       ; roll carry bit into numerator
-                        lsr         ; shift denominator right (divide by 2)
-                        bcc @loop   ; carry is clear when denominator is empty
-                    ; x will always be at least 1, maximum of 8?
-                    dex             ; decrease x to reverse /1 affects
-                    rol t           ; roll back numerator
-                    asl n           ; roll back integer
-                    ldy t           ; save numerator
-                    stx t           ; log shift into temp
-                    lda #$08        ; load max shift
-                    sec
-                    sbc t           ; subtract unneeded shifts
-                    tax             ; store in x
-                    sty t           ; restore numerator
-                    @_loop:
-                        lsr t       ; shift numerator
-                        dex         ; decrease shift count
-                        bpl @_loop  ; repeat until shift complete
-                    ldx n           ; load n (integer) into integer return
-                pla
-                sta n           ; restore original numerator
-                lda t           ; load t (numerator) into numerator return
-                rts
-
-            @not_power:
-            .endif
-            
+            bne not_one         ; if (a-1) [does not check for zerodivision]
+            txa                 ; x "0" --> A   [no remainder]
+            ldx denominator     ; Quotient = Denominator [no division]
+            rts                 ; leave
             not_one:
 
-            lda n           ; load numerator
+
+            .if DIVIDE_FAST_POWER_OF_TWO = 1
+                and divisor     ; check for power of 2
+                bne @not_power  ; leave if it can't apply
+                
+                ldx #$00
+                lda divisor
+                lsr
+                @_loop:         ; calculate shift amount/mask index
+                    inx
+                    lsr
+                    bcc @_loop
+
+                lda denominator
+                @loop:          ; shift as appropriate
+                    lsr
+                    dex
+                    bpl @loop
+                tax 
+
+                lda denominator
+                and mask-1, x   ; mask for remainder
+                
+                rts
+                mask: .byte $01, $03, $07, $0f, $1f, $3f, $7f
+            @not_power:
+            .endif
+
+            lda dividend
             sec
             loop:
                 inx         ; d fits into n (x + 1) times --> modify x
-                sbc d       ; subtract demoninator from current
-                bcs loop    ; check if underflow, if not repeat
-            dex             ; decrease to reverse initial increment
-            adc d           ; add with carry d to get numerator
+                sbc divisor
+                bcs loop    ; check for underflow
+            dex
+            adc divisor     ; add with carry d to get numerator
             rts
 
             .endproc

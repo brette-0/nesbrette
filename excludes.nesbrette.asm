@@ -6,7 +6,11 @@
 .define EXCLUDE_UNSAFE_SET_FLAGS        1
 
 .define EXCLUDE_2A03_DIVIDE             1
-    .define DIVIDE_FAST_POWER_OF_TWO    !RELEASE
+    ; 2A03_Feature_Enables
+    .define DIVIDE_FAST_POWER_OF_TWO    RELEASE
+    .define CHECK_FOR_ZERODIVISIONERROR RELEASE
+        ; Zero_Division Handler
+        .define BREAK_ON_ZERODIVISIONERROR  !RELEASE
 
 .define EXCLUDE_ROOT                    0
 .define EXCLUDE_HYPOTENUSE              0
