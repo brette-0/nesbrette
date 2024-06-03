@@ -108,7 +108,7 @@
             denominator = ASIN_DECIMAL_DIVISOR
 
             lda #-1
-            sta FUNCTION_DIVIDE_DENOMINATOR
+            sta FUNCTION_DIVIDE_DIVDEND
             lda demoninator
             sta FUNCTION_DIVIDE_DIVISOR
             jsr divide_8
@@ -145,14 +145,13 @@
             ;   x - quotient
             ;   a - remainder
 
-            denominator = FUNCTION_DIVIDE_DENOMINATOR
+            dividend    = FUNCTION_DIVIDE_DIVDEND
             divisor     = FUNCTION_DIVIDE_DIVISOR
             .if DIVIDE_FAST_POWER_OF_TWO = 0
                 temp    = FUNCTION_DIVIDE_TEMP
             .endif
 
-            ldx #$00            ; initialize x
-            lda divisor
+            lax divisor
             .if CHECK_FOR_ZERODIVISIONERROR = 1
                 .if BREAK_ON_ZERODIVISIONERROR = 0
                     bne nonzero ; if a nonzero leave
@@ -161,39 +160,84 @@
                     rts         ; leave with no calculations
                 nonzero:
                 .else
+                    bne nonzero
                     brk
+                    nonzero:
                 .endif
             .endif
+
             
-            sec
-            sbc #$01
+            dex
             bne not_one         ; if (a-1) [does not check for zerodivision]
-            txa                 ; x "0" --> A   [no remainder]
-            ldx denominator     ; Quotient = Denominator [no division]
+            txa                 ; no remainder
+            ldx dividend        ; Quotient = dividend [no division]
             rts                 ; leave
             not_one:
 
+            lax dividend
+            bne div_notzero
+                                ; q = 0, r = 0
+            @leave: 
+                rts
+            
+            @div_notzero:
+            cmp divisor
+            bne @is_div_one
+            lda #$00
+            ldx #$01
+            rts                 ; q = 1, r = 0 
+            @is_div_one:
+
+            dex
+            beq @leave          ; q = 0, r = 1
+
 
             .if DIVIDE_FAST_POWER_OF_TWO = 1
+                txa             ; dividend-1
                 and divisor     ; check for power of 2
                 bne @not_power  ; leave if it can't apply
-                
-                ldx #$00
+        
                 lda divisor
+                cmp #$40
+                bcs @not_power
+
+                cpx #$01
+                bne @_
+                cmp #18
+                bcc @not_power
+                bcs @___
+
+                @_:
+                cpx #$03
+                bne @__
+                cmp #40
+                bcc @not_power
+                bcs @___
+
+                @__:
+                cpx #$07
+                bne @___
+                cmp #92
+                bcc @not_power
+                bcs @___
+
+                @___:
+
+                ldx #$00
                 lsr
                 @_loop:         ; calculate shift amount/mask index
                     inx
                     lsr
                     bcc @_loop
 
-                lda denominator
+                lda dividend
                 @loop:          ; shift as appropriate
                     lsr
                     dex
                     bpl @loop
                 tax 
 
-                lda denominator
+                lda dividend
                 and mask-1, x   ; mask for remainder
                 
                 rts
@@ -357,7 +401,7 @@
             interval        = RAYCAST_FIXED_INTERVAL
 
             lda FUNCTION_ROOT_ROOT  ; ? redundant
-            sta FUNCTION_DIVIDE_DENOMINATOR
+            sta FUNCTION_DIVIDE_DIVDEND
             
             sta FUNCTION_DIVIDE_DIVISOR
             jsr function::divide_8
@@ -369,7 +413,7 @@
             pha
 
             lda FUNCTION_HYPOTENUSE_A
-            sta FUNCTION_DIVIDE_DENOMINATOR
+            sta FUNCTION_DIVIDE_DIVDEND
             stx FUNCTION_DIVIDE_DIVISOR
             jsr function::divide_8
 
@@ -378,7 +422,7 @@
             pla
             tax
             lda FUNCTION_HYPOTENUSE_O
-            sta FUNCTION_DIVIDE_DENOMINATOR
+            sta FUNCTION_DIVIDE_DIVDEND
             stx FUNCTION_DIVIDE_DIVISOR
             jsr function::divide_8
             stx RAYCAST_O_COARSE
@@ -407,7 +451,7 @@
                 lda FUNCTION_ROOT_ROOT  ; access original hypotenuse (? redundant)
                 sta FUNCTION_DIVIDE_DIVISOR
                 lda #255                ; end denominator
-                sta FUNCTION_DIVIDE_DENOMINATOR
+                sta FUNCTION_DIVIDE_DIVDEND
                 jsr function::divide_8
                 lda FUNCTION_HYPOTENUSE_O
                 .if (MAPPER = 5)

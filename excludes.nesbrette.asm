@@ -11,6 +11,7 @@
     .define CHECK_FOR_ZERODIVISIONERROR RELEASE
         ; Zero_Division Handler
         .define BREAK_ON_ZERODIVISIONERROR  !RELEASE
+    .define CHECK_FOR_DIVISOR_ONE       0
 
 .define EXCLUDE_ROOT                    0
 .define EXCLUDE_HYPOTENUSE              0
