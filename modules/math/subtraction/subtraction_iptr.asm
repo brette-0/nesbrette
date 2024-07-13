@@ -1,14 +1,3 @@
-.if INCLUDE_SUBTRACTION_IPTR_INIT
-    .proc cleaned_subtraction_iptr
-        ldx FUNCTION_MATH_SUBTRACTION_WIDTH
-        lda #$00
-        @clean:
-            sta FUNCTION_MATH_SUBTRACTION_OUT, x
-            dex
-            bne @clean    
-        
-        .endproc
-    .endif
 .proc subtraction_iptr
     ; inputs:
     ; little endian

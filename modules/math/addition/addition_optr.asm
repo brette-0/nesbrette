@@ -1,15 +1,3 @@
-.if INCLUDE_ADDITION_OPTR_INIT
-    .proc cleaned_addition_optr
-        ldy Width
-        lda #$00
-
-        @clean:
-            sta ($00), y
-            dey
-            bne @clean    
-        
-        .endproc
-    .endif
 .proc addition_optr
     ; inputs:
     ; little endian

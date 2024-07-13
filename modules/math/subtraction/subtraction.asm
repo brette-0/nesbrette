@@ -1,14 +1,3 @@
-.if INCLUDE_SUBTRACTION_INIT
-    .proc cleaned_subtraction
-        ldx FUNCTION_MATH_SUBTRACTION_WIDTH
-        lda #$00
-        @clean:
-            sta FUNCTION_MATH_SUBTRACTION_OUT, x
-            dex
-            bne @clean
-        ; leaks into SUBTRACTION
-        .endproc
-    .endif
 .proc subtraction
     ; inputs:
     ; little endian

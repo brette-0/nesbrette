@@ -1,15 +1,3 @@
-.if INCLUDE_SUBTRACTION_OPTR_INIT
-    .proc cleaned_subtraction_optr
-        ldy FUNCTION_MATH_SUBTRACTION_WIDTH
-        lda #$00
-
-        @clean:
-            sta (FUNCTION_MATH_SUBTRACTION_OUT), y
-            dey
-            bne @clean    
-        
-        .endproc
-    .endif
 .proc subtraction_optr
     ; inputs:
     ; little endian

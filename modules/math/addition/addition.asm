@@ -1,14 +1,3 @@
-.if INCLUDE_ADDITION_INIT
-    .proc cleaned_addition
-        ldx FUNCTION_MATH_ADDITION_WIDTH
-        lda #$00
-        @clean:
-            sta FUNCTION_MATH_ADDITION_OUT, x
-            dex
-            bne @clean
-        ; leaks into addition
-        .endproc
-    .endif
 .proc addition
     ; inputs:
     ; little endian

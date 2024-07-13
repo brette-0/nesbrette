@@ -1,14 +1,3 @@
-.if INCLUDE_ADDITION_IOPTR_INIT
-    .proc cleaned_addition_ioptr
-        ldy FUNCTION_MATH_ADDITION_WIDTH
-        lda #$00
-        @clean:
-            sta (FUNCTION_MATH_ADDITION_OUT), y
-            dey
-            bne @clean    
-        
-        .endproc
-    .endif
 .proc addition_ioptr
     ; inputs:
     ; little endian
