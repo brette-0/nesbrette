@@ -1,7 +1,3 @@
-.if ((RECIPROCAL_ElementWidth - 1) & RECIPROCAL_ElementWidth) .and WARNINGS_MACRO_MMC5_DIV_EWPOT
-    .warning "Reciprocal Element Width not a power of two, using mmc5 multiplication registers"
-    .endif
-
 .macro div addr
     pha
     .if RECIPROCAL_ElementWidth = 1
