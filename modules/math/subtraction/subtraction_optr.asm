@@ -1,24 +1,24 @@
-.if INCLUDE_ADDITION_OPTR_INIT
-    .proc cleaned_addition_optr
-        ldy Width
+.if INCLUDE_SUBTRACTION_OPTR_INIT
+    .proc cleaned_subtraction_optr
+        ldy FUNCTION_MATH_SUBTRACTION_WIDTH
         lda #$00
 
         @clean:
-            sta ($00), y
+            sta (FUNCTION_MATH_SUBTRACTION_OUT), y
             dey
             bne @clean    
         
         .endproc
     .endif
-.proc addition_optr
+.proc subtraction_optr
     ; inputs:
     ; little endian
 
-    Adder   = FUNCTION_MATH_ADDITION_ADDER
-    Result  = FUNCTION_MATH_ADDITION_OUT
-    Width   = FUNCTION_MATH_ADDITION_WIDTH
+    Adder   = FUNCTION_MATH_SUBTRACTION_ADDER
+    Result  = FUNCTION_MATH_SUBTRACTION_OUT
+    Width   = FUNCTION_MATH_SUBTRACTION_WIDTH
     
-    .if FUNCTION_MATH_ADDITION_LITTLE_ENDIAN
+    .if FUNCTION_MATH_SUBTRACTION_LITTLE_ENDIAN
         ldy #$00
         ldx Width
         

@@ -1,9 +1,9 @@
 .if INCLUDE_ADDITION_IPTR_INIT
     .proc cleaned_addition_iptr
-        ldx Width
+        ldx FUNCTION_MATH_ADDITION_WIDTH
         lda #$00
         @clean:
-            sta Result, x
+            sta FUNCTION_MATH_ADDITION_OUT, x
             dex
             bne @clean    
         
