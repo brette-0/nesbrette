@@ -1,0 +1,28 @@
+{
+    "00" : {
+        "sin" : {
+            "index_width" : 8,
+            "element_width" : 8,
+            "lossy" : 1,
+            "circle": 1,
+            "signed": 1,
+            "space_efficient" : 1
+        },
+        "cos" : {
+            "index_width" : 8,
+            "element_width" : 8,
+            "lossy" : 1,
+            "circle": 1,
+            "signed" : 1,
+            "space_efficient" : 1
+        },
+        "tan" : {
+            "index_width" : 8,
+            "element_width" : 8,
+            "lossy" : 1,
+            "circle": 1,
+            "signed" : 1,
+            "space_efficient" : 1
+        }
+    }
+}

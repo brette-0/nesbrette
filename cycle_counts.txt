@@ -1,3 +1,0 @@
-Cycle Count : Dividend, Divisor
-Most Common Mode (32637 cycles):
-28
