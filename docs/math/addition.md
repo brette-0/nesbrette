@@ -28,7 +28,7 @@ All operations should be passed in the endianness selected, failure to do so wil
 > Note that for obvious reasons this table will not be completely accurate for all situations.
 >
 
-Otherfunctions in the namespace:
+Other functions in the namespace:
 - `math::addition::addition_iptr`
 - `math::addition::addition_optr`
 - `math::addition::addition_ioptr`

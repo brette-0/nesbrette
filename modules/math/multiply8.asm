@@ -1,10 +1,9 @@
-.proc multiply
+.proc multiply8
 
-    output
-    otemp
-    itemp
-
-    multiplier
+    output          = FUNCITON_MATH_MULTIPLICATION_OUT
+    otemp           = FUNCITON_MATH_MULTIPLICATION_OUTTEMP
+    itemp           = FUNCITON_MATH_MULTIPLICATION_INTEMP
+    multiplier      = FUNCITON_MATH_MULTIPLICATION_MULTIPLIER
 
     lda output
     sta otemp

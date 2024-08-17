@@ -4,6 +4,24 @@ from sys import argv, exit
 from os import system
 from math import sin, cos, tan, asin, acos, atan, pi
 
+def is_prime(n):
+    if n == 2 or n == 3: return True
+    if n < 2 or n%2 == 0: return False
+    if n < 9: return True
+    if n%3 == 0: return False
+    r = int(n**0.5)
+  # since all primes > 3 are of the form 6n ± 1
+  # start with f=5 (which is prime)
+  # and test f, f+2 for being prime
+  # then loop by 6. 
+    f = 5
+    while f <= r:
+        print('\t',f)
+        if n % f == 0: return False
+        if n % (f+2) == 0: return False
+        f += 6
+    return True  
+
 class main:
     
     def main():
@@ -56,6 +74,59 @@ class main:
     
     def tan(**kw):
         return main.trig(tan, **kw)
+    
+    def primes(**kw):
+        valid_args = {"digits"}
+
+        if any(tuple(arg not in valid_args for arg in kw)) or any (arg not in kw for arg in valid_args):
+            print(f"Invalid arguements found")
+
+        result = "PRIME_TABLE:\n   .addr "
+
+        for x in range(kw["digits"]):
+            result += f"@PRIME_DIGS_{x}, "
+
+        result = result[:-2] + "@PRIME_DIGS_END:\n"
+
+        c = 2
+        nums = []
+        for x in range(kw["digits"]):
+            while not is_prime(z): c += 1
+            z = f"{z:x}"
+            y : str = ".byte "
+            while len(z):
+                y += f"${z[-2:]}, "
+                z = z[:-2]
+            y = y[:-2] + "\n"
+            result += f"@PRIME_DIGS_{x}:\n"
+            result += y
+        result += "@PRIME_DIGS_END:\n"
+        return result
+    
+    def tens(**kw):
+        valid_args = {"digits"}
+
+        if any(tuple(arg not in valid_args for arg in kw)) or any (arg not in kw for arg in valid_args):
+            print(f"Invalid arguements found")
+
+        result = "PO10_TABLE:\n   .addr "
+
+        for x in range(kw["digits"]):
+            result += f"@PO10_DIGS_{x}, "
+        
+        result = result[:-2] + "@PO10_DIGS_END:\n"
+
+        for x in range(kw["digits"]):
+            z = f"{2**x:x}"
+            y : str = ".byte "
+            while len(z):
+                y += f"${z[-2:]}, "
+                z = z[:-2]
+            y = y[:-2] + "\n"
+            result += f"@PO10_DIGS_{x}:\n"
+            result += y
+        result += "@PO10_DIGS_END:\n"
+        return result
     
     def reciprocal(**kw):
         valid_args = {"lossy", "circle", "index_width", "element_width", "signed", "space_efficient"}

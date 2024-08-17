@@ -1,8 +1,8 @@
-.proc subtraction_optr
+.proc subtraction
     ; inputs:
     ; little endian
 
-    Adder   = FUNCTION_MATH_SUBTRACTION_ADDER
+    Adder   = FUNCTION_MATH_SUBTRACTION_MODIFIER
     Result  = FUNCTION_MATH_SUBTRACTION_OUT
     Width   = FUNCTION_MATH_SUBTRACTION_WIDTH
     
@@ -10,10 +10,10 @@
         ldy #$00
         ldx Width
         
-        clc
+        sec
         @loop:
-            lda Result, y
-            adc Adder,  y
+            lda (Result), y
+            sbc (Adder),  y
             sta (Result), y
             inx
             dex
@@ -21,10 +21,10 @@
     .elseif
         ldy Width
         
-        clc
+        sec
         @loop:
-            lda Result, y
-            adc Adder,  y
+            lda (Result), y
+            sbc (Adder),  y
             sta (Result), y
             dey
             bne @loop

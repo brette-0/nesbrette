@@ -1,0 +1,4 @@
+.proc multiply
+
+    rts
+    .endproc

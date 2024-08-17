@@ -1,8 +1,8 @@
-.proc addition_ioptr
+.proc addition
     ; inputs:
     ; little endian
 
-    Adder   = FUNCTION_MATH_ADDITION_ADDER
+    Adder   = FUNCTION_MATH_ADDITION_MODIFIER
     Result  = FUNCTION_MATH_ADDITION_OUT
     Width   = FUNCTION_MATH_ADDITION_WIDTH
 
@@ -15,12 +15,10 @@
             lda (Result), y
             adc (Adder),  y
             sta (Result), y
-            inx
+            inu
             dex
             bne @loop
     .elseif
-        ldy Width
-        
         clc
         @loop:
             lda (Result), y

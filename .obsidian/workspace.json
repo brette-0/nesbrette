@@ -11,8 +11,12 @@
             "id": "b0061fb007547c07",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -140,8 +146,22 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "02810f396c32a0c6",
+  "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "README.md"
+    "modules/logic/lroll.asm",
+    "modules/logic/roll.asm",
+    "modules/logic/lshift.asm",
+    "modules/logic/rshift copy 3.asm",
+    "modules/logic/rshift copy 2.asm",
+    "modules/logic/rshift copy.asm",
+    "modules/logic/rshift.asm",
+    "modules/logic",
+    "modules/math/fraction/simplify.asm",
+    "modules/math/fraction/multiply.asm",
+    "modules/math/fraction/divide.asm",
+    "docs/math/addition.md",
+    "docs/math/division.md",
+    "README.md",
+    "docs/ines2/ines2.md"
   ]
 }

@@ -1,3 +1,9 @@
+; label inclusion
+
+.include "system.asm"
+
+
+
 .macro __includeif__ condition path
     .if condition
         .include path
@@ -40,3 +46,8 @@
     .include "bias.asm"
 
     .endmacro
+
+
+__includeif__ MACROS_INCLUDE_INES2 "static/macros/instructions/ines2.asm"
+__includeif__ (MACROS_INCLUDE_MMC5 .and Maper = 5)  "static/macros/instructions/ines2.asm"
+__includeif__ MACROS_INCLUDE_VRAM "static/macros/instructions/vram.nes"

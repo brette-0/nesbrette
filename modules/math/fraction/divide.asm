@@ -1,0 +1,4 @@
+.proc divide
+
+    rts
+    .endproc
