@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "docs/math/fraction/Simplification.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "docs/math/fraction/Simplification.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "docs/math/fraction/Simplification.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "docs/math/fraction/Simplification.md"
               }
             }
           }
@@ -148,20 +148,20 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "modules/string.asm",
-    "modules/logic copy.asm",
-    "modules/math/fraction/subtract.asm",
-    "modules/logic.asm",
-    "modules/math copy.asm",
-    "modules/logic/lroll.asm",
-    "modules/logic/roll.asm",
-    "modules/logic/lshift.asm",
-    "modules/logic/rshift copy 3.asm",
-    "modules/logic/rshift copy 2.asm",
-    "modules/logic/rshift copy.asm",
+    "README.md",
+    "docs/math/fraction/Simplification.md",
+    "docs/math/fraction",
+    "static/macros/modules/math/fraction/multiplication.asm",
+    "static/macros/modules/math/fraction/slow_division.asm",
+    "static/macros/modules/math/fraction/slow_addition copy 2.asm",
+    "static/macros/modules/math/fraction/slow_addition copy.asm",
+    "static/macros/modules/math/fraction/slow_addition.asm",
+    "static/macros/modules/math/fraction/slow_subtract copy.asm",
+    "static/macros/modules/math/fraction/slow_subtract.asm",
+    "static/macros/modules/math/fraction",
+    "static/macros/modules/math",
     "docs/math/addition.md",
     "docs/math/division.md",
-    "README.md",
     "docs/ines2/ines2.md"
   ]
 }

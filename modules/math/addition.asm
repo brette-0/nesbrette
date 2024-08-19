@@ -15,7 +15,7 @@
             lda (Result), y
             adc (Adder),  y
             sta (Result), y
-            inu
+            iny
             dex
             bne @loop
     .elseif
