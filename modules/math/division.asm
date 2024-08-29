@@ -1,9 +1,11 @@
-.proc divide8
+.proc divide
 
     divisor     = FUNCTION_MATH_DIVISION_MODIFIER
     dividend    = FUNCTION_MATH_DIVISION_DIVIDEND
     quotient    = FUNCTION_MATH_DIVISION_QUOTIENT
     remainder   = FUNCTION_MATH_DIVISION_REMAINDER
+
+    width       = FUNCTION_MATH_DIVISION_WIDTH
 
     ldy #$00
     ldx $00
@@ -11,15 +13,13 @@
     
     sec
     @loop:
-        sbc (divisor), y
+        ; point divisor
+        jsr math::subtraction
         inx
         bcs @loop
-    adc (divisor), y
+    ; point divisor?
+    jsr math::addition
     dex
 
-    ; x = quotient
-    ; a = remainder
-    ; (dividend) holds dividend
-    
     rts
     .endproc

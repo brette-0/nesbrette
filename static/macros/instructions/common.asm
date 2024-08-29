@@ -236,3 +236,14 @@
     lda #>sourceptr
     sta targetptr+1
     .endmacro
+
+
+.macro abs
+    ; a
+    .local temp
+    bpl @temp:
+        eor #$ff
+        clc
+        adc #$01
+    @temp:
+    .endmacro

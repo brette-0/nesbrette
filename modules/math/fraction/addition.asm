@@ -74,28 +74,18 @@
         sbc temp
         bcs @simplify
         rts
-        
+
+    @simplify:
+        .if FUNCTION_MATH_FRACTION_FEATURE_EXTERNAL_SIMPLIFY
+            bit FUNCTION_FLAGS
+            bmi @_leave
+            bvs @_continue
+            @_leave:
+            rts
+            @_continue:
+        .endif
         ldx width
         __clear__ FUNCTION_LOGIC_RSHIFT_MODIFIER
-        
-        
-        .if FEATURE_FUNCTION_MATH_FRACTION_ADDITION_APO2MOD
-            lax width
-            dex
-            and #~$03
-            tay
-            txa
-            and #$03
-            tax
-            lda #$01
-            xrshift
-            sta FUNCTION_LOGIC_RSHIFT_MODIFIER, y
-        .else
-            ldx width
-            dex
-            lda #$01
-            sta FUNCTION_LOGIC_RSHIFT_MODIFIER, x
-        .endif
 
         copyaddr FUNCTION_MATH_DIVISION_REMAINDER FUNCTION_LOGIC_RSHIFT_OUTPUT
         jsr logic::rshift
