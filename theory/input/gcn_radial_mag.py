@@ -8,7 +8,7 @@
 
 import math
 
-
+dist : int = 128
 
 def v256(radian : float, magntiude : float) -> tuple:
     radian += math.pi / 2               # zerobase it, theta now lies between 0:pi (r)
@@ -35,8 +35,8 @@ class arraymap():
 
 results : arraymap = arraymap()
 
-for adj in range(-128, 128):
-    for opp in range(-128, 128):
+for adj in range(-dist, dist):
+    for opp in range(-dist, dist):
         if adj or opp:
             if not adj: 
                 radian : float = (math.pi/2) + math.pi if adj < 0 else 0
@@ -60,7 +60,9 @@ payload : str = str()
 for elem in results.content.values(): elem.sort()
 output : dict = {}
 
-for rad in range(256): output[rad] = results.content[rad]
+for rad in range(256): 
+    if rad in results.content.keys():
+        output[rad] = results.content[rad]
 del results
 
 
@@ -70,29 +72,58 @@ for rad, mags in output.items():
         payload += f" {mag:02x}, "
     payload = payload[:-2] + "\n"
 
-
-assert len(output.keys()) == 256
-
 with open("radial_dispersion.txt", "w") as f:
     f.write(payload)
 
 
 """
 lda LX
-abs             ; absolute a macro
-sta FUNCTION_MATH_DIVISION_OUT
+beq @nox
 
-lda LY
-abs
-sta FUNCTION_MATH_DIVISION_DIVISOR
+ldx LY
+beq @noy
+
+copyaddr LX FUNCTION_MATH_DIVIDE_OUTPUT
+copyaddr LY FUNCTION_MATH_DIVIDE_DIVISOR
 
 jsr math::divide
-ldx ATAN, y     ; access atan(o/a) from division quotient
 
-lda LX
-rol
-lda LY
-and #$80
-ror
-ora IDTABLE, x  ; ora x
+lda ATAN, x
+sta radian
+
+tax
+lda SIN, x
+
+.ifdef math::divide_8
+    sta FUNCTION_MATH_DIVIDE8_DIVISOR
+    lda LY
+    abs
+    sta FUNCITON_MATH_DIVIDE8_BASE
+    jsr math::divide_8
+.else
+    sta temp
+    copyaddr temp FUNCTION_MATH_DIVIDE_DIVISOR
+    lda LY
+    abs
+    sta FUNCTION_MATH_DIVIDE_DIVISOR
+    jsr math::divide
+.endif
+
+sta magnitude
+; data is already in degrees due to 256deg ATAN table, SIN frac *should* be signed val/bits
+rts
+
+; as long as LX/LY is zp we can use bit branch
+@noy:
+    lax LX
+    nob
+@nox:
+    lax LY
+    and #$80
+    sta radian
+    txa
+    and #$7f
+    sta magnitude
+    rts
+
 """

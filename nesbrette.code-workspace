@@ -5,6 +5,9 @@
 		}
 	],
 	"settings": {
-		"workbench.colorTheme": "Theme Darker"
+		"workbench.colorTheme": "Theme Darker",
+		"files.associations": {
+			"xiosbase": "cpp"
+		}
 	}
 }

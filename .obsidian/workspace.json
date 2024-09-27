@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/math/fraction/Simplification.md",
+                "file": "docs/modules/math/Add.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/math/fraction/Simplification.md",
+                "file": "docs/modules/math/Add.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/math/fraction/Simplification.md",
+                "file": "docs/modules/math/Add.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/math/fraction/Simplification.md"
+                "file": "docs/modules/math/Add.md"
               }
             }
           }
@@ -148,19 +148,22 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "radial_dispersion.txt",
-    "theory/input/gcn_radial.py",
-    "theory/input/gcn_radial_mag copy.py",
-    "theory/input/gcn_radial_mag.py",
-    "theory/input/radial_dispersion.txt",
-    "theory/input/radial_disperson.txt",
-    "theory/input/__pycache__/gamecube_radial_map.cpython-312.pyc",
-    "theory/input/__pycache__/gcn_r_gpt.cpython-312.pyc",
-    "theory/input/__pycache__",
-    "theory/input/gcn_r_gpt.py",
-    "theory/input/gcn_r_gpt",
-    "README.md",
+    "docs/Untitled.md",
+    "docs/modules/math/Add.md",
+    "docs/modules/math",
+    "docs/modules",
+    "Untitled",
+    "Untitled.md",
+    "docs",
+    "modules/add.asm",
+    "modules/math/add/add_noptr.asm",
+    "modules/math/add",
+    "modules/math",
+    "modules",
+    "tablemaker/tablemaker.cpp",
     "docs/math/fraction/Simplification.md",
+    "README.md",
+    "theory/nescube/psuedocode.md",
     "docs/math/addition.md",
     "docs/math/division.md",
     "docs/ines2/ines2.md"

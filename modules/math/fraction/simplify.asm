@@ -1,3 +1,0 @@
-.proc simplify
-    rts
-    .endproc

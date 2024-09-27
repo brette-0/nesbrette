@@ -247,3 +247,11 @@
         adc #$01
     @temp:
     .endmacro
+
+.macro nob
+    .byte $0c   ; nop abs
+    .endmacro
+
+.macro bitop    ; nob but doesn't perform read
+    .byte $2c
+    .endmacro

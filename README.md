@@ -1,112 +1,16 @@
 # `nesbrette`
 ---
+## Use of libraries
 
-## What does `nesbrette` do?
-`nesbrette` is a swiss army knife of NES/Famicom routines, macros and tables to increase speed and quality of NES Homebrew/ROMHack development. `nesbrette` uses selective including to remove all redundant routine reducing; reducing output size. But it doesn't stop there, `nesbrette` also doesn't natively include tables for the functions, but rather a `python` script that will generate the information with a normalized filesystem with the outputs natively accessible to a `ca65 assembler`.
+If it's been done once well then why write it yourself, I present the idea of the library, but NES Development has little room for libraries. `32KiB` of immediately accessible `PRGROM` (outside of `RNBW`) means each byte is precious. Projects should *not* include *entire* libraries for many reasons such as :
+- similar label usage
+- fixed behaviour
+- included unused
+- bank fetching
 
-## Extent of quality
-`nesbrette` prefers *always* to reduce CPU intensity with reasonable attentiveness to output size. Each routine has been profilled with a simulated cycle count for (where feasible) every possible configuration and array of arguements. Routines will have an allocated area in memory (configurable in a `defines` file) which may be used to house either the information passed as an arguement or a pointer to it. 
+Simply put, both speed and size is *always* a concern - this is where `nesbrette` excels.
+`nesbrette` is a highly configurable library, only including what you *need* and making functions inline where it matters. `nesbrette` processes write only to configured RAM areas, allowing processes to write to areas of memory to the concern of the developer.
 
-> When disabling `FUNCTION_MATH_USES_OPTR` for any routine, you must preserve the output in a new area of memory or else your programme will behave unexpectedly.
+`nesbrette` aligns tables (where possible) to pages in order to reduce read speeds, offering highly precise and detailed tables to perform more complex operations. These tables come with access functions and generation scripts from `json` files.  By encapsulating `nesbrette` includes in declared scopes some code can be copied in many banks to prevent `PRG` window issues.
 
-Routines that contain the suffix `ptr` refer to routines that use an `indirect` addressing method and therefore are *slower* than those that use `direct` addressing. If a routine ends `iptr` that means the inputs *only* are indirectly accessed, if the routine ends `optr` that means *only* the ouput is indirectly constructed, and if the function alias ends in `ioptr` then this is the *slowest* variant that *indirectly* handles all arguements.
-
-## How to begin using it
-
-First of all, you will need to perform a static setup.
-```
-.include "static/macros/macroengine.asm"
-.include "static/macros/optionalincluder.asm"
-; the above will include the needed macros, with any optional ones
-; this will inclued system labels, mapper labels and common macros
-```
-
-This should go in your `main` or `header` script. It should be noted that `macros` are not protected by `scope`, and thus defining a label that shares the name as this macro *will* cause issues regardless of scope. Modifying the contents of `macroengine` could lead to total failure of dependant members, I would highly suggest not modifying this unless you think you are better than me at coding.
-
-Modify `static/static_inclusions` to disable/enable macros as you see fit for use. All are documented in `docs/module/feature`, some code *may* depend on `macros` here. Routines that require a `macro` library will raise a warning instructing you to include it.
-
-> Macros do not modify the size of your output based on inclusion, but usage, they function similarly to inline code. 
-
-After you have performed all this, you can include the library in these ways:
-### static inclusion (not recommended)
-
-```
-__libinclude__ "nesbrette"
-```
-This macro will include a configured `nesbrette` library here, accessible everywhere taking up space as you allow it to.
-
-### modular inclusion (reccomended)
-```
-.scope nesbrette
-	__libinclude__ "nesbrette"
-	; rest of code here
-.endscope
-```
-
-Only write what can be accessed, with clever bank management - repeats of code can be forgiven. Have only what you need and never twice when you can have it, a simple and effective way to solve bank clashes.
-
-The `__libinclude__` macro accepts a path to the configured library. For situations that use multiple inclusions of `nesbrette`, a modular approach will benefit from multiple configured libraries in different locations. Tables are page aligned by assuming they start on a page boundary.
-
-## library config
-
-`nesbrette` boasts speed over size, allowing itself to be dynamically shrunk at the will of the user. When you perform `__libinclude__` it searches for a `addresses.nesbrette.asm`, `constants.nesbrette.asm`, `tables.asm` and an `includes.nesbrette.asm`. 
-
-### `includes.nesbrette.asm`
-This file dictates *what* modules you will include through a series of toggle-able elements, `nesbrette` does not have automatic include specification so you will rely on the feedback of warnings to ensure you enable what you need.
-
-### `tables.asm`
-This file will be automatically generated and included first to ensure accesses are page-aligned.
-The tables are generated by a python script called `tablemaker.py`. `tablemaker.py` will generate tables with some meta information to help access the elements, it offers lots of control in how the tables are made and can be configured by a fetched `tablemaker.json` script which *should* be unique per call.
-
-### `constants.nesbrette.asm`
-This file will decide how some subroutines behave, experimental optimisations or deciding the accuracy of a routine.
-
-### `addresses.nesbrette.asm`
-This file will allow you to choose what address the functions will use each, they may overlap and be separate, *however*, we suggest that you make them ZP where possible and where it demands for ZP you **must** place it there or you **will** get assembler errors.
-
-## Terminology
-
-- `output`
-	returning value for a cumulative method, should be used as `base` value too.
-- `modifier`
-	modifies the `output`, may be perceived as secondary value or applied value.
-- `temp`
-	temporary memory that has no meaning to the result after completion
-- `ioptr`
-	access point for indirect indexed addressing
-
-
-## Schedule
-
-- Math
-	- Division
-	- Fraction
-		- Addition
-		- Subtraction
-		- Multiplication
-		- Division
-		- Exponential
-	- Exponential
-	- Approximate
-		- Root
-		- Fraction
-			- Root
-			- IntegerConversion
-	- Angular
-	- Trigonometry
-- Logic
-	- Reverse
-	- BCD
-- biasing
-	- bitset
-	- rle
-- random
-	- lfsr
-- string
-	- msb_terminated
-	- null_terminated
-- sprite
-	- dynamic_spirite_engine
-- physics
-	- angular physics
-	- raycast
+Speed, Size, Configuration written with good practice, tidy code.
