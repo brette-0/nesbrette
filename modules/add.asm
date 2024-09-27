@@ -10,6 +10,7 @@
         u32         = 32
         u64         = 64
         absolute    = 128
+        big         = 256
     .endenum
 
 
@@ -73,7 +74,7 @@
     .endmacro 
 
 
-.macro add arg1 arg2 arg3 arg4
+.macro add arg1 arg2 arg3 arg4 arg5
     .ifndef arg1
         ; begin evaluating            
         .ifndef mode
@@ -84,10 +85,41 @@
             isinline = 0
             .endif
 
-        .ifndef bitwidth
-            bitwidth = 0    ; vwidth
+        .ifndef bitwidth    ; inline only
+            isabsolute = 0
+        .else
+            .if bitwidth .and (.not isinline)
+                .fatal "cannot declare as absolute if not inline, use CONFIG_MODULES_MATH_FORCE_ABSOLUTE"
             .endif
+        .endif
 
+        .ifndef isabsolute  ; inline only
+            isabsolute = 0
+        .else
+            .if isabsolute .and (.not isinline)
+                .fatal "cannot declare as absolute if not inline, use CONFIG_MODULES_MATH_FORCE_ABSOLUTE"
+            .endif
+        .endif
+
+        .ifndef isunrolled  ; inline only
+            isunrolled = 0
+        .else
+            .if isunrolled .and (.not isinline)
+                .fatal "cannot declare as unrolled if not inline, use CONFIG_MODULES_MATH_FORCE_UNROLL"
+            .endif
+        .endif
+
+        .ifndef isbig       ; inline only
+            isbig = 0
+        .else
+            .if isbig .and (.not isbig)
+                .fatal "cannot declare as big endian if not inline, use CONFIG_MODULES_MATH_BIG_ENDIAN"
+            .endif
+        .endif
+
+        
+
+        
         .if isinline
             .if mode == noptr
                 ; include noptr add
@@ -134,8 +166,17 @@
         .if arg1 & ~(inline + ioptr)
             bitwidth = arg1 & ~(unroll + ioptr)
             .endif
+        .if arg1 & absolute
+            isabsolute = 1
+            .endif
+        .if arg1 & unroll
+            isunrolled = 1
+            .endif
+        .if arg1 & big
+            isbig      = 1
+            .endif
 
-        add arg2 arg3 arg4  ; call with reduced args
-        .exitmacro          ; leave macro (recurse back into proir call)
+        add arg2 arg3 arg4 arg5 ; call with reduced args
+        .exitmacro              ; leave macro (recurse back into proir call)
             
-    .endmacro               ; close macro (complete definition)
+    .endmacro                   ; close macro (complete definition)

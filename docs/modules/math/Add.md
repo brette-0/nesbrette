@@ -11,6 +11,7 @@ When performing addition in `nesbrette`, you **must** call it through the `macro
 - `inline` 
 - `noptr` / `iptr` / `optr` / `ioptr`
 - `u16` / `u32` / `u64`
+- `big`
 
 An `inline` call will re-include the assembly, please note that this is not the intended means to reduce bankswitching - instead we suggest simply scoping your includes for each bank. A call should only be `inline` where speed takes incredible priority over all other facets. Please note that excessive use of `inline` calls may incur wasted cycled through cross-page accesses.
 
@@ -20,6 +21,7 @@ Use of `iptr` will ensure all reads are fetched using `indirect indexed`, wherea
 
 When width is left unspecified, the macro will call a "get width" function that fetches the either constant or variable width before leaking into the main addition process. Please note that the function itself is *always* V-Width, simply the 'default' width can be changed if set to an address in place of a constant.
 
+Use of `big` will enable "big endian" mode, in order to track index changes when scaling each byte. It should be noted that this introduces a new complexity in which optimisation freaks will need to concern themselves over. `inline big` operations will perform a logical compare each time unless `unroll` is set, this differs from non-`inline` calls in which if a `bitwidth` is specified - that bit will be specified *before* call and written to `ADDRESSES_ADD_WIDTH`.  All in all, little endian is faster and smaller.
 # `add_vptr_retarget_out`
 
 `add_vpr_retarget_out add_vptr player_score`
@@ -35,3 +37,5 @@ This function accepts a target where the `add_noptr` is stored in `RAM` and the 
 - Do not modify `nesbrette` addresses if stored in `SMC` before calling `SMC` modification macros.
 - Do not attempt to use `vptr` behaviour if target resembles an `unrolled` process.
 - Ensure the target `RAM` address is `__add_noptr_body`. (see [here]())
+
+
