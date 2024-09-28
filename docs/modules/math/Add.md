@@ -37,5 +37,3 @@ This function accepts a target where the `add_noptr` is stored in `RAM` and the 
 - Do not modify `nesbrette` addresses if stored in `SMC` before calling `SMC` modification macros.
 - Do not attempt to use `vptr` behaviour if target resembles an `unrolled` process.
 - Ensure the target `RAM` address is `__add_noptr_body`. (see [here]())
-
-
