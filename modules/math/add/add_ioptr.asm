@@ -1,4 +1,4 @@
-
+.ifndef isinline
 .proc __add_ioptr_fetch_width
     ; defines
     .ifdef CONSTANTS_MATH_ADD_WIDTH
@@ -11,6 +11,7 @@
     .endproc
     ;leak
 .proc __add_ioptr__body
+.endif
     ; x => width
 
     output = ADDRESSES_MATH_ADD_OUT
@@ -30,7 +31,7 @@
             .if (.ifdef isbig) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
                 iny
                 .if .isinline
-                    cpy #(bitwidth >> 3)
+                    cpy #(bitwidth >> 5)
                 .else (.ifdef CONSTANTS_MATH_ADD_WIDTH)
                     cpy #CONSTANTS_MATH_ADD_WIDTH
                 .else
@@ -42,10 +43,10 @@
             bne @loop                      ; do {} while (width);
 
     .else
-        .ifdef (bitwidth >> 3)
-            repeatwidth = (bitwidth >> 3)
+        .ifdef (bitwidth >> 5)
+            repeatwidth = (bitwidth >> 5)
         .elseif (.ifdef CONSTANTS_MATH_ADD_WIDTH)
-            repeatwidth = (bitwidth >> 3)
+            repeatwidth = (bitwidth >> 5)
         .else
             .fatal "No constant width specified for unroll"
         .endif

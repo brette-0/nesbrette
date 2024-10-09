@@ -4,14 +4,18 @@
         inline      = 2
         big         = 4
         unroll      = 8
-        u16         = 16
-        u24         = 24
-        u32         = 32
-        u64         = 64
-        absolute    = 128
-        big         = 256
+        absolute    = 16
+        big         = 32
+        u16         = 64
+        u24         = 96
+        u32         = 128
+        u64         = 256
+        u128        = 512
+        u256        = 1024
+        u512        = 2048
+        u1024       = 4096
+        u2048       = 8192
     .endenum
-
 ; add macros to mod vptr targets
 
 .macro add arg1 arg2 arg3 arg4 arg5
@@ -26,7 +30,7 @@
             .endif
 
         .ifndef bitwidth    ; inline only
-            isabsolute = 0
+            isabsolute = CONFIG_MODULES_MATH_FORCE_ABSOLUTE
         .else
             .if bitwidth .and (.not isinline)
                 .fatal "cannot declare as absolute if not inline, use CONFIG_MODULES_MATH_FORCE_ABSOLUTE"
@@ -34,7 +38,7 @@
         .endif
 
         .ifndef isabsolute  ; inline only
-            isabsolute = 0
+            isabsolute = CONFIG_MODULES_MATH_FORCE_ABSOLUTE
         .else
             .if isabsolute .and (.not isinline)
                 .fatal "cannot declare as absolute if not inline, use CONFIG_MODULES_MATH_FORCE_ABSOLUTE"
@@ -42,7 +46,7 @@
         .endif
 
         .ifndef isunrolled  ; inline only
-            isunrolled = 0
+            isunrolled = CONFIG_MODULES_MATH_FORCE_UNROLL
         .else
             .if isunrolled .and (.not isinline)
                 .fatal "cannot declare as unrolled if not inline, use CONFIG_MODULES_MATH_FORCE_UNROLL"
@@ -50,7 +54,7 @@
         .endif
 
         .ifndef isbig       ; inline only
-            isbig = 0
+            isbig = CONFIG_MODULES_MATH_BIG_ENDIAN
         .else
             .if isbig .and (.not isbig)
                 .fatal "cannot declare as big endian if not inline, use CONFIG_MODULES_MATH_BIG_ENDIAN"
@@ -69,17 +73,17 @@
         .else
             .if bitwidth
                 .if mode == noptr
-                    ldx #(bitwidth >> 3)
+                    ldx #(bitwidth >> 5)
                     jsr nesbrette::modules::math::__add_noptr__body
                 .else
-                    ldy #(bitwidth >> 3)
-                    jsr nesbrette::modules::math::__add_noptr__body
+                    ldy #(bitwidth >> 5)
+                    jsr nesbrette::modules::math::__add_ioptr__body
                 .endif
             .else
                 .if mode == noptr
                     jsr nesbrette::modules::math::__add_noptr_fetch_width
                 .else
-                    jsr nesbrette::modules::math::__add_noptr_fetch_width
+                    jsr nesbrette::modules::math::__add_ioptr_fetch_width
                 .endif
             .endif
         .endif
@@ -92,9 +96,6 @@
         .if arg1 & inline
             isinline = 1
             .endif
-        .if arg1 & ~(inline + ioptr)
-            bitwidth = arg1 & ~(unroll + ioptr)
-            .endif
         .if arg1 & absolute
             isabsolute = 1
             .endif
@@ -103,6 +104,9 @@
             .endif
         .if arg1 & big
             isbig      = 1
+            .endif
+        .if arg1 & ~(u16-1)
+            bitwidth = ~(u16-1)
             .endif
 
         add arg2 arg3 arg4 arg5 ; call with reduced args

@@ -28,5 +28,21 @@ Routines should always belong to an appropriate module, square rooting - for exa
 
 Modification of the `nesbrette` engine : include management, definition management etc... will undergo a heavy evaluation process - it is less preferable that these are interacted with without communication with the `nesbrette` owners.
 
+Tests must be conducted in the form
+```
+Tested Object Name - Passing/Failed/Underperforming/Depreciated
 
+Cycle Count Formula:
+ Byte Count Formula:
 
+Optimisations:
+	Circumstancial
+	Toggleable
+	Size vs speed
+
+Big O
+
+Related Code
+
+Visualisations:
+```

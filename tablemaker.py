@@ -164,6 +164,17 @@ RECIPROCAL_InWidth = {kw["index_width"]}
 RECIPROCAL_OutWidth= {kw["element_width"]}
 RECIPROCAL_Signed  = {kw["signed"]}
 RECIPROCAL:"""
-    
+        
+    def idtables(**kw):
+        valid_args = {"reversed"}
+        if any(tuple(arg not in valid_args for arg in kw)) or any (arg not in kw for arg in valid_args):
+            print(f"Invalid arguements found")
+
+        output = f"""\n;   {"R" if kw["revsersed"] else "ID"}TABLE
+{"R" if kw["revsersed"] else "ID"}TABLE:"""
+        output += "".join(
+            [".byte ".join([f"${(i << 4) + j:02x}, " for j in range(16)][::(-1 if kw["revsersed"] else 1)]) + "\n"
+              for i in range(16)][::(-1 if kw["revsersed"] else 1)]
+            )
 
 if __name__ == "__main__": main.main()

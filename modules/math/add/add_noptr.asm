@@ -1,4 +1,4 @@
-
+.ifndef .isline                             ; do not include header or labels if inline
 .proc __add_noptr_fetch_width
     ; defines
     .ifdef CONSTANTS_MATH_ADD_WIDTH
@@ -11,6 +11,7 @@
     .endproc
     ;leak
 .proc __add_noptr__body
+.endif
     ; x => width
 
     output = ADDRESSES_MATH_ADD_OUT
@@ -36,7 +37,7 @@
             .if (.ifdef isbig) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
                 inx
                 .if .isinline
-                    cpx #(bitwidth >> 3)
+                    cpx #(bitwidth >> 5)
                 .else (.ifdef CONSTANTS_MATH_ADD_WIDTH)
                     cpx #CONSTANTS_MATH_ADD_WIDTH
                 .else
@@ -48,19 +49,19 @@
             bne @loop                      ; do {} while (width);
 
     .else
-        .ifdef (bitwidth >> 3)
-            repeatwidth = (bitwidth >> 3)
+        .ifdef (bitwidth >> 5)
+            repeatwidth = (bitwidth >> 5)
         .elseif (.ifdef CONSTANTS_MATH_ADD_WIDTH)
-            repeatwidth = (bitwidth >> 3)
+            repeatwidth = (bitwidth >> 5)
         .else
             .fatal "No constant width specified for unroll"
         .endif
 
         .repeat repeatwidth, iter
             .if (.ifdef isbig) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
-                lda output - iter + modifier + (bitwidth >> 3)
-                adc adder  - iter + modifier + (bitwidth >> 3)
-                sta output - iter + modifier + (bitwidth >> 3)
+                lda output - iter + modifier + (bitwidth >> 5)
+                adc adder  - iter + modifier + (bitwidth >> 5)
+                sta output - iter + modifier + (bitwidth >> 5)
             .else
                 lda output + iter + modifier
                 adc adder  + iter + modifier
