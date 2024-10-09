@@ -17,18 +17,26 @@
     output = ADDRESSES_MATH_ADD_OUT
     adder  = ADDRESSES_MATH_ADD_MOD
 
-    .if (.ifdef isabsolute) .or (.ifdef CONFIG_MODULES_MATH_FORCE_ABSOLUTE)
-        modifier = $800
+    .ifdef isabsolute 
+        modifier = $800 * isabsolute
     .else
-        modifier = $0
+        .ifdef CONFIG_MODULES_MATH_FORCE_ABSOLUTE
+            modifier = $800 * CONFIG_MODULES_MATH_FORCE_ABSOLUTE
+        .else
+            modifier = $0
+        .endif
     .endif
 
     clc
-    .if ((.ifdef isbig) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)) .and .not ((.ifdef .isunrolled) .or (.ifdef CONFIG_MODULES_MATH_FORCE_UNROLL))
-        ldx #$00
+
+    .ifdef isbig
+        .ifdef isunrolled
+
+    .if (.ifndef isunrolled) .or (.ifndef CONFIG_MODULES_MATH_FORCE_UNROLL)
+        .if (.ifdef big) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
+            ldx #$00
         .endif
 
-    .if (.ifdef isunrolled) .or (.not .ifdef CONFIG_MODULES_MATH_FORCE_UNROLL)
         @loop:
             lda output + modifier, x
             adc adder  + modifier, x
