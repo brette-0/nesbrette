@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Theme Darker",
+		"files.associations": {
+			"xiosbase": "cpp"
+		}
+	}
+}

@@ -52,3 +52,24 @@
 > **Variable Width Safety**
 > 
 > If you preserve the original width, reduce the width you can safely reduce wasted cycles if you are sure the `adder` will be thinner than the potential output. Misuse of V-Width could lead into overflows, if used alongside with `vptr` functions you earn yourself an `ACE` vulnerability. 
+> To specify detailed `bitwidth` perform `(u64 + u32)` , don't specify them both with `u64, u32` or you will hit an error!
+
+
+#### `alpha-`1728616905
+> **idtable/rtable use**
+> Adding use of 'idtables' unlocked a variety of new macro's with low speed. Such as `neg` which effectively completes `reg = -reg` with some limitations and other less useful things such as `iisc` which uses `vptr` method to get `indirect` addressing for `isc` the illegal instruction completing `inc` followed by `sbc`. 
+> 
+> The sheer idea of someone creating a `vptr` function for something like `iisc` is amusing considering the cost of branching and returning. These features will be scrapped as long as I can think of a rule that decides they are inappropriate. *However*, if a system depended on *requests* to modify memory *then* these *could* be useful. But that's a very specific condition I highly doubt will be fulfilled.
+> 
+> I decide that `phx` and `phy` will not get support for these reasons :
+> - Good nesdevers can go without
+> - `stx` and `sty` both have `zp` Addressing modes.
+> - Stack is precious.
+> - `zp` is precious
+> - if `zp` isn't used, `a` is clobbered despite the 'opcodes' stating `x` and `y`.
+>   
+>  But I happily added `tyx` and `txy` as it's just absolute indexed. Is it slower than transferring between general purpose registers and `a`? Yes, but it's no faster or smaller to pass through `a` first and is certainly faster than storing `zp` and fetching. Simply put, a better programmer than I may *somehow* avoid wanting to shift values between general purpose registers but I have found myself in too many a case where it has been useful.
+>  
+>  None of the bitwise operations need be explained, `sax` completes the job of `xmask` but requires a write target - if the value need not be preserved simply using `sax zp` with a wasted temp address is sufficient.
+>  
+>  `laxi` must be used over `lax #imm` because `lax #imm` is undefined, while emulators may yield the developer intended result - this is a hardware inaccuracy, different `2a03` models yield different results in varying degrees of chaos but consistent in it's erroneous.

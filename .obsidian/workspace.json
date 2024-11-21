@@ -11,40 +11,13 @@
             "id": "b0061fb007547c07",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "fc0dff8f66a4e8cf",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Developing nesbrette.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "8840413a72493ea6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "DEVNOTES.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -64,7 +37,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -79,7 +54,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -87,7 +64,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
@@ -110,7 +89,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "DEVNOTES.md",
+                "file": "Developing nesbrette.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +97,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Developing nesbrette"
             }
           },
           {
@@ -127,10 +108,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "DEVNOTES.md",
+                "file": "Developing nesbrette.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Developing nesbrette"
             }
           },
           {
@@ -141,7 +124,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -150,8 +135,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "DEVNOTES.md"
-              }
+                "file": "Developing nesbrette.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Developing nesbrette"
             }
           }
         ]
@@ -171,29 +158,53 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8840413a72493ea6",
+  "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "test/signed_math.py",
-    "test",
-    "Developing nesbrette.md",
-    "DEVNOTES.md",
-    "modules/math/sub/sub_noptr.asm",
-    "modules/math/sub/sub_ioptr.asm",
-    "modules/math/sub/add_noptr.asm",
-    "modules/math/sub/add_ioptr.asm",
-    "modules/math/sub",
-    "modules/math/add copy/add_noptr.asm",
-    "modules/math/add copy/add_ioptr.asm",
-    "modules/math/add copy",
-    "modules/sub.asm",
-    "docs/modules/math/Add.md",
+    "engine/includes.nesbrette.asm",
+    "modules/global/idtable/i6502x.asm",
+    "modules/global/idtable/i6502.asm",
+    "modules/global/idtable",
+    "engine/includer.nesbrette.asm",
+    "modules/global/math/trig/sin.asm",
+    "modules/global/math/trig/cos.asm",
+    "modules/global/math/trig",
+    "modules/global/trig/sin.asm",
+    "modules/global/trig/cos.asm",
+    "modules/global/trig",
+    "docs/modules/math/trig.md",
+    "thoughts/trig.md",
+    "docs/modules/math/image-3.png",
+    "testing/results/cmult_accumulator_mode_oob_mask.png",
+    "testing/results/cmult_accumulator_mode_oob_mask.bmp",
+    "testing/results/cmult_accumulator_mode_oob.bmp",
+    "multiply_speedchart.bmp",
+    "profiling/math/cmult_results/cmult_accumulator_mode_biased_complexity_profiling.png",
+    "profiling/math/cmult_results/cmult_accumulator_mode_unbiased_complexity_profiling.png",
+    "profiling/math/cmult_results/cmult_accumulator_mode_multiplier_profiling.png",
+    "profiling/math/cmult_results/cmult_biased_complexity_profiling.png",
+    "profiling/math/cmult_results/cmult_unbiased_complexity_profiling.png",
+    "docs/modules/math/cmult.md",
+    "docs_example.md",
+    "docs/modules/header.md",
+    "Engine_Lexis.md",
     "README.md",
-    "Pasted image 20240927205709.png",
+    "nesbrette.md",
+    "archive/Objective_Syntax.md",
+    "Objective_Syntax.md",
+    "archive/DEVNOTES.md",
+    "archive/Developing nesbrette.md",
+    "archive/documentation/Mulitplication.md",
+    "archive/documentation/Addition.md",
+    "archive/math/Add.md",
+    "Developing nesbrette.md",
+    "documentation/Mulitplication.md",
+    "documentation/Addition copy.md",
+    "documentation/Addition.md",
+    "Untitled.md",
+    "DEVNOTES.md",
+    "docs/modules/math/Add.md",
     "docs/Untitled.md",
     "docs/math/fraction/Simplification.md",
-    "theory/nescube/psuedocode.md",
-    "docs/math/addition.md",
-    "docs/math/division.md",
-    "docs/ines2/ines2.md"
+    "theory/nescube/psuedocode.md"
   ]
 }

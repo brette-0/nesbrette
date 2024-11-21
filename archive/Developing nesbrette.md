@@ -46,3 +46,53 @@ Related Code
 
 Visualisations:
 ```
+
+### Rules
+
+- All code must function completely on authentic hardware. Use of
+	- Expansion Audio Mod
+	- Expansion Device
+	- Controller Feature
+	Does not count as inauthentic hardware. All `ECT` specific modules *must* depend on an `ECT` constant value using the `iNES2` module.
+- Code cannot be designed in a way that condones bad practice
+- Code must be as configurable as *beneficially* possible
+- No code configuration may include unintentionally wasted cycles or bytes.
+- All constants to be provided an Alias
+- Code must target `2a03-6502x-ca65`
+
+
+#### Code style
+
+
+```
+.if bool
+	; body
+	.endif
+
+.if
+	; large
+	; body
+.endif
+; same for macro
+
+.proc function_name
+
+	local = GLOBAL_NAME		; use local aliases for clarity
+	sta local				; lowercase opcodes
+	sta local + 3, x		; spaces between operators
+	
+	.endproc				; priority shift earns tab
+	;leak
+.proc __notcalled
+	pha
+		lda #$20
+		sta $2000			; stack wrapped code earns tab
+	pla
+	rts
+	.endproc
+
+CATEGORY_SUBCAT_SUBCAT_GLOBAL_NAME	; globals to be capitalized
+; comments to be a tab away from last character, lower case + space
+
+; nesbrette uses cstyle comments, forced range, underline in numbers
+```

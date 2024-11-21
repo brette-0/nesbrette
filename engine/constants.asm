@@ -1,1 +1,0 @@
-;.define CONSTANTS_MATH_ADD_WIDTH    0

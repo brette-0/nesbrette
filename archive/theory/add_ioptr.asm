@@ -1,58 +1,44 @@
-.ifndef .isline                             ; do not include header or labels if inline
-.proc __add_noptr_fetch_width
+.ifndef isinline
+.proc __add_ioptr_fetch_width
     ; defines
     .ifdef CONSTANTS_MATH_ADD_WIDTH
-        ldx #CONSTANTS_MATH_ADD_WIDTH
+        ldy #CONSTANTS_MATH_ADD_WIDTH
     .else
-        ldx ADDRESSES_MATH_ADD_WIDTH
+        ldy ADDRESSES_MATH_ADD_WIDTH
     .endif
 
     ; use bitwidth if inline and nonzero, else use vwidth
     .endproc
     ;leak
-.proc __add_noptr__body
+.proc __add_ioptr__body
 .endif
     ; x => width
 
     output = ADDRESSES_MATH_ADD_OUT
     adder  = ADDRESSES_MATH_ADD_MOD
 
-    .ifdef isabsolute 
-        modifier = $800 * isabsolute
-    .else
-        .ifdef CONFIG_MODULES_MATH_FORCE_ABSOLUTE
-            modifier = $800 * CONFIG_MODULES_MATH_FORCE_ABSOLUTE
-        .else
-            modifier = $0
-        .endif
-    .endif
-
     clc
 
-    .ifdef isbig
-        .ifdef isunrolled
-
-    .if (.ifndef isunrolled) .or (.ifndef CONFIG_MODULES_MATH_FORCE_UNROLL)
+    .if (.ifdef isunrolled) .or (.not .ifdef CONFIG_MODULES_MATH_FORCE_UNROLL)
         .if (.ifdef big) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
             ldx #$00
         .endif
-
         @loop:
-            lda output + modifier, x
-            adc adder  + modifier, x
-            sta output + modifier, x       ; tar += mod
+            lda (output), y
+            adc (adder), y
+            sta (output), y       ; tar += mod
             
             .if (.ifdef isbig) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
-                inx
+                iny
                 .if .isinline
-                    cpx #(bitwidth >> 5)
+                    cpy #(bitwidth >> 5)
                 .else (.ifdef CONSTANTS_MATH_ADD_WIDTH)
-                    cpx #CONSTANTS_MATH_ADD_WIDTH
+                    cpy #CONSTANTS_MATH_ADD_WIDTH
                 .else
-                    cpx ADDRESSES_MATH_ADD_WIDTH
+                    cpy ADDRESSES_MATH_ADD_WIDTH
                 .endif
             .else
-                dex
+                dey
             .endif
             bne @loop                      ; do {} while (width);
 
@@ -67,13 +53,15 @@
 
         .repeat repeatwidth, iter
             .if (.ifdef isbig) .or (.ifdef CONFIG_MODULES_MATH_BIG_ENDIAN)
-                lda output - iter + modifier + (bitwidth >> 5)
-                adc adder  - iter + modifier + (bitwidth >> 5)
-                sta output - iter + modifier + (bitwidth >> 5)
+                lda (output), y
+                adc (output), y
+                sta (output), y
+                iny
             .else
-                lda output + iter + modifier
-                adc adder  + iter + modifier
-                sta output + iter + modifier
+                dey
+                lda (output), y
+                adc (adder) , y
+                sta (output), y
             .endif
     .endif
     ; exit
