@@ -24,3 +24,5 @@ insert_header
 
 ; include other scripts
 ```
+
+> `insert_header` has only been tested with `24KiB` `NTSC` `NROM` blanks, if values appear erroneously feel free to submit a commit or raise the error!

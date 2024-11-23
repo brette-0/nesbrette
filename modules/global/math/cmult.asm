@@ -1,6 +1,8 @@
+; untested
+
 ; constant multiply
 
-.macro cmult __multiplier__ __temp__ __output__ __osize__
+.macro cmult __multiplier__, __temp__, __output__, __osize__
     ; both modes require a temporary ram address
     .ifblank __temp__
         .ifdef CONSTANTS_MATH_CMULT_TEMP

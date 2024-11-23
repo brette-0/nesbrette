@@ -1,6 +1,6 @@
 .ifndef insert_header
     .macro insert_header
-        .asciiz "NES", $ea
+        .literal "NES", $1a
         
         .byte (CONSTANTS_HEADER_PRG_ROM_AMT & $ff)     ; byte 4 => prg rom atm 16KiB
         .byte (CONSTANTS_HEADER_CHR_ROM_AMT & $ff)     ; byte 5 => chr rom atm 8KiB
@@ -18,27 +18,57 @@
         .byte ((CONSTANTS_HEADER_CHR_ROM_AMT >> 4) & $f0) | (CONSTANTS_HEADER_PRG_ROM_AMT >> 8)
         
         ; byte 10 (cart prg ram sizes)
-        .repeat iter, 8
-            .if ((CONSTANTS_HEADER_PRG_RAM_AMT >> 6) & (1 << (8 - iter)) .and .ifndef prgramtamt_done)
-                prgramtamt_done = 8 - iter
+        .repeat 8, iter
+            .ifdef prgramtamt_done
+                .if (CONSTANTS_HEADER_PRG_RAM_AMT >> 6) & (1 << (8 - iter))
+                    prgramtamt_done = 8 - iter
+                    .endif
+                .endif
             .endrepeat
 
-        .repeat iter, 8
-            .if ((CONSTANTS_HEADER_EEPROM_AMT >> 6) & (1 << (8 - iter)) .and .ifndef eepromamt_done)
-                eepromamt_done = 8 - iter
+        .repeat 8, iter
+            .ifdef eepromamt_done
+                .if (CONSTANTS_HEADER_EEPROM_AMT >> 6) & (1 << (8 - iter))
+                    eepromamt_done = 8 - iter
+                    .endif
+                .endif
             .endrepeat
+        
+        .ifndef eepromamt_done
+            eepromamt_done = 0    ; made useless if no present value
+        .endif
+
+        .ifndef prgramtamt_done
+            prgramtamt_done = 0
+        .endif
+        
         .byte (eepromamt_done << 4) | prgramtamt_done
 
         ; byte 11 (cart chr ram sizes)
-        .repeat iter, 8
-            .if ((CONSTANTS_HEADER_CHR_RAM_AMT >> 6) & (1 << (8 - iter)) .and .ifndef chrramamt_done)
-                chrramamt_done = 8 - iter
+        .repeat 8, iter
+            .ifdef chrramamt_done
+                .if (CONSTANTS_HEADER_CHR_RAM_AMT >> 6) & (1 << (8 - iter))
+                    chrramamt_done = 8 - iter
+                    .endif
+                .endif
             .endrepeat
 
-        .repeat iter, 8
-            .if ((CONSTANTS_HEADER_CHR_NVRAM_AMT >> 6) & (1 << (8 - iter)) .and .ifndef chrnvramamt_done)
-                chrnvramamt_done = 8 - iter
+        .repeat 8, iter
+            .ifdef chrnvramamt_done
+                .if (CONSTANTS_HEADER_CHR_NVRAM_AMT >> 6) & (1 << (8 - iter))
+                    chrnvramamt_done = 8 - iter
+                    .endif
+                .endif
             .endrepeat
+        
+        .ifndef chrnvramamt_done
+            chrnvramamt_done = 0    ; made useless if no present value
+        .endif
+
+        .ifndef chrramamt_done
+            chrramamt_done = 0
+        .endif
+
         .byte (chrnvramamt_done << 4) | chrramamt_done
 
         ; byte 12 (cpu timing)

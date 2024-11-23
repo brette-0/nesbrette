@@ -9,3 +9,17 @@ INCLUDES_NESBRETTE_MATH_TRIG_COS            = 0
 
 INCLUDES_NESBRETTE_IDTABLE_INSTRUCTIONS     = 0
 INCLUDES_NESBRETTE_IDTABLE_ILLEGAL          = 0
+
+; DO NOT REMOVE THE BELOW
+.ifndef ___libinclude___
+    .macro ___libinclude___
+            .include "constants.nesbrette.asm"
+            .include "addresses.nesbrette.asm"
+            .include "warnings.nesbrette.asm"
+            .include "includer.nesbrette.asm"
+        
+            ; not for user use
+            .undef ___includeif___
+            .undef ___libinclude___
+        .endmacro
+    .endif

@@ -1,3 +1,5 @@
+; untested
+
 .macro cos
     .ifdef COS_TABLE
         .if (.ifdef SIN_TABLE) .and (WARNINGS_MATH_TRIG_DUAL_TABLE)
