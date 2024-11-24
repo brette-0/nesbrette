@@ -3,6 +3,7 @@
 ; constant multiply
 
 .macro cmult __multiplier__, __temp__, __output__, __osize__
+    .local _msize_, _lssb_, _mssb_
     ; both modes require a temporary ram address
     .ifblank __temp__
         .ifdef CONSTANTS_MATH_CMULT_TEMP
@@ -18,13 +19,7 @@
         .fatal "Constant Multiplier must have Multiplier operand"
     .endif
 
-    .repeat iter, 4 ; ca65 preprocessor nums are 32bit
-        .if .not (__multiplier__ >> (iter * 8))
-            _msize_ = iter
-        .endif
-        .endrepeat
-
-    .if __multiplier__ == 0
+    .if !__multiplier__
         .if WARNINGS_MATH_CMULT_MULTZERO
             .warning "Constant multiplication by Zero : Check the value journey of the passed label"
         .endif
@@ -38,17 +33,29 @@
         .exitmacro
     .endif
 
-    ; most and least significant set bit macros, works for both accumulator and address mode
-    .repeat iter, 8 * _msize_
-        .if __multiplier__ >> (((8 * _msize_) - 1) - iter)
-            _mssb_ = (((8 * _msize_) - 1) - iter)
-        .endif
+    .repeat 4, iter ; ca65 preprocessor nums are 32bit
+        .if !(__multiplier__ >> (iter * 8))
+            .ifndef _msize_
+                _msize_ = iter
+                .endif
+            .endif
         .endrepeat
 
-    .repeat iter, 8 * _msize_
+    ; most and least significant set bit macros, works for both accumulator and address mode
+    .repeat 8 * _msize_, iter
+        .if __multiplier__ >> (((8 * _msize_) - 1) - iter)
+            .ifndef _mssb_
+                _mssb_ = (((8 * _msize_) - 1) - iter)
+                .endif
+            .endif
+        .endrepeat
+
+    .repeat 8 * _msize_, iter
         .if __multiplier__ & (1 << iter)
-            _lssb_ = iter
-        .endif
+            .ifndef _lssb_
+                _lssb_ = iter
+                .endif
+            .endif
         .endrepeat
 
     .ifblank __output__ ; accumulator mode      
@@ -56,7 +63,7 @@
             .warning "Constant Multiplication : Multiplier out of bounds"
         .endif
 
-        .repeat iter, _lssb_
+        .repeat _lssb_, iter
                 asl
             .endrepeat
 
@@ -66,7 +73,7 @@
         
         sta _temp_
         clc
-        .repeat iter, _mssb_ - _lssb_
+        .repeat _mssb_ - _lssb_, iter
             asl _temp_
             .if __multiplier__ >> (iter + _lssb_)
                 adc _temp_
@@ -86,8 +93,8 @@
         .endif
 
 
-    .repeat iter, _lssb_
-        .repeat _iter, _msize_
+    .repeat _lssb_, iter
+        .repeat _msize_, _iter
             asl _temp_ + _iter
             .endrepeat
         .endrepeat
@@ -97,19 +104,19 @@
         .endif
     
     ldx #$00
-    .repeat iter, __osize__
+    .repeat __osize__, iter
         lda __output__, iter
         stx __output__, iter
         sta _temp_, iter
         .endrepeat
 
     clc
-    .repeat iter, _mssb_ - _lssb_
-        .repeat _iter, _msize_
+    .repeat _mssb_ - _lssb_, iter
+        .repeat _msize_, _iter
             asl _temp_ + iter
             .endrepeat
         .if __multiplier__ >> (iter + _lssb_)
-            .repeat _iter, __osize__
+            .repeat __osize__, _iter
                 lda __output__ + iter
                 adc _temp_     + iter
                 sta __output__ + iter
