@@ -3,6 +3,14 @@
     .include "modules/global/header/header.asm"
 .endif
 
+.if INCLUDES_NESBRETTE_LOGIC_LSHIFT
+    .include "modules/global/logic/lshift.asm"
+.endif
+
+.if INCLUDES_NESBRETTE_LOGIC_RSHIFT
+    .include "modules/global/logic/rshift.asm"
+.endif
+
 ; global/math
 .if INCLUDES_NESBRETTE_MATH_ADD
     .include "modules/global/math/add.asm"

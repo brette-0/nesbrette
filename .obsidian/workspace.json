@@ -160,17 +160,18 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "modules/global/math/trig/sin.asm",
-    "modules/global/math/trig/cos.asm",
-    "modules/global/math/trig",
-    "modules/global/math/sub.asm",
-    "modules/global/math/add.asm",
-    "modules/global/math/cmult.asm",
-    "modules/global/idtable/i6502x.asm",
-    "modules/global/idtable/i6502.asm",
-    "modules/global/header/header.asm",
-    "modules/global/math",
-    "modules/global/idtable",
+    "engine/warnings.nesbrette.asm",
+    "engine/includes.nesbrette.asm",
+    "engine/includer.nesbrette.asm",
+    "engine/constants.nesbrette.asm",
+    "engine/addresses.nesbrette.asm",
+    "engine",
+    "modules/global/engine/includes.nesbrette.asm",
+    "modules/global/engine/warnings.nesbrette.asm",
+    "modules/global/engine/includer.nesbrette.asm",
+    "modules/global/engine/constants.nesbrette.asm",
+    "modules/global/engine/addresses.nesbrette.asm",
+    "thoughts/TODO.md",
     "docs/modules/math/trig.md",
     "thoughts/trig.md",
     "docs/modules/math/image-3.png",
@@ -204,7 +205,6 @@
     "DEVNOTES.md",
     "docs/modules/math/Add.md",
     "docs/Untitled.md",
-    "docs/math/fraction/Simplification.md",
-    "theory/nescube/psuedocode.md"
+    "docs/math/fraction/Simplification.md"
   ]
 }
