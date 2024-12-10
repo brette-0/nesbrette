@@ -70,3 +70,6 @@
     ldx IDTABLE, y
 .endmacro
 
+.macro sev
+    biti $40
+    .endmacro

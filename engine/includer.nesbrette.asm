@@ -11,6 +11,17 @@
     .include "modules/global/logic/rshift.asm"
 .endif
 
+.if INCLUDES_NESBRETTE_LOGIC_LSSB
+    .include "modules/global/logic/lssb.asm"    ; homes LSSB(sym)
+.endif
+
+.if INCLUDES_NESBRETTE_LOGIC_MSSB
+    .include "modules/global/logic/mssb.asm"    ; homes MSSB(sym)
+.endif
+
+.if INCLUDES_NESBRETTE_MATH_ISPO2
+    .include "modules/global/math/ispo2.asm"    ; homes ispo2(sym)
+
 ; global/math
 .if INCLUDES_NESBRETTE_MATH_ADD
     .include "modules/global/math/add.asm"

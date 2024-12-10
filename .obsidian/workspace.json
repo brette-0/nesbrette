@@ -11,10 +11,14 @@
             "id": "b0061fb007547c07",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "docs/modules/synthetic/i6502.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "i6502"
             }
           }
         ]
@@ -160,17 +164,19 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "testing/null_coalesce.py",
+    "testing/null_coalesce.asm",
+    "modules/global/preprocessor/null.asm",
+    "docs/Table.md",
+    "docs/modules/synthetic/`s6502`.md",
+    "docs/modules/synthetic",
+    "modules/global/math/ispo2.asm",
+    "modules/global/logic/mssb.asm",
+    "modules/global/logic/lssb.asm",
     "engine/warnings.nesbrette.asm",
     "engine/includes.nesbrette.asm",
     "engine/includer.nesbrette.asm",
     "engine/constants.nesbrette.asm",
-    "engine/addresses.nesbrette.asm",
-    "engine",
-    "modules/global/engine/includes.nesbrette.asm",
-    "modules/global/engine/warnings.nesbrette.asm",
-    "modules/global/engine/includer.nesbrette.asm",
-    "modules/global/engine/constants.nesbrette.asm",
-    "modules/global/engine/addresses.nesbrette.asm",
     "thoughts/TODO.md",
     "docs/modules/math/trig.md",
     "thoughts/trig.md",
@@ -203,8 +209,6 @@
     "documentation/Addition.md",
     "Untitled.md",
     "DEVNOTES.md",
-    "docs/modules/math/Add.md",
-    "docs/Untitled.md",
-    "docs/math/fraction/Simplification.md"
+    "docs/modules/math/Add.md"
   ]
 }
