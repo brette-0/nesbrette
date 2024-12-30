@@ -1,0 +1,2 @@
+## Square Rooting
+Square rooting has little place on the NES, where it has geometric purpose it often can be solved to a greater degree of accuracy with trigonemetic functions. While rooting still has purpose, it is left to the user to develop a solution - the best being a Look-Up Table of square numbers to compare against and source index.
