@@ -2,6 +2,8 @@
 ; needs ioptr
 ; untested
 
+; NEEDS MAJOR REWORK
+
 .macro eval __offset__, __width__, __endian__, __reg__
     .ifblank __offset__
         .fatal "eval requires offset to evaluate"
@@ -20,10 +22,10 @@
         .endif
 
     .ifblank __reg__
-        __reg__ = x
+        __reg__ = a
         .endif
 
-    .if (__reg__ <> x) .and (__reg__ <> y)
+    .if (__reg__ <> x) .and (__reg__ <> y) .and (__reg__ <> a)
         .fatal "Invalid GPR for eval"
         .endif
 
@@ -42,8 +44,14 @@
 
     @skip:
 
+    .if __reg__ = a
+        pha
+        .endif
+
     .repeat __width__, iter
-        .if __reg__ == x
+        .if     __reg__ = a
+            lda __offset__ + __width__      
+        .elseif __reg__ = x
             ldx __offset__ + __width__
         .else
             ldy __offset__ + __width__
@@ -52,7 +60,12 @@
         bne @exit    
         .endrepeat
     
+    .if __reg__ = a
+        pla
+        .endif
+    
     ora #$02                ; enable Z
+    
     @exit:
     pha
     plp                     ; a => status

@@ -164,17 +164,18 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "docs/concepts/smc.md",
+    "docs/concepts",
+    "thoughts/MSSB_sims.py",
+    "modules/global/memory/MSSB.asm",
+    "modules/global/preprocessor/aligned.asm",
+    "docs/modules/math/mult.md",
     "modules/global/memory/compare.asm",
     "modules/global/memory/lcmp.ams",
     "modules/global/memory/memcpy.asm",
     "modules/global/memory/eval.asm",
     "modules/global/memory/load",
     "modules/global/memory",
-    "modules/math/mult.asm",
-    "modules/math",
-    "modules/physics/rb.cpp",
-    "modules/physics/rb.rs",
-    "modules/physics/rb.c",
     "docs/modules/physics/rigidbody.md",
     "thoughts/sqrt.md",
     "docs/exclusions.md",
@@ -208,7 +209,6 @@
     "archive/documentation/Addition.md",
     "archive/math/Add.md",
     "Developing nesbrette.md",
-    "documentation/Mulitplication.md",
-    "documentation/Addition copy.md"
+    "documentation/Mulitplication.md"
   ]
 }

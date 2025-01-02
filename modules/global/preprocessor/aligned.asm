@@ -1,0 +1,1 @@
+.define aligned(o, w) .hibyte(o) = .hibyte(o + w)

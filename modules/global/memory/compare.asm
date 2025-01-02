@@ -1,3 +1,4 @@
+; untested
 .macro compare __base__, __compare__, __width__, __status__, __reg__, __direct__
 
     .ifblank __base__
