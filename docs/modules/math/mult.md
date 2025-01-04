@@ -21,3 +21,7 @@ Now we need to 'fetch' the opcode of the first iterated instruction within each 
 
 #### 3. Call Function
 The function should now be called, all vWidth logic handled by the macro at the start. 
+
+
+### Bottlenecks
+Generating code that uses relative branches limits the size of the output within those confines, meaning that code may need to 'invert' the logic sub-optimally to yield a result within the confines the signed byte operand.

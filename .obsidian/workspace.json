@@ -164,6 +164,7 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "modules/global/preprocessor/rload.asm",
     "docs/concepts/smc.md",
     "docs/concepts",
     "thoughts/MSSB_sims.py",
@@ -208,7 +209,6 @@
     "archive/documentation/Mulitplication.md",
     "archive/documentation/Addition.md",
     "archive/math/Add.md",
-    "Developing nesbrette.md",
-    "documentation/Mulitplication.md"
+    "Developing nesbrette.md"
   ]
 }
