@@ -1,0 +1,1 @@
+.macro index(__offset__, __tokens__) .left(1, .mid(__offset__, 1, __tokens__))
