@@ -66,6 +66,7 @@
     .endenum
 
     CONSTANTS_HEADER_MAPPER = header_mapper_nrom
+    CONSTANTS_HEADER_MIRRORING = 0      ; vertical
     CONSTANTS_HEADER_SUBMAPPER = 0      ; no submapper
     CONSTANTS_HEADER_PRG_ROM_AMT = 1    ; 16kib
     CONSTANTS_HEADER_CHR_ROM_AMT = 1    ; 8kib

@@ -4,7 +4,7 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "c:/cc65/bin/cl65 --target none ./example/src/main.asm -C ./config.cfg --verbose --warnings-as-errors -o ./dist/output.nes",
+            "command": "c:/cc65/bin/cl65 --target none ./example/src/main.asm -C ./example/config.cfg --verbose -o ./example/example.nes",
             "problemMatcher": ["$ca65", "$ld65"],
 			"group": {
 				"kind": "build",

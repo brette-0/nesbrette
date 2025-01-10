@@ -7,7 +7,7 @@
                 .endif
             .endrepeat
             .ident(.sprintf("LSSB_VALUE_%d", iter)) .set _LSSB_TEMP_VALUE
-        .endrepeat
-    .endif
+        .endif
+    .endrepeat
 
 .define LSSB(n) .ident(.sprintf("LSSB_VALUE_%d", n))

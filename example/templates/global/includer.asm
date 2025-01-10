@@ -19,9 +19,9 @@
     .include .concat(libroot, "global/logic/mssb.asm")    ; homes MSSB(sym)
 .endif
 
-.if INCLUDES_NESBRETTE_MATH_ISPO2
-    .include .concat(libroot, "global/math/ispo2.asm")    ; homes ispo2(sym)
-.endif
+;.if INCLUDES_NESBRETTE_MATH_ISPO2
+;    .include .concat(libroot, "global/math/ispo2.asm")    ; homes ispo2(sym)
+;.endif
 
 ; global/math
 .if INCLUDES_NESBRETTE_MATH_ADD

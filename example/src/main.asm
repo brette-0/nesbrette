@@ -23,5 +23,5 @@ reset:
 
 .segment "VECTORS"
     .addr $0000
-    .addr reset
+    .addr code::reset
     .addr $0000

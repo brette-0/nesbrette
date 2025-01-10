@@ -7,7 +7,7 @@
                 .endif
             .endrepeat
             .ident(.sprintf("MSSB_VALUE_%d", iter)) .set _MSSB_TEMP_VALUE
-        .endrepeat
     .endif
+    .endrepeat
 
 .define MSSB(n) .ident(.sprintf("MSSB_VALUE_%d", n))
