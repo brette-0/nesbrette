@@ -2,7 +2,7 @@
 
 .macro sin
     .ifdef SIN_TABLE
-        .if (.ifdef COS_TABLE) .and (WARNINGS_MATH_TRIG_DUAL_TABLE)
+        .if (.ifdef(COS_TABLE)) .and (WARNINGS_MATH_TRIG_DUAL_TABLE)
             .warning "Both Sine and Cosine tables are defined, unless speed is crucial remove one for more space"
         .endif
 
@@ -25,7 +25,7 @@
             eor #$ff
 
         @no_mirror:
-    .elseif .ifdef COS_TABLE
+    .elseif .ifdef(COS_TABLE)
         clc
         adc #$40
         cos

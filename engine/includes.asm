@@ -20,13 +20,9 @@ INCLUDES_NESBRETTE_LOGIC_RSHIFT             = 1
 ; DO NOT REMOVE THE BELOW
 .ifndef ___libinclude___
     .macro ___libinclude___
-            .include "constants.nesbrette.asm"
-            .include "addresses.nesbrette.asm"
-            .include "warnings.nesbrette.asm"
-            .include "includer.nesbrette.asm"
-        
-            ; not for user use
-            .undef ___includeif___
-            .undef ___libinclude___
+            .include .concat(template, "constants.asm")
+            .include .concat(template, "addresses.asm")
+            .include .concat(template, "warnings.asm")
+            .include .concat(template, "includer.asm")
         .endmacro
     .endif

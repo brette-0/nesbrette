@@ -21,6 +21,7 @@
 
 .if INCLUDES_NESBRETTE_MATH_ISPO2
     .include "modules/global/math/ispo2.asm"    ; homes ispo2(sym)
+.endif
 
 ; global/math
 .if INCLUDES_NESBRETTE_MATH_ADD

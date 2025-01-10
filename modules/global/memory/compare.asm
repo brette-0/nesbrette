@@ -147,7 +147,6 @@
         @exit:
             pla
             .exitmacro                      ; leave with original
-        .endif
     .else
         ora #abs(z)                         ; set z
         @exit:
@@ -235,7 +234,6 @@
         @exit:
             pla
             .exitmacro                      ; leave with original
-        .endif
     .else
         ora #abs(z)                         ; set z
         @exit:

@@ -4,8 +4,8 @@
 
 .macro laxi __imm__
     lax (IDTABLE + __imm__)
-.endif
+    .endmacro
 
 .macro tyxa
     lax IDTABLE, y
-.endif
+    .endmacro

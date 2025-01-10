@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "c:/cc65/bin/cl65 --target none ./example/src/main.asm -C ./config.cfg --verbose --warnings-as-errors -o ./dist/output.nes",
+            "problemMatcher": ["$ca65", "$ld65"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+        }
+    ]
+}

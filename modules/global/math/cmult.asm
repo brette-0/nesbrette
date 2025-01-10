@@ -66,7 +66,7 @@
             .repeat iter, _mssb_ >> 3
                 lda #(_mssb_ >> (3 * iter)) & $ff                           ; scale int as bytes
                 sta _temp_ + iter                                           ; store little endian
-                .endif
+                .endrepeat
             .endif
 
         
