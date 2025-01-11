@@ -78,14 +78,25 @@ OUT, MOD, TEMP
     sta TIMER
 
     .if (__nocall__)
-        .ident(.sprintf("jmp __mult_%d_%d"))
+        .ifdef .ident(.sprintf("__mult_%d_%d"))
+            .ident(.sprintf("jmp __mult_%d_%d"))
+        .else
+            .ident(.sprintf("__mult_make %d, %d"))
+        .endif
     .else
-        .ident(.sprintf("jsr __mult_%d_%d"))
+        .ifndef .ident(.sprintf("__mult_%d_%d"))
+            .ident(.sprintf("__mult_make %d, %d"))
+            callback generated__callback
+            .ident(.sprintf("jmp __mult_%d_%d"))
+            generated__callback:
+        .else
+            .ident(.sprintf("jsr __mult_%d_%d"))
+        .endif
     .endif
-    
+
     .endmacro
 
-.macro __mult_make
+.macro __mult_make out_type, mod_type
 loop:
         jsr __get_MOD_LSSByte
         dec TIMER
@@ -109,10 +120,7 @@ loop:
             jsr __sum_out
 
         skip:
-            lda #>loop
-            pha
-            lda #<loop
-            pha
+            callback loop
             jmp __lsr__mod_entry
     @exit:
     rts
