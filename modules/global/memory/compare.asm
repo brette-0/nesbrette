@@ -52,7 +52,7 @@
     php
     pla                 ; status => a
 
-    and #~$__status__   ; clear values we intend to change (if a funtion exists, elsewise nuke)
+    and #~__status__   ; clear values we intend to change (if a funtion exists, elsewise nuke)
 
     .if __status__ & abs(z)
         __eqcompare __base__, __compare__, __width__, __reg__, __direct__
