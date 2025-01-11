@@ -5,6 +5,10 @@ MOD_MAXIMUM_ARRAY
 ; zp
 MOD_MSSByte, MOD_MSSB, TIMER
 
+.define OPTIMIZATION_MULT_MSSBYTE_VALUE
+.define OPTIMIZATION_MULT_MSSBYTE_DETAIL
+.define OPTIMIZATION_MULT_MSSBYTE_COMPLEX
+
 OUT, MOD, TEMP
 .proc __get_MOD_MSSByte
     MSSByte ADDRESSES_MATH_MULT_MOD, MOD_MAXIMUM_ARRAY, null
@@ -52,6 +56,40 @@ OUT, MOD, TEMP
 
 ; nocall in case (mult => rts) = (jsr => rts => rts) | faster (jmp => rts)
 .macro mult out, mod, out_type, mod_type, __nocall__
+    .if mod_type > out_type
+        .fatal "Multiplier cannot be larger than output"
+    .elseif mod_type = out_type
+        .ifdef OPTIMIZATION_MULT_MSSBYTE_VALUE
+            lda OUT + out_type
+            cmp MOD + mod_type
+            bcs @skip
+            juggle {out, mod}, {out_type}, TEMP, 0
+            @skip:
+        .endif
+
+        .ifdef OPTIMIZATION_MULT_MSSBYTE_DETAIL
+            ldx OUT + out_type
+            lda TABLES_BIT_DETAIL, x
+            ldx MOD + mod_type
+            cmp TABLES_BIT_DETAIL, x
+            bcs @skip
+            juggle {out, mod}, {out_type}, TEMP, 0
+            @skip:
+        .endif
+
+        .ifdef OPTIMIZATION_MULT_MSSBYTE_COMPLEX
+            ldx OUT + out_type
+            lda TABLES_MULT_COMPLEX, x
+            ldx MOD + mod_type
+            cmp TABLES_MULT_COMPLEX, x
+            bcs @skip
+            juggle {out, mod}, {out_type}, TEMP, 0
+            @skip:
+        .endif
+
+        
+    .endif
+        
     
     ; deduce most significant byte and bit of mod
     ldx #mod_width
