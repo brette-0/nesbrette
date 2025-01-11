@@ -31,5 +31,8 @@
     clear = unset
     set = 1
 
+    ; handy kw to resolve jsr->rts
+    return = 1
+
     null = (1 << 31)
 .endenum

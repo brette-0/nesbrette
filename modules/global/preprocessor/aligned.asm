@@ -1,1 +1,1 @@
-.define aligned(o, w) .hibyte(o) = .hibyte(o + w)
+.define confined(o, w) .hibyte(o) = .hibyte(o + w)
