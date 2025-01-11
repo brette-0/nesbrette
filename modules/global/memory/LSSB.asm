@@ -4,22 +4,20 @@
         .endif
     
     .if __register__ = y
-        ldy #$ff
+        ldy #$09
         @loop:
-            iny
-            lsr
-            bne @loop
+            dey
+            asl
+            bcc @loop
         tya
     .elseif __register__ = x
-        ldx #$ff
+        ldx #$09
         @loop:
-            inx
-            lsr
-            bne @loop
+            dey
+            asl
+            bcc @loop
         txa
     .else
         .fatal "Invalid regsiter for MSSB"
     .endif
-
-    adc #$00
     .endmacro
