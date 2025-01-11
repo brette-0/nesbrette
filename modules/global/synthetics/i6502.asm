@@ -18,27 +18,27 @@
     sbc IDTABLE, y
 .endmacro
 
-.macro xset
+.macro orax
     ora IDTABLE, x
 .endmacro
 
-.macro yset
+.macro oray
     ora IDTABLE, y
 .endmacro
 
-.macro xmask
+.macro andx
     and IDTABLE, x
 .endmacro
 
-.macro ymask
+.macro andy
     and IDTABLE, y
 .endmacro
 
-.macro xflip
+.macro eorx
     eor IDTABLE, x
 .endmacro
 
-.macro yflip
+.macro eory
     eor IDTABLE, y
 .endmacro
 
