@@ -1,5 +1,5 @@
 .macro LSSByte __address__, __length__, __offset__
-    .if is_null(__offset__)
+    .if is_null __offset__
     .else
         ldx #00
     .endif

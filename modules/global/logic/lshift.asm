@@ -2,7 +2,7 @@
 
 .macro lshift __amt__, __output__, __width__
     .ifnblank __output__                            ; undefine output if null, uses acc mode
-        .if is_null(__output__)
+        .if is_null __output__
             .undefine __output__
         .endif
     .endif

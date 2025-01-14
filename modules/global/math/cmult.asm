@@ -6,7 +6,7 @@
 ; depends on lshift (acc) | MSSB(sym) | LSSB(sym)
 
 .macro cmult __multiplier__, __output__, __osize__, __temp__
-    .local _msize_, _temp_, _mssb_, _lssb_, _mode_
+    .local _temp_, _mode_
 
     .enum 
         acc  = 0
@@ -18,8 +18,6 @@
     .endif
 
     _mode_ = .ifnblank(__output__)          ; bool --> int --> enum
-    _mssb_ = MSSB(__multiplier__)
-    _lssb_ = LSSB(__multiplier__)           ; no idea why I need to do this
 
     .if _mode_ = addr
         .ifblank __osize__
@@ -60,18 +58,18 @@
 
         .if _mode_ == addr                                                    ; clear higher bytes of temp, that the multiplier doesn't overwrite
             lda #$00
-            .repeat iter, __osize__ + 1 - (_mssb_ >> 3)
+            .repeat iter, __osize__ + 1 - ((MSSB __multiplier__) >> 3)
                 sta _temp_ + iter + 1
                 .endrepeat
-            .repeat iter, _mssb_ >> 3
-                lda #(_mssb_ >> (3 * iter)) & $ff                           ; scale int as bytes
+            .repeat iter, (MSSB __multiplier__) >> 3
+                lda #((MSSB __multiplier__) >> (3 * iter)) & $ff                           ; scale int as bytes
                 sta _temp_ + iter                                           ; store little endian
                 .endrepeat
             .endif
 
         
         
-        .repeat _mssb_ - _lssb_, iter                                       ; repeat by 'detailed range'
+        .repeat (MSSB __multiplier__) - (LSSB __multiplier__), iter                                       ; repeat by 'detailed range'
             .if _mode_ = addr
                 .repeat iter, __osize__
                     asl _temp_ + iter
@@ -80,7 +78,7 @@
                 asl _temp_                                                  ; adjust temporary multiplier
                 .endif
             
-            .if (__multiplier__ >> (iter + _lssb_ + 1)) & 1                 ; check definition of bit of multiplier
+            .if (__multiplier__ >> (iter + (LSSB __multiplier__) + 1)) & 1                 ; check definition of bit of multiplier
                 .if mode = addr
                     add __osize__ __output__ _temp_                         ; add temp to to output
                 .else
@@ -90,6 +88,6 @@
             .endrepeat
         .endif
 
-    lshift _lssb_, __output__, __osize__                                    ; adjust for known multiplicant of two power (may pass null)
+    lshift (LSSB __multiplier__), __output__, __osize__                     ; adjust for known multiplicant of two power (may pass null)
     .undefine acc, addr                                                     ; remove enum definitions
     .endmacro
