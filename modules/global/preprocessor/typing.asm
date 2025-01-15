@@ -6,4 +6,6 @@
     | (.xmatch(.left(1, __token__), u64)    * 8 ) \
     | (.xmatch(.left(1, __token__), string) * -1) \
     | (.xmatch(.left(1, __token__), token)  * -2) \
-    | (.xmatch(.left(1, __token__), list)   * -2) \
+    | (.xmatch(.left(1, __token__), x)      * -3) \
+    | (.xmatch(.left(1, __token__), y)      * -4) \
+    ;| (.xmatch(.left(1, __token__), a)      * ?) \
