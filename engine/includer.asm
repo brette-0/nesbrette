@@ -87,6 +87,10 @@
     .include .concat(libroot, "global/preprocessor/aligned.asm")
 .endif
 
+.if INCLUDES_NESBRETTE_PREPROCESSOR_COLLECTION
+    .include .concat(libroot, "global/preprocessor/collection.asm")
+.endif
+
 .if INCLUDES_NESBRETTE_PREPROCESSOR_EVAL
     .include .concat(libroot, "global/preprocessor/evaluation.asm")
 .endif
@@ -99,6 +103,12 @@
     .include .concat(libroot, "global/preprocessor/rload.asm")
 .endif
 
+.if INCLUDES_NESBRETTE_PREPROCESSOR_TYPING
+    .include .concat(libroot, "global/preprocessor/typing/typing.asm")
+    .include .concat(libroot, "global/preprocessor/typing/int.asm")
+    .include .concat(libroot, "global/preprocessor/typing/get.asm")
+.endif
+
 ; global/memory
 .if INCLUDES_NESBRETTE_MEMORY_COMPARE
     .include .concat(libroot, "global/memory/compare.asm")
@@ -106,6 +116,10 @@
 
 .if INCLUDES_NESBRETTE_MEMORY_EVAL
     .include .concat(libroot, "global/memory/eval.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_FLUSH
+    .include .concat(libroot, "global/memory/flush.asm")
 .endif
 
 .if INCLUDES_NESBRETTE_MEMORY_JUGGLE
