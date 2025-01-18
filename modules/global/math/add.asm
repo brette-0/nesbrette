@@ -1,30 +1,34 @@
 ; untested
 
 .macro add __output__, __mod__
-    .local skip, isoutconst, isoutnum, ismodconst, ismodnum
-
-    ; type validation
-
+    .local skip, isoutconst, isoutnum, ismodconst, ismodnum, modtype, outtype, olabel, mlabel
+    
     isoutnum    = isnum __output__
     isoutconst  = isconst __output__
 
     ismodnum    = isnum __mod__
     ismodconst  = isconst __mod__
 
-    modtype     = type __mod__
-    outtype     = type __output__
+    olabel      = ilabel __output__
+    mlabel      = ilabel __mod__
 
-    .if !(isoutnum && isoutconst)
+    modtype     .set type __mod__
+    outtype     .set type __output__
+    
+    .if !outtype
+        outtype .set width __output__
+    .elseif !(isoutnum && isoutconst)
         .fatal "Addition requires output to int type"
+    .endif
+
+    .if !modtype
+        modtype .set width __mod__
     .elseif !(ismodnum && ismodconst)
         .fatal "Addition requires modifier to be int type"
     .endif
 
-    olabel = ilabel __output__
-    mlabel = ilabel __mod__
-
     ; core
-    .repeat type __mod__ >> 1, iter
+    .repeat modtype, iter
         lda olabel + iter
         adc mlabel + iter
         sta olabel + iter

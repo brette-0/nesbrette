@@ -11,13 +11,17 @@
     ;| (.xmatch(.left(1, __token__), a)      * ?) \
 
 .define label(__token__)\
-    .string(.right(1, __token__))
+  .string(.right(1, __token__))
 
 .define ilabel(__token__)\
-    .ident(.string(.right(1, __token__)))
+  .ident(label __token__)
 
+; consider removal
 .define peek(__token__)\
-    .sprintf("%d", .ident(label __token__))
+  .sprintf("%d", .ident(label __token__))
+
+.define width(__token__)\
+  .ident(.concat("w_", label __token__))
     
 .define isnum(__token__)\
       (.xmatch(.left(1, __token__), u8)     * 1 ) \
