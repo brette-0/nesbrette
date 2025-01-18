@@ -50,3 +50,15 @@
     | (.xmatch(.left(1, __token__), x)      * 0) \
     | (.xmatch(.left(1, __token__), y)      * 0)
     ;| (.xmatch(.left(1, __token__), a)      * ?)
+
+
+.macro detype __typed__, __type__
+  .if istyped __typed__
+      __type__ .set type __typed__
+      .if !__type__
+          __type__ .set itype __typed__
+      .endif
+  .else
+      __type__ .set width __typed__
+  .endif
+.endmacro

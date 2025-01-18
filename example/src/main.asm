@@ -19,9 +19,19 @@ ___libinclude___
 .segment "HEADER"
 insert_header
 
+
+
 .segment "CODE"
 .scope code
+
+Addr1 = $0300
+Addr2 = $0303
+
+w_Addr1 = $03
+w_Addr2 = $02
+
 reset:
+    add w_Addr1: Addr1, Addr2
     @hang:
         jmp @hang
 

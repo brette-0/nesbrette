@@ -11,14 +11,10 @@
             "id": "b0061fb007547c07",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "thoughts/TODO.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "TODO"
+              "title": "New tab"
             }
           }
         ]
@@ -165,16 +161,19 @@
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
     "example/src/main.o",
-    "example/templates/global/macros.json",
-    "macromaker.py",
-    "modules/global/preprocessor/exec.asm/exec.asm",
-    "modules/global/preprocessor/exec.asm",
-    "modules/global/math/sum.asm",
-    "modules/global/math/add copy.asm",
-    "example/src/main.c",
-    "example/example.nes",
-    "example.nes",
-    "scan.py",
+    "modules/global/preprocessor/typing/get.asm",
+    "modules/global/preprocessor/typing/typing.asm",
+    "modules/global/preprocessor/typing.asm",
+    "modules/global/preprocessor/typing/int copy.asm",
+    "modules/global/preprocessor/typing/int.asm",
+    "modules/global/preprocessor/typing",
+    "modules/global/preprocessor/int.asm",
+    "thoughts/MathScript.md",
+    "docs/mathscript/MathScript.md",
+    "node_relationship_diagram",
+    "thoughts/TODO.md",
+    "docs/mathscript",
+    "modules/global/preprocessor/collection.asm",
     "docs/concepts/template.md",
     "docs/concepts/container.md",
     "docs/modules/memory/juggle.md",
@@ -187,7 +186,6 @@
     "docs/modules/math/image-3.png",
     "docs/modules/math/image-2.png",
     "docs/modules/math/image-1.png",
-    "thoughts/TODO.md",
     "docs_example.md",
     "multiply_speedchart.bmp",
     "nesbrette.md",
@@ -207,8 +205,6 @@
     "Engine_Lexis.md",
     "archive/Objective_Syntax.md",
     "Objective_Syntax.md",
-    "archive/DEVNOTES.md",
-    "archive/Developing nesbrette.md",
-    "archive/documentation/Mulitplication.md"
+    "archive/DEVNOTES.md"
   ]
 }
