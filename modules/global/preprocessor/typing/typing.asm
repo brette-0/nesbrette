@@ -1,3 +1,9 @@
+.define istyped(__token__)\
+  !.xmatch(.left(1, __token__), .right(1, __token__))
+
+.define itype(__token__)\
+  .ident(.string(.left(1, __token__)))
+
 .define type(__token__)\
       (.xmatch(.left(1, __token__), u8)     * 1 ) \
     | (.xmatch(.left(1, __token__), u16)    * 2 ) \

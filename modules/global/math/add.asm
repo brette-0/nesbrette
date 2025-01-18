@@ -14,17 +14,33 @@
 
     modtype     .set type __mod__
     outtype     .set type __output__
-    
-    .if !outtype
+
+    .if istyped __output__
+        .out "Alpha"
+        outtype .set type __output__
+        .if !outtype
+            outtype .set itype __output__
+        .endif
+
+        .if !(isoutnum && isoutconst)
+            .fatal "Addition requires output to int type"
+        .endif
+    .else
         outtype .set width __output__
-    .elseif !(isoutnum && isoutconst)
-        .fatal "Addition requires output to int type"
     .endif
 
-    .if !modtype
+    .if istyped __mod__
+        .out "Alpha"
+        modtype .set type __mod__
+        .if !modtype
+            modtype .set itype __mod__
+        .endif
+
+        .if !(ismodnum && ismodconst)
+            .fatal "Addition requires modifier to int type"
+        .endif
+    .else
         modtype .set width __mod__
-    .elseif !(ismodnum && ismodconst)
-        .fatal "Addition requires modifier to be int type"
     .endif
 
     ; core
