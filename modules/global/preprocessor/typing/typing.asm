@@ -13,6 +13,9 @@
 .define label(__token__)\
     .string(.right(1, __token__))
 
+.define ilabel(__token__)\
+    .ident(.string(.right(1, __token__)))
+
 .define peek(__token__)\
     .sprintf("%d", .ident(label __token__))
     
