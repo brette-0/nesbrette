@@ -53,20 +53,30 @@ If your solution wishes to use type validation, the only instruction you might r
 
 ##### Types:
 
-| Name           | Prefix   | Category     | Size |
-| -------------- | -------- | ------------ | ---- |
-| Unsigned 8bit  | `u8`     | Number       | 1    |
-| Unsigned 16bit | `u16`    | Number       | 2    |
-| Unsigned 24bit | `u24`    | Number       | 3    |
-| Unsigned 32bit | `u32`    | Number       | 4    |
-| Unsigned 64bit | `u64`    | Number       | 8    |
-| Signed 8bit    | `i8`     | Number       | 1    |
-| signed 16bit   | `i16`    | Number       | 2    |
-| Signed 24bit   | `i24`    | Number       | 3    |
-| Signed 32bit   | `i32`    | Number       | 4    |
-| Signed 64bit   | `i64`    | Number       | 8    |
-| String         | `string` | Preprocessor | None |
-| Token          | `token`  | Preprocessor | None |
-| X Register     | `x`      | Special      | 1*   |
-| Y Register     | `y`      | Special      | 1*   |
-| Accumolator    | `acc`    | Special      | 1*   |
+| Name             | Prefix   | Category     | Size |
+| ---------------- | -------- | ------------ | ---- |
+| Unsigned 8bit    | `u8`     | Number       | 1    |
+| Unsigned 16bit   | `u16`    | Number       | 2    |
+| Unsigned 24bit   | `u24`    | Number       | 3    |
+| Unsigned 32bit   | `u32`    | Number       | 4    |
+| Unsigned 64bit   | `u64`    | Number       | 8    |
+| Signed 8bit      | `i8`     | Number       | 1    |
+| signed 16bit     | `i16`    | Number       | 2    |
+| Signed 24bit     | `i24`    | Number       | 3    |
+| Signed 32bit     | `i32`    | Number       | 4    |
+| Signed 64bit     | `i64`    | Number       | 8    |
+| Big Endian `u8`  | `bu8`    | Number       | 1    |
+| Big Endian `u16` | `bu16`   | Number       | 2    |
+| Big Endian `u24` | `bu24`   | Number       | 3    |
+| Big Endian `u32` | `bu32`   | Number       | 4    |
+| Big Endian `u64` | `bu64`   | Number       | 8    |
+| Big Endian `i8`  | `bi8`    | Number       | 1    |
+| Big Endian `i16` | `bi16`   | Number       | 2    |
+| Big Endian `i24` | `bi24`   | Number       | 3    |
+| Big Endian `i32` | `bi32`   | Number       | 4    |
+| Big Endian `i64` | `bi64`   | Number       | 8    |
+| String           | `string` | Preprocessor | None |
+| Token            | `token`  | Preprocessor | None |
+| X Register       | `x`      | Special      | 1*   |
+| Y Register       | `y`      | Special      | 1*   |
+| Accumolator      | `acc`    | Special      | 1*   |

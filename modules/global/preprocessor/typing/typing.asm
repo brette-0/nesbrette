@@ -7,26 +7,39 @@
 .define signed(__token__)\
   __token__ & (1 << 30)
 
+.define eindex(__offset__, __width__, __index__, __endian__)\
+  ((__offset__ + __index__) * (__endian__ < 1)) | ((__offset__ + __width__ - __index__ - 1) * (__endian__ > 0))
+
 .define type(__token__)\
       (.xmatch(.left(1, __token__), u8)     * 1 ) \
     | (.xmatch(.left(1, __token__), u16)    * 2 ) \
     | (.xmatch(.left(1, __token__), u24)    * 3 ) \
     | (.xmatch(.left(1, __token__), u32)    * 4 ) \
     | (.xmatch(.left(1, __token__), u64)    * 8 ) \
+    | (.xmatch(.left(1, __token__), bu8)    * ((1 << 29) + 1) ) \
+    | (.xmatch(.left(1, __token__), bu16)   * ((1 << 29) + 2) ) \
+    | (.xmatch(.left(1, __token__), bu24)   * ((1 << 29) + 3) ) \
+    | (.xmatch(.left(1, __token__), bu32)   * ((1 << 29) + 4) ) \
+    | (.xmatch(.left(1, __token__), bu64)   * ((1 << 29) + 8) ) \
     | (.xmatch(.left(1, __token__), i8)     * ((1 << 30) + 1) ) \
     | (.xmatch(.left(1, __token__), i16)    * ((1 << 30) + 2) ) \
     | (.xmatch(.left(1, __token__), i24)    * ((1 << 30) + 3) ) \
     | (.xmatch(.left(1, __token__), i32)    * ((1 << 30) + 4) ) \
     | (.xmatch(.left(1, __token__), i64)    * ((1 << 30) + 8) ) \
+    | (.xmatch(.left(1, __token__), bi8)    * ((3 << 29) + 1) ) \
+    | (.xmatch(.left(1, __token__), bi16)   * ((3 << 29) + 2) ) \
+    | (.xmatch(.left(1, __token__), bi24)   * ((3 << 29) + 3) ) \
+    | (.xmatch(.left(1, __token__), bi32)   * ((3 << 29) + 4) ) \
+    | (.xmatch(.left(1, __token__), bi64)   * ((3 << 29) + 8) ) \
     | (.xmatch(.left(1, __token__), string) * -1) \
     | (.xmatch(.left(1, __token__), token)  * -2) \
     | (.xmatch(.left(1, __token__), x)      * -3) \
     | (.xmatch(.left(1, __token__), y)      * -4) \
     | (.xmatch(.left(1, __token__), acc)    * -5)
-    ;| (.xmatch(.left(1, __token__), a)      * ?) \
 
 ; d31 = Reserved for special case
-; d12 = signed flag (for numbers)
+; d30 = signed flag (for numbers)
+; d29 = endian flag (for numbers)
 ; (d0-d11) value segment
 
 .define typeas(__label__, __type__)\
@@ -47,25 +60,60 @@
     
 .define isnum(__token__)\
       (.xmatch(.left(1, __token__), u8)     * 1 ) \
-    | (.xmatch(.left(1, __token__), u16)    * 1 ) \
-    | (.xmatch(.left(1, __token__), u24)    * 1 ) \
-    | (.xmatch(.left(1, __token__), u32)    * 1 ) \
-    | (.xmatch(.left(1, __token__), u64)    * 1 ) \
+    | (.xmatch(.left(1, __token__), u16)    * 2 ) \
+    | (.xmatch(.left(1, __token__), u24)    * 3 ) \
+    | (.xmatch(.left(1, __token__), u32)    * 4 ) \
+    | (.xmatch(.left(1, __token__), u64)    * 8 ) \
+    | (.xmatch(.left(1, __token__), bu8)    * 1 ) \
+    | (.xmatch(.left(1, __token__), bu16)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bu24)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bu32)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bu64)   * 1 ) \
+    | (.xmatch(.left(1, __token__), i8)     * 1 ) \
+    | (.xmatch(.left(1, __token__), i16)    * 1 ) \
+    | (.xmatch(.left(1, __token__), i24)    * 1 ) \
+    | (.xmatch(.left(1, __token__), i32)    * 1 ) \
+    | (.xmatch(.left(1, __token__), i64)    * 1 ) \
+    | (.xmatch(.left(1, __token__), bi8)    * 1 ) \
+    | (.xmatch(.left(1, __token__), bi16)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bi24)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bi32)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bi64)   * 1 ) \
+    | (.xmatch(.left(1, __token__), string) * 0) \
+    | (.xmatch(.left(1, __token__), token)  * 0) \
     | (.xmatch(.left(1, __token__), x)      * 1) \
-    | (.xmatch(.left(1, __token__), y)      * 1)
-    ;| (.xmatch(.left(1, __token__), a)      * ?)
+    | (.xmatch(.left(1, __token__), y)      * 1) \
+    | (.xmatch(.left(1, __token__), acc)    * 1)
 
 .define isconst(__token__)\
       (.xmatch(.left(1, __token__), u8)     * 1 ) \
-    | (.xmatch(.left(1, __token__), u16)    * 1 ) \
-    | (.xmatch(.left(1, __token__), u24)    * 1 ) \
-    | (.xmatch(.left(1, __token__), u32)    * 1 ) \
-    | (.xmatch(.left(1, __token__), u64)    * 1 ) \
+    | (.xmatch(.left(1, __token__), u16)    * 2 ) \
+    | (.xmatch(.left(1, __token__), u24)    * 3 ) \
+    | (.xmatch(.left(1, __token__), u32)    * 4 ) \
+    | (.xmatch(.left(1, __token__), u64)    * 8 ) \
+    | (.xmatch(.left(1, __token__), bu8)    * 1 ) \
+    | (.xmatch(.left(1, __token__), bu16)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bu24)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bu32)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bu64)   * 1 ) \
+    | (.xmatch(.left(1, __token__), i8)     * 1 ) \
+    | (.xmatch(.left(1, __token__), i16)    * 1 ) \
+    | (.xmatch(.left(1, __token__), i24)    * 1 ) \
+    | (.xmatch(.left(1, __token__), i32)    * 1 ) \
+    | (.xmatch(.left(1, __token__), i64)    * 1 ) \
+    | (.xmatch(.left(1, __token__), bi8)    * 1 ) \
+    | (.xmatch(.left(1, __token__), bi16)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bi24)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bi32)   * 1 ) \
+    | (.xmatch(.left(1, __token__), bi64)   * 1 ) \
     | (.xmatch(.left(1, __token__), string) * 1) \
-    | (.xmatch(.left(1, __token__), token)  * 1) \
+    | (.xmatch(.left(1, __token__), token)  * 0) \
     | (.xmatch(.left(1, __token__), x)      * 0) \
-    | (.xmatch(.left(1, __token__), y)      * 0)
-    ;| (.xmatch(.left(1, __token__), a)      * ?)
+    | (.xmatch(.left(1, __token__), y)      * 0) \
+    | (.xmatch(.left(1, __token__), acc)    * 0)
+
+.define endian(__type__)\
+    __type__ & (1 << 29)
 
 
 .macro detype __typed__, __type__
