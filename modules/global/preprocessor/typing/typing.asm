@@ -42,6 +42,9 @@
 ; d29 = endian flag (for numbers)
 ; (d0-d11) value segment
 
+.define typeval(__type__)\
+  (__type__) & 0%11111111111
+
 .define typeas(__label__, __type__)\
   .ident(.sprintf("w_%s", .string(__label__))) .set type __type__
 
