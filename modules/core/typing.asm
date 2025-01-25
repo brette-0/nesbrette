@@ -40,7 +40,7 @@
 ; (d0-d11) value segment
 
 .define typeval(__type__)\
-  (__type__) & 0%11111111111
+  (__type__) & %11111111111
 
 
 .define def(__label__, __typed_const__)\
