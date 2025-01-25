@@ -1,18 +1,18 @@
 .enum
     ; register
-    a   = -1
-    x   = -2
-    y   = -3
+    ar   = -1
+    xr   = -2
+    yr   = -3
 
     ; cpu status
-    z   = -1
-    c   = -2
-    i   = -4
-    d   = -8
-    b   = -16
+    zf   = -1
+    cf   = -2
+    if   = -4
+    df   = -8
+    bf   = -16
     ; 
-    o   = -64
-    n   = -128
+    of   = -64
+    nf   = -128
 
     ; endian
     little = -1
