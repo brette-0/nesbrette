@@ -1,21 +1,56 @@
-.macro LSSByte __address__, __length__, __offset__
-    .if is_null __offset__
+.macro LSSByte __target__, __indexreg__, __returnreg__, __offset__
+    .local targettype, targetlabel, targetsize, indexreg, returnreg
+
+    targettype .set 0
+    detype __target__, targettype
+
+    .ifnblank __offset__
+        .if !(is_null __offset__)
+            ldx #00
+        .endif
+    .endif
+
+    .ifblank __indexreg__
+        indexreg = xr
+    .elseif .xmatch(__index__, y)
+        indexreg = yr
+    .elseif .xmatch(__index__, x)
+        indexreg = xr
     .else
-        ldx #00
+        .fatal "Invalid indexing register specified"
+    .endif
+
+    .ifblank __returnreg__
+        returnreg = ar
+    .elseif .xmatch(__index__, y)
+        returnreg = yr
+    .elseif .xmatch(__index__, x)
+        returnreg = xr
+    .elseif .xmatch(__index__, a)
+        returnreg = ar
+    .else
+        .fatal "Invalid indexing register specified"
     .endif
     
-    .if __length__ > 21
-        .fatal "LSSByte cannot index array longer than 21 bytes"
-        .endif
+    targetlabel = ilabel  __target__
+    targetsize  = typeval targettype
 
-    lda __address__ + iter
-    beq @exit
-    .repeat __length__ - 2, iter
-        .if iter
-            inx
-            lda __address__ + iter
-            beq @exit
-        .endif
-        .endrepeat
+    .if targetsize > 21
+        .fatal "LSSByte cannot index array longer than 21 bytes"
+    .endif
+
+    .if targetsize < 1
+        .fatal "LSSByte cannot index array shorter than 1 byte"
+    .endif
+
+    .repeat targetsize, iter
+        lda eindex targetlabel, targetsize, iter, endian targettype
+        beq @exit
+        inr indexreg
+    .endrepeat
+
     @exit:
-    .endmacro
+    .if returnreg <> indexreg
+        trr indexreg, returnreg
+    .endif
+.endmacro
