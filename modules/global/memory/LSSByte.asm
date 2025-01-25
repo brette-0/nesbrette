@@ -10,26 +10,19 @@
         .endif
     .endif
 
+    indexreg  .set 0
+    returnreg .set 0
+
     .ifblank __indexreg__
-        indexreg = xr
-    .elseif .xmatch(__index__, y)
-        indexreg = yr
-    .elseif .xmatch(__index__, x)
-        indexreg = xr
+        indexreg .set xr
     .else
-        .fatal "Invalid indexing register specified"
+        setireg __indexreg__, indexreg
     .endif
 
     .ifblank __returnreg__
-        returnreg = ar
-    .elseif .xmatch(__index__, y)
-        returnreg = yr
-    .elseif .xmatch(__index__, x)
-        returnreg = xr
-    .elseif .xmatch(__index__, a)
-        returnreg = ar
+        returnreg .set ar
     .else
-        .fatal "Invalid indexing register specified"
+        setreg __returnreg__, returnreg
     .endif
     
     targetlabel = ilabel  __target__

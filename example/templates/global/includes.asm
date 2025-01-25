@@ -55,6 +55,7 @@ INCLUDES_NESBRETTE_SYNTH_GPR                    = 1
             .include .concat(libroot, "core/typing.asm")
             .include .concat(libroot, "core/enums.asm")
             .include .concat(libroot, "core/null.asm")
+            .include .concat(libroot, "core/register.asm")
         .endif
 
         .include .concat(template, "constants.asm")

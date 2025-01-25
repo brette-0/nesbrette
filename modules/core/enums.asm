@@ -34,5 +34,5 @@
     ; handy kw to resolve jsr->rts
     return = 1
 
-    null = (1 << 31)
+    null = (1 << 31)    ; can be viewed as type negative typeless
 .endenum

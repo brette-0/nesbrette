@@ -93,10 +93,6 @@
     .include .concat(libroot, "global/prep/evaluation.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_PREP_NULL
-    .include .concat(libroot, "global/prep/null.asm")
-.endif
-
 .if INCLUDES_NESBRETTE_PREP_RLOAD
     .include .concat(libroot, "global/prep/rload.asm")
 .endif
