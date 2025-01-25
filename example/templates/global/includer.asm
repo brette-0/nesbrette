@@ -76,8 +76,8 @@
     .include .concat(libroot, "global/synth/i6502.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_SYNTH_STACK
-    .include .concat(libroot, "global/synth/stack.asm")
+.if INCLUDES_NESBRETTE_SYNTH_GPR
+    .include .concat(libroot, "global/synth/gpr.asm")
 .endif
 
 ; global/prep

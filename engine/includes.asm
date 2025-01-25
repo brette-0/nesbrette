@@ -19,7 +19,6 @@ INCLUDES_NESBRETTE_MATH_TRIG_SEC                = 0
 INCLUDES_NESBRETTE_PREP_ALIGNED                 = 0
 INCLUDES_NESBRETTE_PREP_COLLECTION              = 1
 INCLUDES_NESBRETTE_PREP_EVAL                    = 0
-INCLUDES_NESBRETTE_PREP_NULL                    = 0
 INCLUDES_NESBRETTE_PREP_RLOAD                   = 0
 
 INCLUDES_NESBRETTE_MEMORY_COMPARE               = 0
@@ -28,11 +27,16 @@ INCLUDES_NESBRETTE_MEMORY_FLUSH                 = 1
 INCLUDES_NESBRETTE_MEMORY_JUGGLE                = 0
 INCLUDES_NESBRETTE_MEMORY_MEMCPY                = 1
 INCLUDES_NESBRETTE_MEMORY_MSSB                  = 0
+INCLUDES_NESBRETTE_MEMORY_MSSByte               = 0
+INCLUDES_NESBRETTE_MEMORY_LSSB                  = 0
+INCLUDES_NESBRETTE_MEMORY_LSSByte               = 1
 
 INCLUDES_NESBRETTE_SYNTH_INSTRUCTIONS           = 0
 INCLUDES_NESBRETTE_SYNTH_IDTABLE                = 0
 INCLUDES_NESBRETTE_SYNTH_ILLEGAL_ID             = 0
 INCLUDES_NESBRETTE_SYNTH_STACK                  = 0
+INCLUDES_NESBRETTE_SYNTH_GPR                    = 1
+
 ; DO NOT REMOVE THE BELOW
 .ifndef ___libinclude___
     .macro ___libinclude___
@@ -49,6 +53,8 @@ INCLUDES_NESBRETTE_SYNTH_STACK                  = 0
         .ifndef insert_header
             .include .concat(libroot, "core/header.asm")
             .include .concat(libroot, "core/typing.asm")
+            .include .concat(libroot, "core/enums.asm")
+            .include .concat(libroot, "core/null.asm")
         .endif
 
         .include .concat(template, "constants.asm")
@@ -56,4 +62,16 @@ INCLUDES_NESBRETTE_SYNTH_STACK                  = 0
         .include .concat(template, "warnings.asm")
         .include .concat(template, "includer.asm")
     .endmacro
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_MSSByte
+    .include .concat(libroot, "global/memory/MSSByte.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_LSSB
+    .include .concat(libroot, "global/memory/LSSB.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_LSSByte
+    .include .concat(libroot, "global/memory/LSSByte.asm")
 .endif
