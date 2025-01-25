@@ -1,5 +1,5 @@
 ***
-Advanced Syntax | `6502` | Any Hardware
+###### Advanced Syntax | `6502` | Any Hardware
 
 The 'synthetic instructions' below are for atypical but useful cases for some of the stack interacting instructions.
 
