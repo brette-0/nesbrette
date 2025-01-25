@@ -1,11 +1,5 @@
 .macro sub __output__, __mod__
     .local skip, ahead, isoutconst, isoutnum, ismodconst, ismodnum, modtype, outtype, olabel, mlabel
-    
-    isoutnum    = isnum __output__
-    isoutconst  = isconst __output__
-
-    ismodnum    = isnum __mod__
-    ismodconst  = isconst __mod__
 
     olabel      .set ilabel __output__
     mlabel      .set ilabel __mod__
