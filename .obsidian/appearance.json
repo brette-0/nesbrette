@@ -1,1 +1,6 @@
-{}
+{
+  "cssTheme": "Everforest",
+  "nativeMenus": false,
+  "theme": "obsidian",
+  "enabledCssSnippets": []
+}

@@ -1,8 +1,3 @@
-; global header
-.if INCLUDES_NESBRETTE_HEADER
-    .include .concat(libroot, "global/header/header.asm")
-.endif
-
 ; global logic
 .if INCLUDES_NESBRETTE_LOGIC_LSHIFT
     .include .concat(libroot, "global/logic/lshift.asm")
@@ -63,50 +58,44 @@
     .include .concat(libroot, "global/math/trig/sec.asm")
 .endif
 
-; global/synthetic
-.if INCLUDES_NESBRETTE_SYNTHETIC_INSTRUCTIONS
-    .include .concat(libroot, "global/synthetic/s6502.asm")
+; global/synth
+.if INCLUDES_NESBRETTE_SYNTH_INSTRUCTIONS
+    .include .concat(libroot, "global/synth/s6502.asm")
 .endif
 
-; global/synthetic
-.if INCLUDES_NESBRETTE_SYNTHETIC_IDTABLE
-    .include .concat(libroot, "global/synthetic/i6502.asm")
+; global/synth
+.if INCLUDES_NESBRETTE_SYNTH_IDTABLE
+    .include .concat(libroot, "global/synth/i6502.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_SYNTHETIC_ILLEGAL_ID
-    .include .concat(libroot, "global/synthetic/i6502x.asm")
+.if INCLUDES_NESBRETTE_SYNTH_ILLEGAL_ID
+    .include .concat(libroot, "global/synth/i6502x.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_SYNTHETIC_INSTRUCTIONS
-    .include .concat(libroot, "global/synthetic/i6502.asm")
+.if INCLUDES_NESBRETTE_SYNTH_INSTRUCTIONS
+    .include .concat(libroot, "global/synth/i6502.asm")
 .endif
 
 
-; global/preprocessor
-.if INCLUDES_NESBRETTE_PREPROCESSOR_ALIGNED
-    .include .concat(libroot, "global/preprocessor/aligned.asm")
+; global/prep
+.if INCLUDES_NESBRETTE_PREP_ALIGNED
+    .include .concat(libroot, "global/prep/aligned.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_PREPROCESSOR_COLLECTION
-    .include .concat(libroot, "global/preprocessor/collection.asm")
+.if INCLUDES_NESBRETTE_PREP_COLLECTION
+    .include .concat(libroot, "global/prep/collection.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_PREPROCESSOR_EVAL
-    .include .concat(libroot, "global/preprocessor/evaluation.asm")
+.if INCLUDES_NESBRETTE_PREP_EVAL
+    .include .concat(libroot, "global/prep/evaluation.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_PREPROCESSOR_NULL
-    .include .concat(libroot, "global/preprocessor/null.asm")
+.if INCLUDES_NESBRETTE_PREP_NULL
+    .include .concat(libroot, "global/prep/null.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_PREPROCESSOR_RLOAD
-    .include .concat(libroot, "global/preprocessor/rload.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_PREPROCESSOR_TYPING
-    .include .concat(libroot, "global/preprocessor/typing/typing.asm")
-    .include .concat(libroot, "global/preprocessor/typing/int.asm")
-    .include .concat(libroot, "global/preprocessor/typing/get.asm")
+.if INCLUDES_NESBRETTE_PREP_RLOAD
+    .include .concat(libroot, "global/prep/rload.asm")
 .endif
 
 ; global/memory

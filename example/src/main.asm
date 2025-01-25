@@ -1,14 +1,7 @@
-.setcpu "6502x"
-
-.feature c_comments
-.feature force_range
-.feature line_continuations
-.feature string_escapes
-.feature underline_in_numbers
-.feature bracket_as_indirect
-
 .define libroot     "../../modules/"
 .define templates   "../templates/"
+
+.scope code
 
 .define template .concat(templates, "global/")
 .include .concat(templates, "global/includes.asm")
@@ -19,24 +12,21 @@ ___libinclude___
 .segment "HEADER"
 insert_header
 
-
-
 .segment "CODE"
-.scope code
 
-Addr1 = $0300
-Addr2 = $0303
+Addr1 = $300
+Addr2 = $308
 
-w_Addr1 = $03
-w_Addr2 = $02
+typeas Addr1, bu32
+typeas Addr2, bi8
 
 reset:
-    add w_Addr1: Addr1, Addr2
+    clc
+    add Addr1, Addr2
     @hang:
         jmp @hang
 
 .endscope
-
 
 .segment "VECTORS"
     .addr $0000
