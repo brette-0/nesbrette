@@ -16,6 +16,6 @@ The `GPR` instructions below use `enum` evaluation to create the necessary gener
 | `tra`     | Transfer Register to A         | `2c 1b`     | Transfers specified register to A.                  |
 | `try`     | Transfer Register to Y         | `~3.5c ~2b` | Transfers specified register to Y.                  |
 | `trx`     | Transfer Register to X         | `~3.5c ~2b` | Transfers specified register to X.                  |
-| `trr`     | Transfers Register to Register | `~3.5c ~2b` | Transfers specified register to specified register. |
+| `trr`     | Transfers Register to Register | `~2.1c ~1.3b` | Transfers specified register to specified register. |
 
 > All `i6502` dependant synthetics use official `6502` instructions for legitimate operations, where not possible they use `i6502` solutions and *never* involve memory/stack.
