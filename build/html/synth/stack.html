@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>synth::stack &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="synth::gpr" href="gpr.html" />
+    <link rel="prev" title="synth::s6502" href="s6502.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="synth-stack">
+<h1><code class="docutils literal notranslate"><span class="pre">synth::stack</span></code><a class="headerlink" href="#synth-stack" title="Link to this heading">¶</a></h1>
+<p>Typically the stack is used by interrupts, calling, returning and pushing temporaries to free up the Accumolator, but there exists methodologies, optimisations and features of the 6502 that can be created with clever stack manipulation.</p>
+<section id="ldstat-load-cpu-status-flags">
+<h2><code class="docutils literal notranslate"><span class="pre">ldstat</span></code> - Load CPU Status Flags<a class="headerlink" href="#ldstat-load-cpu-status-flags" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldstat</span>
+<span class="n">cmp</span> <span class="c1">#bf     ; break flag</span>
+<span class="n">beq</span> <span class="nd">@handler</span><span class="p">;</span> <span class="n">handle</span> <span class="n">brk</span> <span class="n">IRQs</span> <span class="n">within</span> <span class="n">IRQ</span> <span class="n">vector</span>
+</pre></div>
+</div>
+</section>
+<section id="ststat-store-cpu-status-flags">
+<h2><code class="docutils literal notranslate"><span class="pre">ststat</span></code> - Store CPU Status Flags<a class="headerlink" href="#ststat-store-cpu-status-flags" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldstat</span>
+<span class="n">ora</span> <span class="c1">#$bf    ; enable break for next IRQ</span>
+<span class="n">ststat</span>      <span class="p">;</span> <span class="n">apply</span> <span class="n">changes</span>
+</pre></div>
+</div>
+</section>
+<section id="callback-allocate-callback">
+<h2><code class="docutils literal notranslate"><span class="pre">callback</span></code> - Allocate Callback<a class="headerlink" href="#callback-allocate-callback" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@body</span><span class="p">:</span>      <span class="p">;</span> <span class="n">example</span> <span class="s1">&#39;foo&#39;</span> <span class="n">function</span>
+    <span class="n">lda</span> <span class="c1">#$10</span>
+    <span class="n">sta</span> <span class="n">Example</span>
+    <span class="n">rts</span>
+
+<span class="nd">@main</span><span class="p">:</span>
+    <span class="n">jsr</span> <span class="nd">@body</span>
+            <span class="p">;</span> <span class="n">justifies</span> <span class="s1">&#39;rts&#39;</span> <span class="n">at</span> <span class="nd">@body</span>
+    <span class="n">bne</span> <span class="nd">@main</span>
+            <span class="p">;</span> <span class="n">justifies</span> <span class="n">calling</span> <span class="nd">@body</span> <span class="k">as</span> <span class="n">logic</span> <span class="n">cannot</span> <span class="n">be</span> <span class="n">simplified</span>
+    <span class="n">callback</span> <span class="nd">@main</span>
+            <span class="p">;</span> <span class="n">pushes</span> <span class="nd">@main</span> <span class="n">onto</span> <span class="n">stack</span> <span class="k">for</span> <span class="nb">next</span> <span class="k">return</span>
+    <span class="n">jmp</span> <span class="nd">@body</span>
+            <span class="p">;</span> <span class="n">jumps</span> <span class="n">to</span> <span class="n">target</span><span class="p">,</span> <span class="n">returns</span> <span class="n">to</span> <span class="n">prevent</span> <span class="n">stack</span> <span class="n">corruption</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are situations in which simply making the called function jump instead of return can prevent this complication, however, this is not true for all circumstances making this very useful.</p>
+</div>
+</section>
+<section id="lds-load-register-with-stack-pointer-at-stack">
+<h2><code class="docutils literal notranslate"><span class="pre">lds</span></code> - Load Register with Stack Pointer at Stack<a class="headerlink" href="#lds-load-register-with-stack-pointer-at-stack" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lds         ; load stack at SP
+sta $00
+lds 1       ; load (stack + 1) at SP
+sta $01
+jmp ($0000) ; jump to caller
+</pre></div>
+</div>
+</section>
+<section id="sts-store-register-value-at-stack-pointer-in-stack">
+<h2><code class="docutils literal notranslate"><span class="pre">sts</span></code> - Store Register Value at Stack Pointer in Stack<a class="headerlink" href="#sts-store-register-value-at-stack-pointer-in-stack" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">assume</span> <span class="n">cycle</span><span class="o">-</span><span class="n">timed</span> <span class="n">irq</span> <span class="n">counter</span> <span class="n">expiry</span>
+<span class="n">lda</span> <span class="c1">#.hibyte $addr</span>
+<span class="n">sts</span> <span class="mi">1</span>
+<span class="n">lda</span> <span class="c1">#.lobyte $addr</span>
+<span class="n">sts</span> <span class="mi">2</span>       <span class="p">;</span> <span class="n">modify</span> <span class="k">return</span> <span class="n">address</span> <span class="kn">from</span><span class="w"> </span><span class="nn">interrupt</span>
+<span class="n">rti</span>
+</pre></div>
+</div>
+</section>
+<section id="des-decrement-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">des</span></code> - Decrement Stack at Stack Pointer<a class="headerlink" href="#des-decrement-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>; assume $100, SP holds (target + 1)
+des
+pla         ; a =&gt; target
+</pre></div>
+</div>
+</section>
+<section id="ins-increment-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span></code> - Increment Stack at Stack Pointer<a class="headerlink" href="#ins-increment-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>; assume $100, SP holds (target - 1)
+ins
+pla         ; a =&gt; target
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It should be noted that <code class="docutils literal notranslate"><span class="pre">irol</span></code> is twice as fast as <code class="docutils literal notranslate"><span class="pre">iror</span></code> and this cannot be helped.</p>
+</div>
+</section>
+<section id="cps-compare-against-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">cps</span></code> - Compare Against Stack at Stack Pointer<a class="headerlink" href="#cps-compare-against-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="c1">#$80</span>
+<span class="n">cps</span>
+<span class="n">bcs</span> <span class="nd">@negative</span>
+            <span class="p">;</span> <span class="n">handle</span> <span class="n">negative</span> <span class="n">temps</span> <span class="n">differently</span><span class="p">,</span> <span class="n">preserve</span> <span class="n">Accumolator</span> <span class="n">freedom</span>
+</pre></div>
+</div>
+</section>
+<section id="ads-add-stack-at-stack-pointer-with-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">ads</span></code> - Add Stack at Stack Pointer with Carry<a class="headerlink" href="#ads-add-stack-at-stack-pointer-with-carry" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clc</span>
+<span class="n">ads</span> <span class="mi">1</span>
+<span class="n">ads</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">ads</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span>    <span class="p">;</span> <span class="nb">sum</span> <span class="n">combo</span> <span class="n">scores</span>
+</pre></div>
+</div>
+</section>
+<section id="sbs-subtract-stack-at-stack-pointer-with-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">sbs</span></code> - Subtract Stack at Stack Pointer with Carry<a class="headerlink" href="#sbs-subtract-stack-at-stack-pointer-with-carry" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sec</span>
+<span class="n">sbs</span> <span class="mi">1</span>
+<span class="n">sbs</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">sbs</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span>    <span class="p">;</span> <span class="n">deduct</span> <span class="n">penalties</span>
+</pre></div>
+</div>
+</section>
+<section id="ans-bitmask-and-by-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">ans</span></code> - Bitmask/and by Stack at Stack Pointer<a class="headerlink" href="#ans-bitmask-and-by-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IO_DEBUFFER</span>
+    <span class="n">lda</span> <span class="n">payload</span>
+    <span class="n">ans</span>     <span class="p">;</span> <span class="n">mask</span> <span class="n">out</span> <span class="n">task</span> <span class="n">missing</span> <span class="n">permissions</span>
+    <span class="n">sta</span> <span class="n">io</span><span class="p">::</span><span class="n">device</span>
+</pre></div>
+</div>
+</section>
+<section id="ors-bitset-or-by-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">ors</span></code> - Bitset/or by Stack at Stack Pointer<a class="headerlink" href="#ors-bitset-or-by-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="n">Player</span>
+<span class="n">ror</span>
+<span class="n">ror</span>
+<span class="n">ror</span>
+<span class="n">ora</span> <span class="c1">#$80    ; p1 =&gt; $00 | p2 =&gt; $40</span>
+<span class="n">ors</span>         <span class="p">;</span> <span class="n">bitset</span> <span class="n">highbyte</span>
+<span class="n">sts</span>         <span class="p">;</span> <span class="n">redirect</span> <span class="n">callback</span> <span class="n">to</span> <span class="s1">&#39;implied PRG mirror&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="eos-bitflip-eor-xor-by-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">eos</span></code> - Bitflip/eor/xor by Stack at Stack Pointer<a class="headerlink" href="#eos-bitflip-eor-xor-by-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lds
+eos 1
+pha ; push delta of $100, SP &amp; $101, SP
+</pre></div>
+</div>
+</section>
+<section id="rss-right-shift-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">rss</span></code> - Right Shift Stack at Stack Pointer<a class="headerlink" href="#rss-right-shift-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="n">shrunk</span>
+<span class="n">beq</span> <span class="nd">@ahead</span>
+
+<span class="n">rss</span> <span class="p">;</span> <span class="n">shrink</span> <span class="n">buffered</span> <span class="n">force</span>
+</pre></div>
+</div>
+</section>
+<section id="lss-left-shift-by-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">lss</span></code> - Left Shift by Stack at Stack Pointer<a class="headerlink" href="#lss-left-shift-by-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="n">supersize</span>
+<span class="n">beq</span> <span class="nd">@ahead</span>
+
+<span class="n">lss</span> <span class="p">;</span> <span class="n">grow</span> <span class="n">buffered</span> <span class="n">force</span>
+</pre></div>
+</div>
+</section>
+<section id="lrs-left-roll-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">lrs</span></code> - Left Roll Stack at Stack Pointer<a class="headerlink" href="#lrs-left-roll-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lrs</span>
+<span class="n">bcc</span> <span class="nd">@positive</span>
+<span class="p">;</span> <span class="n">handle</span> <span class="n">based</span> <span class="n">on</span> <span class="n">sign</span> <span class="p">(</span><span class="n">d6</span><span class="o">=&gt;</span><span class="n">d7</span> <span class="n">now</span> <span class="n">available</span> <span class="n">through</span> <span class="n">N</span> <span class="n">on</span> <span class="nb">next</span> <span class="n">load</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="lrr-right-roll-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">lrr</span></code> - Right Roll Stack at Stack Pointer<a class="headerlink" href="#lrr-right-roll-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rol</span>
+<span class="n">lrr</span>
+<span class="n">clc</span> <span class="p">;</span> <span class="n">signed</span> <span class="n">right</span> <span class="n">roll</span> <span class="n">stack</span> <span class="n">by</span> <span class="n">A</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Many of these have little to no use or may indicate an irregular methodology if used. Seriously evaluate the complexity of your task before utilising the obscurer of these.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nesbrette</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="i6502.html"><code class="docutils literal notranslate"><span class="pre">synth::i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">synth::i6502x</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="s6502.html"><code class="docutils literal notranslate"><span class="pre">synth::s6502</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">synth::stack</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpr.html"><code class="docutils literal notranslate"><span class="pre">synth::gpr</span></code></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="s6502.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">synth::s6502</span></code></a></li>
+      <li>Next: <a href="gpr.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">synth::gpr</span></code></a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Brette.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/synth/stack.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

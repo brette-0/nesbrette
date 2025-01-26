@@ -5,9 +5,21 @@
 ; constant multiply
 ; depends on lshift (acc) | MSSB(sym) | LSSB(sym)
 
-.macro cmult __multiplier__, __output__, __osize__, __temp__
+.macro cmult __param0__, __param1__
     .local _temp_, _mode_
 
+    .ifblank __param1__
+        __multiplier__ = __param0__
+    .elseif .xmatch(__param0__, a)
+        __multiplier__ = __param1__
+    .else
+        __output__ = __param0__
+        __multiplier__ = __param1__
+        
+        outtype .set 0
+        detype __output__
+
+        __osize__ .set typeval outtype
     .enum 
         acc  = 0
         addr = 1
@@ -17,7 +29,7 @@
         .fatal "Constant Multiplier must have Multiplier operand"
     .endif
 
-    _mode_ = .ifnblank(__output__)          ; bool --> int --> enum
+    _mode_ = .ifnblank(__param1__)          ; bool --> int --> enum
 
     .if _mode_ = addr
         .ifblank __osize__

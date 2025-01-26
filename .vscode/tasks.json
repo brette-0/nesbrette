@@ -2,14 +2,31 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build",
+            "label": "Build Example ROM",
             "type": "shell",
             "command": "c:/cc65/bin/cl65 --target none ./example/src/main.asm -C ./example/config.cfg --verbose -o ./example/example.nes",
-            "problemMatcher": ["$ca65", "$ld65"],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
+            "problemMatcher": [
+                "$ca65",
+                "$ld65"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+        {
+            "label": "Build Docsite HTMLs",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "html"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+            }
         }
     ]
 }

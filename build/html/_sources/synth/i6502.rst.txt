@@ -1,0 +1,192 @@
+``synth::i6502`` & ``synth::i6502x``
+====================================
+
+Because the value at any index in an `Identity Table <https://www.nesdev.org/wiki/Identity_table>`_ is the same as the index, it is possible to use our GPRs as operands for read only instructions. The table required is only ``256`` bytes in size, if page aligned they should all complete in ``4`` cycles taking up ``3`` bytes except for ``laxi`` which only takes ``3`` cycles.
+
+``adx`` - Add X with Carry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$10
+    lda #$20
+    clc
+    adx         ; a => $30
+
+``ady`` - Add Y with Carry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$10
+    lda #$20
+    clc
+    ady         ; a => $30
+
+``sbx`` - Subtract X with Carry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$10
+    lda #$20
+    sec
+    sbx         ; a => $10
+
+``sby`` - Subtract Y with Carry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$10
+    lda #$20
+    sec
+    sby         ; a => $30
+
+``orax`` - Bitset/or By X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$18
+    lda #$28s
+    orax        ; a => $38
+
+``oray`` - Bitset/or by Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$18
+    lda #$28
+    oray        ; a => $30
+
+``andx`` - Mask/and by X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$f0
+    lda #$cd
+    andx        ; a => $c0
+
+``andy`` - Mask/and by Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$f0
+    lda #$cd
+    andy        ; a => $c0
+
+``eorx`` - Flip/eor/xor by X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$18
+    lda #$28
+    adx         ; a => $30
+
+``eory`` - Flip/eor/xor by Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$18
+    lda #$28
+    eory        ; a => $30
+
+``biti`` - `BIT <http://www.6502.org/tutorials/6502opcodes.html#BIT>`_ Immediate ``| 4c : 3b``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+    
+    biti $cd
+
+``xcmp`` - Compare against X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$10
+    lda #$20
+    xcmp        ; c = 1 | z = 0 | n = 0
+
+``ycmp`` - Compare against Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$10
+    lda #$20
+    ycmp        ; c = 1 | z = 0 | n = 0
+
+``xcpy`` - Compare X against Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$10
+    ldx #$20
+    xcpy        ; c = 1 | z = 0 | n = 0
+
+``ycpx`` - Compare Y against X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$10
+    ldy #$20
+    ycpx        ; c = 1 | z = 0 | n = 0
+
+``txy`` - Transfer X to Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldx #$10
+    ldy #$20
+    txy         ; y => $10
+
+``tyx`` - Transfer Y to X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$10
+    ldx #$20
+    tyx         ; x => $10
+
+.. note::
+    Since ``i6502`` is IDTable assisted there is no stack use here, making it faster and smaller than existing ``txy``/``tyx`` methods that depend on ``pha=>tya=>tax=>pla``.
+
+``sev`` - Set Overflow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    sev         ; v => 1
+
+.. note::
+    This performs ``biti $40`` and therefore if you wish to set both Overflow and Negative then you can use ``biti $c0`` .
+
+``tyxa`` - Transfer Y to both X and A
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ldy #$30
+    ldx #$10
+    lda #$20
+    tyxa        ; a, x => $30
+
+``laxi`` - Load A & X with Immediate
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    laxi $10    ; a, x => $10
+
+.. warning::
+    Do not use ``lax #imm`` as immediate opcode as it is **unstable** with chaotic entropy on Hardware and is not supported in `Mesen2 <https://mesen.ca>`_.

@@ -20,9 +20,14 @@ Addr2 = $308
 typeas Addr1, bu32
 typeas Addr2, bi8
 
+
+TempArray:
+    .byte $01, $23, $00, $00
+
 reset:
     clc
-    add Addr1, Addr2
+    LSSByte u32: TempArray
+    sta $310
     @hang:
         jmp @hang
 

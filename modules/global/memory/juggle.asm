@@ -1,5 +1,7 @@
 ; untested
 
+.warning "deprecrated"
+
 .macro juggle __tokens__, __widths__, __temp__, __polarity__
     ; (final element should have no width)
     ; t0 => t-1

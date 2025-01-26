@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>synth::s6502 &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="synth::stack" href="stack.html" />
+    <link rel="prev" title="synth::i6502 &amp; synth::i6502x" href="i6502.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="synth-s6502">
+<h1><code class="docutils literal notranslate"><span class="pre">synth::s6502</span></code><a class="headerlink" href="#synth-s6502" title="Link to this heading">¶</a></h1>
+<p>The following instructions are synthetic instructions mostly found and created elsewhere but given a mneumonic by <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code>. These should <strong>not</strong> be used for the majority case as they complete typical functions with additional overhead suited for few use cases.</p>
+<section id="sasl-signed-arithmetic-left-shift">
+<h2><code class="docutils literal notranslate"><span class="pre">sasl</span></code> - Signed Arithmetic Left Shift<a class="headerlink" href="#sasl-signed-arithmetic-left-shift" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$f4
+sasl        ; a =&gt; $f8
+</pre></div>
+</div>
+</section>
+<section id="slsr-signed-arithmetic-right-shift">
+<h2><code class="docutils literal notranslate"><span class="pre">slsr</span></code> - Signed Arithmetic Right Shift<a class="headerlink" href="#slsr-signed-arithmetic-right-shift" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$f8
+slsr        ; a =&gt; $f4
+</pre></div>
+</div>
+</section>
+<section id="neg-make-negative">
+<h2><code class="docutils literal notranslate"><span class="pre">neg</span></code> - Make Negative<a class="headerlink" href="#neg-make-negative" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$05
+neg         ; a =&gt; $fb, -$05
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is different to simply <code class="docutils literal notranslate"><span class="pre">eor</span> <span class="pre">#$ff</span></code> as that yields a difference of <code class="docutils literal notranslate"><span class="pre">1</span></code> from the target, this process normally takes <code class="docutils literal notranslate"><span class="pre">6</span></code> cycles but if carry is passed with <code class="docutils literal notranslate"><span class="pre">neg</span> <span class="pre">0/1</span></code> then it only takes <code class="docutils literal notranslate"><span class="pre">4</span></code> cycles.</p>
+</div>
+</section>
+<section id="ccf-complement-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">ccf</span></code> - Complement Carry<a class="headerlink" href="#ccf-complement-carry" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clc</span>
+<span class="n">ccf</span>         <span class="p">;</span> <span class="n">c</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+<span class="n">ccf</span>         <span class="p">;</span> <span class="n">c</span> <span class="o">=&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+<section id="iror-inner-right-roll">
+<h2><code class="docutils literal notranslate"><span class="pre">iror</span></code> - Inner Right Roll<a class="headerlink" href="#iror-inner-right-roll" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$81
+iror        ; a =&gt; $50
+</pre></div>
+</div>
+</section>
+<section id="irol-inner-left-roll">
+<h2><code class="docutils literal notranslate"><span class="pre">irol</span></code> - Inner Left Roll<a class="headerlink" href="#irol-inner-left-roll" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$81
+irol        ; a =&gt; $03
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It should be noted that <code class="docutils literal notranslate"><span class="pre">irol</span></code> is twice as fast as <code class="docutils literal notranslate"><span class="pre">iror</span></code> and this cannot be helped.</p>
+</div>
+</section>
+<section id="labs-load-a-always-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">labs</span></code> - Load A Always Absolute<a class="headerlink" href="#labs-load-a-always-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>label = $01
+labs label  ; PC: lda $0801
+labs label, x
+            ; PC: lda $0801, x
+labs label, y
+            ; PC: lda $0801, y
+labs label, r
+            ; PC : lda $0801, y|x
+</pre></div>
+</div>
+</section>
+<section id="lybs-load-y-always-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">lybs</span></code> - Load Y Always Absolute<a class="headerlink" href="#lybs-load-y-always-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>label = $01
+lybs label  ; PC: ldy $0801
+lybs label, x
+            ; PC: ldy $0801, x
+</pre></div>
+</div>
+</section>
+<section id="lxbs-load-x-always-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">lxbs</span></code> - Load X Always Absolute<a class="headerlink" href="#lxbs-load-x-always-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>label = $01
+lxbs label  ; PC: ldx $0801
+lxbs label, y
+            ; PC: ldx $0801, y
+</pre></div>
+</div>
+</section>
+<section id="sabs-store-a-always-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">sabs</span></code> - Store A Always Absolute<a class="headerlink" href="#sabs-store-a-always-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>label = $01
+sabs label  ; PC: sta $0801
+sabs label, x
+            ; PC: sta $0801, x
+sabs label, y
+            ; PC: sta $0801, y
+sabs label, r
+            ; PC : sta $0801, y|x
+</pre></div>
+</div>
+</section>
+<section id="sybs-store-y-always-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">sybs</span></code> - Store Y Always Absolute<a class="headerlink" href="#sybs-store-y-always-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>label = $01
+sybs label  ; PC: sty $0801
+</pre></div>
+</div>
+</section>
+<section id="sxbs-store-x-always-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">sxbs</span></code> - Store X Always Absolute<a class="headerlink" href="#sxbs-store-x-always-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>label = $01
+sxbs label  ; PC: stx $0801
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All ‘Always Absolute’ regions utilise the first system RAM Mirror available, considering the use of indexing this prevents any dummy reads/writes on PPU Registers.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nesbrette</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="i6502.html"><code class="docutils literal notranslate"><span class="pre">synth::i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">synth::i6502x</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">synth::s6502</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="stack.html"><code class="docutils literal notranslate"><span class="pre">synth::stack</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpr.html"><code class="docutils literal notranslate"><span class="pre">synth::gpr</span></code></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="i6502.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">synth::i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">synth::i6502x</span></code></a></li>
+      <li>Next: <a href="stack.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">synth::stack</span></code></a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Brette.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/synth/s6502.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

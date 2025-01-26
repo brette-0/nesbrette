@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/modules/synthetic/s6502.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "s6502"
+              "title": "README"
             }
           }
         ]
@@ -164,27 +164,33 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "source/synth/synth.rst",
+    "build/html/_sources/synth/synth.rst.txt",
+    "build/html/synth/synth.html",
+    "build/doctrees/synth/synth.doctree",
+    "build/html/_sources/synth/gpr.rst.txt",
+    "build/html/synth/gpr.html",
+    "build/doctrees/synth/gpr.doctree",
+    "source/synth/gpr.rst",
+    "build/html/_sources/synth/stack.rst.txt",
+    "build/html/synth/stack.html",
+    "build/doctrees/synth/stack.doctree",
+    "build/html/_static/github-banner.svg",
+    "build/html/_static/plus.png",
+    "build/html/_static/minus.png",
+    "build/html/_static/file.png",
+    "docs/modules/synthetic/GPR.md",
+    "docs/modules/synthetic/i6502.md",
+    "docs/modules/synthetic/s6502.md",
     "docs/modules/synthetic/Stack.md",
     "docs/modules/synthetic/ld.md",
-    "modules/global/synth/ld.asm",
-    "docs/modules/synthetic/s6502.md",
-    "docs/modules/synthetic/i6502.md",
     "docs/modules/math/trig.md",
     "docs/modules/memory/juggle.md",
     "docs/modules/math/mult.md",
     "docs/modules/math/div.md",
     "docs/modules/math/wip_cmult.md",
-    "modules/global/synth/stack.asm",
     "docs/modules/math/deprecated_cmult.md",
     "docs/modules/math/Add & Sub.md",
-    "engine/addresses.asm",
-    "engine/constants.asm",
-    "engine/includer.asm",
-    "engine/includes.asm",
-    "engine/warnings.asm",
-    "modules/global/synth/s6502.asm",
-    "modules/global/synth/i6502x.asm",
-    "modules/global/synth/i6502.asm",
     "testing/multiply_speedchart.bmp",
     "docs/Typing, Templating & Call Handlers.md",
     "docs/modules/header.md",
@@ -203,11 +209,6 @@
     "docs/modules/math/image-1.png",
     "docs_example.md",
     "multiply_speedchart.bmp",
-    "nesbrette.md",
-    "testing/results/cmult_accumulator_mode_oob_mask.png",
-    "testing/results/cmult_accumulator_mode_oob_mask.bmp",
-    "testing/results/cmult_accumulator_mode_oob.bmp",
-    "profiling/math/cmult_results/cmult_accumulator_mode_biased_complexity_profiling.png",
-    "profiling/math/cmult_results/cmult_accumulator_mode_unbiased_complexity_profiling.png"
+    "testing/results/cmult_accumulator_mode_oob_mask.png"
   ]
 }
