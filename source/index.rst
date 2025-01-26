@@ -7,10 +7,8 @@
 =============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
-   synth/s6502
-   synth/i6502
-   synth/stack
-   synth/gpr
+   modules/modules
+   theory/theory
