@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Typing &#8212; nesbrette 0.1 documentation</title>
+    <title>Phase 2 &#8212; nesbrette 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
     
@@ -15,8 +15,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Includer" href="includer.html" />
-    <link rel="prev" title="theory" href="theory.html" /> 
+    <link rel="prev" title="Warning" href="warning.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -25,14 +24,11 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="includer.html" title="Includer"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="theory.html" title="theory"
+          <a href="warning.html" title="Warning"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="theory.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Typing</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Phase 2</a></li> 
       </ul>
     </div>  
 
@@ -41,15 +37,45 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="typing">
-<h1>Typing<a class="headerlink" href="#typing" title="Link to this heading">¶</a></h1>
-<p>The solution to performing higher bit math on low bit microprocessors always has been either assembled iteration or preprocessor iteration, however, by an exploit in the <code class="docutils literal notranslate"><span class="pre">ca65</span></code> string parser I managed to access a field left untouched. Any address may be typed, and type indicated with type symbols, enums and labels. If given <code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">u32:Phrase</span></code>, <code class="docutils literal notranslate"><span class="pre">u32</span></code> is accessed by methods unseen elsewhere and serially matched against an array of symbols to yield a ‘type’.</p>
-<p>Types may indicate number bit width, signature and endian. Types may also indicate register or preprocessor element, null exists as signed zero-width. There exists no intentional means to remove typing from <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> as I belive it enhances the experience and yields cleaner code. The type evluation ‘operator’ and methods are often used to obtain parameters for a type (seen most with regiters, describing an immediate ‘affinity’)</p>
-<p>To avoid frequent type specification, the user may use <code class="docutils literal notranslate"><span class="pre">typeas</span></code> which will enable them the ability to pass their parameters without type specification as it will be deduced by the instruction handler. It should be noted that calling instruction bodies may yield a legal response but no performance garauntee is made. It is, however, suggested that type indication be used on type given labels to perform ‘casts’ between families of types.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>It is impossible to evaluate a collection of typed symbols, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will <strong>never</strong> combine collection and type use in a singular token.</p>
-</div>
+  <section id="phase-2">
+<h1>Phase 2<a class="headerlink" href="#phase-2" title="Link to this heading">¶</a></h1>
+<dl class="simple">
+<dt>Inputs:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NES</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SNES</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GCN</span></code></p></li>
+</ul>
+</dd>
+<dt>Physics:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">rigidbody</span></code></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Raycasting</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Hitboxes</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Vector</span> <span class="pre">Forces</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Normalized</span> <span class="pre">Forces</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Audio:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DPCM</span> <span class="pre">Split</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DPCM</span> <span class="pre">Hierachy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Famistudio</span> <span class="pre">Channel</span> <span class="pre">redirect</span> <span class="pre">Mod</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PCM</span> <span class="pre">player</span></code></p></li>
+</ul>
+</dd>
+<dt>Memory:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Decompression</span></code></p></li>
+</ul>
+</dd>
+<dt>Random:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LFSR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Biasing</span></code></p></li>
+</ul>
+</dd>
+</dl>
 </section>
 
 
@@ -61,18 +87,13 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="theory.html"
-                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="includer.html"
-                          title="next chapter">Includer</a></p>
+    <p class="topless"><a href="warning.html"
+                          title="previous chapter">Warning</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/theory/typing.rst.txt"
+      <li><a href="../_sources/theory/phase2.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -97,14 +118,11 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="includer.html" title="Includer"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="theory.html" title="theory"
+          <a href="warning.html" title="Warning"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="theory.html" ><code class="docutils literal notranslate"><span class="pre">theory</span></code></a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Typing</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Phase 2</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
