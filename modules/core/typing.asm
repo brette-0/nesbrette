@@ -42,11 +42,6 @@
 .define typeval(__type__)\
   (__type__) & %11111111111
 
-
-.define def(__label__, __typed_const__)\
-  .ident(__label__) .set type __typed_const__ \
-  typeas(__label__, .right(1, __typed_const__))
-
 .define typeas(__label__, __type__)\
   .ident(.sprintf("w_%s", .string(__label__))) .set type __type__
 
