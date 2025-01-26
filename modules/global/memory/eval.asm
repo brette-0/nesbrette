@@ -1,72 +1,36 @@
-; needs dynamic width
-; needs ioptr
-; untested
+.macro eval __target__, __reg__
+    .local targettype, targetsize, tlabel
 
-; NEEDS MAJOR REWORK
+    targettype .set 0
+    detype __target__, targettype
 
-.macro eval __offset__, __width__, __endian__, __reg__
-    .ifblank __offset__
-        .fatal "eval requires offset to evaluate"
-        .endif
+    targetsize  = typeval targettype
+    tlabel      = ilabel __target__
 
-    .ifblank width
-        .fatal "eval requires width to evaluate"
-        .endif
+    pha ; cpu stat          ::+2
+    pha ; saved a           ::+1
+    pha ; saved __reg__     ::+0
 
-    .ifblank __endian__
-        __endian__ = little
-        .endif
+    lda #$00
 
-    .if (__endian__ <> little) .and (__endian__ <> big)
-        .fatal "Invalid Endianness"
-        .endif
+    ; get z
+    .repeat targetsize, iter
+        ldr wabs:: __reg__, (eindex tlabel, targetsize, iter, endian targettype)
+        bne @fail
+    .endrepeat
 
-    .ifblank __reg__
-        __reg__ = a
-        .endif
+    ora #$02
+    @fail:
 
-    .if (__reg__ <> x) .and (__reg__ <> y) .and (__reg__ <> a)
-        .fatal "Invalid GPR for eval"
-        .endif
-
-    php
-    pla                                 ; status => a
-    and #%01111101                      ; mask out N and Z
-
-    .if __endian__ = little
-        bit __offset__ + __width__ - 1  ; fetch signature
-    .else
-        bit __offset__
-    .endif
-
-    bpl @skip
-        ora #$80
-
-    @skip:
-
-    .if __reg__ = a
-        pha
-        .endif
-
-    .repeat __width__, iter
-        .if     __reg__ = a
-            lda __offset__ + __width__      
-        .elseif __reg__ = x
-            ldx __offset__ + __width__
-        .else
-            ldy __offset__ + __width__
-        .endif
-
-        bne @exit    
-        .endrepeat
+    ldr wabs:: __reg__, (eindex tlabel, targetsize, 0, endian targettype)
+    bpl @fail2
+    ora #$80
     
-    .if __reg__ = a
-        pla
-        .endif
-    
-    ora #$02                ; enable Z
-    
-    @exit:
-    pha
-    plp                     ; a => status
-    .endmacro
+    @fail2:
+
+    sts 2
+    pla ; dump old __reg__
+    tar __reg__
+    pla ; dump a
+    plp ; new cpu stat
+.endmacro
