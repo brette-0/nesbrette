@@ -18,17 +18,17 @@
 .macro lds __reg__
     tsx
     .if .xmatch(__reg__, y)
-        ldy $0100, x
+        ldy $0100 + __offset__, x
     .else
-        lda $0100, x
+        lda $0100 + __offset__, x
     .endif
 .endmacro
 
-.macro sts __reg__
+.macro sts __offset__, __reg__
     tsx
     .if .xmatch(__reg__, y)
-        sty $0100, x
+        sty $0100 + __offset__, x
     .else
-        sta $0100, x
+        sta $0100 + __offset__, x
     .endif
 .endmacro
