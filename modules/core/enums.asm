@@ -20,11 +20,21 @@
     big    = -2
     large  = big
 
-    ; directness
-    implied   = -1
-    immediate = -2
-    direct    = -3  ; either absolute or zp
-    indirect  = -4  ; any of the indirect modes
+    ; memory address mode
+    imp     = 0
+    imm     = 1
+    zp      = 2
+    zpx     = 3
+    zpy     = 4
+    wabs    = 5
+    wabsx   = 6
+    wabsy   = 7
+    abs     = 8
+    absx    = 9
+    absy    = 10
+    inabsy  = 11
+    inabsx  = 12
+    inabs   = 13
 
     ; flag states
     unset = 0
