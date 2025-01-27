@@ -1,1 +1,0 @@
-.define confined(o, w) .hibyte(o) = .hibyte(o + w)

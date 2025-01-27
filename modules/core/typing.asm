@@ -51,10 +51,6 @@
 .define ilabel(__token__)\
   .ident(label __token__)
 
-; consider removal
-.define peek(__token__)\
-  .sprintf("%d", .ident(label __token__))
-
 .define width(__token__)\
   .ident(.concat("w_", label __token__))
     
@@ -128,3 +124,6 @@
     .endif
   .endif
 .endmacro
+
+.define null_coalesce(n, c) ((n == null) * c) | ((n != null) * n)
+.define is_null(n) (n == null)

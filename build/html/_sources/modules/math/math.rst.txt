@@ -1,5 +1,5 @@
-math
-======
+``math``
+========
 
 ``add int::src, int::tar`` - Add Memory with Carry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

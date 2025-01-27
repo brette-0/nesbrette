@@ -39,23 +39,25 @@ As interchangable as GPRs tend to be, users will often find themselves with only
     tar inreg   ; a -> x
 
 ``tyr`` - Transfer Y to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
     inreg = xr
 
     tyr inreg   ; y -> x
+
 ``txr`` - Transfer X to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
     inreg = yr
 
     txr inreg   ; x -> y
+
 ``tra`` - Transfer Register to a
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -64,7 +66,7 @@ As interchangable as GPRs tend to be, users will often find themselves with only
     tra inreg   ; y -> a
 
 ``try`` - Transfer Register to Y
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -73,7 +75,7 @@ As interchangable as GPRs tend to be, users will often find themselves with only
     try inreg   ; x -> y
 
 ``trx`` - Transfer Register to X
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -82,7 +84,7 @@ As interchangable as GPRs tend to be, users will often find themselves with only
     trx inreg   ; y -> x
 
 ``trr`` - Transfer Register to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -102,7 +104,7 @@ As interchangable as GPRs tend to be, users will often find themselves with only
     bpl @task
 
 ``str`` - Store Register
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
@@ -110,7 +112,7 @@ As interchangable as GPRs tend to be, users will often find themselves with only
     str reg::wabs. param
     
 ``cpr`` - Compare Register
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
