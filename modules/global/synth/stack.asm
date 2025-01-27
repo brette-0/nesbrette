@@ -15,8 +15,11 @@
     pha
 .endmacro
 
-.macro lds __reg__
-    tsx
+.macro lds __reg__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     .if .xmatch(__reg__, y)
         ldy $0100 + __offset__, x
     .else
@@ -24,8 +27,11 @@
     .endif
 .endmacro
 
-.macro sts __offset__, __reg__
-    tsx
+.macro sts __offset__, __reg__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     .if .xmatch(__reg__, y)
         sty $0100 + __offset__, x
     .else
@@ -33,18 +39,27 @@
     .endif
 .endmacro
 
-.macro des
-    tsx
+.macro des, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     dec $0100 + __offset__, x
 .endmacro
 
-.macro ins
-    tsx
+.macro ins, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     inc $0100 + __offset__, x
 .endmacro
 
-.macro cps __reg__
-    tsx
+.macro cps __reg__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     .if .xmatch(__reg__, y)
         cpy $0100 + __offset__, x
     .else
@@ -52,48 +67,75 @@
     .endif
 .endmacro
 
-.macro ads __offset__
-    tsx
+.macro ads __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     adc $0100 + __offset__, x
 .endmacro
 
-.macro sbs __offset__
-    tsx
+.macro sbs __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     sbc $0100 + __offset__, x
 .endmacro
 
-.macro ans __offset__
-    tsx
+.macro ans __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     and $0100 + __offset__, x
     .endmacro
 
-.macro ors __offset__
-    tsx
+.macro ors __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     ora $0100 + __offset__, x
     .endmacro
 
-.macro eos __offset__
-    tsx
+.macro eos __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     eor $0100 + __offset__, x
 .endif
 
-.macro rss __offset__
-    tsx
+.macro rss __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     lsr $0100 + __offset__, x
 .endif
 
-.macro lss __offset__
-    tsx
+.macro lss __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     asl $0100 + __offset__, x
 .endif
 
-.macro lrs __offset__
-    tsx
+.macro lrs __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
     rol $0100 + __offset__, x
 .endif
 
 
-.macro rrs __offset__
-    tsx
+.macro rrs __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+
     ror $0110 + __offset__, x
 .endif
