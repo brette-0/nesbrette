@@ -198,3 +198,28 @@
 
 .. warning::
     This code hasn't been tested catastrophic results are expected.
+
+
+``lshift a | int::addr`` - Left Shift
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    lshift 2    ; a => (a << 2)
+    lshift u32: Out, 13
+                ; u32: Out <<= 13
+
+.. warning::
+    This code is currently undeveloped.
+
+``rshift a | int::addr`` - Right Shift
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    rshift 2    ; a => (a >> 2)
+    rshift u32: Out, 13
+                ; u32: Out >>= 13
+
+.. warning::
+    This code is currently undeveloped.

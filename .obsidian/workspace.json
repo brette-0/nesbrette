@@ -164,6 +164,8 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "source/modules/memory/rshift.rst",
+    "source/modules/memory/lshift.rst",
     "build/html/_sources/modules/core/core.rst.txt",
     "build/html/_sources/modules/core",
     "build/html/modules/core/core.html",
@@ -173,8 +175,6 @@
     "modules/core/qol.asm",
     "source/modules/core/core.rst",
     "source/modules/math/sub.rst",
-    "source/Theory/warning.rst",
-    "source/Theory/typing.rst",
     "build/html/_static/github-banner.svg",
     "build/html/_static/plus.png",
     "build/html/_static/minus.png",

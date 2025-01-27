@@ -15,7 +15,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="logic" href="../logic/logic.html" />
+    <link rel="next" title="math" href="../math/math.html" />
     <link rel="prev" title="gpr" href="../synth/gpr.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
@@ -25,7 +25,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../logic/logic.html" title="logic"
+          <a href="../math/math.html" title="math"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../synth/gpr.html" title="gpr"
@@ -236,6 +236,30 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code hasn’t been tested catastrophic results are expected.</p>
 </div>
 </section>
+<section id="lshift-a-int-addr-left-shift">
+<h2><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Left Shift<a class="headerlink" href="#lshift-a-int-addr-left-shift" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lshift</span> <span class="mi">2</span>    <span class="p">;</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">lshift</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span><span class="p">,</span> <span class="mi">13</span>
+            <span class="p">;</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span> <span class="o">&lt;&lt;=</span> <span class="mi">13</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This code is currently undeveloped.</p>
+</div>
+</section>
+<section id="rshift-a-int-addr-right-shift">
+<h2><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Right Shift<a class="headerlink" href="#rshift-a-int-addr-right-shift" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rshift</span> <span class="mi">2</span>    <span class="p">;</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">rshift</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span><span class="p">,</span> <span class="mi">13</span>
+            <span class="p">;</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span> <span class="o">&gt;&gt;=</span> <span class="mi">13</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This code is currently undeveloped.</p>
+</div>
+</section>
 </section>
 
 
@@ -262,6 +286,8 @@ stz u64: Enemies, ar::yr, $ea
 <li><a class="reference internal" href="#lssb-a-token-int-src-least-significant-set-bit"><code class="docutils literal notranslate"><span class="pre">lssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Least Significant Set Bit</a></li>
 <li><a class="reference internal" href="#msub-a-token-int-src-most-significant-unset-bit"><code class="docutils literal notranslate"><span class="pre">msub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Most Significant Unset Bit</a></li>
 <li><a class="reference internal" href="#lsub-a-token-int-src-least-significant-unset-bit"><code class="docutils literal notranslate"><span class="pre">lsub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Least Significant Unset Bit</a></li>
+<li><a class="reference internal" href="#lshift-a-int-addr-left-shift"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Left Shift</a></li>
+<li><a class="reference internal" href="#rshift-a-int-addr-right-shift"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Right Shift</a></li>
 </ul>
 </li>
 </ul>
@@ -274,8 +300,8 @@ stz u64: Enemies, ar::yr, $ea
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="../logic/logic.html"
-                          title="next chapter">logic</a></p>
+    <p class="topless"><a href="../math/math.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">math</span></code></a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -305,7 +331,7 @@ stz u64: Enemies, ar::yr, $ea
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../logic/logic.html" title="logic"
+          <a href="../math/math.html" title="math"
              >next</a> |</li>
         <li class="right" >
           <a href="../synth/gpr.html" title="gpr"

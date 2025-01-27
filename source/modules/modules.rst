@@ -7,5 +7,4 @@ Modules
    core/core
    synth/synth
    memory/memory
-   logic/logic
    math/math
