@@ -14,7 +14,9 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="synth" href="../synth/synth.html" />
+    <link rel="prev" title="Modules" href="../modules.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -22,7 +24,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../synth/synth.html" title="synth"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../modules.html" title="Modules"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">core</span></code></a></li> 
       </ul>
     </div>  
@@ -191,6 +200,83 @@ typeas Score, u32
 </pre></div>
 </div>
 </section>
+<section id="setreg-int-label-set-register">
+<h2><code class="docutils literal notranslate"><span class="pre">setreg</span> <span class="pre">int,</span> <span class="pre">label</span></code> - Set Register<a class="headerlink" href="#setreg-int-label-set-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setreg</span> <span class="n">__param__</span><span class="p">,</span> <span class="n">__out__</span>
+</pre></div>
+</div>
+</section>
+<section id="setireg-int-label-set-indexing-register">
+<h2><code class="docutils literal notranslate"><span class="pre">setireg</span> <span class="pre">int,</span> <span class="pre">label</span></code> - Set Indexing Register<a class="headerlink" href="#setireg-int-label-set-indexing-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setireg</span> <span class="n">__param__</span><span class="p">,</span> <span class="fm">__index__</span>
+</pre></div>
+</div>
+</section>
+<section id="confined-int-int-if-confined">
+<h2><code class="docutils literal notranslate"><span class="pre">confined</span> <span class="pre">int,</span> <span class="pre">int</span></code> - If Confined<a class="headerlink" href="#confined-int-int-if-confined" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ArrayStart = $3fe
+typeas ArrayStart, u32
+
+.if !(confined ArrayStart)
+    .fatal &quot;Cannot Mitigate Page Overlap&quot;
+.endif
+</pre></div>
+</div>
+</section>
+<section id="index-array-int-index-array">
+<h2><code class="docutils literal notranslate"><span class="pre">index</span> <span class="pre">array,</span> <span class="pre">int</span></code> - Index Array<a class="headerlink" href="#index-array-int-index-array" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">define</span> <span class="n">MyArray</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+
+<span class="o">.</span><span class="n">out</span> <span class="o">.</span><span class="n">sprintf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">index</span> <span class="n">MyArray</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="append-array-token-append-array">
+<h2><code class="docutils literal notranslate"><span class="pre">append</span> <span class="pre">array,</span> <span class="pre">token</span></code> - Append Array<a class="headerlink" href="#append-array-token-append-array" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">define</span> <span class="n">Array</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+<span class="n">append</span> <span class="n">Array</span><span class="p">,</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</section>
+<section id="isarray-token-is-array">
+<h2><code class="docutils literal notranslate"><span class="pre">isArray</span> <span class="pre">token</span></code> - Is Array<a class="headerlink" href="#isarray-token-is-array" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">define</span> <span class="n">MyArray</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+
+<span class="o">.</span><span class="k">if</span> <span class="p">(</span><span class="n">isArray</span> <span class="n">MyArray</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">out</span> <span class="s2">&quot;Woah, that&#39;s sure a lot of numbers&quot;</span>
+<span class="o">.</span><span class="k">else</span>
+    <span class="o">.</span><span class="n">out</span> <span class="s2">&quot;boo, too few numbers&quot;</span>
+<span class="o">.</span><span class="n">endif</span>
+</pre></div>
+</div>
+</section>
+<section id="ispo2-int-is-power-of-two">
+<h2><code class="docutils literal notranslate"><span class="pre">ispo2</span> <span class="pre">int</span></code> - Is Power of two?<a class="headerlink" href="#ispo2-int-is-power-of-two" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="k">if</span> <span class="p">(</span><span class="n">ispo2</span> <span class="n">__param__</span><span class="p">)</span>
+    <span class="p">;</span> <span class="n">optimized</span> <span class="n">mode</span>
+<span class="o">.</span><span class="k">else</span>
+    <span class="p">;</span> <span class="n">suboptimal</span> <span class="n">mode</span>
+<span class="o">.</span><span class="n">endif</span>
+</pre></div>
+</div>
+</section>
+<section id="abs-int-absolute">
+<h2><code class="docutils literal notranslate"><span class="pre">abs</span> <span class="pre">int</span></code> - Absolute<a class="headerlink" href="#abs-int-absolute" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="c1">#(abs ExtremeValue)</span>
+</pre></div>
+</div>
+</section>
+<section id="insert-header-insert-header">
+<h2><code class="docutils literal notranslate"><span class="pre">insert_header</span></code> - Insert Header<a class="headerlink" href="#insert-header-insert-header" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">segment</span> <span class="s2">&quot;HEADER&quot;</span>
+<span class="n">insert_header</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The specification used with <code class="docutils literal notranslate"><span class="pre">insert_header</span></code> is <a class="reference external" href="https://www.nesdev.org/wiki/NES_2.0">iNES</a> 2.</p>
+</div>
+</section>
 </section>
 
 
@@ -219,10 +305,29 @@ typeas Score, u32
 <li><a class="reference internal" href="#detype-isolate-type-algorithmically"><code class="docutils literal notranslate"><span class="pre">detype</span></code> - Isolate Type Algorithmically</a></li>
 <li><a class="reference internal" href="#null-coalesce-int-null-coalesce"><code class="docutils literal notranslate"><span class="pre">null_coalesce</span> <span class="pre">int</span></code> - Null Coalesce</a></li>
 <li><a class="reference internal" href="#is-null-int-is-null"><code class="docutils literal notranslate"><span class="pre">is_null</span> <span class="pre">int</span></code> - is Null</a></li>
+<li><a class="reference internal" href="#setreg-int-label-set-register"><code class="docutils literal notranslate"><span class="pre">setreg</span> <span class="pre">int,</span> <span class="pre">label</span></code> - Set Register</a></li>
+<li><a class="reference internal" href="#setireg-int-label-set-indexing-register"><code class="docutils literal notranslate"><span class="pre">setireg</span> <span class="pre">int,</span> <span class="pre">label</span></code> - Set Indexing Register</a></li>
+<li><a class="reference internal" href="#confined-int-int-if-confined"><code class="docutils literal notranslate"><span class="pre">confined</span> <span class="pre">int,</span> <span class="pre">int</span></code> - If Confined</a></li>
+<li><a class="reference internal" href="#index-array-int-index-array"><code class="docutils literal notranslate"><span class="pre">index</span> <span class="pre">array,</span> <span class="pre">int</span></code> - Index Array</a></li>
+<li><a class="reference internal" href="#append-array-token-append-array"><code class="docutils literal notranslate"><span class="pre">append</span> <span class="pre">array,</span> <span class="pre">token</span></code> - Append Array</a></li>
+<li><a class="reference internal" href="#isarray-token-is-array"><code class="docutils literal notranslate"><span class="pre">isArray</span> <span class="pre">token</span></code> - Is Array</a></li>
+<li><a class="reference internal" href="#ispo2-int-is-power-of-two"><code class="docutils literal notranslate"><span class="pre">ispo2</span> <span class="pre">int</span></code> - Is Power of two?</a></li>
+<li><a class="reference internal" href="#abs-int-absolute"><code class="docutils literal notranslate"><span class="pre">abs</span> <span class="pre">int</span></code> - Absolute</a></li>
+<li><a class="reference internal" href="#insert-header-insert-header"><code class="docutils literal notranslate"><span class="pre">insert_header</span></code> - Insert Header</a></li>
 </ul>
 </li>
 </ul>
 
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../modules.html"
+                          title="previous chapter">Modules</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../synth/synth.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -251,7 +356,14 @@ typeas Score, u32
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../synth/synth.html" title="synth"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../modules.html" title="Modules"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">core</span></code></a></li> 
       </ul>
     </div>

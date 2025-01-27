@@ -175,3 +175,90 @@
         .fatal "NullReferenceException said C sharp"
     .endif
 
+
+``setreg int, label`` - Set Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    setreg __param__, __out__
+
+
+``setireg int, label`` - Set Indexing Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    setireg __param__, __index__
+
+
+``confined int, int`` - If Confined
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ArrayStart = $3fe
+    typeas ArrayStart, u32
+
+    .if !(confined ArrayStart)
+        .fatal "Cannot Mitigate Page Overlap"
+    .endif
+
+``index array, int`` - Index Array
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    .define MyArray {2, 5, 7}
+
+    .out .sprintf("%d", (index MyArray, 1))
+
+``append array, token`` - Append Array
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    .define Array {2, 5, 7}
+    append Array, 5
+
+``isArray token`` - Is Array
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    .define MyArray {2, 5, 7}
+
+    .if (isArray MyArray)
+        .out "Woah, that's sure a lot of numbers"
+    .else
+        .out "boo, too few numbers"
+    .endif
+
+``ispo2 int`` - Is Power of two?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    .if (ispo2 __param__)
+        ; optimized mode
+    .else
+        ; suboptimal mode
+    .endif
+
+``abs int`` - Absolute
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    lda #(abs ExtremeValue)
+
+``insert_header`` - Insert Header
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    .segment "HEADER"
+    insert_header
+
+.. note::
+    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2.
