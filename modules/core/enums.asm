@@ -29,7 +29,7 @@
     wabs    = 5
     wabsx   = 6
     wabsy   = 7
-    abs     = 8
+    abst    = 8
     absx    = 9
     absy    = 10
     inabsy  = 11

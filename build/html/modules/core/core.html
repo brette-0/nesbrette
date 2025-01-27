@@ -31,7 +31,7 @@
           <a href="../modules.html" title="Modules"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">core</span></code></a></li> 
       </ul>
     </div>  
@@ -43,6 +43,7 @@
             
   <section id="core">
 <h1><code class="docutils literal notranslate"><span class="pre">core</span></code><a class="headerlink" href="#core" title="Link to this heading">¶</a></h1>
+<p>To refer to how to use <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> core features, please refer to <a class="reference external" href="https://nesbrette.readthedocs.io/en/latest/index.html">tutorials</a> .Use of the following methods will not yield immediate benefit, the <code class="docutils literal notranslate"><span class="pre">core</span></code> member set is designed to clarify and optimise nesbrette engine behaviors and therefore should only really be used for advanced expansions of <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code>.</p>
 <section id="itype-label-param-identify-type">
 <h2><code class="docutils literal notranslate"><span class="pre">itype</span> <span class="pre">label:</span> <span class="pre">param</span></code> - Identify Type<a class="headerlink" href="#itype-label-param-identify-type" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">macro</span> <span class="n">MyMacro</span> <span class="n">__param__</span>
@@ -140,15 +141,17 @@ typeas Score, u32
 .endmacro
 </pre></div>
 </div>
+<p>Yields the parameter label Identify, must be stored before use. Retains Scope of caller and scope lexis cannot be passed down because <code class="docutils literal notranslate"><span class="pre">.ident</span></code> (native <code class="docutils literal notranslate"><span class="pre">ca65</span></code> preprocessor directive) cannot identify scopes and is, therefore, scope constrained.</p>
 </section>
-<section id="width-width-of">
-<h2><code class="docutils literal notranslate"><span class="pre">width</span></code> - Width of<a class="headerlink" href="#width-width-of" title="Link to this heading">¶</a></h2>
+<section id="dedtype-deduce-type">
+<h2><code class="docutils literal notranslate"><span class="pre">dedtype</span></code> - Deduce Type<a class="headerlink" href="#dedtype-deduce-type" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="n">VRAM_BUFFER_LEN</span>
 <span class="n">clc</span>
-<span class="n">adc</span> <span class="c1">#(width Score)</span>
+<span class="n">adc</span> <span class="c1">#(dedtype Score)</span>
 <span class="n">sta</span> <span class="n">VRAM_BUFFER_LEN</span>
 </pre></div>
 </div>
+<p>This function fetches the type assigned to the token passed. The token can always be evluated as <code class="docutils literal notranslate"><span class="pre">t_{token}</span></code> and should always have the same scope as the target token.</p>
 </section>
 <section id="isnum-is-type-numerical">
 <h2><code class="docutils literal notranslate"><span class="pre">isnum</span></code> - Is Type Numerical?<a class="headerlink" href="#isnum-is-type-numerical" title="Link to this heading">¶</a></h2>
@@ -191,6 +194,7 @@ typeas Score, u32
 <span class="o">.</span><span class="n">endif</span>
 </pre></div>
 </div>
+<p>Perhaps the one feature I really like about <code class="docutils literal notranslate"><span class="pre">C#</span></code> is how it handles <code class="docutils literal notranslate"><span class="pre">null</span></code> on the high level, so I decided that <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator">null-coalescence</a> should be created for <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> as the existence of <code class="docutils literal notranslate"><span class="pre">null</span></code> was already designed with type defaulting in mind.</p>
 </section>
 <section id="is-null-int-is-null">
 <h2><code class="docutils literal notranslate"><span class="pre">is_null</span> <span class="pre">int</span></code> - is Null<a class="headerlink" href="#is-null-int-is-null" title="Link to this heading">¶</a></h2>
@@ -199,6 +203,7 @@ typeas Score, u32
 <span class="o">.</span><span class="n">endif</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">null</span></code> is define as type ‘<code class="docutils literal notranslate"><span class="pre">i0</span></code>’ in which typelessness is ‘<code class="docutils literal notranslate"><span class="pre">u0</span></code>’, it can also be evaluated by comparing it to <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">&lt;&lt;</span> <span class="pre">31)</span></code>.</p>
 </section>
 <section id="setreg-int-label-set-register">
 <h2><code class="docutils literal notranslate"><span class="pre">setreg</span> <span class="pre">int,</span> <span class="pre">label</span></code> - Set Register<a class="headerlink" href="#setreg-int-label-set-register" title="Link to this heading">¶</a></h2>
@@ -211,6 +216,10 @@ typeas Score, u32
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setireg</span> <span class="n">__param__</span><span class="p">,</span> <span class="fm">__index__</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above <code class="docutils literal notranslate"><span class="pre">setreg</span></code> and <code class="docutils literal notranslate"><span class="pre">setireg</span></code> expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations.</p>
+</div>
 </section>
 <section id="confined-int-int-if-confined">
 <h2><code class="docutils literal notranslate"><span class="pre">confined</span> <span class="pre">int,</span> <span class="pre">int</span></code> - If Confined<a class="headerlink" href="#confined-int-int-if-confined" title="Link to this heading">¶</a></h2>
@@ -222,6 +231,7 @@ typeas ArrayStart, u32
 .endif
 </pre></div>
 </div>
+<p>Simply encaging your code within a page can reduce the amount of updates needed, especially if using <code class="docutils literal notranslate"><span class="pre">SMC</span></code> - inevitably page confinement imposes an ‘artificial’ limit to the member’s capability - but a good solution often can exceed typical demand while obeying page confinement which overall leads to more optimised code.</p>
 </section>
 <section id="index-array-int-index-array">
 <h2><code class="docutils literal notranslate"><span class="pre">index</span> <span class="pre">array,</span> <span class="pre">int</span></code> - Index Array<a class="headerlink" href="#index-array-int-index-array" title="Link to this heading">¶</a></h2>
@@ -249,6 +259,10 @@ typeas ArrayStart, u32
 <span class="o">.</span><span class="n">endif</span>
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Expect vast quantities of logical/syntax errors when using preprocessor arrays as they were not designed mutable and poor handling of them is likely to cause problems. I wouldn’t (unless you truly believe in your skills) form a dependancy on these at your backend for threat of catastrophic code debt.</p>
+</div>
 </section>
 <section id="ispo2-int-is-power-of-two">
 <h2><code class="docutils literal notranslate"><span class="pre">ispo2</span> <span class="pre">int</span></code> - Is Power of two?<a class="headerlink" href="#ispo2-int-is-power-of-two" title="Link to this heading">¶</a></h2>
@@ -274,7 +288,110 @@ typeas ArrayStart, u32
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The specification used with <code class="docutils literal notranslate"><span class="pre">insert_header</span></code> is <a class="reference external" href="https://www.nesdev.org/wiki/NES_2.0">iNES</a> 2.</p>
+<p>The specification used with <code class="docutils literal notranslate"><span class="pre">insert_header</span></code> is <a class="reference external" href="https://www.nesdev.org/wiki/NES_2.0">iNES</a> 2. <code class="docutils literal notranslate"><span class="pre">insert__header</span></code> is the define that indicates if <code class="docutils literal notranslate"><span class="pre">core</span></code> has been included. There is no reason to use any other format than <code class="docutils literal notranslate"><span class="pre">iNES2</span></code> as of writing this.</p>
+</div>
+</section>
+<section id="inr-incrment-register">
+<h2><code class="docutils literal notranslate"><span class="pre">inr</span></code> - Incrment Register<a class="headerlink" href="#inr-incrment-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>inreg = xr
+
+@timer:
+    ldr ar:: tar, inreg
+    inr
+    cpr inreg:: $30
+    bne @timer
+</pre></div>
+</div>
+</section>
+<section id="der-decrment-register">
+<h2><code class="docutils literal notranslate"><span class="pre">der</span></code> - Decrment Register<a class="headerlink" href="#der-decrment-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">xr</span>
+
+<span class="nd">@timer</span><span class="p">:</span>
+    <span class="n">ldr</span> <span class="n">ar</span><span class="p">::</span> <span class="n">tar</span><span class="p">,</span> <span class="n">inreg</span>
+    <span class="n">der</span>
+    <span class="n">bne</span> <span class="nd">@timer</span>
+</pre></div>
+</div>
+</section>
+<section id="tar-transfer-a-to-register">
+<h2><code class="docutils literal notranslate"><span class="pre">tar</span></code> - Transfer A to Register<a class="headerlink" href="#tar-transfer-a-to-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">xr</span>
+
+<span class="n">tar</span> <span class="n">inreg</span>   <span class="p">;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+<section id="tyr-transfer-y-to-register">
+<h2><code class="docutils literal notranslate"><span class="pre">tyr</span></code> - Transfer Y to Register<a class="headerlink" href="#tyr-transfer-y-to-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">xr</span>
+
+<span class="n">tyr</span> <span class="n">inreg</span>   <span class="p">;</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+<section id="txr-transfer-x-to-register">
+<h2><code class="docutils literal notranslate"><span class="pre">txr</span></code> - Transfer X to Register<a class="headerlink" href="#txr-transfer-x-to-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">yr</span>
+
+<span class="n">txr</span> <span class="n">inreg</span>   <span class="p">;</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="tra-transfer-register-to-a">
+<h2><code class="docutils literal notranslate"><span class="pre">tra</span></code> - Transfer Register to a<a class="headerlink" href="#tra-transfer-register-to-a" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">yr</span>
+
+<span class="n">tra</span> <span class="n">inreg</span>   <span class="p">;</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="n">a</span>
+</pre></div>
+</div>
+</section>
+<section id="try-transfer-register-to-y">
+<h2><code class="docutils literal notranslate"><span class="pre">try</span></code> - Transfer Register to Y<a class="headerlink" href="#try-transfer-register-to-y" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">xr</span>
+
+<span class="k">try</span> <span class="n">inreg</span>   <span class="p">;</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="trx-transfer-register-to-x">
+<h2><code class="docutils literal notranslate"><span class="pre">trx</span></code> - Transfer Register to X<a class="headerlink" href="#trx-transfer-register-to-x" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span> <span class="o">=</span> <span class="n">yr</span>
+
+<span class="n">trx</span> <span class="n">inreg</span>   <span class="p">;</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+<section id="trr-transfer-register-to-register">
+<h2><code class="docutils literal notranslate"><span class="pre">trr</span></code> - Transfer Register to Register<a class="headerlink" href="#trr-transfer-register-to-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inreg</span>  <span class="o">=</span> <span class="n">yr</span>
+<span class="n">outreg</span> <span class="o">=</span> <span class="n">xr</span>
+
+<span class="n">trr</span> <span class="n">yr</span><span class="p">::</span><span class="n">xr</span>  <span class="p">;</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+<section id="ldr-load-register">
+<h2><code class="docutils literal notranslate"><span class="pre">ldr</span></code> - Load Register<a class="headerlink" href="#ldr-load-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">ar</span>
+<span class="n">ldr</span> <span class="n">reg</span><span class="p">::</span><span class="n">imm</span><span class="p">,</span> <span class="n">param</span>
+<span class="n">bpl</span> <span class="nd">@task</span>
+</pre></div>
+</div>
+</section>
+<section id="str-store-register">
+<h2><code class="docutils literal notranslate"><span class="pre">str</span></code> - Store Register<a class="headerlink" href="#str-store-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">yr</span>
+<span class="nb">str</span> <span class="n">reg</span><span class="p">::</span><span class="n">wabs</span><span class="o">.</span> <span class="n">param</span>
+</pre></div>
+</div>
+</section>
+<section id="cpr-compare-register">
+<h2><code class="docutils literal notranslate"><span class="pre">cpr</span></code> - Compare Register<a class="headerlink" href="#cpr-compare-register" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">ar</span>
+<span class="n">cpr</span> <span class="n">reg</span><span class="p">::</span><span class="n">zp</span><span class="p">,</span> <span class="n">param</span>
+<span class="n">bne</span> <span class="nd">@task</span>
+</pre></div>
 </div>
 </section>
 </section>
@@ -299,7 +416,7 @@ typeas ArrayStart, u32
 <li><a class="reference internal" href="#typeas-label-int-allocate-deductible-type-define"><code class="docutils literal notranslate"><span class="pre">typeas</span> <span class="pre">label,</span> <span class="pre">int</span></code> - Allocate Deductible Type Define</a></li>
 <li><a class="reference internal" href="#label-type-label-access-parameter-label"><code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">type:</span> <span class="pre">label</span></code> - Access Parameter Label</a></li>
 <li><a class="reference internal" href="#ilabel-type-label-identify-parameter-label"><code class="docutils literal notranslate"><span class="pre">ilabel</span> <span class="pre">type:</span> <span class="pre">label</span></code> - Identify Parameter Label</a></li>
-<li><a class="reference internal" href="#width-width-of"><code class="docutils literal notranslate"><span class="pre">width</span></code> - Width of</a></li>
+<li><a class="reference internal" href="#dedtype-deduce-type"><code class="docutils literal notranslate"><span class="pre">dedtype</span></code> - Deduce Type</a></li>
 <li><a class="reference internal" href="#isnum-is-type-numerical"><code class="docutils literal notranslate"><span class="pre">isnum</span></code> - Is Type Numerical?</a></li>
 <li><a class="reference internal" href="#isconst-is-type-preprocesor-constant"><code class="docutils literal notranslate"><span class="pre">isconst</span></code> - Is Type Preprocesor Constant?</a></li>
 <li><a class="reference internal" href="#detype-isolate-type-algorithmically"><code class="docutils literal notranslate"><span class="pre">detype</span></code> - Isolate Type Algorithmically</a></li>
@@ -314,6 +431,18 @@ typeas ArrayStart, u32
 <li><a class="reference internal" href="#ispo2-int-is-power-of-two"><code class="docutils literal notranslate"><span class="pre">ispo2</span> <span class="pre">int</span></code> - Is Power of two?</a></li>
 <li><a class="reference internal" href="#abs-int-absolute"><code class="docutils literal notranslate"><span class="pre">abs</span> <span class="pre">int</span></code> - Absolute</a></li>
 <li><a class="reference internal" href="#insert-header-insert-header"><code class="docutils literal notranslate"><span class="pre">insert_header</span></code> - Insert Header</a></li>
+<li><a class="reference internal" href="#inr-incrment-register"><code class="docutils literal notranslate"><span class="pre">inr</span></code> - Incrment Register</a></li>
+<li><a class="reference internal" href="#der-decrment-register"><code class="docutils literal notranslate"><span class="pre">der</span></code> - Decrment Register</a></li>
+<li><a class="reference internal" href="#tar-transfer-a-to-register"><code class="docutils literal notranslate"><span class="pre">tar</span></code> - Transfer A to Register</a></li>
+<li><a class="reference internal" href="#tyr-transfer-y-to-register"><code class="docutils literal notranslate"><span class="pre">tyr</span></code> - Transfer Y to Register</a></li>
+<li><a class="reference internal" href="#txr-transfer-x-to-register"><code class="docutils literal notranslate"><span class="pre">txr</span></code> - Transfer X to Register</a></li>
+<li><a class="reference internal" href="#tra-transfer-register-to-a"><code class="docutils literal notranslate"><span class="pre">tra</span></code> - Transfer Register to a</a></li>
+<li><a class="reference internal" href="#try-transfer-register-to-y"><code class="docutils literal notranslate"><span class="pre">try</span></code> - Transfer Register to Y</a></li>
+<li><a class="reference internal" href="#trx-transfer-register-to-x"><code class="docutils literal notranslate"><span class="pre">trx</span></code> - Transfer Register to X</a></li>
+<li><a class="reference internal" href="#trr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span></code> - Transfer Register to Register</a></li>
+<li><a class="reference internal" href="#ldr-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span></code> - Load Register</a></li>
+<li><a class="reference internal" href="#str-store-register"><code class="docutils literal notranslate"><span class="pre">str</span></code> - Store Register</a></li>
+<li><a class="reference internal" href="#cpr-compare-register"><code class="docutils literal notranslate"><span class="pre">cpr</span></code> - Compare Register</a></li>
 </ul>
 </li>
 </ul>
@@ -322,7 +451,7 @@ typeas ArrayStart, u32
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="../modules.html"
-                          title="previous chapter">Modules</a></p>
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -363,7 +492,7 @@ typeas ArrayStart, u32
           <a href="../modules.html" title="Modules"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">core</span></code></a></li> 
       </ul>
     </div>

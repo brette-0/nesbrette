@@ -140,3 +140,10 @@ All precomputed solutions are of much relative speed and non-constant width oper
 .. code-block::
 
     acsc u8: Theta
+
+.. note::
+    For obvious reasons all ``trig`` functions require either a Sine or Cosine Table that is at least ``64`` bytes in size indexed by angles that must be 8bit binary degrees. It is recommended that you include the table that belongs to the instruction you use most. 
+
+    Choosing to use both ``cos`` with only a Sine table will only incur minute slowdown, but compared to the speed of the fetching ``sin`` with a Sine table may be considerable. It should be noted that all trigonometric indentities that are reciprocals or defined by a combination of Sine and Cosine will be fetched with additional slowdown unless their tables is also included.
+
+    It should also be noted that Arc Identities require the fraction to be passed as it was fetched (Multiplied by ``256``) and will return the angle 'theta' in response in an 8bit binary degree respsonse.

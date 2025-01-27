@@ -15,6 +15,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="theory" href="../../theory/theory.html" />
     <link rel="prev" title="memory" href="../memory/memory.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
@@ -24,10 +25,13 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../../theory/theory.html" title="theory"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="../memory/memory.html" title="memory"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">math</span></code></a></li> 
       </ul>
     </div>  
@@ -159,6 +163,12 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acsc</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For obvious reasons all <code class="docutils literal notranslate"><span class="pre">trig</span></code> functions require either a Sine or Cosine Table that is at least <code class="docutils literal notranslate"><span class="pre">64</span></code> bytes in size indexed by angles that must be 8bit binary degrees. It is recommended that you include the table that belongs to the instruction you use most.</p>
+<p>Choosing to use both <code class="docutils literal notranslate"><span class="pre">cos</span></code> with only a Sine table will only incur minute slowdown, but compared to the speed of the fetching <code class="docutils literal notranslate"><span class="pre">sin</span></code> with a Sine table may be considerable. It should be noted that all trigonometric indentities that are reciprocals or defined by a combination of Sine and Cosine will be fetched with additional slowdown unless their tables is also included.</p>
+<p>It should also be noted that Arc Identities require the fraction to be passed as it was fetched (Multiplied by <code class="docutils literal notranslate"><span class="pre">256</span></code>) and will return the angle ‘theta’ in response in an 8bit binary degree respsonse.</p>
+</div>
 </section>
 </section>
 
@@ -200,6 +210,11 @@
     <p class="topless"><a href="../memory/memory.html"
                           title="previous chapter"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></p>
   </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../theory/theory.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -228,10 +243,13 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../../theory/theory.html" title="theory"
+             >next</a> |</li>
+        <li class="right" >
           <a href="../memory/memory.html" title="memory"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">math</span></code></a></li> 
       </ul>
     </div>

@@ -76,10 +76,6 @@
     .include .concat(libroot, "global/synth/i6502.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_SYNTH_GPR
-    .include .concat(libroot, "global/synth/gpr.asm")
-.endif
-
 ; global/prep
 .if INCLUDES_NESBRETTE_PREP_ALIGNED
     .include .concat(libroot, "global/prep/aligned.asm")
@@ -121,3 +117,32 @@
 .if INCLUDES_NESBRETTE_MEMORY_MSSB
     .include .concat(libroot, "global/memory/MSSB.asm")
 .endif
+
+.if INCLUDES_NESBRETTE_MEMORY_LSSB
+    .include .concat(libroot, "global/memory/LSSB.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_MSSByte
+    .include .concat(libroot, "global/memory/MSSByte.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_LSSByte
+    .include .concat(libroot, "global/memory/LSSByte.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_MSUB
+    .include .concat(libroot, "global/memory/MSUB.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_LSUB
+    .include .concat(libroot, "global/memory/LSUB.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_MSUByte
+    .include .concat(libroot, "global/memory/MSUByte.asm")
+.endif
+
+.if INCLUDES_NESBRETTE_MEMORY_LSUByte
+    .include .concat(libroot, "global/memory/LSUByte.asm")
+.endif
+

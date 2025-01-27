@@ -36,20 +36,19 @@
 
 
 .macro iror __reg__
-    .ifblank __reg__
+    .local _ireg
+
+    _ireg = setreg __reg__
+
+    .if _ireg = ar
         pha
         lsr
         pla
         ror
-    .elseif __reg__ = x
-        tax
+    .else
+        tar _ireg
         lsr
-        txa
-        ror
-    .elseif __reg__ = y
-        tay
-        lsr
-        tya
+        tra _ireg
         ror
     .endif
 
@@ -58,58 +57,61 @@
     rol
     .endmacro
 
+; this design is stupidly optimised
 .macro labs __target__
-    lda __target__ | $800
-.endmacro
+    .local _ireg
 
-.macro labsx __target__
-    lda __target__ | $800, x
-.endmacro
-
-.macro labsy __target__
-    lda __target__ | $800, y
+    _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
+    ldr ar: ((abs _ireg) + abst), __target__
 .endmacro
 
 .macro lybs __target__
-    ldy __target__ | $800
-.endmacro
+    .local _ireg
 
-.macro lybsx __target__
-    ldy __target__ | $800, x
+    _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
+    .if _ireg = yr
+        .fatal "Cannot index with accessing register"
+    .endif
+
+    ldr yr: ((abs _ireg) + abst), __target__
 .endmacro
 
 .macro lxbs __target__
-    ldx __target__ | $800
+    .local _ireg
+
+    _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
+    .if _ireg = xr
+        .fatal "Cannot index with accessing register"
+    .endif
+    
+    ldr xr: ((abs _ireg) + abst), __target__
 .endmacro
 
-.macro lxbsy __target__
-    ldx __target__ | $800, y
-.endmacro
+.macro labs __target__
+    .local _ireg
 
-.macro sabs __target__
-    sta __target__ | $800
-.endmacro
-
-.macro sabsx __target__
-    sta __target__ | $800, x
-.endmacro
-
-.macro sabsy __target__
-    sta __target__ | $800, y
+    _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
+    str ar: ((abs _ireg) + abst), __target__
 .endmacro
 
 .macro sybs __target__
-    sty __target__ | $800
-.endmacro
+    .local _ireg
 
-.macro sybsx __target__
-    sty __target__ | $800, x
+    _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
+    .if _ireg = yr
+        .fatal "Cannot index with accessing register"
+    .endif
+
+    str yr: ((abs _ireg) + abst), __target__
 .endmacro
 
 .macro sxbs __target__
-    stx __target__ | $800
-.endmacro
+    .local _ireg
 
-.macro sxbsy __target__
-    stx __target__ | $800, y
+    _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
+    .if _ireg = xr
+        .fatal "Cannot index with accessing register"
+    .endif
+
+    str x: ((abs _ireg) + abst), __target__
 .endmacro

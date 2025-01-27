@@ -30,12 +30,15 @@ INCLUDES_NESBRETTE_MEMORY_MSSB                  = 0
 INCLUDES_NESBRETTE_MEMORY_MSSByte               = 0
 INCLUDES_NESBRETTE_MEMORY_LSSB                  = 0
 INCLUDES_NESBRETTE_MEMORY_LSSByte               = 1
+INCLUDES_NESBRETTE_MEMORY_MSUB                  = 0
+INCLUDES_NESBRETTE_MEMORY_MSUByte               = 0
+INCLUDES_NESBRETTE_MEMORY_LSUB                  = 0
+INCLUDES_NESBRETTE_MEMORY_LSUByte               = 0
 
 INCLUDES_NESBRETTE_SYNTH_INSTRUCTIONS           = 0
 INCLUDES_NESBRETTE_SYNTH_IDTABLE                = 0
 INCLUDES_NESBRETTE_SYNTH_ILLEGAL_ID             = 0
 INCLUDES_NESBRETTE_SYNTH_STACK                  = 0
-INCLUDES_NESBRETTE_SYNTH_GPR                    = 1
 
 ; DO NOT REMOVE THE BELOW
 .ifndef ___libinclude___
@@ -51,28 +54,17 @@ INCLUDES_NESBRETTE_SYNTH_GPR                    = 1
 
         ; if core installed
         .ifndef insert_header
-            .include .concat(libroot, "core/header.asm")
-            .include .concat(libroot, "core/typing.asm")
-            .include .concat(libroot, "core/enums.asm")
-            .include .concat(libroot, "core/null.asm")
-            .include .concat(libroot, "core/register.asm")
+            .include .concat(libroot, "core/header.asm")    ; header and ROM info code
+            .include .concat(libroot, "core/typing.asm")    ; variable types
+            .include .concat(libroot, "core/enums.asm")     ; enums for nonconst reg|mao
+            .include .concat(libroot, "core/null.asm")      ; null handling
+            .include .concat(libroot, "core/register.asm")  ; reg validation
+            .include .concat(libroot, "core/gpr.asm")       ; reg nondiscriminate synths
         .endif
 
-        .include .concat(template, "constants.asm")
-        .include .concat(template, "addresses.asm")
-        .include .concat(template, "warnings.asm")
-        .include .concat(template, "includer.asm")
+        .include .concat(template, "constants.asm")         ; immutable elements
+        .include .concat(template, "addresses.asm")         ; immutable 'targets' for functions
+        .include .concat(template, "warnings.asm")          ; suppressable warnings
+        .include .concat(template, "includer.asm")          ; minimal include system
     .endmacro
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_MSSByte
-    .include .concat(libroot, "global/memory/MSSByte.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_LSSB
-    .include .concat(libroot, "global/memory/LSSB.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_LSSByte
-    .include .concat(libroot, "global/memory/LSSByte.asm")
 .endif

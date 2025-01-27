@@ -164,6 +164,7 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "modules/core/gpr.asm",
     "source/theory/theory.rst",
     "source/theory/phase2.rst",
     "source/theory",
@@ -174,7 +175,6 @@
     "build/html/modules/core/core.html",
     "build/html/modules/core",
     "build/doctrees/modules/core/core.doctree",
-    "build/doctrees/modules/core",
     "build/html/_static/github-banner.svg",
     "build/html/_static/plus.png",
     "build/html/_static/minus.png",

@@ -1,6 +1,8 @@
 ``core``
 ========
 
+To refer to how to use ``nesbrette`` core features, please refer to `tutorials <https://nesbrette.readthedocs.io/en/latest/index.html>`_ .Use of the following methods will not yield immediate benefit, the ``core`` member set is designed to clarify and optimise nesbrette engine behaviors and therefore should only really be used for advanced expansions of ``nesbrette``.
+
 ``itype label: param`` - Identify Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -16,6 +18,8 @@
         .endif
     .endmacro
     
+
+
 ``signed token`` - Query Sign Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -108,15 +112,19 @@
         .endif
     .endmacro
 
-``width`` - Width of
+Yields the parameter label Identify, must be stored before use. Retains Scope of caller and scope lexis cannot be passed down because ``.ident`` (native ``ca65`` preprocessor directive) cannot identify scopes and is, therefore, scope constrained.
+
+``dedtype`` - Deduce Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
     lda VRAM_BUFFER_LEN
     clc
-    adc #(width Score)
+    adc #(dedtype Score)
     sta VRAM_BUFFER_LEN
+
+This function fetches the type assigned to the token passed. The token can always be evluated as ``t_{token}`` and should always have the same scope as the target token.
 
 ``isnum`` - Is Type Numerical?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -166,6 +174,8 @@
         __param__ .set 10
     .endif
 
+Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on the high level, so I decided that `null-coalescence <https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator>`_ should be created for ``nesbrette`` as the existence of ``null`` was already designed with type defaulting in mind.
+
 ``is_null int`` - is Null
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -175,6 +185,7 @@
         .fatal "NullReferenceException said C sharp"
     .endif
 
+``null`` is define as type '``i0``' in which typelessness is '``u0``', it can also be evaluated by comparing it to ``(1 << 31)``.
 
 ``setreg int, label`` - Set Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,6 +202,8 @@
 
     setireg __param__, __index__
 
+.. note::
+    The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. 
 
 ``confined int, int`` - If Confined
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,6 +216,8 @@
     .if !(confined ArrayStart)
         .fatal "Cannot Mitigate Page Overlap"
     .endif
+
+Simply encaging your code within a page can reduce the amount of updates needed, especially if using ``SMC`` - inevitably page confinement imposes an 'artificial' limit to the member's capability - but a good solution often can exceed typical demand while obeying page confinement which overall leads to more optimised code.
 
 ``index array, int`` - Index Array
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -234,6 +249,9 @@
         .out "boo, too few numbers"
     .endif
 
+.. warning::
+    Expect vast quantities of logical/syntax errors when using preprocessor arrays as they were not designed mutable and poor handling of them is likely to cause problems. I wouldn't (unless you truly believe in your skills) form a dependancy on these at your backend for threat of catastrophic code debt.
+
 ``ispo2 int`` - Is Power of two?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -261,4 +279,122 @@
     insert_header
 
 .. note::
-    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2.
+    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this.
+
+``inr`` - Incrment Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = xr
+
+    @timer:
+        ldr ar:: tar, inreg
+        inr
+        cpr inreg:: $30
+        bne @timer
+
+
+``der`` - Decrment Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = xr
+
+    @timer:
+        ldr ar:: tar, inreg
+        der
+        bne @timer
+
+``tar`` - Transfer A to Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = xr
+
+    tar inreg   ; a -> x
+
+``tyr`` - Transfer Y to Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = xr
+
+    tyr inreg   ; y -> x
+
+``txr`` - Transfer X to Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = yr
+
+    txr inreg   ; x -> y
+
+``tra`` - Transfer Register to a
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = yr
+
+    tra inreg   ; y -> a
+
+``try`` - Transfer Register to Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = xr
+
+    try inreg   ; x -> y
+
+``trx`` - Transfer Register to X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg = yr
+
+    trx inreg   ; y -> x
+
+``trr`` - Transfer Register to Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    inreg  = yr
+    outreg = xr
+
+    trr yr::xr  ; y -> x
+
+
+``ldr`` - Load Register
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+    
+    reg = ar
+    ldr reg::imm, param
+    bpl @task
+
+``str`` - Store Register
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+    
+    reg = yr
+    str reg::wabs. param
+    
+``cpr`` - Compare Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+    
+    reg = ar
+    cpr reg::zp, param
+    bne @task
+
