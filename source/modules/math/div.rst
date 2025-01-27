@@ -6,6 +6,8 @@
 
 .. code-block::
 
+    div u32: Scores, u32: Players
 
-.. note::
-    Because I don't expect you to need to do much of ``stz`` I decided that I'd make the rolled solution the default when storing to a ``u24`` or of equal size. If you have PRG/CPU space to unroll then I highly suggest you do as it the rolled solution is three times slower.
+
+.. warning::
+    This feature is currently undeveloped, but even further the division formats are yet to be determined. There may be a ``float`` type, but planned also is the ``frac`` type that uses modulo and struct like typeform.
