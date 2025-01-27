@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Typing &#8212; nesbrette 0.1 documentation</title>
+    <title>&lt;no title&gt; &#8212; nesbrette 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
     
@@ -23,7 +23,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Typing</a></li> 
+        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
       </ul>
     </div>  
 
@@ -32,17 +32,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="typing">
-<h1>Typing<a class="headerlink" href="#typing" title="Link to this heading">¶</a></h1>
-<p>The solution to performing higher bit math on low bit microprocessors always has been either assembled iteration or preprocessor iteration, however, by an exploit in the <code class="docutils literal notranslate"><span class="pre">ca65</span></code> string parser I managed to access a field left untouched. Any address may be typed, and type indicated with type symbols, enums and labels. If given <code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">u32:Phrase</span></code>, <code class="docutils literal notranslate"><span class="pre">u32</span></code> is accessed by methods unseen elsewhere and serially matched against an array of symbols to yield a ‘type’.</p>
-<p>Types may indicate number bit width, signature and endian. Types may also indicate register or preprocessor element, null exists as signed zero-width. There exists no intentional means to remove typing from <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> as I belive it enhances the experience and yields cleaner code. The type evluation ‘operator’ and methods are often used to obtain parameters for a type (seen most with regiters, describing an immediate ‘affinity’)</p>
-<p>To avoid frequent type specification, the user may use <code class="docutils literal notranslate"><span class="pre">typeas</span></code> which will enable them the ability to pass their parameters without type specification as it will be deduced by the instruction handler. It should be noted that calling instruction bodies may yield a legal response but no performance garauntee is made. It is, however, suggested that type indication be used on type given labels to perform ‘casts’ between families of types.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>It is impossible to evaluate a collection of typed symbols, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will <strong>never</strong> combine collection and type use in a singular token.</p>
-</div>
-</section>
-
+  
 
             <div class="clearer"></div>
           </div>
@@ -78,7 +68,7 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Typing</a></li> 
+        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

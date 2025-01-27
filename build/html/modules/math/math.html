@@ -15,7 +15,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="rshift" href="../logic/rshift.html" /> 
+    <link rel="prev" title="memory" href="../memory/memory.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -24,7 +24,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../logic/rshift.html" title="rshift"
+          <a href="../memory/memory.html" title="memory"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Modules</a> &#187;</li>
@@ -39,6 +39,7 @@
             
   <section id="math">
 <h1><code class="docutils literal notranslate"><span class="pre">math</span></code><a class="headerlink" href="#math" title="Link to this heading">¶</a></h1>
+<p>All precomputed solutions are of much relative speed and non-constant width operations incur a ‘performance threshold’ through the Order(sizeof(n)) parameter which may complicate performance evaluation of software in any given state.</p>
 <section id="add-int-src-int-tar-add-memory-with-carry">
 <h2><code class="docutils literal notranslate"><span class="pre">add</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Add Memory with Carry<a class="headerlink" href="#add-int-src-int-tar-add-memory-with-carry" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Score</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">PentakillScore</span>
@@ -81,6 +82,10 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">mult</span></code> uses a <em>very</em> optimised way of performing higher bit math unrolled for differing widths to reduce the amount of Program ROM wasted in which ‘handlers’ are defined based on the types if not already existing that perform positional calls into the ‘body’ that performs the heavy lifting. This means that the less variations of <code class="docutils literal notranslate"><span class="pre">mult</span></code> you use (<code class="docutils literal notranslate"><span class="pre">i8::i8</span></code>, <code class="docutils literal notranslate"><span class="pre">u8::bu8</span></code> etc..) the more Program ROM you save.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is <strong>highly</strong> suggested that you use <code class="docutils literal notranslate"><span class="pre">MMC5</span></code> or <code class="docutils literal notranslate"><span class="pre">Rainbow</span></code> Multiplication registers if your game will perform lots of multiplication as on Hardware the Algorithmi becomes incredibly simplified.</p>
 </div>
 </section>
 <section id="sin-int-theta-sine-of-theta">
@@ -192,8 +197,8 @@
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../logic/rshift.html"
-                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">rshift</span></code></a></p>
+    <p class="topless"><a href="../memory/memory.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -223,7 +228,7 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../logic/rshift.html" title="rshift"
+          <a href="../memory/memory.html" title="memory"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>

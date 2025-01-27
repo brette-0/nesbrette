@@ -43,6 +43,7 @@
             
   <section id="memory">
 <h1><code class="docutils literal notranslate"><span class="pre">memory</span></code><a class="headerlink" href="#memory" title="Link to this heading">¶</a></h1>
+<p>The majority of higher bit math functions is dealing with memory due to thin buses and registers. Analysing memory often can yield circumstantial optimisations, copying memory often is faster than indirectly fetching new targets and a great way to evade code debt is to utilise the well written <code class="docutils literal notranslate"><span class="pre">juggle</span></code> method.</p>
 <section id="mssbyte-int-addr-most-significant-set-byte">
 <h2><code class="docutils literal notranslate"><span class="pre">mssbyte</span> <span class="pre">int::addr</span></code> - Most Significant Set Byte<a class="headerlink" href="#mssbyte-int-addr-most-significant-set-byte" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mssbyte</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span>

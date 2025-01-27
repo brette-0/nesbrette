@@ -9,8 +9,10 @@
 The ``nesbrette`` library is currently still seriously in development and not for use for others as of yet. The first wave of development will see the library enter a usable state in which everything is tested as is listed here in docs during phase 1. After Phase 1 ``nesbrette`` will incur a silent period in which `Mesen2G <https://github.com/brette-0/Mesen2-G>`_ is being worked on, in which case on return Phase 2 will begin.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :caption: Contents:
 
    modules/modules
    theory/theory
+   
+   .. tables/tables

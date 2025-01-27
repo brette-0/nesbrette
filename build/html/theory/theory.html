@@ -34,15 +34,25 @@
             
   <section id="theory">
 <h1><code class="docutils literal notranslate"><span class="pre">theory</span></code><a class="headerlink" href="#theory" title="Link to this heading">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="typing.html">Typing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="includer.html">Includer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="warning.html">Warning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="phase2.html">Phase 2</a></li>
-</ul>
+<section id="includer">
+<h2>Includer<a class="headerlink" href="#includer" title="Link to this heading">¶</a></h2>
+<p>What makes <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> so good is the high performance, clean code with the <em>minimal output</em>. The minimal output is achieved by using a ‘template’ that describes: the constants, the includes, the addresses, the warnings, the tables and finally a file known as the <code class="docutils literal notranslate"><span class="pre">includer</span></code>. The job of the <code class="docutils literal notranslate"><span class="pre">includer</span></code> is to sysmetatically include everything it needs to and ‘build’ the library through a series of defines to create <strong>only</strong> what is deemed to be needed either by the engine or by the user.</p>
+<p>This feture is entirely compatible with <code class="docutils literal notranslate"><span class="pre">ca65</span></code> lexical scopes, and while macros and defines don’t obey scope, the targets they have certainly will and therefore use of instructions that depend on an assembled code body will fail if said code body hasn’t been assembled available within that lexical scope. This is different to <code class="docutils literal notranslate"><span class="pre">global</span></code> members which do not require assembled bodies to interact with and instead are completely macro or define based.</p>
+</section>
+</section>
+<section id="typing">
+<h1>Typing<a class="headerlink" href="#typing" title="Link to this heading">¶</a></h1>
+<p>The solution to performing higher bit math on low bit microprocessors always has been either assembled iteration or preprocessor iteration, however, by an exploit in the <code class="docutils literal notranslate"><span class="pre">ca65</span></code> string parser I managed to access a field left untouched. Any address may be typed, and type indicated with type symbols, enums and labels. If given <code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">u32:Phrase</span></code>, <code class="docutils literal notranslate"><span class="pre">u32</span></code> is accessed by methods unseen elsewhere and serially matched against an array of symbols to yield a ‘type’.</p>
+<p>Types may indicate number bit width, signature and endian. Types may also indicate register or preprocessor element, null exists as signed zero-width. There exists no intentional means to remove typing from <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> as I belive it enhances the experience and yields cleaner code. The type evluation ‘operator’ and methods are often used to obtain parameters for a type (seen most with regiters, describing an immediate ‘affinity’)</p>
+<p>To avoid frequent type specification, the user may use <code class="docutils literal notranslate"><span class="pre">typeas</span></code> which will enable them the ability to pass their parameters without type specification as it will be deduced by the instruction handler. It should be noted that calling instruction bodies may yield a legal response but no performance garauntee is made. It is, however, suggested that type indication be used on type given labels to perform ‘casts’ between families of types.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is impossible to evaluate a collection of typed symbols, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will <strong>never</strong> combine collection and type use in a singular token.</p>
 </div>
+<section id="warning">
+<h2>Warning<a class="headerlink" href="#warning" title="Link to this heading">¶</a></h2>
+<p>When developing <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> I elected to use a <code class="docutils literal notranslate"><span class="pre">warning</span></code> system that could be suppressed optionally. This is because I often find that the warnings I am provided by libraries, or IDEs hold some merit but occassionaly hallucinate or do not exempt a safe use case. Considering this, I decided that all possible warnigns can be silenced, or turned into errors with <code class="docutils literal notranslate"><span class="pre">pedantic</span></code> mode, issues may become pedantic or suppressed by defining constants <em>or</em> by pasing suppression/pedantic as a parameter.</p>
+</section>
 </section>
 
 
@@ -52,6 +62,20 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a><ul>
+<li><a class="reference internal" href="#includer">Includer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#typing">Typing</a><ul>
+<li><a class="reference internal" href="#warning">Warning</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">

@@ -1,6 +1,8 @@
 ``math``
 ========
 
+All precomputed solutions are of much relative speed and non-constant width operations incur a 'performance threshold' through the Order(sizeof(n)) parameter which may complicate performance evaluation of software in any given state.
+
 ``add int::src, int::tar`` - Add Memory with Carry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -46,6 +48,9 @@
 
 .. note::
     ``mult`` uses a *very* optimised way of performing higher bit math unrolled for differing widths to reduce the amount of Program ROM wasted in which 'handlers' are defined based on the types if not already existing that perform positional calls into the 'body' that performs the heavy lifting. This means that the less variations of ``mult`` you use (``i8::i8``, ``u8::bu8`` etc..) the more Program ROM you save.
+
+.. note::
+   It is **highly** suggested that you use ``MMC5`` or ``Rainbow`` Multiplication registers if your game will perform lots of multiplication as on Hardware the Algorithmi becomes incredibly simplified. 
 
 ``sin int::theta`` - Sine of Theta
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

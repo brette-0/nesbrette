@@ -73,10 +73,79 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="synth/synth.html"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="synth/s6502.html"><code class="docutils literal notranslate"><span class="pre">s6502</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="synth/i6502.html"><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="synth/stack.html"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="synth/gpr.html"><code class="docutils literal notranslate"><span class="pre">gpr</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="synth/s6502.html"><code class="docutils literal notranslate"><span class="pre">s6502</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#sasl-signed-arithmetic-left-shift"><code class="docutils literal notranslate"><span class="pre">sasl</span></code> - Signed Arithmetic Left Shift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#slsr-signed-arithmetic-right-shift"><code class="docutils literal notranslate"><span class="pre">slsr</span></code> - Signed Arithmetic Right Shift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#neg-make-negative"><code class="docutils literal notranslate"><span class="pre">neg</span></code> - Make Negative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#ccf-complement-carry"><code class="docutils literal notranslate"><span class="pre">ccf</span></code> - Complement Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#iror-inner-right-roll"><code class="docutils literal notranslate"><span class="pre">iror</span></code> - Inner Right Roll</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#irol-inner-left-roll"><code class="docutils literal notranslate"><span class="pre">irol</span></code> - Inner Left Roll</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#labs-load-a-always-absolute"><code class="docutils literal notranslate"><span class="pre">labs</span></code> - Load A Always Absolute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#lybs-load-y-always-absolute"><code class="docutils literal notranslate"><span class="pre">lybs</span></code> - Load Y Always Absolute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#lxbs-load-x-always-absolute"><code class="docutils literal notranslate"><span class="pre">lxbs</span></code> - Load X Always Absolute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#sabs-store-a-always-absolute"><code class="docutils literal notranslate"><span class="pre">sabs</span></code> - Store A Always Absolute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#sybs-store-y-always-absolute"><code class="docutils literal notranslate"><span class="pre">sybs</span></code> - Store Y Always Absolute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/s6502.html#sxbs-store-x-always-absolute"><code class="docutils literal notranslate"><span class="pre">sxbs</span></code> - Store X Always Absolute</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synth/i6502.html"><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#adx-add-x-with-carry"><code class="docutils literal notranslate"><span class="pre">adx</span></code> - Add X with Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#ady-add-y-with-carry"><code class="docutils literal notranslate"><span class="pre">ady</span></code> - Add Y with Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#sbx-subtract-x-with-carry"><code class="docutils literal notranslate"><span class="pre">sbx</span></code> - Subtract X with Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#sby-subtract-y-with-carry"><code class="docutils literal notranslate"><span class="pre">sby</span></code> - Subtract Y with Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#orax-bitset-or-by-x"><code class="docutils literal notranslate"><span class="pre">orax</span></code> - Bitset/or By X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#oray-bitset-or-by-y"><code class="docutils literal notranslate"><span class="pre">oray</span></code> - Bitset/or by Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#andx-mask-and-by-x"><code class="docutils literal notranslate"><span class="pre">andx</span></code> - Mask/and by X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#andy-mask-and-by-y"><code class="docutils literal notranslate"><span class="pre">andy</span></code> - Mask/and by Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#eorx-flip-eor-xor-by-x"><code class="docutils literal notranslate"><span class="pre">eorx</span></code> - Flip/eor/xor by X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#eory-flip-eor-xor-by-y"><code class="docutils literal notranslate"><span class="pre">eory</span></code> - Flip/eor/xor by Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#biti-bitcheck-immediate"><code class="docutils literal notranslate"><span class="pre">biti</span></code> - Bitcheck Immediate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#xcmp-compare-against-x"><code class="docutils literal notranslate"><span class="pre">xcmp</span></code> - Compare against X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#ycmp-compare-against-y"><code class="docutils literal notranslate"><span class="pre">ycmp</span></code> - Compare against Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#xcpy-compare-x-against-y"><code class="docutils literal notranslate"><span class="pre">xcpy</span></code> - Compare X against Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#ycpx-compare-y-against-x"><code class="docutils literal notranslate"><span class="pre">ycpx</span></code> - Compare Y against X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#txy-transfer-x-to-y"><code class="docutils literal notranslate"><span class="pre">txy</span></code> - Transfer X to Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#tyx-transfer-y-to-x"><code class="docutils literal notranslate"><span class="pre">tyx</span></code> - Transfer Y to X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#sev-set-overflow"><code class="docutils literal notranslate"><span class="pre">sev</span></code> - Set Overflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#tyxa-transfer-y-to-both-x-and-a"><code class="docutils literal notranslate"><span class="pre">tyxa</span></code> - Transfer Y to both X and A</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/i6502.html#laxi-load-a-x-with-immediate"><code class="docutils literal notranslate"><span class="pre">laxi</span></code> - Load A &amp; X with Immediate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synth/stack.html"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#ldstat-load-cpu-status-flags"><code class="docutils literal notranslate"><span class="pre">ldstat</span></code> - Load CPU Status Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#ststat-store-cpu-status-flags"><code class="docutils literal notranslate"><span class="pre">ststat</span></code> - Store CPU Status Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#callback-allocate-callback"><code class="docutils literal notranslate"><span class="pre">callback</span></code> - Allocate Callback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#lds-load-register-with-stack-pointer-at-stack"><code class="docutils literal notranslate"><span class="pre">lds</span></code> - Load Register with Stack Pointer at Stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#sts-store-register-value-at-stack-pointer-in-stack"><code class="docutils literal notranslate"><span class="pre">sts</span></code> - Store Register Value at Stack Pointer in Stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#des-decrement-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">des</span></code> - Decrement Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#ins-increment-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">ins</span></code> - Increment Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#cps-compare-against-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">cps</span></code> - Compare Against Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#ads-add-stack-at-stack-pointer-with-carry"><code class="docutils literal notranslate"><span class="pre">ads</span></code> - Add Stack at Stack Pointer with Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#sbs-subtract-stack-at-stack-pointer-with-carry"><code class="docutils literal notranslate"><span class="pre">sbs</span></code> - Subtract Stack at Stack Pointer with Carry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#ans-bitmask-and-by-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">ans</span></code> - Bitmask/and by Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#ors-bitset-or-by-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">ors</span></code> - Bitset/or by Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#eos-bitflip-eor-xor-by-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">eos</span></code> - Bitflip/eor/xor by Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#rss-right-shift-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">rss</span></code> - Right Shift Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#lss-left-shift-by-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">lss</span></code> - Left Shift by Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#lrs-left-roll-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">lrs</span></code> - Left Roll Stack at Stack Pointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/stack.html#lrr-right-roll-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">lrr</span></code> - Right Roll Stack at Stack Pointer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="synth/gpr.html"><code class="docutils literal notranslate"><span class="pre">gpr</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#inr-incrment-register"><code class="docutils literal notranslate"><span class="pre">inr</span></code> - Incrment Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#der-decrment-register"><code class="docutils literal notranslate"><span class="pre">der</span></code> - Decrment Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#tar-transfer-a-to-register"><code class="docutils literal notranslate"><span class="pre">tar</span></code> - Transfer A to Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#tyr-transfer-y-to-register"><code class="docutils literal notranslate"><span class="pre">tyr</span></code> - Transfer Y to Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#txr-transfer-x-to-register"><code class="docutils literal notranslate"><span class="pre">txr</span></code> - Transfer X to Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#tra-transfer-register-to-a"><code class="docutils literal notranslate"><span class="pre">tra</span></code> - Transfer Register to a</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#try-transfer-register-to-y"><code class="docutils literal notranslate"><span class="pre">try</span></code> - Transfer Register to Y</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#trx-transfer-register-to-x"><code class="docutils literal notranslate"><span class="pre">trx</span></code> - Transfer Register to X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#trr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span></code> - Transfer Register to Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#ldr-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span></code> - Load Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#str-store-register"><code class="docutils literal notranslate"><span class="pre">str</span></code> - Store Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="synth/gpr.html#cpr-compare-register"><code class="docutils literal notranslate"><span class="pre">cpr</span></code> - Compare Register</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="memory/memory.html"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a><ul>

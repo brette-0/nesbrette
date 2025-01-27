@@ -1,11 +1,26 @@
 ``theory``
-----------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+==========
    
-   typing
-   includer
-   warning
-   phase2
+``Includer``
+~~~~~~~~
+
+What makes ``nesbrette`` so good is the high performance, clean code with the *minimal output*. The minimal output is achieved by using a 'template' that describes: the constants, the includes, the addresses, the warnings, the tables and finally a file known as the ``includer``. The job of the ``includer`` is to sysmetatically include everything it needs to and 'build' the library through a series of defines to create **only** what is deemed to be needed either by the engine or by the user.
+
+This feture is entirely compatible with ``ca65`` lexical scopes, and while macros and defines don't obey scope, the targets they have certainly will and therefore use of instructions that depend on an assembled code body will fail if said code body hasn't been assembled available within that lexical scope. This is different to ``global`` members which do not require assembled bodies to interact with and instead are completely macro or define based.
+
+``Typing``
+~~~~~~
+
+The solution to performing higher bit math on low bit microprocessors always has been either assembled iteration or preprocessor iteration, however, by an exploit in the ``ca65`` string parser I managed to access a field left untouched. Any address may be typed, and type indicated with type symbols, enums and labels. If given ``stz u32:Phrase``, ``u32`` is accessed by methods unseen elsewhere and serially matched against an array of symbols to yield a 'type'.
+
+Types may indicate number bit width, signature and endian. Types may also indicate register or preprocessor element, null exists as signed zero-width. There exists no intentional means to remove typing from ``nesbrette`` as I belive it enhances the experience and yields cleaner code. The type evluation 'operator' and methods are often used to obtain parameters for a type (seen most with regiters, describing an immediate 'affinity')
+
+To avoid frequent type specification, the user may use ``typeas`` which will enable them the ability to pass their parameters without type specification as it will be deduced by the instruction handler. It should be noted that calling instruction bodies may yield a legal response but no performance garauntee is made. It is, however, suggested that type indication be used on type given labels to perform 'casts' between families of types.
+
+.. warning::
+    It is impossible to evaluate a collection of typed symbols, ``nesbrette`` will **never** combine collection and type use in a singular token.
+
+``Warning``
+~~~~~~~
+
+When developing ``nesbrette`` I elected to use a ``warning`` system that could be suppressed optionally. This is because I often find that the warnings I am provided by libraries, or IDEs hold some merit but occassionaly hallucinate or do not exempt a safe use case. Considering this, I decided that all possible warnigns can be silenced, or turned into errors with ``pedantic`` mode, issues may become pedantic or suppressed by defining constants *or* by pasing suppression/pedantic as a parameter.

@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="s6502" href="s6502.html" />
-    <link rel="prev" title="Modules" href="../modules.html" /> 
+    <link rel="prev" title="core" href="../core/core.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -28,7 +28,7 @@
           <a href="s6502.html" title="s6502"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../modules.html" title="Modules"
+          <a href="../core/core.html" title="core"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Modules</a> &#187;</li>
@@ -44,6 +44,7 @@
   <section id="synth">
 <h1><code class="docutils literal notranslate"><span class="pre">synth</span></code><a class="headerlink" href="#synth" title="Link to this heading">¶</a></h1>
 <p>Synthetic instructions are macros comprised of instructions that perform a basic task to expand on the hardware immitating differeng instruction sets. The <code class="docutils literal notranslate"><span class="pre">synth</span></code> module houses them all, the only types they use are register indicator enums, they score well for size and speed across the board with little but strong utility.</p>
+<p>It should also be noted that by using SMC (Self-Modifying Code) you can improve the speed of some opcodes by abusing the mutability of the operand to change ‘directness’. This is useful for sophisticated raster code that may need to crunch operations within a delicate timeframe. It also can be used to enable indirectness where before not possible such as indirect without indexing and indirect Absolute indexed.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -133,8 +134,8 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../modules.html"
-                          title="previous chapter">Modules</a></p>
+    <p class="topless"><a href="../core/core.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">core</span></code></a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -172,7 +173,7 @@
           <a href="s6502.html" title="s6502"
              >next</a> |</li>
         <li class="right" >
-          <a href="../modules.html" title="Modules"
+          <a href="../core/core.html" title="core"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
