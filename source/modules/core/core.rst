@@ -388,13 +388,3 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     
     reg = yr
     str reg::wabs. param
-    
-``cpr reg: mao`` - Compare Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-    
-    reg = ar
-    cpr reg::zp, param
-    bne @task
-

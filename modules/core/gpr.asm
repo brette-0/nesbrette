@@ -95,22 +95,6 @@
     .endif
 .endmacro
 
-.macro trr __src__, __tar__
-    .if __src__ = __tar__
-        .exitmacro
-    .endif
-
-    .if    __src__ = ar
-        tar __tar__
-    .elseif __src__ = xr
-        txr __tar__
-    .elseif __src = yr
-        tyr __tar__
-    .else
-         .fatal "Invalid register specified"
-    .endif
-.endmacro
-
 .macro ldr __typed_reg__, __value__
     .local mao, treg
     detype __typed_reg__, mao
@@ -186,29 +170,6 @@
             ldx __value__
         .elseif mao = zpy || mao = wabsy
             ldx __value__, y
-        .endif
-    .elseif treg = (ar + xr)
-        .if (mao = zpx || mao = wabsx || mao = absx || mao = inabsx)
-            .fatal "Invalid Memory Address Mode for Load AX"
-        .endif
-
-        .if (mao = imm || mao = zp || mao = zpy) && __target__ > $ff
-            .fatal "Invalid Operand Size"
-        .endif
-
-        .if mao = imm
-            laxi __value__
-            .exitmacro
-        .elseif mao = abs
-            lax __value__ | $800
-        .elseif mao = absy
-            lax __value__ | $800, y
-        .elseif mao = zp || mao = wabs
-            lax __value__
-        .elseif mao = zpy || mao = wabsy
-            lax __value__, y
-        .elseif mao = inabsy
-            lax [__value__], y
         .endif
     .else
         .fatal "Invalid Register Specified"
