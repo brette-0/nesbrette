@@ -3,7 +3,7 @@
 
 To refer to how to use ``nesbrette`` core features, please refer to `tutorials <https://nesbrette.readthedocs.io/en/latest/index.html>`_ .Use of the following methods will not yield immediate benefit, the ``core`` member set is designed to clarify and optimise nesbrette engine behaviors and therefore should only really be used for advanced expansions of ``nesbrette``.
 
-``itype label: param`` - Identify Type
+``itype label:`` - Identify Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -46,12 +46,12 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
         .endif
     .endmacro
     
-``eindex int: addr, int, bool`` - Endian Index
+``eindex int:, int`` - Endian Index
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
-    lda eindex Health, 0, endian Health
+    lda eindex Health, 0
     
 ``type type: label`` - Type of
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -77,7 +77,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
         .endif
     .endmacro
     
-``typeas label, int`` - Allocate Deductible Type Define
+``typeas label, type`` - Allocate Type Define
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -85,7 +85,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     Score = $0300
     typeas Score, u32
     
-``label type: label`` - Access Parameter Label
+``label typed:`` - Access Parameter Label
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -95,7 +95,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
         .out .sprintf("%d", label __param__)
     .endmacro
 
-``ilabel type: label`` - Identify Parameter Label
+``ilabel typed:`` - Identify Parameter Label
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -114,7 +114,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
 
 Yields the parameter label Identify, must be stored before use. Retains Scope of caller and scope lexis cannot be passed down because ``.ident`` (native ``ca65`` preprocessor directive) cannot identify scopes and is, therefore, scope constrained.
 
-``dedtype`` - Deduce Type
+``dedtype int`` - Deduce Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -126,7 +126,7 @@ Yields the parameter label Identify, must be stored before use. Retains Scope of
 
 This function fetches the type assigned to the token passed. The token can always be evluated as ``t_{token}`` and should always have the same scope as the target token.
 
-``isnum`` - Is Type Numerical?
+``isnum int`` - Is Type Numerical?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -138,7 +138,7 @@ This function fetches the type assigned to the token passed. The token can alway
     .endif
 
 
-``isconst`` - Is Type Preprocesor Constant?
+``isconst int`` - Is Type Preprocesor Constant?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -150,7 +150,7 @@ This function fetches the type assigned to the token passed. The token can alway
     .endif
 
 
-``detype`` - Isolate Type Algorithmically
+``detype type?: token`` - Decode Typing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -187,23 +187,23 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 
 ``null`` is define as type '``i0``' in which typelessness is '``u0``', it can also be evaluated by comparing it to ``(1 << 31)``.
 
-``setreg int, label`` - Set Register
+``setreg int`` - Set Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
-    setreg __param__, __out__
+    thisreg = setreg __param__
 
 
-``setireg int, label`` - Set Indexing Register
+``setireg int`` - Set Indexing Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
-    setireg __param__, __index__
+    thisireg = setireg __param__
 
 .. note::
-    The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. 
+    The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. The function will return ``null`` for GPR indicating failure, response is offloaded to handler.
 
 ``confined int, int`` - If Confined
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -281,7 +281,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 .. note::
     The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this.
 
-``inr`` - Incrment Register
+``inr gpr`` - Incrment Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -295,7 +295,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
         bne @timer
 
 
-``der`` - Decrment Register
+``der gpr`` - Decrment Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -307,7 +307,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
         der
         bne @timer
 
-``tar`` - Transfer A to Register
+``tar gpr`` - Transfer A to Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -316,7 +316,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     tar inreg   ; a -> x
 
-``tyr`` - Transfer Y to Register
+``tyr gpr`` - Transfer Y to Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -325,7 +325,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     tyr inreg   ; y -> x
 
-``txr`` - Transfer X to Register
+``txr gpr`` - Transfer X to Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -334,7 +334,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     txr inreg   ; x -> y
 
-``tra`` - Transfer Register to a
+``tra gpr`` - Transfer Register to a
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -343,7 +343,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     tra inreg   ; y -> a
 
-``try`` - Transfer Register to Y
+``try gpr`` - Transfer Register to Y
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -352,7 +352,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     try inreg   ; x -> y
 
-``trx`` - Transfer Register to X
+``trx gpr`` - Transfer Register to X
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -361,7 +361,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     trx inreg   ; y -> x
 
-``trr`` - Transfer Register to Register
+``trr gpr: gpr`` - Transfer Register to Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -372,7 +372,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trr yr::xr  ; y -> x
 
 
-``ldr`` - Load Register
+``ldr reg: mao`` - Load Register
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -381,7 +381,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     ldr reg::imm, param
     bpl @task
 
-``str`` - Store Register
+``str reg: mao`` - Store Register
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -389,7 +389,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     reg = yr
     str reg::wabs. param
     
-``cpr`` - Compare Register
+``cpr reg: mao`` - Compare Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::

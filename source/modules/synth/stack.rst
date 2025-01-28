@@ -19,7 +19,7 @@ Typically the stack is used by interrupts, calling, returning and pushing tempor
 .. code-block:: 
 
     ldstat
-    ora #$bf    ; enable break for next IRQ
+    ora #bf    ; enable break for next IRQ
     ststat      ; apply changes
     
 ``callback`` - Allocate Callback
@@ -51,7 +51,7 @@ Typically the stack is used by interrupts, calling, returning and pushing tempor
 
     lds         ; load stack at SP
     sta $00
-    lds 1       ; load (stack + 1) at SP
+    lds 1, 1    ; load (stack + 1) at SP
     sta $01
     jmp ($0000) ; jump to caller
 
@@ -64,7 +64,7 @@ Typically the stack is used by interrupts, calling, returning and pushing tempor
     lda #.hibyte $addr
     sts 1
     lda #.lobyte $addr
-    sts 2       ; modify return address from interrupt
+    sts 2, 1     ; modify return address from interrupt
     rti
 
 ``des`` - Decrement Stack at Stack Pointer

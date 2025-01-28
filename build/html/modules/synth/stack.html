@@ -15,7 +15,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="gpr" href="gpr.html" />
+    <link rel="next" title="memory" href="../memory/memory.html" />
     <link rel="prev" title="i6502 &amp; i6502x" href="i6502.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
@@ -25,13 +25,13 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="gpr.html" title="gpr"
+          <a href="../memory/memory.html" title="memory"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="i6502.html" title="i6502 &amp; i6502x"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="synth.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">stack</span></code></a></li> 
       </ul>
@@ -56,7 +56,7 @@
 <section id="ststat-store-cpu-status-flags">
 <h2><code class="docutils literal notranslate"><span class="pre">ststat</span></code> - Store CPU Status Flags<a class="headerlink" href="#ststat-store-cpu-status-flags" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldstat</span>
-<span class="n">ora</span> <span class="c1">#$bf    ; enable break for next IRQ</span>
+<span class="n">ora</span> <span class="c1">#bf    ; enable break for next IRQ</span>
 <span class="n">ststat</span>      <span class="p">;</span> <span class="n">apply</span> <span class="n">changes</span>
 </pre></div>
 </div>
@@ -88,7 +88,7 @@
 <h2><code class="docutils literal notranslate"><span class="pre">lds</span></code> - Load Register with Stack Pointer at Stack<a class="headerlink" href="#lds-load-register-with-stack-pointer-at-stack" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lds         ; load stack at SP
 sta $00
-lds 1       ; load (stack + 1) at SP
+lds 1, 1    ; load (stack + 1) at SP
 sta $01
 jmp ($0000) ; jump to caller
 </pre></div>
@@ -100,7 +100,7 @@ jmp ($0000) ; jump to caller
 <span class="n">lda</span> <span class="c1">#.hibyte $addr</span>
 <span class="n">sts</span> <span class="mi">1</span>
 <span class="n">lda</span> <span class="c1">#.lobyte $addr</span>
-<span class="n">sts</span> <span class="mi">2</span>       <span class="p">;</span> <span class="n">modify</span> <span class="k">return</span> <span class="n">address</span> <span class="kn">from</span><span class="w"> </span><span class="nn">interrupt</span>
+<span class="n">sts</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>     <span class="p">;</span> <span class="n">modify</span> <span class="k">return</span> <span class="n">address</span> <span class="kn">from</span><span class="w"> </span><span class="nn">interrupt</span>
 <span class="n">rti</span>
 </pre></div>
 </div>
@@ -261,8 +261,8 @@ pha ; push delta of $100, SP &amp; $101, SP
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="gpr.html"
-                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">gpr</span></code></a></p>
+    <p class="topless"><a href="../memory/memory.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -292,13 +292,13 @@ pha ; push delta of $100, SP &amp; $101, SP
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="gpr.html" title="gpr"
+          <a href="../memory/memory.html" title="memory"
              >next</a> |</li>
         <li class="right" >
           <a href="i6502.html" title="i6502 &amp; i6502x"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="synth.html" ><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">stack</span></code></a></li> 
       </ul>

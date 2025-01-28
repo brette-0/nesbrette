@@ -24,3 +24,13 @@ To avoid frequent type specification, the user may use ``typeas`` which will ena
 ~~~~~~~
 
 When developing ``nesbrette`` I elected to use a ``warning`` system that could be suppressed optionally. This is because I often find that the warnings I am provided by libraries, or IDEs hold some merit but occassionaly hallucinate or do not exempt a safe use case. Considering this, I decided that all possible warnigns can be silenced, or turned into errors with ``pedantic`` mode, issues may become pedantic or suppressed by defining constants *or* by pasing suppression/pedantic as a parameter.
+
+``Call Handler``
+~~~~~~~~~~~~~~~~
+
+Modern programming languages allow functions to share the same name as long as they use different parameter types. ``nesbrette`` is similar in the regard that it promotes 'templating' by simply enabling type detection to exist. How a call handler handles its parameters is case specific, typically integer types are treated unanimously whereas register types may incur seperate logic. 
+
+``Memory Address Modes``
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+On the NES there exists a few memory address modes that ``nesbrette`` has enums for. These enums are used in much of the library to ensure that the correct register is being used, or to enable indexing by checking the parameters as a collection. The main reason is to ensure that some instructions are assembled in the intended address mode. For example, some code should *only* use zero page memory for its speed, or perhaps you need to force usage of absolute even for addresses within the zero page for code alignment. 

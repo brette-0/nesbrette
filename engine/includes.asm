@@ -42,7 +42,7 @@ INCLUDES_NESBRETTE_SYNTH_STACK                  = 0
 
 ; DO NOT REMOVE THE BELOW
 .ifndef ___libinclude___
-    .macro ___libinclude___
+    .macro ___libinclude___, __table__
         .setcpu "6502x"
         
         .feature c_comments
@@ -67,4 +67,10 @@ INCLUDES_NESBRETTE_SYNTH_STACK                  = 0
         .include .concat(template, "warnings.asm")          ; suppressable warnings
         .include .concat(template, "includer.asm")          ; minimal include system
     .endmacro
+
+
+    .macro __intable__
+        .include .concat(template, "tables.asm")            ; smart table system
+    .endmacro
+
 .endif

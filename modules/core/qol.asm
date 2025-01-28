@@ -1,24 +1,15 @@
-.macro setreg __regenum__, __out__
-    .if .xmatch(__index__, y)
-        __out__ .set yr
-    .elseif .xmatch(__index__, x)
-        __out__ .set xr
-    .elseif .xmatch(__index__, a)
-        __out__ .set ar
-    .else
-        .fatal "Invalid register specified"
-    .endif
-.endmacro
 
-.macro setireg __regenum__, __out__
-    .if .xmatch(__index__, y)
-        __out__ .set yr
-    .elseif .xmatch(__index__, x)
-        __out__ .set xr
-    .else
-        .fatal "Invalid indexing register specified"
-    .endif
-.endmacro
+.define setreg(__regenum__) \
+    ((__regenum__ = yr) * yr) | \
+    ((__regenum__ = xr) * xr) | \
+    ((__regenum__ = ar) * ar) | \
+    (__regenum__ <> yr && __regenum__ <> xr && __regenum__ <> ar) * null))
+
+
+.define setireg(__regenum__) \
+    ((__regenum__ = yr) * yr) | \
+    ((__regenum__ = xr) * xr) | \
+    (__regenum__ <> yr && __regenum__ <> xr && __regenum__ <> ar) * null))
 
 .define confined(o, w) .hibyte(o) = .hibyte(o + w)
 
