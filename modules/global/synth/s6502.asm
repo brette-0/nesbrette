@@ -90,7 +90,7 @@
     ldr xr: ((abs _ireg) + abst), __target__
 .endmacro
 
-.macro labs __target__
+.macro sabs __target__
     .local _ireg
 
     _ireg = setireg (.right(1, __target__) * (.paramcount - 1))
@@ -120,3 +120,6 @@
 .endmacro
 
 .endif
+
+
+; lrbs, srbs

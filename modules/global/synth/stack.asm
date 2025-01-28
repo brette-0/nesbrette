@@ -39,6 +39,8 @@
     .endif
 .endmacro
 
+.if 0
+
 .macro des, __xissp__
     .ifblank __xissp__
         tsx
@@ -107,38 +109,37 @@
     eor $0100 + __offset__, x
 .endif
 
-.if 0 ; unincluded
+.macro rss __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
+    lsr $0100 + __offset__, x
+.endif
 
-    .macro rss __offset__, __xissp__
-        .ifblank __xissp__
-            tsx
-        .endif
-        
-        lsr $0100 + __offset__, x
+.macro lss __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
+    asl $0100 + __offset__, x
+.endif
+
+.macro lrs __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
+    .endif
+    
+    rol $0100 + __offset__, x
+.endif
+
+
+.macro rrs __offset__, __xissp__
+    .ifblank __xissp__
+        tsx
     .endif
 
-    .macro lss __offset__, __xissp__
-        .ifblank __xissp__
-            tsx
-        .endif
-        
-        asl $0100 + __offset__, x
-    .endif
+    ror $0110 + __offset__, x
+.endif
 
-    .macro lrs __offset__, __xissp__
-        .ifblank __xissp__
-            tsx
-        .endif
-        
-        rol $0100 + __offset__, x
-    .endif
-
-
-    .macro rrs __offset__, __xissp__
-        .ifblank __xissp__
-            tsx
-        .endif
-
-        ror $0110 + __offset__, x
-    .endif
 .endif
