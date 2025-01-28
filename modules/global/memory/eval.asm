@@ -15,22 +15,20 @@
 
     ; get z
     .repeat targetsize, iter
-        ldr wabs:: __reg__, (eindex tlabel, targetsize, iter, endian targettype)
+        ldr wabs: __reg__, (eindex tlabel, targetsize, iter, endian targettype)
         bne @fail
     .endrepeat
 
     ora #$02
     @fail:
-
-    ldr wabs:: __reg__, (eindex tlabel, targetsize, 0, endian targettype)
-    bpl @fail2
-    ora #$80
+        ldr wabs: __reg__, (eindex tlabel, targetsize, 0, endian targettype)
+        bpl @fail2
+        ora #$80
     
     @fail2:
-
-    sts 2
-    pla ; dump old __reg__
-    tar __reg__
-    pla ; dump a
-    plp ; new cpu stat
+        sts 2
+        pla ; dump old __reg__
+        tar __reg__
+        pla ; dump a
+        plp ; new cpu stat
 .endmacro

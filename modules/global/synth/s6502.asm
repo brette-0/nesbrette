@@ -57,6 +57,9 @@
     rol
     .endmacro
 
+
+.if 0
+
 ; this design is stupidly optimised
 .macro labs __target__
     .local _ireg
@@ -115,3 +118,5 @@
 
     str x: ((abs _ireg) + abst), __target__
 .endmacro
+
+.endif

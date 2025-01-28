@@ -171,19 +171,6 @@ Because the value at any index in an `Identity Table <https://www.nesdev.org/wik
 .. note::
     This performs ``biti $40`` and therefore if you wish to set both Overflow and Negative then you can use ``biti $c0`` .
 
-``rcp typed:`` - Register Compare
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-    
-    reg = ar
-    rcp reg::zp, yr
-    bne @task
-    rcp reg::zpx, memory
-    bne @task
-
-
-
 ``tyxa`` - Transfer Y to both X and A
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -1,242 +1,154 @@
 ; untested
-.macro compare __base__, __compare__, __width__, __status__, __reg__, __direct__
+.macro compare __base__, __compare__, __status__, __regs__
+    .local t_base, t_comp, _ireg, _reg
 
     .ifblank __base__
         .fatal "long compare needs base value to compare"
-        .endif 
+    .endif 
 
     .ifblank __compare__
         .fatal "long compare needs compare value to compare"
-        .endif
+    .endif
 
-    .ifblank __width__
-        .fatal "long compare needs width value to compare"
-        .endif
+    t_base .set 0
+    t_comp .set 0
 
-    .if (__width__ < 1) && (__width__ <> x) && (__width__ <> y)
-        .fatal "long compare needs valid width to compare"
-        .endif
+    detype __base__, t_base
+    detype __compare__, t_comp
+
+    .ifblank __regs__
+        _ireg = xr
+        _reg  = ar
+    .else
+        _reg   =  setreg (.left(1,  __regs__))
+        _ireg  = setireg (.right(1, __regs__))
+    .endif
+
+    .if (typeval __base__) <> (typeval <> t_comp)
+        .warning "Compares are of differing sizes, will only compare smaller region"
+    .endif
+
+    .if (typeval __base__) = 0 || (typeval __valcompare) = 0
+        .warning "Compared Emptiness"
+        .exitmacro
+    .endif
+
+    .if ((endian __base__) <> (endian __compare__)) && (isconst __base__) && (isconst __compare__)
+        .fatal "Cannot compare values with differing endians within one loop"
+    .endif
+
+    /*
+        Alright, fine : you can, but not without specifying that you want to use all three registers
+        I don't think thats fair on the user, so I won't add it. Unroll the code if you need to or just
+        don't miss match endianness.  
+    */
 
     .ifblank __status__
         .fatal "long compare needs specified cpu status flags"
-        .endif
+    .endif
 
-    .if abs(__status__) <> status & abs(z + c) && WARNINGS_MEMORY_COMPARE_UNSUPPORTED_FLAGS
+    .if ( abs __status__ ) <> status & (abs (zf + cf)) && WARNINGS_MEMORY_COMPARE_UNSUPPORTED_FLAGS
         .warning "long compare will not set all flags, but will clear them"
-        .endif
+    .endif
 
-    .ifblank __direct__
-        __direct__ = direct
-        .endif
-
-    .ifblank __reg__
-        __reg__ = a
-        .endif
-
-    .if (__reg__ <> a) .and (__reg__ <> x) .and (__reg__ <> y)
-        .fatal "long compare must use valid general purpose register"
-        .endif
-    
-    .ifblank __direct__
-        __direct__ = direct
-        .endif
-
-    .if (__direct__ <> direct) && (__direct__ <> indirect)
-        .fatal "long compare must use either direct or indirect addressing"
-        .endif
-
-    .if (__direct__ = indirect) && ((__reg__ <> a) || (__width__) <> y)
-        .fatal "indirect mode was not configured correctly"
-        .endif
-
-    php
-    pla                 ; status => a
-
+    ldstat
     and #~__status__   ; clear values we intend to change (if a funtion exists, elsewise nuke)
 
-    .if __status__ & abs(z)
-        __eqcompare __base__, __compare__, __width__, __reg__, __direct__
-        .endif
+    .if __status__ & (abs zf)
+        __eqcompare __base__, __compare__, __width__, _ireg, _reg
+    .endif
 
-    .if __status__ & abs(c)
-        __valcompare __base__, __compare__, __width__, __reg__, __direct__
-        .endif
+    .if __status__ & (abs cf)
+        __valcompare __base__, __compare__, __width__, _ireg, _reg
+    .endif
 
-    pha
-    plp                 ; a => status
+    ststat
 
     .endmacro
 
-.macro __eqcompare  __base__, __compare__, __width__, __reg__, __direct__
+.macro __eqcompare  __base__, __compare__, __width__, _ireg, _reg
     ; 'engine' macro performs no validation : assumes parameters are validated on entry
 
     
-    .if __reg__ = a
+    .if _reg = ar
         pha
-        .endif
+    .endif
 
-    .if __direct__ = indirect
-        .if __width__ > 0
-            .repeat __width__, iter
-                dey
-                lda (__base__),    y
-                cmp (__compare__), y
-                bne @exit
-                .endrepeat
-        .else
-            @loop:
-                lda (__base__), y
-                cmp (__compare__), y
-                bne @exit
-                cpy #$00
-                bne @loop
-        .endif
-    .elseif __width__ > 0
+    .if  __width__ > 0
         .repeat __width__, iter
-            .if __reg__ = a
-                lda __base__    + iter
-                cmp __compare__ + iter
-            .elseif __reg__ = x
-                ldx __base__    + iter
-                cpx __compare__ + iter
-            .elseif __reg__ = y
-                ldy __base__    + iter
-                cpy __compare__ + iter
-            .endif
-
+            ldr _reg: wabs, (eindex __width__: __base__, iter)
+            rcp _reg: wabs, (eindex __width__: __compare__, iter)
             bne @exit
-            .endrepeat
+        .endrepeat
     .else
         @loop:
-            .if __reg__ = a
-                .if     __width__ = x
-                    dex
-                    lda __base__,    x
-                    cmp __compare__, x
-                .elseif __width__ = y
-                    dey
-                    lda __base__,    y
-                    cmp __compare__, y
-                .endif
-            .elseif __reg__ = x
-                dex
-                ldy __base__,    x
-                cpy __compare__, x
-            .else
-                dey
-                ldx __base__,    y
-                cpx __compare__, y
-            .endif
-
+            der _ireg
+            ldr (wabs + _ireg): _reg
+            rcp (wabs + _ireg): _reg
             bne @loop
 
-            .if __width__ = x
-                cpx #$00
-            .else
-                cpy #$00
-            .endif
-
+            rcp _ireg: imm, $00
             bne @loop
     .endif
     
-    .if __reg__ = a
+    .if _reg = a
         pla                                 ; fetch original a
-        ora #abs(z)                         ; set z
+        ora #(abs zf)                        ; set z
         .exitmacro
 
         @exit:
             pla
             .exitmacro                      ; leave with original
     .else
-        ora #abs(z)                         ; set z
+        ora #(abs zf)                        ; set z
         @exit:
             .exitmacro                      ; leave with original
     .endif
-    .endmacro
+.endmacro
 
 
-.macro __valcompare  __base__, __compare__, __width__, __reg__, __direct__
+.macro __valcompare  __base__, __compare__, __width__, _ireg, _reg
     ; 'engine' macro performs no validation : assumes parameters are validated on entry
 
-    .if __reg__ = a
+    .if _reg = ar
         pha
-        .endif
+    .endif
 
-    .if __direct__ = indirect
-        .if __width__ > 0
-            .repeat __width__, iter
-                dey
-                lda (__base__),    y
-                cmp (__compare__), y
-                bcc @exit
-                .endrepeat
-        .else
-            @loop:
-                lda (__base__), y
-                cmp (__compare__), y
-                bcc @exit
-                cpy #$00
-                bne @loop
-        .endif
-    .elseif __width__ > 0
+    .if __width__ > 0
         .repeat __width__, iter
-            .if __reg__ = a
-                lda __base__    + iter
-                cmp __compare__ + iter
-            .elseif __reg__ = x
-                ldx __base__    + iter
-                cpx __compare__ + iter
-            .elseif __reg__ = y
-                ldy __base__    + iter
-                cpy __compare__ + iter
-            .endif
-
+            ldr _reg: wabs, (eindex __width__: __base__, iter)
+            rcp _reg: wabs, (eindex __width__: __compare__, iter)
             bcc @exit
-            .endrepeat
+        .endrepeat
     .else
         @loop:
-            .if __reg__ = a
-                .if     __width__ = x
-                    dex
-                    lda __base__,    x
-                    cmp __compare__, x
-                .elseif __width__ = y
-                    dey
-                    lda __base__,    y
-                    cmp __compare__, y
-                .endif
-            .elseif __reg__ = x
-                dex
-                ldy __base__,    x
-                cpy __compare__, x
-            .else
-                dey
-                ldx __base__,    y
-                cpx __compare__, y
-            .endif
-
+            der _ireg
+            ldr (wabs + _ireg): _reg
+            rcp (wabs + _ireg): _reg
             bcc @loop
 
-            .if __width__ = x
-                cpx #$00
-            .else
-                cpy #$00
-            .endif
-
+            rcp _ireg: imm, $00
             bne @loop
     .endif
 
-    .if __reg__ = a
+    .if _reg = ar
         pla                                 ; fetch original a
-        ora #abs(z)                         ; set z
+        ora #(abs cf)                       ; set z
         .exitmacro
 
         @exit:
             pla
             .exitmacro                      ; leave with original
     .else
-        ora #abs(z)                         ; set z
+        ora #(abs cf)                       ; set z
         @exit:
             .exitmacro                      ; leave with original
     .endif
-    .endmacro
+.endmacro
+
+/*
+
+    Do not set N, we can let the user handle that.
+    The issue arises with type semantics and general N flag abuse being typical
+
+*/

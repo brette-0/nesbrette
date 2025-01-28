@@ -291,7 +291,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     @timer:
         ldr ar:: tar, inreg
         inr
-        cpr inreg:: $30
+        rcp inreg:: $30
         bne @timer
 
 
@@ -372,7 +372,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trr yr::xr  ; y -> x
 
 
-``ldr reg: mao`` - Load Register
+``ldr gpr: mode`` - Load Register
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -381,10 +381,21 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     ldr reg::imm, param
     bpl @task
 
-``str reg: mao`` - Store Register
+``str gpr: mode`` - Store Register
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
     reg = yr
     str reg::wabs. param
+
+``rcp typed:`` - Register Compare
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+    
+    reg = ar
+    rcp reg::zp, yr     ; needs i6502
+    bne @task
+    rcp reg::zpx, memory
+    bne @task

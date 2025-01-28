@@ -1,72 +1,51 @@
 .macro memcpy __from__, __to__, __width__, __direct__, __reverse__
+    .local t_from, t_to, _reg, _ireg
+    
     .ifblank __from__
         .fatal "memcpy needs source address"
-        .endif
+    .endif
 
     .ifblank __to__
         .fatal "memcpy needs target address"
-        .endif
+    .endif
 
-    .ifblank __width__
-        .fatal "memcpy needs specified with"
-        .endif
+    t_from .set 0
+    t_to   .set 0
 
-    .if (width <> x) .and (width <> y) and width <= 0
-        .fatal "invalid memcpy width"
-        .endif
+    detype __from__, t_from
+    detype __to__,   t_to
     
-    .ifblank __direct__
-        __direct__ = direct
-        .endif
+    .ifblank __regs__
+        _reg  = ar
+        _ireg = xr
+    .else
+        _reg  =  setreg .left(1,  __regs__)
+        _ireg = setireg .right(1, __regs__)
+    .endif
 
-    .if (__direct__ <> direct) .and (__direct__ <> indirect)
-        .fatal "invalid memory address mode for memcpy"
-        .endif
-        
     pha
 
-    .ifblank __reverse__
-        __reverse__ = 0
-    .endif
-
     .if __width__ < 0
-
-        .if __reverse__
-            .fatal "cannot reverse with variable width"
-            .endif
-
         @loop:
-            .if __width__ = x
-                .if __direct__ = indirect
-                    .fatal "memcpy does not support indexed indirect"
-                    .endif
-
-                lda __from__, x
-                sta __from__, x
-                dex
-            .else
-                .if __direct__ = indirect
-                    lda (from), y
-                    sta (to),   y
-                .else
-                    lda __from__, y
-                    sta __from__, y
-                .endif
-                dey
-            .endif
-
+            ldr _reg: (wabs + _ireg), __from__
+            str _reg: (wabs + _ireg), __to__
+            der _ireq
             bne @loop
+
     .else
         .repeat width, iter
-            .if __reverse__
-                lda __from__ + __width__ - iter - 1
-            .else
-                lda __from__ + iter
-            .endif
-
-            sta __to__   + iter
-            .endrepeat
+            ldr _reg: wabs, (eindex t_from: __from__, iter)
+            str _reg: wabs, (eindex t_to: __to__, iter)
+        .endrepeat
     .endif
 
-    pla 
-    .endmacro
+    pla
+.endmacro
+
+
+/*
+
+    memcpy u32: foo, u32: bar   ; typical use
+    memcpy u32: foo, bu32: bar  ; 'reverse' use
+
+*/

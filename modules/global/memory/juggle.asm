@@ -18,7 +18,7 @@
     .endif
     
     .repeat .tcount(__tokens__), iter
-        .if iter <> 0 .or iter = .tcount(__tokens__)          ; zero is handled outside the loop
+        .if iter <> 0 || iter = .tcount(__tokens__)          ; zero is handled outside the loop
             .if __polarity__
                 src .set index iter, __tokens__
                 tar .set index iter - 1, __tokens__
