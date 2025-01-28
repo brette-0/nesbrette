@@ -45,7 +45,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     .. code-block::
         
         @lssu_enemies:
-            LSUByte u32::Enemies
+            lsubyte u32: Enemies
             rts
 
         jsr @lssu_enemies   ; call to get value
@@ -60,7 +60,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 
 
 .. warning::
-    This code has not been tested for some time, expect catastrophic failure.
+    This code has not been tested for some time, and has been modified as of late, expect catastrophic failure.
 
 ``eval int::src`` - Evaluate for CPU Flags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +71,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     bmi @minus  ; functions like lda i8: Addr
 
 .. warning::
-    This code has not been tested for some time, expect catastrophic failure.
+    This code has not been tested for some time, and has been modified as of late, expect catastrophic failure.
 
 ``mempcy int::src, int::tar`` - Copy out Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,7 +81,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     memcpy u64:: Inputs, u64:: LastInputs
             ; to check if buttons where held or pressed
 .. note::
-    This task is unrolled as it is expected to be needed often as ``nesbrette`` avoids using indirect memory address modes where possible.
+    This task is unrolled by default as it is expected to be needed often as ``nesbrette`` avoids using indirect memory address modes where possible.
 
 ``juggle {tokens}, int::addr`` - Juggle Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
