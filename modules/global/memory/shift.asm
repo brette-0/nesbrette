@@ -1,107 +1,137 @@
 ; untested
 
-.macro lshift __amt__, __output__, __width__
-    .ifnblank __output__                            ; undefine output if null, uses acc mode
-        .if is_null __output__
-            .undefine __output__
-        .endif
-    .endif
+.macro lshift __param0__, __param1__, __reg__
+    .local t_out, w_out, l_out, _reg, _amt
 
-    .ifndef __output__  ; acc mode
+    .if .paramcount = 1
+        ; acc mode
+
+        _amt = __param0__
+
         .if (__amt__) > 7
             .if WARNING_LOGIC_SHIFT_OVERFLOW
                 .warning "Amount to shift by will always result in zero"
             .endif
-            lda #$00
-        .elseif (__amt__) > 5
-            .repeat (9 - __amt__), _
+            ldz
+        .elseif (_amt) > 5
+            .repeat (9 - _amt), _
                 ror
-                .endrepeat
-            and #~((1 << (amt)) - 1)
+            .endrepeat
+            and #~((1 << (_amt)) - 1)
         .else
-            .repeat __amt__, _
+            .repeat _amt, _
                 asl
-                .endrepeat
+            .endrepeat
         .endif
+
+
     .else
-        .if __amt__ >= (__width__ * 8)
+        ; mem mode
+
+        t_out .set 0
+        detype __param0__, t_out
+
+        w_out = typeval t_out
+        _amt = __param1__
+        l_out = ilabel __param0__
+
+        .ifndef __reg__
+            _reg = ar
+        .else
+            _reg = setreg __reg__
+        .endif
+
+        .if _amt >= (w_out * 8)
             ; warn too large
             .endif
 
         ; byte shift (moving bytes)
-        .repeat __width__ - (__amt__ >> 3), iter
-            lda __output__ + iter
-            sta __output__ + (__amt__ >> 3) + iter
+        .repeat w_out - (_amt >> 3), iter
+            ldr _reg: _reg, (eindex t_out: l_out, iter)
+            str wabs: _reg, (eindex t_out: l_out, (iter + (_amt >> 3)))
             .endrepeat
 
         ; cleaning tail
-        lda #$00
+        ldz _reg
         .repeat (__amt__ >> 3), iter
-            sta __output__ + width - (__amt__ >> 3) + iter
+            str wabs: _reg, (l_out + width - (_amt >> 3) + iter)
             .endrepeat
 
         ; shifting all remaining bytes by "fine detail"
-        .if __amt__ & %111
+        .if _amt & %111
             clc
-            .repeat (__amt__ & %111), _
-                .repeat __width__ - (__amt__ >> 3), iter
-                    rol __output__ + __width__ - (__amt__ >> 3) -  iter
+            .repeat (_amt & %111), _
+                .repeat w_out - (_amt >> 3), iter
+                    rol l_out + w_out - (_amt >> 3) -  iter
                     .endrepeat
                 .endrepeat
-            .endif            
+            .endif 
     .endif
-    .endmacro
+.endmacro
 
 ; untested
 
-.macro rshift  __amt__, __output__, __width__
-    .ifnblank __output__                            ; undefine output if null, uses acc mode
-        .if is_null __output__
-            .undefine __output__
-        .endif
-    .endif
+.macro rshift  __param0__, __param1__, __reg__
+    .local t_out, w_out, l_out, _reg, _amt
+   
 
-    .ifndef __output__
-        .if (__amt__) > 7
+   .if .paramcount = 1
+        _amt = __param0__
+
+        .if (_amt) > 7
             .if WARNING_LOGIC_SHIFT_OVERFLOW
                 .warning "Amount to shift by will always result in zero"
             .endif
-            lda #$00
-        .elseif (__amt__) > 5
-            .repeat (9 - __amt__), _
+            ldz
+        .elseif (_amt) > 5
+            .repeat (9 - _amt), _
                 rol
                 .endrepeat
-            and #(1 << (8 - amt)) - 1
+            and #(1 << (8 - _amt)) - 1
         .else
-            .repeat __amt__, _
+            .repeat _amt, _
                 lsr
                 .endrepeat
         .endif
     .else
-        .if __amt__ >= (__width__ * 8)
+        t_out .set 0
+        detype __param0__, t_out
+
+        w_out = typeval t_out
+        _amt = __param1__
+        l_out = ilabel __param0__
+
+        .ifndef __reg__
+            _reg = ar
+        .else
+            _reg = setreg __reg__
+        .endif
+
+
+        .if _amt >= (__width__ * 8)
             ; warn too large
             .endif
 
         ; byte shift (moving bytes)
-        .repeat __width__ - (__amt__ >> 3), iter
-            lda __output__ + __width__ - (__amt__ >> 3) - iter
-            sta __output__ + __width__ - iter
+        .repeat __width__ - (_amt >> 3), iter
+            ldr wabs: _reg, (eindex w_out: l_out, (iter - (_amt >> 3)))
+            str wabs: _reg, (eindex w_out: l_out, iter)
             .endrepeat
 
         ; cleaning trail
-        lda #$00
-        .repeat (__amt__ >> 3), iter
-            sta __output__ + iter
+        ldz
+        .repeat (_amt >> 3), iter
+            sta eindex w_out: l_out, iter
             .endrepeat
 
         ; shifting all remaining bytes by "fine detail"
-        .if __amt__ & %111
+        .if _amt & %111
             clc
-            .repeat (__amt__ & %111), _
-                .repeat __width__ - (__amt__ >> 3), iter
-                    ror __output__ + (__amt__ >> 3) +  iter
+            .repeat (_amt & %111), _
+                .repeat w_out - (_amt >> 3), iter
+                    ror l_out + (_amt >> 3) +  iter
                     .endrepeat
                 .endrepeat
             .endif
     .endif
-    .endmacro
+.endmacro
