@@ -31,7 +31,7 @@
           <a href="s6502.html" title="s6502"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="synth.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a></li> 
       </ul>
@@ -135,32 +135,32 @@ eory        ; a =&gt; $30
 </pre></div>
 </div>
 </section>
-<section id="xcmp-compare-against-x">
-<h2><code class="docutils literal notranslate"><span class="pre">xcmp</span></code> - Compare against X<a class="headerlink" href="#xcmp-compare-against-x" title="Link to this heading">¶</a></h2>
+<section id="cmpx-compare-against-x">
+<h2><code class="docutils literal notranslate"><span class="pre">cmpx</span></code> - Compare against X<a class="headerlink" href="#cmpx-compare-against-x" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldx</span> <span class="c1">#$10</span>
 <span class="n">lda</span> <span class="c1">#$20</span>
 <span class="n">xcmp</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </section>
-<section id="ycmp-compare-against-y">
-<h2><code class="docutils literal notranslate"><span class="pre">ycmp</span></code> - Compare against Y<a class="headerlink" href="#ycmp-compare-against-y" title="Link to this heading">¶</a></h2>
+<section id="cmpy-compare-against-y">
+<h2><code class="docutils literal notranslate"><span class="pre">cmpy</span></code> - Compare against Y<a class="headerlink" href="#cmpy-compare-against-y" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldy</span> <span class="c1">#$10</span>
 <span class="n">lda</span> <span class="c1">#$20</span>
 <span class="n">ycmp</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </section>
-<section id="xcpy-compare-x-against-y">
-<h2><code class="docutils literal notranslate"><span class="pre">xcpy</span></code> - Compare X against Y<a class="headerlink" href="#xcpy-compare-x-against-y" title="Link to this heading">¶</a></h2>
+<section id="cpyx-compare-x-against-y">
+<h2><code class="docutils literal notranslate"><span class="pre">cpyx</span></code> - Compare X against Y<a class="headerlink" href="#cpyx-compare-x-against-y" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldy</span> <span class="c1">#$10</span>
 <span class="n">ldx</span> <span class="c1">#$20</span>
 <span class="n">xcpy</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </section>
-<section id="ycpx-compare-y-against-x">
-<h2><code class="docutils literal notranslate"><span class="pre">ycpx</span></code> - Compare Y against X<a class="headerlink" href="#ycpx-compare-y-against-x" title="Link to this heading">¶</a></h2>
+<section id="cpxy-compare-y-against-x">
+<h2><code class="docutils literal notranslate"><span class="pre">cpxy</span></code> - Compare Y against X<a class="headerlink" href="#cpxy-compare-y-against-x" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldx</span> <span class="c1">#$10</span>
 <span class="n">ldy</span> <span class="c1">#$20</span>
 <span class="n">ycpx</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
@@ -240,10 +240,10 @@ tyxa        ; a, x =&gt; $30
 <li><a class="reference internal" href="#eorx-flip-eor-xor-by-x"><code class="docutils literal notranslate"><span class="pre">eorx</span></code> - Flip/eor/xor by X</a></li>
 <li><a class="reference internal" href="#eory-flip-eor-xor-by-y"><code class="docutils literal notranslate"><span class="pre">eory</span></code> - Flip/eor/xor by Y</a></li>
 <li><a class="reference internal" href="#biti-bitcheck-immediate"><code class="docutils literal notranslate"><span class="pre">biti</span></code> - Bitcheck Immediate</a></li>
-<li><a class="reference internal" href="#xcmp-compare-against-x"><code class="docutils literal notranslate"><span class="pre">xcmp</span></code> - Compare against X</a></li>
-<li><a class="reference internal" href="#ycmp-compare-against-y"><code class="docutils literal notranslate"><span class="pre">ycmp</span></code> - Compare against Y</a></li>
-<li><a class="reference internal" href="#xcpy-compare-x-against-y"><code class="docutils literal notranslate"><span class="pre">xcpy</span></code> - Compare X against Y</a></li>
-<li><a class="reference internal" href="#ycpx-compare-y-against-x"><code class="docutils literal notranslate"><span class="pre">ycpx</span></code> - Compare Y against X</a></li>
+<li><a class="reference internal" href="#cmpx-compare-against-x"><code class="docutils literal notranslate"><span class="pre">cmpx</span></code> - Compare against X</a></li>
+<li><a class="reference internal" href="#cmpy-compare-against-y"><code class="docutils literal notranslate"><span class="pre">cmpy</span></code> - Compare against Y</a></li>
+<li><a class="reference internal" href="#cpyx-compare-x-against-y"><code class="docutils literal notranslate"><span class="pre">cpyx</span></code> - Compare X against Y</a></li>
+<li><a class="reference internal" href="#cpxy-compare-y-against-x"><code class="docutils literal notranslate"><span class="pre">cpxy</span></code> - Compare Y against X</a></li>
 <li><a class="reference internal" href="#txy-transfer-x-to-y"><code class="docutils literal notranslate"><span class="pre">txy</span></code> - Transfer X to Y</a></li>
 <li><a class="reference internal" href="#tyx-transfer-y-to-x"><code class="docutils literal notranslate"><span class="pre">tyx</span></code> - Transfer Y to X</a></li>
 <li><a class="reference internal" href="#sev-set-overflow"><code class="docutils literal notranslate"><span class="pre">sev</span></code> - Set Overflow</a></li>
@@ -298,7 +298,7 @@ tyxa        ; a, x =&gt; $30
           <a href="s6502.html" title="s6502"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="synth.html" ><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a></li> 
       </ul>

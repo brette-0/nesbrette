@@ -34,3 +34,5 @@ Modern programming languages allow functions to share the same name as long as t
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the NES there exists a few memory address modes that ``nesbrette`` has enums for. These enums are used in much of the library to ensure that the correct register is being used, or to enable indexing by checking the parameters as a collection. The main reason is to ensure that some instructions are assembled in the intended address mode. For example, some code should *only* use zero page memory for its speed, or perhaps you need to force usage of absolute even for addresses within the zero page for code alignment. 
+
+.. build tasks

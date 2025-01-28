@@ -279,7 +279,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     insert_header
 
 .. note::
-    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this.
+    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this. To fully use ``insert_header`` the user will need to modify the ``header`` constants in ``template/{scope}/constants.asm``.
 
 ``inr gpr`` - Incrment Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -291,7 +291,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     @timer:
         ldr ar:: tar, inreg
         inr
-        cpr inreg:: $30
+        rcp inreg:: $30
         bne @timer
 
 
@@ -372,7 +372,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trr yr::xr  ; y -> x
 
 
-``ldr reg: mao`` - Load Register
+``ldr gpr: mode`` - Load Register
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -381,20 +381,21 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     ldr reg::imm, param
     bpl @task
 
-``str reg: mao`` - Store Register
+``str gpr: mode`` - Store Register
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
     reg = yr
     str reg::wabs. param
-    
-``cpr reg: mao`` - Compare Register
+
+``rcp typed:`` - Register Compare
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
     reg = ar
-    cpr reg::zp, param
+    rcp reg::zp, yr     ; needs i6502
     bne @task
-
+    rcp reg::zpx, memory
+    bne @task

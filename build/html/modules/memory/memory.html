@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="math" href="../math/math.html" />
-    <link rel="prev" title="gpr" href="../synth/gpr.html" /> 
+    <link rel="prev" title="stack" href="../synth/stack.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -28,10 +28,10 @@
           <a href="../math/math.html" title="math"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../synth/gpr.html" title="gpr"
+          <a href="../synth/stack.html" title="stack"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></li> 
       </ul>
     </div>  
@@ -44,32 +44,32 @@
   <section id="memory">
 <h1><code class="docutils literal notranslate"><span class="pre">memory</span></code><a class="headerlink" href="#memory" title="Link to this heading">¶</a></h1>
 <p>The majority of higher bit math functions is dealing with memory due to thin buses and registers. Analysing memory often can yield circumstantial optimisations, copying memory often is faster than indirectly fetching new targets and a great way to evade code debt is to utilise the well written <code class="docutils literal notranslate"><span class="pre">juggle</span></code> method.</p>
-<section id="mssbyte-int-addr-most-significant-set-byte">
-<h2><code class="docutils literal notranslate"><span class="pre">mssbyte</span> <span class="pre">int::addr</span></code> - Most Significant Set Byte<a class="headerlink" href="#mssbyte-int-addr-most-significant-set-byte" title="Link to this heading">¶</a></h2>
+<section id="mssbyte-int-most-significant-set-byte">
+<h2><code class="docutils literal notranslate"><span class="pre">mssbyte</span> <span class="pre">int:</span></code> - Most Significant Set Byte<a class="headerlink" href="#mssbyte-int-most-significant-set-byte" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mssbyte</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span>
 <span class="n">sta</span> <span class="n">HEALTH_WIDTH</span>
         <span class="p">;</span> <span class="n">could</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">render</span> <span class="n">only</span> <span class="n">so</span> <span class="n">many</span> <span class="n">hearts</span>
 </pre></div>
 </div>
 </section>
-<section id="lssbyte-int-addr-least-significant-set-byte">
-<h2><code class="docutils literal notranslate"><span class="pre">lssbyte</span> <span class="pre">int::addr</span></code> - Least Significant Set Byte<a class="headerlink" href="#lssbyte-int-addr-least-significant-set-byte" title="Link to this heading">¶</a></h2>
+<section id="lssbyte-int-least-significant-set-byte">
+<h2><code class="docutils literal notranslate"><span class="pre">lssbyte</span> <span class="pre">int:</span></code> - Least Significant Set Byte<a class="headerlink" href="#lssbyte-int-least-significant-set-byte" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lssbyte</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span>
 <span class="n">sta</span> <span class="n">USED_INDEX</span>
         <span class="p">;</span> <span class="n">find</span> <span class="n">first</span> <span class="s1">&#39;used&#39;</span> <span class="n">byte</span>
 </pre></div>
 </div>
 </section>
-<section id="msubyte-int-addr-most-significant-unset-byte">
-<h2><code class="docutils literal notranslate"><span class="pre">msubyte</span> <span class="pre">int::addr</span></code> - Most Significant Unset Byte<a class="headerlink" href="#msubyte-int-addr-most-significant-unset-byte" title="Link to this heading">¶</a></h2>
+<section id="msubyte-int-most-significant-unset-byte">
+<h2><code class="docutils literal notranslate"><span class="pre">msubyte</span> <span class="pre">int:</span></code> - Most Significant Unset Byte<a class="headerlink" href="#msubyte-int-most-significant-unset-byte" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">msubyte</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span>
 <span class="n">sta</span> <span class="n">UNUSED_INDEX</span>
         <span class="p">;</span> <span class="n">find</span> <span class="n">last</span> <span class="s1">&#39;free&#39;</span> <span class="n">byte</span>
 </pre></div>
 </div>
 </section>
-<section id="lsubyte-int-addr-least-significant-unset-byte">
-<h2><code class="docutils literal notranslate"><span class="pre">lsubyte</span> <span class="pre">int::addr</span></code> - Least Significant Unset Byte<a class="headerlink" href="#lsubyte-int-addr-least-significant-unset-byte" title="Link to this heading">¶</a></h2>
+<section id="lsubyte-int-least-significant-unset-byte">
+<h2><code class="docutils literal notranslate"><span class="pre">lsubyte</span> <span class="pre">int:</span></code> - Least Significant Unset Byte<a class="headerlink" href="#lsubyte-int-least-significant-unset-byte" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lsubyte</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span>
 <span class="n">sta</span> <span class="n">UNUSED_INDEX</span>
         <span class="p">;</span> <span class="n">find</span> <span class="n">first</span> <span class="s1">&#39;free&#39;</span> <span class="n">byte</span>
@@ -79,7 +79,7 @@
 <p class="admonition-title">Note</p>
 <p>Situations in which there are many calls to check the Most/Least Significant Set/Unset bit of the same valule, declaring a function like so</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@lssu_enemies</span><span class="p">:</span>
-    <span class="n">LSUByte</span> <span class="n">u32</span><span class="p">::</span><span class="n">Enemies</span>
+    <span class="n">lsubyte</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Enemies</span>
     <span class="n">rts</span>
 
 <span class="n">jsr</span> <span class="nd">@lssu_enemies</span>   <span class="p">;</span> <span class="n">call</span> <span class="n">to</span> <span class="n">get</span> <span class="n">value</span>
@@ -87,41 +87,41 @@
 </div>
 </div>
 </section>
-<section id="compare-int-src-int-tar-compare-memory">
-<h2><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Compare Memory<a class="headerlink" href="#compare-int-src-int-tar-compare-memory" title="Link to this heading">¶</a></h2>
+<section id="compare-int-int-compare-memory">
+<h2><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Compare Memory<a class="headerlink" href="#compare-int-int-compare-memory" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">compare</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">bar</span>
 <span class="n">beq</span> <span class="nd">@same</span>   <span class="p">;</span> <span class="n">same</span> <span class="k">as</span> <span class="n">cmp</span> <span class="n">u8</span><span class="p">:</span> <span class="n">foo</span>
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This code has not been tested for some time, expect catastrophic failure.</p>
+<p>This code has not been tested for some time, and has been modified as of late, expect catastrophic failure.</p>
 </div>
 </section>
-<section id="eval-int-src-evaluate-for-cpu-flags">
-<h2><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">int::src</span></code> - Evaluate for CPU Flags<a class="headerlink" href="#eval-int-src-evaluate-for-cpu-flags" title="Link to this heading">¶</a></h2>
+<section id="eval-int-evaluate-for-cpu-flags">
+<h2><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">int:</span></code> - Evaluate for CPU Flags<a class="headerlink" href="#eval-int-evaluate-for-cpu-flags" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">eval</span> <span class="n">i32</span><span class="p">:</span> <span class="n">Addr</span>
 <span class="n">bmi</span> <span class="nd">@minus</span>  <span class="p">;</span> <span class="n">functions</span> <span class="n">like</span> <span class="n">lda</span> <span class="n">i8</span><span class="p">:</span> <span class="n">Addr</span>
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This code has not been tested for some time, expect catastrophic failure.</p>
+<p>This code has not been tested for some time, and has been modified as of late, expect catastrophic failure.</p>
 </div>
 </section>
-<section id="mempcy-int-src-int-tar-copy-out-memory">
-<h2><code class="docutils literal notranslate"><span class="pre">mempcy</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Copy out Memory<a class="headerlink" href="#mempcy-int-src-int-tar-copy-out-memory" title="Link to this heading">¶</a></h2>
+<section id="mempcy-int-int-copy-out-memory">
+<h2><code class="docutils literal notranslate"><span class="pre">mempcy</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Copy out Memory<a class="headerlink" href="#mempcy-int-int-copy-out-memory" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">memcpy</span> <span class="n">u64</span><span class="p">::</span> <span class="n">Inputs</span><span class="p">,</span> <span class="n">u64</span><span class="p">::</span> <span class="n">LastInputs</span>
         <span class="p">;</span> <span class="n">to</span> <span class="n">check</span> <span class="k">if</span> <span class="n">buttons</span> <span class="n">where</span> <span class="n">held</span> <span class="ow">or</span> <span class="n">pressed</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This task is unrolled as it is expected to be needed often as <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> avoids using indirect memory address modes where possible.</p>
+<p>This task is unrolled by default as it is expected to be needed often as <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> avoids using indirect memory address modes where possible.</p>
 </div>
 </section>
-<section id="juggle-tokens-int-addr-juggle-memory">
-<h2><code class="docutils literal notranslate"><span class="pre">juggle</span> <span class="pre">{tokens},</span> <span class="pre">int::addr</span></code> - Juggle Memory<a class="headerlink" href="#juggle-tokens-int-addr-juggle-memory" title="Link to this heading">¶</a></h2>
+<section id="juggle-tokens-int-juggle-memory">
+<h2><code class="docutils literal notranslate"><span class="pre">juggle</span> <span class="pre">{tokens},</span> <span class="pre">int:</span></code> - Juggle Memory<a class="headerlink" href="#juggle-tokens-int-juggle-memory" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">juggle</span> <span class="p">{</span><span class="n">Addr1</span><span class="p">,</span> <span class="n">Addr2</span><span class="p">},</span> <span class="n">w_Addr1</span><span class="p">:</span> <span class="n">Temp</span>
 </pre></div>
 </div>
@@ -134,8 +134,8 @@
 <p>This feature hasn’t finished development and has no type deduction.</p>
 </div>
 </section>
-<section id="stz-int-addr-store-zeroes-flush">
-<h2><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">int::addr</span></code> - Store Zeroes (Flush)<a class="headerlink" href="#stz-int-addr-store-zeroes-flush" title="Link to this heading">¶</a></h2>
+<section id="stz-int-store-zeroes-flush">
+<h2><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">int:</span></code> - Store Zeroes (Flush)<a class="headerlink" href="#stz-int-store-zeroes-flush" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>; stz int::addr, reg::reg?, value?, unroll?
 ; 6c &lt; x &lt;= 116c
 ; 5b &lt; x &lt;= 26b
@@ -161,8 +161,22 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code hasn’t been tested catastrophic results are expected.</p>
 </div>
 </section>
-<section id="mssb-a-token-int-src-most-significant-set-bit">
-<h2><code class="docutils literal notranslate"><span class="pre">mssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Most Significant Set Bit<a class="headerlink" href="#mssb-a-token-int-src-most-significant-set-bit" title="Link to this heading">¶</a></h2>
+<section id="ldz-gpr-load-zero">
+<h2><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">gpr?</span></code> - Load Zero<a class="headerlink" href="#ldz-gpr-load-zero" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldz</span>
+<span class="nd">@empty</span><span class="p">:</span>
+    <span class="n">sta</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">x</span>
+    <span class="n">dex</span>
+    <span class="n">bne</span> <span class="nd">@empty</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This code hasn’t been tested catastrophic results are expected.</p>
+</div>
+</section>
+<section id="mssb-a-token-int-most-significant-set-bit">
+<h2><code class="docutils literal notranslate"><span class="pre">mssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Most Significant Set Bit<a class="headerlink" href="#mssb-a-token-int-most-significant-set-bit" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_mssb</span> <span class="o">.</span><span class="n">set</span> <span class="mi">0</span>
 <span class="n">mssb</span> <span class="n">__value__</span><span class="p">,</span> <span class="n">val_mssb</span>
     <span class="p">;</span> <span class="n">token</span>
@@ -180,8 +194,8 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code hasn’t been tested catastrophic results are expected.</p>
 </div>
 </section>
-<section id="lssb-a-token-int-src-least-significant-set-bit">
-<h2><code class="docutils literal notranslate"><span class="pre">lssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Least Significant Set Bit<a class="headerlink" href="#lssb-a-token-int-src-least-significant-set-bit" title="Link to this heading">¶</a></h2>
+<section id="lssb-a-token-int-least-significant-set-bit">
+<h2><code class="docutils literal notranslate"><span class="pre">lssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Least Significant Set Bit<a class="headerlink" href="#lssb-a-token-int-least-significant-set-bit" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_lssb</span> <span class="o">.</span><span class="n">set</span> <span class="mi">0</span>
 <span class="n">lssb</span> <span class="n">__value__</span><span class="p">,</span> <span class="n">val_lssb</span>
     <span class="p">;</span> <span class="n">token</span>
@@ -199,8 +213,8 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code hasn’t been tested catastrophic results are expected.</p>
 </div>
 </section>
-<section id="msub-a-token-int-src-most-significant-unset-bit">
-<h2><code class="docutils literal notranslate"><span class="pre">msub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Most Significant Unset Bit<a class="headerlink" href="#msub-a-token-int-src-most-significant-unset-bit" title="Link to this heading">¶</a></h2>
+<section id="msub-a-token-int-most-significant-unset-bit">
+<h2><code class="docutils literal notranslate"><span class="pre">msub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Most Significant Unset Bit<a class="headerlink" href="#msub-a-token-int-most-significant-unset-bit" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_msub</span> <span class="o">.</span><span class="n">set</span> <span class="mi">0</span>
 <span class="n">msub</span> <span class="n">__value__</span><span class="p">,</span> <span class="n">val_msub</span>
     <span class="p">;</span> <span class="n">token</span>
@@ -218,8 +232,8 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code hasn’t been tested catastrophic results are expected.</p>
 </div>
 </section>
-<section id="lsub-a-token-int-src-least-significant-unset-bit">
-<h2><code class="docutils literal notranslate"><span class="pre">lsub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Least Significant Unset Bit<a class="headerlink" href="#lsub-a-token-int-src-least-significant-unset-bit" title="Link to this heading">¶</a></h2>
+<section id="lsub-a-token-int-least-significant-unset-bit">
+<h2><code class="docutils literal notranslate"><span class="pre">lsub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Least Significant Unset Bit<a class="headerlink" href="#lsub-a-token-int-least-significant-unset-bit" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val_lsub</span> <span class="o">.</span><span class="n">set</span> <span class="mi">0</span>
 <span class="n">lsub</span> <span class="n">__value__</span><span class="p">,</span> <span class="n">val_msub</span>
     <span class="p">;</span> <span class="n">token</span>
@@ -237,8 +251,8 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code hasn’t been tested catastrophic results are expected.</p>
 </div>
 </section>
-<section id="lshift-a-int-addr-left-shift">
-<h2><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Left Shift<a class="headerlink" href="#lshift-a-int-addr-left-shift" title="Link to this heading">¶</a></h2>
+<section id="lshift-a-int-left-shift">
+<h2><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Left Shift<a class="headerlink" href="#lshift-a-int-left-shift" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lshift</span> <span class="mi">2</span>    <span class="p">;</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">lshift</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span><span class="p">,</span> <span class="mi">13</span>
             <span class="p">;</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span> <span class="o">&lt;&lt;=</span> <span class="mi">13</span>
@@ -249,8 +263,8 @@ stz u64: Enemies, ar::yr, $ea
 <p>This code is currently undeveloped.</p>
 </div>
 </section>
-<section id="rshift-a-int-addr-right-shift">
-<h2><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Right Shift<a class="headerlink" href="#rshift-a-int-addr-right-shift" title="Link to this heading">¶</a></h2>
+<section id="rshift-a-int-right-shift">
+<h2><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Right Shift<a class="headerlink" href="#rshift-a-int-right-shift" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rshift</span> <span class="mi">2</span>    <span class="p">;</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">rshift</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span><span class="p">,</span> <span class="mi">13</span>
             <span class="p">;</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Out</span> <span class="o">&gt;&gt;=</span> <span class="mi">13</span>
@@ -274,21 +288,22 @@ stz u64: Enemies, ar::yr, $ea
     <h3><a href="../../index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a><ul>
-<li><a class="reference internal" href="#mssbyte-int-addr-most-significant-set-byte"><code class="docutils literal notranslate"><span class="pre">mssbyte</span> <span class="pre">int::addr</span></code> - Most Significant Set Byte</a></li>
-<li><a class="reference internal" href="#lssbyte-int-addr-least-significant-set-byte"><code class="docutils literal notranslate"><span class="pre">lssbyte</span> <span class="pre">int::addr</span></code> - Least Significant Set Byte</a></li>
-<li><a class="reference internal" href="#msubyte-int-addr-most-significant-unset-byte"><code class="docutils literal notranslate"><span class="pre">msubyte</span> <span class="pre">int::addr</span></code> - Most Significant Unset Byte</a></li>
-<li><a class="reference internal" href="#lsubyte-int-addr-least-significant-unset-byte"><code class="docutils literal notranslate"><span class="pre">lsubyte</span> <span class="pre">int::addr</span></code> - Least Significant Unset Byte</a></li>
-<li><a class="reference internal" href="#compare-int-src-int-tar-compare-memory"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Compare Memory</a></li>
-<li><a class="reference internal" href="#eval-int-src-evaluate-for-cpu-flags"><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">int::src</span></code> - Evaluate for CPU Flags</a></li>
-<li><a class="reference internal" href="#mempcy-int-src-int-tar-copy-out-memory"><code class="docutils literal notranslate"><span class="pre">mempcy</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Copy out Memory</a></li>
-<li><a class="reference internal" href="#juggle-tokens-int-addr-juggle-memory"><code class="docutils literal notranslate"><span class="pre">juggle</span> <span class="pre">{tokens},</span> <span class="pre">int::addr</span></code> - Juggle Memory</a></li>
-<li><a class="reference internal" href="#stz-int-addr-store-zeroes-flush"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">int::addr</span></code> - Store Zeroes (Flush)</a></li>
-<li><a class="reference internal" href="#mssb-a-token-int-src-most-significant-set-bit"><code class="docutils literal notranslate"><span class="pre">mssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Most Significant Set Bit</a></li>
-<li><a class="reference internal" href="#lssb-a-token-int-src-least-significant-set-bit"><code class="docutils literal notranslate"><span class="pre">lssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Least Significant Set Bit</a></li>
-<li><a class="reference internal" href="#msub-a-token-int-src-most-significant-unset-bit"><code class="docutils literal notranslate"><span class="pre">msub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Most Significant Unset Bit</a></li>
-<li><a class="reference internal" href="#lsub-a-token-int-src-least-significant-unset-bit"><code class="docutils literal notranslate"><span class="pre">lsub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int::src</span></code> - Least Significant Unset Bit</a></li>
-<li><a class="reference internal" href="#lshift-a-int-addr-left-shift"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Left Shift</a></li>
-<li><a class="reference internal" href="#rshift-a-int-addr-right-shift"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int::addr</span></code> - Right Shift</a></li>
+<li><a class="reference internal" href="#mssbyte-int-most-significant-set-byte"><code class="docutils literal notranslate"><span class="pre">mssbyte</span> <span class="pre">int:</span></code> - Most Significant Set Byte</a></li>
+<li><a class="reference internal" href="#lssbyte-int-least-significant-set-byte"><code class="docutils literal notranslate"><span class="pre">lssbyte</span> <span class="pre">int:</span></code> - Least Significant Set Byte</a></li>
+<li><a class="reference internal" href="#msubyte-int-most-significant-unset-byte"><code class="docutils literal notranslate"><span class="pre">msubyte</span> <span class="pre">int:</span></code> - Most Significant Unset Byte</a></li>
+<li><a class="reference internal" href="#lsubyte-int-least-significant-unset-byte"><code class="docutils literal notranslate"><span class="pre">lsubyte</span> <span class="pre">int:</span></code> - Least Significant Unset Byte</a></li>
+<li><a class="reference internal" href="#compare-int-int-compare-memory"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Compare Memory</a></li>
+<li><a class="reference internal" href="#eval-int-evaluate-for-cpu-flags"><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">int:</span></code> - Evaluate for CPU Flags</a></li>
+<li><a class="reference internal" href="#mempcy-int-int-copy-out-memory"><code class="docutils literal notranslate"><span class="pre">mempcy</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Copy out Memory</a></li>
+<li><a class="reference internal" href="#juggle-tokens-int-juggle-memory"><code class="docutils literal notranslate"><span class="pre">juggle</span> <span class="pre">{tokens},</span> <span class="pre">int:</span></code> - Juggle Memory</a></li>
+<li><a class="reference internal" href="#stz-int-store-zeroes-flush"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">int:</span></code> - Store Zeroes (Flush)</a></li>
+<li><a class="reference internal" href="#ldz-gpr-load-zero"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">gpr?</span></code> - Load Zero</a></li>
+<li><a class="reference internal" href="#mssb-a-token-int-most-significant-set-bit"><code class="docutils literal notranslate"><span class="pre">mssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Most Significant Set Bit</a></li>
+<li><a class="reference internal" href="#lssb-a-token-int-least-significant-set-bit"><code class="docutils literal notranslate"><span class="pre">lssb</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Least Significant Set Bit</a></li>
+<li><a class="reference internal" href="#msub-a-token-int-most-significant-unset-bit"><code class="docutils literal notranslate"><span class="pre">msub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Most Significant Unset Bit</a></li>
+<li><a class="reference internal" href="#lsub-a-token-int-least-significant-unset-bit"><code class="docutils literal notranslate"><span class="pre">lsub</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">token</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Least Significant Unset Bit</a></li>
+<li><a class="reference internal" href="#lshift-a-int-left-shift"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Left Shift</a></li>
+<li><a class="reference internal" href="#rshift-a-int-right-shift"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">a</span> <span class="pre">|</span> <span class="pre">int:</span></code> - Right Shift</a></li>
 </ul>
 </li>
 </ul>
@@ -296,8 +311,8 @@ stz u64: Enemies, ar::yr, $ea
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../synth/gpr.html"
-                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">gpr</span></code></a></p>
+    <p class="topless"><a href="../synth/stack.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -335,10 +350,10 @@ stz u64: Enemies, ar::yr, $ea
           <a href="../math/math.html" title="math"
              >next</a> |</li>
         <li class="right" >
-          <a href="../synth/gpr.html" title="gpr"
+          <a href="../synth/stack.html" title="stack"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></li> 
       </ul>
     </div>

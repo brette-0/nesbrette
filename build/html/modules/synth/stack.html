@@ -104,6 +104,10 @@ jmp ($0000) ; jump to caller
 <span class="n">rti</span>
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All instructions below require <code class="docutils literal notranslate"><span class="pre">CONSTANTS_NESBRETTE_SYNTH_STACK_ADVANCED</span></code> as they are not required or useful to the majority of even advanded stack use. Seriously evaluate the totality of your circumstances before utilising these.</p>
+</div>
 </section>
 <section id="des-decrement-stack-at-stack-pointer">
 <h2><code class="docutils literal notranslate"><span class="pre">des</span></code> - Decrement Stack at Stack Pointer<a class="headerlink" href="#des-decrement-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
@@ -207,10 +211,10 @@ pha ; push delta of $100, SP &amp; $101, SP
 </pre></div>
 </div>
 </section>
-<section id="lrr-right-roll-stack-at-stack-pointer">
-<h2><code class="docutils literal notranslate"><span class="pre">lrr</span></code> - Right Roll Stack at Stack Pointer<a class="headerlink" href="#lrr-right-roll-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
+<section id="rrs-right-roll-stack-at-stack-pointer">
+<h2><code class="docutils literal notranslate"><span class="pre">rrs</span></code> - Right Roll Stack at Stack Pointer<a class="headerlink" href="#rrs-right-roll-stack-at-stack-pointer" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rol</span>
-<span class="n">lrr</span>
+<span class="n">rrs</span>
 <span class="n">clc</span> <span class="p">;</span> <span class="n">signed</span> <span class="n">right</span> <span class="n">roll</span> <span class="n">stack</span> <span class="n">by</span> <span class="n">A</span>
 </pre></div>
 </div>
@@ -248,7 +252,7 @@ pha ; push delta of $100, SP &amp; $101, SP
 <li><a class="reference internal" href="#rss-right-shift-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">rss</span></code> - Right Shift Stack at Stack Pointer</a></li>
 <li><a class="reference internal" href="#lss-left-shift-by-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">lss</span></code> - Left Shift by Stack at Stack Pointer</a></li>
 <li><a class="reference internal" href="#lrs-left-roll-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">lrs</span></code> - Left Roll Stack at Stack Pointer</a></li>
-<li><a class="reference internal" href="#lrr-right-roll-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">lrr</span></code> - Right Roll Stack at Stack Pointer</a></li>
+<li><a class="reference internal" href="#rrs-right-roll-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">rrs</span></code> - Right Roll Stack at Stack Pointer</a></li>
 </ul>
 </li>
 </ul>

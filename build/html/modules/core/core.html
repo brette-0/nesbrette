@@ -288,7 +288,7 @@ typeas ArrayStart, u32
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The specification used with <code class="docutils literal notranslate"><span class="pre">insert_header</span></code> is <a class="reference external" href="https://www.nesdev.org/wiki/NES_2.0">iNES</a> 2. <code class="docutils literal notranslate"><span class="pre">insert__header</span></code> is the define that indicates if <code class="docutils literal notranslate"><span class="pre">core</span></code> has been included. There is no reason to use any other format than <code class="docutils literal notranslate"><span class="pre">iNES2</span></code> as of writing this.</p>
+<p>The specification used with <code class="docutils literal notranslate"><span class="pre">insert_header</span></code> is <a class="reference external" href="https://www.nesdev.org/wiki/NES_2.0">iNES</a> 2. <code class="docutils literal notranslate"><span class="pre">insert__header</span></code> is the define that indicates if <code class="docutils literal notranslate"><span class="pre">core</span></code> has been included. There is no reason to use any other format than <code class="docutils literal notranslate"><span class="pre">iNES2</span></code> as of writing this. To fully use <code class="docutils literal notranslate"><span class="pre">insert_header</span></code> the user will need to modify the <code class="docutils literal notranslate"><span class="pre">header</span></code> constants in <code class="docutils literal notranslate"><span class="pre">template/{scope}/constants.asm</span></code>.</p>
 </div>
 </section>
 <section id="inr-gpr-incrment-register">
@@ -298,7 +298,7 @@ typeas ArrayStart, u32
 @timer:
     ldr ar:: tar, inreg
     inr
-    cpr inreg:: $30
+    rcp inreg:: $30
     bne @timer
 </pre></div>
 </div>
@@ -371,25 +371,27 @@ typeas ArrayStart, u32
 </pre></div>
 </div>
 </section>
-<section id="ldr-reg-mao-load-register">
-<h2><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">reg:</span> <span class="pre">mao</span></code> - Load Register<a class="headerlink" href="#ldr-reg-mao-load-register" title="Link to this heading">¶</a></h2>
+<section id="ldr-gpr-mode-load-register">
+<h2><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Load Register<a class="headerlink" href="#ldr-gpr-mode-load-register" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">ar</span>
 <span class="n">ldr</span> <span class="n">reg</span><span class="p">::</span><span class="n">imm</span><span class="p">,</span> <span class="n">param</span>
 <span class="n">bpl</span> <span class="nd">@task</span>
 </pre></div>
 </div>
 </section>
-<section id="str-reg-mao-store-register">
-<h2><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">reg:</span> <span class="pre">mao</span></code> - Store Register<a class="headerlink" href="#str-reg-mao-store-register" title="Link to this heading">¶</a></h2>
+<section id="str-gpr-mode-store-register">
+<h2><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Store Register<a class="headerlink" href="#str-gpr-mode-store-register" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">yr</span>
 <span class="nb">str</span> <span class="n">reg</span><span class="p">::</span><span class="n">wabs</span><span class="o">.</span> <span class="n">param</span>
 </pre></div>
 </div>
 </section>
-<section id="cpr-reg-mao-compare-register">
-<h2><code class="docutils literal notranslate"><span class="pre">cpr</span> <span class="pre">reg:</span> <span class="pre">mao</span></code> - Compare Register<a class="headerlink" href="#cpr-reg-mao-compare-register" title="Link to this heading">¶</a></h2>
+<section id="rcp-typed-register-compare">
+<h2><code class="docutils literal notranslate"><span class="pre">rcp</span> <span class="pre">typed:</span></code> - Register Compare<a class="headerlink" href="#rcp-typed-register-compare" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">ar</span>
-<span class="n">cpr</span> <span class="n">reg</span><span class="p">::</span><span class="n">zp</span><span class="p">,</span> <span class="n">param</span>
+<span class="n">rcp</span> <span class="n">reg</span><span class="p">::</span><span class="n">zp</span><span class="p">,</span> <span class="n">yr</span>     <span class="p">;</span> <span class="n">needs</span> <span class="n">i6502</span>
+<span class="n">bne</span> <span class="nd">@task</span>
+<span class="n">rcp</span> <span class="n">reg</span><span class="p">::</span><span class="n">zpx</span><span class="p">,</span> <span class="n">memory</span>
 <span class="n">bne</span> <span class="nd">@task</span>
 </pre></div>
 </div>
@@ -440,9 +442,9 @@ typeas ArrayStart, u32
 <li><a class="reference internal" href="#try-gpr-transfer-register-to-y"><code class="docutils literal notranslate"><span class="pre">try</span> <span class="pre">gpr</span></code> - Transfer Register to Y</a></li>
 <li><a class="reference internal" href="#trx-gpr-transfer-register-to-x"><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">gpr</span></code> - Transfer Register to X</a></li>
 <li><a class="reference internal" href="#trr-gpr-gpr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span> <span class="pre">gpr:</span> <span class="pre">gpr</span></code> - Transfer Register to Register</a></li>
-<li><a class="reference internal" href="#ldr-reg-mao-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">reg:</span> <span class="pre">mao</span></code> - Load Register</a></li>
-<li><a class="reference internal" href="#str-reg-mao-store-register"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">reg:</span> <span class="pre">mao</span></code> - Store Register</a></li>
-<li><a class="reference internal" href="#cpr-reg-mao-compare-register"><code class="docutils literal notranslate"><span class="pre">cpr</span> <span class="pre">reg:</span> <span class="pre">mao</span></code> - Compare Register</a></li>
+<li><a class="reference internal" href="#ldr-gpr-mode-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Load Register</a></li>
+<li><a class="reference internal" href="#str-gpr-mode-store-register"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Store Register</a></li>
+<li><a class="reference internal" href="#rcp-typed-register-compare"><code class="docutils literal notranslate"><span class="pre">rcp</span> <span class="pre">typed:</span></code> - Register Compare</a></li>
 </ul>
 </li>
 </ul>

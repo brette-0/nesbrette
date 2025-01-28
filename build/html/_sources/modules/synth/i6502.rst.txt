@@ -104,7 +104,7 @@ Because the value at any index in an `Identity Table <https://www.nesdev.org/wik
     
     biti $cd
 
-``xcmp`` - Compare against X
+``cmpx`` - Compare against X
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -113,7 +113,7 @@ Because the value at any index in an `Identity Table <https://www.nesdev.org/wik
     lda #$20
     xcmp        ; c = 1 | z = 0 | n = 0
 
-``ycmp`` - Compare against Y
+``cmpy`` - Compare against Y
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -122,7 +122,7 @@ Because the value at any index in an `Identity Table <https://www.nesdev.org/wik
     lda #$20
     ycmp        ; c = 1 | z = 0 | n = 0
 
-``xcpy`` - Compare X against Y
+``cpyx`` - Compare X against Y
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
@@ -131,7 +131,7 @@ Because the value at any index in an `Identity Table <https://www.nesdev.org/wik
     ldx #$20
     xcpy        ; c = 1 | z = 0 | n = 0
 
-``ycpx`` - Compare Y against X
+``cpxy`` - Compare Y against X
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 

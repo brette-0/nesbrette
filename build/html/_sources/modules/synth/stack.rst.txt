@@ -67,6 +67,9 @@ Typically the stack is used by interrupts, calling, returning and pushing tempor
     sts 2, 1     ; modify return address from interrupt
     rti
 
+.. warning::
+    All instructions below require ``CONSTANTS_NESBRETTE_SYNTH_STACK_ADVANCED`` as they are not required or useful to the majority of even advanded stack use. Seriously evaluate the totality of your circumstances before utilising these.
+
 ``des`` - Decrement Stack at Stack Pointer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -184,13 +187,13 @@ Typically the stack is used by interrupts, calling, returning and pushing tempor
     ; handle based on sign (d6=>d7 now available through N on next load)
 
 
-``lrr`` - Right Roll Stack at Stack Pointer
+``rrs`` - Right Roll Stack at Stack Pointer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
     rol
-    lrr
+    rrs
     clc ; signed right roll stack by A
 
 

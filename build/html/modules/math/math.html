@@ -15,7 +15,6 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="theory" href="../../theory/theory.html" />
     <link rel="prev" title="memory" href="../memory/memory.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
@@ -24,9 +23,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../theory/theory.html" title="theory"
-             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../memory/memory.html" title="memory"
              accesskey="P">previous</a> |</li>
@@ -44,20 +40,20 @@
   <section id="math">
 <h1><code class="docutils literal notranslate"><span class="pre">math</span></code><a class="headerlink" href="#math" title="Link to this heading">¶</a></h1>
 <p>All precomputed solutions are of much relative speed and non-constant width operations incur a ‘performance threshold’ through the Order(sizeof(n)) parameter which may complicate performance evaluation of software in any given state.</p>
-<section id="add-int-src-int-tar-add-memory-with-carry">
-<h2><code class="docutils literal notranslate"><span class="pre">add</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Add Memory with Carry<a class="headerlink" href="#add-int-src-int-tar-add-memory-with-carry" title="Link to this heading">¶</a></h2>
+<section id="add-int-int-add-memory-with-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">add</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Add Memory with Carry<a class="headerlink" href="#add-int-int-add-memory-with-carry" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Score</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">PentakillScore</span>
 </pre></div>
 </div>
 </section>
-<section id="sub-int-src-int-tar-subtract-memory-with-carry">
-<h2><code class="docutils literal notranslate"><span class="pre">sub</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Subtract Memory with Carry<a class="headerlink" href="#sub-int-src-int-tar-subtract-memory-with-carry" title="Link to this heading">¶</a></h2>
+<section id="sub-int-int-subtract-memory-with-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">sub</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Subtract Memory with Carry<a class="headerlink" href="#sub-int-int-subtract-memory-with-carry" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Timer</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">FineSecond</span>
 </pre></div>
 </div>
 </section>
-<section id="cmult-int-src-const-constant-multiply">
-<h2><code class="docutils literal notranslate"><span class="pre">cmult</span> <span class="pre">int::src,</span> <span class="pre">const</span></code> - Constant Multiply<a class="headerlink" href="#cmult-int-src-const-constant-multiply" title="Link to this heading">¶</a></h2>
+<section id="cmult-int-int-constant-multiply">
+<h2><code class="docutils literal notranslate"><span class="pre">cmult</span> <span class="pre">int:,</span> <span class="pre">int</span></code> - Constant Multiply<a class="headerlink" href="#cmult-int-int-constant-multiply" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmult</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Damage</span><span class="p">,</span> <span class="mi">5</span>
         <span class="p">;</span> <span class="n">supercharge</span> <span class="n">damage</span>
 </pre></div>
@@ -67,8 +63,8 @@
 <p>Always use <code class="docutils literal notranslate"><span class="pre">cmult</span></code> over <code class="docutils literal notranslate"><span class="pre">mult</span></code> when performing multiplication with a deterministic multiplier as <code class="docutils literal notranslate"><span class="pre">cmult</span></code> is optimised to the extent it <em>cannot</em> be faster with binary long division as all logic is precomputed <strong>unless</strong> you need to multiply against a number larger than what <code class="docutils literal notranslate"><span class="pre">ca65</span></code> can handle. It should be known that a negative multiplier does incur a speed and size penalty.</p>
 </div>
 </section>
-<section id="cdiv-int-src-const-constant-divide">
-<h2><code class="docutils literal notranslate"><span class="pre">cdiv</span> <span class="pre">int::src,</span> <span class="pre">const</span></code> - Constant Divide<a class="headerlink" href="#cdiv-int-src-const-constant-divide" title="Link to this heading">¶</a></h2>
+<section id="cdiv-int-int-constant-divide">
+<h2><code class="docutils literal notranslate"><span class="pre">cdiv</span> <span class="pre">int:,</span> <span class="pre">int</span></code> - Constant Divide<a class="headerlink" href="#cdiv-int-int-constant-divide" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cdiv</span> <span class="n">u32</span><span class="p">::</span> <span class="n">Power</span><span class="p">,</span> <span class="mi">10</span>
         <span class="p">;</span> <span class="n">some</span> <span class="n">bomb</span> <span class="n">maybe</span>
 </pre></div>
@@ -78,8 +74,8 @@
 <p>This feature is currently <strong>unimplemented</strong></p>
 </div>
 </section>
-<section id="mult-int-src-int-tar-multiply">
-<h2><code class="docutils literal notranslate"><span class="pre">mult</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Multiply<a class="headerlink" href="#mult-int-src-int-tar-multiply" title="Link to this heading">¶</a></h2>
+<section id="mult-int-int-multiply">
+<h2><code class="docutils literal notranslate"><span class="pre">mult</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Multiply<a class="headerlink" href="#mult-int-int-multiply" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mult</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Score</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">PentakillScore</span>
 </pre></div>
 </div>
@@ -87,80 +83,86 @@
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">mult</span></code> uses a <em>very</em> optimised way of performing higher bit math unrolled for differing widths to reduce the amount of Program ROM wasted in which ‘handlers’ are defined based on the types if not already existing that perform positional calls into the ‘body’ that performs the heavy lifting. This means that the less variations of <code class="docutils literal notranslate"><span class="pre">mult</span></code> you use (<code class="docutils literal notranslate"><span class="pre">i8::i8</span></code>, <code class="docutils literal notranslate"><span class="pre">u8::bu8</span></code> etc..) the more Program ROM you save.</p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>It is <strong>highly</strong> suggested that you use <code class="docutils literal notranslate"><span class="pre">MMC5</span></code> or <code class="docutils literal notranslate"><span class="pre">Rainbow</span></code> Multiplication registers if your game will perform lots of multiplication as on Hardware the Algorithmi becomes incredibly simplified.</p>
+</section>
+<section id="div-int-int-multiply">
+<h2><code class="docutils literal notranslate"><span class="pre">div</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Multiply<a class="headerlink" href="#div-int-int-multiply" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">div</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Damage</span><span class="p">,</span> <span class="n">u16</span><span class="p">:</span> <span class="n">EnemyArmour</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This hasn’t been developed yet.</p>
 </div>
 </section>
-<section id="sin-int-theta-sine-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">int::theta</span></code> - Sine of Theta<a class="headerlink" href="#sin-int-theta-sine-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sin</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="sin-gpr-sine-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">gpr</span></code> - Sine of Theta<a class="headerlink" href="#sin-gpr-sine-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sin</span>
 </pre></div>
 </div>
 </section>
-<section id="cos-int-theta-cosine-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">cos</span> <span class="pre">int::theta</span></code> - Cosine of Theta<a class="headerlink" href="#cos-int-theta-cosine-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cos</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="cos-gpr-cosine-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">cos</span> <span class="pre">gpr</span></code> - Cosine of Theta<a class="headerlink" href="#cos-gpr-cosine-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cos</span>
 </pre></div>
 </div>
 </section>
-<section id="tan-int-theta-tangent-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">tan</span> <span class="pre">int::Theta</span></code> - Tangent of Theta<a class="headerlink" href="#tan-int-theta-tangent-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tan</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="tan-gpr-tangent-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">tan</span> <span class="pre">gpr</span></code> - Tangent of Theta<a class="headerlink" href="#tan-gpr-tangent-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tan</span>
 </pre></div>
 </div>
 </section>
-<section id="sct-int-src-secant-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">sct</span> <span class="pre">int::src</span></code> - Secant of Theta<a class="headerlink" href="#sct-int-src-secant-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sct</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>   <span class="p">;</span> <span class="n">sec</span> <span class="ow">is</span> <span class="n">taken</span> <span class="n">by</span> <span class="n">Set</span> <span class="n">Carry</span>
+<section id="sct-gpr-secant-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">sct</span> <span class="pre">gpr</span></code> - Secant of Theta<a class="headerlink" href="#sct-gpr-secant-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sct</span>         <span class="p">;</span> <span class="n">sec</span> <span class="ow">is</span> <span class="n">taken</span> <span class="n">by</span> <span class="n">Set</span> <span class="n">Carry</span>
 </pre></div>
 </div>
 </section>
-<section id="cot-int-src-cotangent-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">cot</span> <span class="pre">int::src</span></code> - Cotangent of Theta<a class="headerlink" href="#cot-int-src-cotangent-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cot</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="cot-gpr-cotangent-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">cot</span> <span class="pre">gpr</span></code> - Cotangent of Theta<a class="headerlink" href="#cot-gpr-cotangent-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cot</span>
 </pre></div>
 </div>
 </section>
-<section id="csc-int-src-cosecant-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">csc</span> <span class="pre">int::src</span></code> - Cosecant of Theta<a class="headerlink" href="#csc-int-src-cosecant-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">csc</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="csc-gpr-cosecant-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">csc</span> <span class="pre">gpr</span></code> - Cosecant of Theta<a class="headerlink" href="#csc-gpr-cosecant-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">csc</span>
 </pre></div>
 </div>
 </section>
-<section id="asin-int-theta-arcsine-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">asin</span> <span class="pre">int::theta</span></code> - Arcsine of Theta<a class="headerlink" href="#asin-int-theta-arcsine-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asin</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="asin-gpr-arcsine-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">asin</span> <span class="pre">gpr</span></code> - Arcsine of Theta<a class="headerlink" href="#asin-gpr-arcsine-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asin</span>
 </pre></div>
 </div>
 </section>
-<section id="acos-int-theta-arcosine-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">acos</span> <span class="pre">int::theta</span></code> - Arcosine of Theta<a class="headerlink" href="#acos-int-theta-arcosine-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acos</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="acos-gpr-arcosine-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">acos</span> <span class="pre">gpr</span></code> - Arcosine of Theta<a class="headerlink" href="#acos-gpr-arcosine-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acos</span>
 </pre></div>
 </div>
 </section>
-<section id="atan-int-theta-arctangent-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">atan</span> <span class="pre">int::Theta</span></code> - Arctangent of Theta<a class="headerlink" href="#atan-int-theta-arctangent-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">atan</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="atan-gpr-arctangent-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">atan</span> <span class="pre">gpr</span></code> - Arctangent of Theta<a class="headerlink" href="#atan-gpr-arctangent-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">atan</span>
 </pre></div>
 </div>
 </section>
-<section id="asct-int-src-arcsecant-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">asct</span> <span class="pre">int::src</span></code> - Arcsecant of Theta<a class="headerlink" href="#asct-int-src-arcsecant-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asct</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="asct-gpr-arcsecant-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">asct</span> <span class="pre">gpr</span></code> - Arcsecant of Theta<a class="headerlink" href="#asct-gpr-arcsecant-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asct</span>
 </pre></div>
 </div>
 </section>
-<section id="acot-int-src-arcotangent-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">acot</span> <span class="pre">int::src</span></code> - Arcotangent of Theta<a class="headerlink" href="#acot-int-src-arcotangent-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acot</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="acot-gpr-arcotangent-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">acot</span> <span class="pre">gpr</span></code> - Arcotangent of Theta<a class="headerlink" href="#acot-gpr-arcotangent-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acot</span>
 </pre></div>
 </div>
 </section>
-<section id="acsc-int-src-arcosecant-of-theta">
-<h2><code class="docutils literal notranslate"><span class="pre">acsc</span> <span class="pre">int::src</span></code> - Arcosecant of Theta<a class="headerlink" href="#acsc-int-src-arcosecant-of-theta" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acsc</span> <span class="n">u8</span><span class="p">:</span> <span class="n">Theta</span>
+<section id="acsc-gpr-arcosecant-of-theta">
+<h2><code class="docutils literal notranslate"><span class="pre">acsc</span> <span class="pre">gpr</span></code> - Arcosecant of Theta<a class="headerlink" href="#acsc-gpr-arcosecant-of-theta" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">acsc</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -183,23 +185,24 @@
     <h3><a href="../../index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">math</span></code></a><ul>
-<li><a class="reference internal" href="#add-int-src-int-tar-add-memory-with-carry"><code class="docutils literal notranslate"><span class="pre">add</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Add Memory with Carry</a></li>
-<li><a class="reference internal" href="#sub-int-src-int-tar-subtract-memory-with-carry"><code class="docutils literal notranslate"><span class="pre">sub</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Subtract Memory with Carry</a></li>
-<li><a class="reference internal" href="#cmult-int-src-const-constant-multiply"><code class="docutils literal notranslate"><span class="pre">cmult</span> <span class="pre">int::src,</span> <span class="pre">const</span></code> - Constant Multiply</a></li>
-<li><a class="reference internal" href="#cdiv-int-src-const-constant-divide"><code class="docutils literal notranslate"><span class="pre">cdiv</span> <span class="pre">int::src,</span> <span class="pre">const</span></code> - Constant Divide</a></li>
-<li><a class="reference internal" href="#mult-int-src-int-tar-multiply"><code class="docutils literal notranslate"><span class="pre">mult</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Multiply</a></li>
-<li><a class="reference internal" href="#sin-int-theta-sine-of-theta"><code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">int::theta</span></code> - Sine of Theta</a></li>
-<li><a class="reference internal" href="#cos-int-theta-cosine-of-theta"><code class="docutils literal notranslate"><span class="pre">cos</span> <span class="pre">int::theta</span></code> - Cosine of Theta</a></li>
-<li><a class="reference internal" href="#tan-int-theta-tangent-of-theta"><code class="docutils literal notranslate"><span class="pre">tan</span> <span class="pre">int::Theta</span></code> - Tangent of Theta</a></li>
-<li><a class="reference internal" href="#sct-int-src-secant-of-theta"><code class="docutils literal notranslate"><span class="pre">sct</span> <span class="pre">int::src</span></code> - Secant of Theta</a></li>
-<li><a class="reference internal" href="#cot-int-src-cotangent-of-theta"><code class="docutils literal notranslate"><span class="pre">cot</span> <span class="pre">int::src</span></code> - Cotangent of Theta</a></li>
-<li><a class="reference internal" href="#csc-int-src-cosecant-of-theta"><code class="docutils literal notranslate"><span class="pre">csc</span> <span class="pre">int::src</span></code> - Cosecant of Theta</a></li>
-<li><a class="reference internal" href="#asin-int-theta-arcsine-of-theta"><code class="docutils literal notranslate"><span class="pre">asin</span> <span class="pre">int::theta</span></code> - Arcsine of Theta</a></li>
-<li><a class="reference internal" href="#acos-int-theta-arcosine-of-theta"><code class="docutils literal notranslate"><span class="pre">acos</span> <span class="pre">int::theta</span></code> - Arcosine of Theta</a></li>
-<li><a class="reference internal" href="#atan-int-theta-arctangent-of-theta"><code class="docutils literal notranslate"><span class="pre">atan</span> <span class="pre">int::Theta</span></code> - Arctangent of Theta</a></li>
-<li><a class="reference internal" href="#asct-int-src-arcsecant-of-theta"><code class="docutils literal notranslate"><span class="pre">asct</span> <span class="pre">int::src</span></code> - Arcsecant of Theta</a></li>
-<li><a class="reference internal" href="#acot-int-src-arcotangent-of-theta"><code class="docutils literal notranslate"><span class="pre">acot</span> <span class="pre">int::src</span></code> - Arcotangent of Theta</a></li>
-<li><a class="reference internal" href="#acsc-int-src-arcosecant-of-theta"><code class="docutils literal notranslate"><span class="pre">acsc</span> <span class="pre">int::src</span></code> - Arcosecant of Theta</a></li>
+<li><a class="reference internal" href="#add-int-int-add-memory-with-carry"><code class="docutils literal notranslate"><span class="pre">add</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Add Memory with Carry</a></li>
+<li><a class="reference internal" href="#sub-int-int-subtract-memory-with-carry"><code class="docutils literal notranslate"><span class="pre">sub</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Subtract Memory with Carry</a></li>
+<li><a class="reference internal" href="#cmult-int-int-constant-multiply"><code class="docutils literal notranslate"><span class="pre">cmult</span> <span class="pre">int:,</span> <span class="pre">int</span></code> - Constant Multiply</a></li>
+<li><a class="reference internal" href="#cdiv-int-int-constant-divide"><code class="docutils literal notranslate"><span class="pre">cdiv</span> <span class="pre">int:,</span> <span class="pre">int</span></code> - Constant Divide</a></li>
+<li><a class="reference internal" href="#mult-int-int-multiply"><code class="docutils literal notranslate"><span class="pre">mult</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Multiply</a></li>
+<li><a class="reference internal" href="#div-int-int-multiply"><code class="docutils literal notranslate"><span class="pre">div</span> <span class="pre">int:,</span> <span class="pre">int:</span></code> - Multiply</a></li>
+<li><a class="reference internal" href="#sin-gpr-sine-of-theta"><code class="docutils literal notranslate"><span class="pre">sin</span> <span class="pre">gpr</span></code> - Sine of Theta</a></li>
+<li><a class="reference internal" href="#cos-gpr-cosine-of-theta"><code class="docutils literal notranslate"><span class="pre">cos</span> <span class="pre">gpr</span></code> - Cosine of Theta</a></li>
+<li><a class="reference internal" href="#tan-gpr-tangent-of-theta"><code class="docutils literal notranslate"><span class="pre">tan</span> <span class="pre">gpr</span></code> - Tangent of Theta</a></li>
+<li><a class="reference internal" href="#sct-gpr-secant-of-theta"><code class="docutils literal notranslate"><span class="pre">sct</span> <span class="pre">gpr</span></code> - Secant of Theta</a></li>
+<li><a class="reference internal" href="#cot-gpr-cotangent-of-theta"><code class="docutils literal notranslate"><span class="pre">cot</span> <span class="pre">gpr</span></code> - Cotangent of Theta</a></li>
+<li><a class="reference internal" href="#csc-gpr-cosecant-of-theta"><code class="docutils literal notranslate"><span class="pre">csc</span> <span class="pre">gpr</span></code> - Cosecant of Theta</a></li>
+<li><a class="reference internal" href="#asin-gpr-arcsine-of-theta"><code class="docutils literal notranslate"><span class="pre">asin</span> <span class="pre">gpr</span></code> - Arcsine of Theta</a></li>
+<li><a class="reference internal" href="#acos-gpr-arcosine-of-theta"><code class="docutils literal notranslate"><span class="pre">acos</span> <span class="pre">gpr</span></code> - Arcosine of Theta</a></li>
+<li><a class="reference internal" href="#atan-gpr-arctangent-of-theta"><code class="docutils literal notranslate"><span class="pre">atan</span> <span class="pre">gpr</span></code> - Arctangent of Theta</a></li>
+<li><a class="reference internal" href="#asct-gpr-arcsecant-of-theta"><code class="docutils literal notranslate"><span class="pre">asct</span> <span class="pre">gpr</span></code> - Arcsecant of Theta</a></li>
+<li><a class="reference internal" href="#acot-gpr-arcotangent-of-theta"><code class="docutils literal notranslate"><span class="pre">acot</span> <span class="pre">gpr</span></code> - Arcotangent of Theta</a></li>
+<li><a class="reference internal" href="#acsc-gpr-arcosecant-of-theta"><code class="docutils literal notranslate"><span class="pre">acsc</span> <span class="pre">gpr</span></code> - Arcosecant of Theta</a></li>
 </ul>
 </li>
 </ul>
@@ -209,11 +212,6 @@
     <h4>Previous topic</h4>
     <p class="topless"><a href="../memory/memory.html"
                           title="previous chapter"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../../theory/theory.html"
-                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -242,9 +240,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="../../theory/theory.html" title="theory"
-             >next</a> |</li>
         <li class="right" >
           <a href="../memory/memory.html" title="memory"
              >previous</a> |</li>
