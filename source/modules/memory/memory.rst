@@ -3,7 +3,7 @@
 
 The majority of higher bit math functions is dealing with memory due to thin buses and registers. Analysing memory often can yield circumstantial optimisations, copying memory often is faster than indirectly fetching new targets and a great way to evade code debt is to utilise the well written ``juggle`` method.
 
-``mssbyte int::addr`` - Most Significant Set Byte
+``mssbyte int:`` - Most Significant Set Byte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -12,7 +12,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     sta HEALTH_WIDTH
             ; could be used to render only so many hearts
 
-``lssbyte int::addr`` - Least Significant Set Byte
+``lssbyte int:`` - Least Significant Set Byte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -21,7 +21,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     sta USED_INDEX
             ; find first 'used' byte
 
-``msubyte int::addr`` - Most Significant Unset Byte
+``msubyte int:`` - Most Significant Unset Byte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -30,7 +30,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     sta UNUSED_INDEX
             ; find last 'free' byte
 
-``lsubyte int::addr`` - Least Significant Unset Byte
+``lsubyte int:`` - Least Significant Unset Byte
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -50,7 +50,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 
         jsr @lssu_enemies   ; call to get value
 
-``compare int::src, int::tar`` - Compare Memory
+``compare int:, int:`` - Compare Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -62,7 +62,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. warning::
     This code has not been tested for some time, and has been modified as of late, expect catastrophic failure.
 
-``eval int::src`` - Evaluate for CPU Flags
+``eval int:`` - Evaluate for CPU Flags
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -73,7 +73,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. warning::
     This code has not been tested for some time, and has been modified as of late, expect catastrophic failure.
 
-``mempcy int::src, int::tar`` - Copy out Memory
+``mempcy int:, int:`` - Copy out Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -83,7 +83,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. note::
     This task is unrolled by default as it is expected to be needed often as ``nesbrette`` avoids using indirect memory address modes where possible.
 
-``juggle {tokens}, int::addr`` - Juggle Memory
+``juggle {tokens}, int:`` - Juggle Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -96,7 +96,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This feature hasn't finished development and has no type deduction.
 
 
-``stz int::addr`` - Store Zeroes (Flush)
+``stz int:`` - Store Zeroes (Flush)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -122,7 +122,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. warning::
     This code hasn't been tested catastrophic results are expected.
 
-``mssb a | token | int::src`` - Most Significant Set Bit
+``mssb a | token | int:`` - Most Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -142,7 +142,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``lssb a | token | int::src`` - Least Significant Set Bit
+``lssb a | token | int:`` - Least Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -162,7 +162,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``msub a | token | int::src`` - Most Significant Unset Bit
+``msub a | token | int:`` - Most Significant Unset Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -182,7 +182,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``lsub a | token | int::src`` - Least Significant Unset Bit
+``lsub a | token | int:`` - Least Significant Unset Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -202,7 +202,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``lshift a | int::addr`` - Left Shift
+``lshift a | int:`` - Left Shift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -214,7 +214,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. warning::
     This code is currently undeveloped.
 
-``rshift a | int::addr`` - Right Shift
+``rshift a | int:`` - Right Shift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::

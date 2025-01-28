@@ -279,7 +279,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     insert_header
 
 .. note::
-    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this.
+    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this. To fully use ``insert_header`` the user will need to modify the ``header`` constants in ``template/{scope}/constants.asm``.
 
 ``inr gpr`` - Incrment Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
