@@ -115,7 +115,6 @@ OUT, MOD, TEMP
     
     clc     ; might be redundant
     lda TIMER
-    
     sbx     ; a = ((MSSByte(MOD) << 3) | MSSB(MOD) - (LSSByte(MOD) << 3) | LSSB(MOD))
 
     ; if timer is zero, there is nothing for us to do.

@@ -1,5 +1,5 @@
-.macro memcpy __from__, __to__, __width__, __direct__, __reverse__
-    .local t_from, t_to, _reg, _ireg
+.macro memcpy __from__, __to__, __regs__
+    .local t_from, w_from, _reg, _ireg
     
     .ifblank __from__
         .fatal "memcpy needs source address"
@@ -10,11 +10,9 @@
     .endif
 
     t_from .set 0
-    t_to   .set 0
-
     detype __from__, t_from
-    detype __to__,   t_to
-    
+    w_from = typeval t_from
+
     .ifblank __regs__
         _reg  = ar
         _ireg = xr
@@ -25,17 +23,16 @@
 
     pha
 
-    .if __width__ < 0
+    .if w_from < 0
         @loop:
             ldr _reg: (wabs + _ireg), __from__
             str _reg: (wabs + _ireg), __to__
-            der _ireq
+            der _ireg
             bne @loop
-
     .else
-        .repeat width, iter
+        .repeat w_from, iter
             ldr _reg: wabs, (eindex t_from: __from__, iter)
-            str _reg: wabs, (eindex t_to: __to__, iter)
+            str _reg: wabs, (eindex t_from: __to__, iter)
         .endrepeat
     .endif
 
