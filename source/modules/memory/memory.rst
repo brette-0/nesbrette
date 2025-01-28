@@ -122,6 +122,21 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. warning::
     This code hasn't been tested catastrophic results are expected.
 
+``ldz gpr?`` - Load Zero
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    @empty:
+        sta Buffer, x
+        dex
+        bne @empty
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
 ``mssb a | token | int:`` - Most Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

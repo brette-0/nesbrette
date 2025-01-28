@@ -1,20 +1,3 @@
-; global logic
-.if INCLUDES_NESBRETTE_LOGIC_LSHIFT
-    .include .concat(libroot, "global/logic/lshift.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_LOGIC_RSHIFT
-    .include .concat(libroot, "global/logic/rshift.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_LOGIC_LSSB
-    .include .concat(libroot, "global/logic/lssb.asm")    ; homes LSSB(sym)
-.endif
-
-.if INCLUDES_NESBRETTE_LOGIC_MSSB
-    .include .concat(libroot, "global/logic/mssb.asm")    ; homes MSSB(sym)
-.endif
-
 ; global/math
 .if INCLUDES_NESBRETTE_MATH_ADD
     .include .concat(libroot, "global/math/add.asm")
@@ -34,28 +17,8 @@
 .endif
 
 ; global/math/trig
-.if INCLUDES_NESBRETTE_MATH_TRIG_SIN
-    .include .concat(libroot, "global/math/trig/sin.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MATH_TRIG_COS
-    .include .concat(libroot, "global/math/trig/cos.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MATH_TRIG_TAN
-    .include .concat(libroot, "global/math/trig/cos.tan")
-.endif
-
-.if INCLUDES_NESBRETTE_MATH_TRIG_CSC
-    .include .concat(libroot, "global/math/trig/csc.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MATH_TRIG_COT
-    .include .concat(libroot, "global/math/trig/cot.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MATH_TRIG_SEC
-    .include .concat(libroot, "global/math/trig/sec.asm")
+.if INCLUDES_NESBRETTE_MATH_TRIG
+    .include .concat(libroot, "global/math/trig.asm")
 .endif
 
 ; global/synth
@@ -63,7 +26,6 @@
     .include .concat(libroot, "global/synth/s6502.asm")
 .endif
 
-; global/synth
 .if INCLUDES_NESBRETTE_SYNTH_IDTABLE
     .include .concat(libroot, "global/synth/i6502.asm")
 .endif
@@ -72,38 +34,21 @@
     .include .concat(libroot, "global/synth/i6502x.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_SYNTH_INSTRUCTIONS
-    .include .concat(libroot, "global/synth/i6502.asm")
-.endif
-
-; global/prep
-.if INCLUDES_NESBRETTE_PREP_ALIGNED
-    .include .concat(libroot, "global/prep/aligned.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_PREP_COLLECTION
-    .include .concat(libroot, "global/prep/collection.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_PREP_EVAL
-    .include .concat(libroot, "global/prep/evaluation.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_PREP_RLOAD
-    .include .concat(libroot, "global/prep/rload.asm")
+.if INCLUDES_NESBRETTE_SYNTH_STACK
+    .include .concat(libroot, "global/synth/stack.asm")
 .endif
 
 ; global/memory
+.if INCLUDES_NESBRETTE_MEMORY_STZ
+    .include .concat(libroot, "global/memory/stz.asm")
+.endif
+
 .if INCLUDES_NESBRETTE_MEMORY_COMPARE
     .include .concat(libroot, "global/memory/compare.asm")
 .endif
 
 .if INCLUDES_NESBRETTE_MEMORY_EVAL
     .include .concat(libroot, "global/memory/eval.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_FLUSH
-    .include .concat(libroot, "global/memory/flush.asm")
 .endif
 
 .if INCLUDES_NESBRETTE_MEMORY_JUGGLE
@@ -114,35 +59,10 @@
     .include .concat(libroot, "global/memory/memcpy.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_MEMORY_MSSB
-    .include .concat(libroot, "global/memory/MSSB.asm")
+.if INCLUDES_NESBRETTE_MEMORY_SHIFT
+    .include .concat(libroot, "global/memory/shift.asm")
 .endif
 
-.if INCLUDES_NESBRETTE_MEMORY_LSSB
-    .include .concat(libroot, "global/memory/LSSB.asm")
+.if INCLUDES_NESBRETTE_MEMORY_MSSSUB
+    .include .concat(libroot, "global/memory/m,ss,ub.asm")
 .endif
-
-.if INCLUDES_NESBRETTE_MEMORY_MSSByte
-    .include .concat(libroot, "global/memory/MSSByte.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_LSSByte
-    .include .concat(libroot, "global/memory/LSSByte.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_MSUB
-    .include .concat(libroot, "global/memory/MSUB.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_LSUB
-    .include .concat(libroot, "global/memory/LSUB.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_MSUByte
-    .include .concat(libroot, "global/memory/MSUByte.asm")
-.endif
-
-.if INCLUDES_NESBRETTE_MEMORY_LSUByte
-    .include .concat(libroot, "global/memory/LSUByte.asm")
-.endif
-

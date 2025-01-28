@@ -1,3 +1,19 @@
+.macro ldz __reg__
+    .local _reg
+
+    .ifblank __reg__
+        _reg = ar
+    .else
+        _reg = setreg __reg__
+    .endif
+
+    .if (is_null _reg)
+        .fatal "Invalid Register specied"
+    .endif
+
+    ldr _reg: imm, $00
+.endmacro
+
 ; ldz u32: Tar
 ; ldz u32: Tar xr:ar
 .macro stz __target__, __regs__, __value__, __unrolled__
