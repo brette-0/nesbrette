@@ -93,7 +93,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     ``juggle`` depends on type deduction and cannot be type indicated within the array. The Temporary can be anywhere and should have enough memory for the final element to be passed into the first.
 
 .. warning::
-    This feature hasn't finished development and has no type deduction.
+    This code hasn't been tested catastrophic results are expected.
 
 
 ``stz int:`` - Store Zeroes (Flush)
@@ -137,14 +137,10 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``mssb a | token | int:`` - Most Significant Set Bit
+``mssb a | int:`` - Most Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
-
-    val_mssb .set 0
-    mssb __value__, val_mssb
-        ; token
 
     lda #$02
     mssb    ; a => 2
@@ -157,14 +153,10 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``lssb a | token | int:`` - Least Significant Set Bit
+``lssb a | int:`` - Least Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
-
-    val_lssb .set 0
-    lssb __value__, val_lssb
-        ; token
 
     lda #$02
     lssb    ; a => 2
@@ -177,14 +169,10 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``msub a | token | int:`` - Most Significant Unset Bit
+``msub a | int:`` - Most Significant Unset Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
-
-    val_msub .set 0
-    msub __value__, val_msub
-        ; token
 
     lda #$02
     msub    ; a => 2
@@ -197,14 +185,10 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
-``lsub a | token | int:`` - Least Significant Unset Bit
+``lsub a | int:`` - Least Significant Unset Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
-
-    val_lsub .set 0
-    lsub __value__, val_msub
-        ; token
 
     lda #$02
     lsub    ; a => 2
@@ -217,6 +201,60 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
+``MSSB token`` - Most Significant Set Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (MSSB Scorefield), _
+        sta PPUDATA
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+``LSSB token:`` - Least Significant Set Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (LSSB Scorefield), _
+        sta PPUDATA
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+``MSUB token`` - Most Significant Unset Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (MSUB Scorefield), _
+        sta PPUDATA
+
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+``LSUB token`` - Least Significant Unset Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (LSUB Scorefield), _
+        sta PPUDATA
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+
 ``lshift a | int:`` - Left Shift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -227,7 +265,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
                 ; u32: Out <<= 13
 
 .. warning::
-    This code is currently undeveloped.
+    This code hasn't been tested catastrophic results are expected.
 
 ``rshift a | int:`` - Right Shift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -239,4 +277,4 @@ The majority of higher bit math functions is dealing with memory due to thin bus
                 ; u32: Out >>= 13
 
 .. warning::
-    This code is currently undeveloped.
+    This code hasn't been tested catastrophic results are expected.

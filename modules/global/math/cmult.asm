@@ -1,105 +1,164 @@
-; Acc mode (untested) | Addr Mode (untested)
+/*
+
+    Constant Multiply
+        - Signature Inclusive
+        - Endian Inclusive
+        - acc/mem mode
+        - possible optimisations (complexity table, dedicated heuristic table)
+
+*/
 
 
+.macro __cmult__mem__body __t_out__, __w_out__, __l_out__, __mult__
 
-; constant multiply
-; depends on lshift (acc) | MSSB(sym) | LSSB(sym)
+.endmacro
 
-.macro cmult __param0__, __param1__
-    .local _temp_, _mode_
+.macro __cmult__acc__body __mult__
+
+.endmacro
+
+.macro exclude_types __origin__, __array__, __msg__
+    .repeat .tcount(__array__), iter
+        .if __origin__ = (index __array__, iter)
+            .fatal __msg__
+        .endif
+    .endrepeat
+.endif
+
+.macro passthrough_types __origin__, __array__, __msg__
+    .local temp
+
+    temp .set 0
+    .repeat .tcount(__array__), iter
+        .if __origin__ = (index __array__, iter)
+            temp .set 1
+        .endif
+    .endrepeat
+
+    .if !temp
+        .fatal __msg__
+    .endif 
+.endif
+
+.macro handlewarning __error__, __msg__
+    .if isfatal(__error__)
+        .fatal __msg__
+    .elseif iserror(__error__)
+        .error __msg__
+    .elseif iswarning(__error__)
+        .warning __msg__
+    .elseif isout(__error__)
+        .out __msg__
+    .else
+        .fatal .sprintf("Condition : %s - Has undefined report level, please adjust.", __error__)
+    .endif
+.endmacro
+
+; cmult 2       ; implied syntax
+; cmult imp: 2  ; specified implied mode
+; cmult ar: 2   ; specifying use of a
+.macro cmult __param0__, __param1__, __eml__, __aemt__, __hpo__
+    ; eml  -> exhaustive multiplier level
+    ; aemt -> Accumolator exhaustive multiplier threshold
+    ; hpo  -> handle potential overflow
+        ; allowed: none, break, limit 
+
+    .local t_out, w_out, l_out, mode, t_mult, eml, aemt, hpo
+
+    .ifblank __eml__
+        __eml__ = null 
+    .endif
+
+    .ifblank __aemt__
+        __aemt__ = null 
+    .endif
+
+    .ifblank __hpo__
+        __hpo__  = null 
+    .endif
+
+    
+
+    ; if no override specified, set warning level for exhausitve multiplier to template config
+    eml  = null_coalesce(__eml__,  exhuastive_multiplier)
+
+    ; set threshold in which, during accumolator mode, we deem that we run the risk of overflow
+    aemt = null_coalesce(__aemt__, accumolator_exhaustive_multiplier_threshold)
+
+    ; cant use null coalescion : not an int
+    .if is_null __hpo__
+        hpo = handle_potential_overflow
+    .else
+        hpo = __hpo__
+    .endif
 
     .ifblank __param1__
-        __multiplier__ = __param0__
-    .elseif .xmatch(__param0__, a)
-        __multiplier__ = __param1__
-    .else
-        __output__ = __param0__
-        __multiplier__ = __param1__
-        
-        outtype .set 0
-        detype __output__
+        .if .tcount(__param0__) > 1 ; typed/array
+            t_mult .set 0
+            detype __param0__, t_mult
 
-        __osize__ .set typeval outtype
-    .enum 
-        acc  = 0
-        addr = 1
-    .endenum
+            passthrough_types t_mult, {ar, imp}, \
+                "Invalid Type indicator for implied constant multiply : Consider removing type indication or passing with ar/imp"
 
-    .ifblank __multiplier__
-        .fatal "Constant Multiplier must have Multiplier operand"
-    .endif
-
-    _mode_ = .ifnblank(__param1__)          ; bool --> int --> enum
-
-    .if _mode_ = addr
-        .ifblank __osize__
-            .fatal "Requires output size to complete cmult action"
-            .endif
-        .endif
-    .else
-        __output__ = null
-        __osize__  = null
-    .endif
-
-    ; both modes require a temporary ram address
-    .ifndef __temp__                                ; use ifndef not ifnblank because __temp__ is no longer a 'true' parameter, but can be defined immediately as result of param2
-        .ifdef CONSTANTS_MATH_CMULT_TEMP
-            _temp_ = CONSTANTS_MATH_CMULT_TEMP
-        .else
-            .fatal "Constant Multiply demands temporary address, either use CONSTANTS_MATH_CMULT_TEMP or pass a constant as a macro parameter"
-        .endif
-    .else
-        _temp_ = __temp__
-    .endif
-
-    .if !__multiplier__
-        .if WARNINGS_MATH_CMULT_MULTZERO .and _mode_ = acc
-            .warning "Constant Multiply Against Zero invalidates previous Accumolator Load"
-        .endif
-        lda #$00
-        
-        .repeat null_coalesce(__osize__, 0), iter
-            sta __output__ + iter
-            .endrepeat
-        .exitmacro
         .endif
 
-    .if .not ispo2(__multiplier__)                                          ; if not power of 2
-        clc
-        sta _temp_
-
-        .if _mode_ == addr                                                    ; clear higher bytes of temp, that the multiplier doesn't overwrite
-            lda #$00
-            .repeat iter, __osize__ + 1 - ((MSSB __multiplier__) >> 3)
-                sta _temp_ + iter + 1
-                .endrepeat
-            .repeat iter, (MSSB __multiplier__) >> 3
-                lda #((MSSB __multiplier__) >> (3 * iter)) & $ff                           ; scale int as bytes
-                sta _temp_ + iter                                           ; store little endian
-                .endrepeat
-            .endif
-
+        ; force ca65 into int validating
         
-        
-        .repeat (MSSB __multiplier__) - (LSSB __multiplier__), iter                                       ; repeat by 'detailed range'
-            .if _mode_ = addr
-                .repeat iter, __osize__
-                    asl _temp_ + iter
-                    .endrepeat
-            .else
-                asl _temp_                                                  ; adjust temporary multiplier
-                .endif
-            
-            .if (__multiplier__ >> (iter + (LSSB __multiplier__) + 1)) & 1                 ; check definition of bit of multiplier
-                .if mode = addr
-                    add __osize__ __output__ _temp_                         ; add temp to to output
+        l_mult = ilabel __param0__  ; works on the belief that ilabel doesn't require type indication presence
+
+        .if l_mult > aemt && !isallowed(eml)
+            handlewarning emt, "Multipler value will cause overflow or consistent upperlimit results"
+        .endif
+
+
+        .if !.xmatch(hpo, "none")
+
+            cmp #aemt
+            bcs @safe
+
+            .if .xmatch(hpo, "break")
+                ; break on evaluated overflow (should be used in DEBUG mode only)
+                brk
+            .elseif (signed t_mult)
+                .if l_mult < 0
+                    lda #$80    ; lowest unsigned number (before sign underflow)
                 .else
-                    adc _temp_
-                .endif    
+                    lda #$7f    ; highest signed number (before sign overflow)
+                .endif
+            .else
+                lda #$ff        ; only one result as multiplying u8 against negative is erroneous
             .endif
-            .endrepeat
+
+            @safe:
         .endif
 
-    lshift (LSSB __multiplier__), __output__, __osize__                     ; adjust for known multiplicant of two power (may pass null)
-    .undefine acc, addr                                                     ; remove enum definitions
-    .endmacro
+        __cmult__acc__body l_mult   ; call accumolator 'implied' mode handler.
+        .exitmacro
+    .endif
+
+    t_out .set 0
+    detype __param0__, t_out
+    w_out = typeval t_out
+    
+    l_out = ilabel __param1__
+    t_mult .set 0
+    detype __param1__, t_mult
+
+    w_mult = (MSSB (abs l_mult)) >> 3   ; fake width (doesn't really consequent the output size)
+
+    .if (w_mult >= w_out) && !isallowed(eml)
+        handlewarning eml, "Multipler value will cause overflow or consistent upperlimit results"
+
+        .if (signed t_out)
+            __stz (eindex t_out: l_out, 0)
+        .else
+        .endif
+    .endif
+
+    passthrough_types t_mult, {ar, imp}, \
+        "Invalid Type indicator for implied constant multiply : Consider removing type indication or passing with ar/imp"
+    
+    
+
+    
+.endmacro

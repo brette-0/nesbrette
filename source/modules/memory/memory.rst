@@ -201,6 +201,60 @@ The majority of higher bit math functions is dealing with memory due to thin bus
     This code hasn't been tested catastrophic results are expected.
 
 
+``MSSB token`` - Most Significant Set Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (MSSB Scorefield), _
+        sta PPUDATA
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+``LSSB token:`` - Least Significant Set Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (LSSB Scorefield), _
+        sta PPUDATA
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+``MSUB token`` - Most Significant Unset Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (MSUB Scorefield), _
+        sta PPUDATA
+
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+``LSUB token`` - Least Significant Unset Bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ldz
+    .repeat (LSUB Scorefield), _
+        sta PPUDATA
+
+.. warning::
+    This code hasn't been tested catastrophic results are expected.
+
+
+
 ``lshift a | int:`` - Left Shift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

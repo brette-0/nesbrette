@@ -164,6 +164,8 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "modules/global/math/addition.asm",
+    "modules/core/warn.asm",
     "modules/global/math/trig.asm",
     "modules/global/memory/shift.asm",
     "modules/global/memory/m,lss,ub.asm",
@@ -173,8 +175,6 @@
     "source/Theory/includer.rst",
     "source/modules/synth/i6502.rst",
     "modules/core/null.asm",
-    "source/modules/memory/rshift.rst",
-    "source/modules/memory/lshift.rst",
     "build/html/_static/github-banner.svg",
     "build/html/_static/plus.png",
     "build/html/_static/minus.png",

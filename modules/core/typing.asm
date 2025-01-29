@@ -127,3 +127,32 @@
 
 .define null_coalesce(n, c) ((n = null) * c) | ((n <> null) * n)
 .define is_null(n) (n = null)
+
+.define filter_types __ctx__, __filter__, __msg__
+  .local pass
+
+  pass .set 0
+  
+  .repeat .tcount(__filter__), iter
+    .if ctx <> (index __filter__, iter)
+      pass .set 1 
+    .endif
+  .endrepeat
+  
+  .if !pass
+    .fatal __msg__
+  .endif
+.endmacro
+
+.define bad_types __ctx__, __pass__, __msg__
+  .repeat .tcount(__pass__), iter
+    .if ctx <> (index __pass__, iter)
+      .fatal __msg__ 
+    .endif
+  .endrepeat
+.endmacro
+
+.macro validate_preprocint __token__
+  .if __token__ & ~0
+  .endif
+.endif
