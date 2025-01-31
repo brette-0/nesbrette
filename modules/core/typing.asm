@@ -128,7 +128,7 @@
 .define null_coalesce(n, c) ((n = null) * c) | ((n <> null) * n)
 .define is_null(n) (n = null)
 
-.define filter_types __ctx__, __filter__, __msg__
+.macro filter_types __ctx__, __filter__, __msg__
   .local pass
 
   pass .set 0
@@ -144,7 +144,7 @@
   .endif
 .endmacro
 
-.define bad_types __ctx__, __pass__, __msg__
+.macro bad_types __ctx__, __pass__, __msg__
   .repeat .tcount(__pass__), iter
     .if ctx <> (index __pass__, iter)
       .fatal __msg__ 
