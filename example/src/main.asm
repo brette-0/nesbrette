@@ -1,21 +1,25 @@
 .include "../../lib/core/include.asm"   ; include the include system (fun right?)
 
-__libroot__ "../../lib/"                ; specify location of libroot (includes libcore)
+__libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
+
+; global static includes
+includefrom memory, flush
 
 .segment "HEADER"
     header \
-        prgrom: 2, \
-        chrrom: 1, \
+        prgrom: 1, \
         mapper: nrom
 
-.segment "CODE"
+.segment "CODE"    
 
-.scope code
-    reset:
-        jmp reset
-.endscope
+reset:
+    ldz (ar + xr), 1, out               ; lax #$00 with no warning (not reccomended)
+    ldz                                 ; lda #$00 (ez)
+    ldz xr                              ; ldx #$00 
+    ldz (ar + xr + yr)                  ; clean all gpr
+    jmp reset
 
 .segment "VECTORS"
     .addr $0000
-    .addr code::reset
+    .addr reset
     .addr $0000

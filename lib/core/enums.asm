@@ -1,23 +1,23 @@
 
 ; register
-ar   = -1
-xr   = -2
-yr   = -3
+ar   = 1
+xr   = 2
+yr   = 4
 
 ; cpu status
-zf   = -1
-cf   = -2
-if   = -4
-df   = -8
-bf   = -16
+zf   = 1
+cf   = 2
+if   = 4
+df   = 8
+bf   = 16
 ; 
-of   = -64
-nf   = -128
+of   = 64
+nf   = 128
 
 ; endian
-little = -1
+little = 1
 small  = little
-big    = -2
+big    = 2
 large  = big
 
 ; memory address mode

@@ -18,6 +18,13 @@
 
 */
 
+
+/*
+
+    TODO: Globally including procedures shoulld have a warning circumstance
+
+*/
+
 .setcpu "6502x"
 
 
@@ -26,17 +33,18 @@
 .feature string_escapes
 .feature underline_in_numbers
 .feature bracket_as_indirect
+.feature dollar_in_identifiers
 
 ; sets libroot define path and includes libcore
 .macro __libroot__ __path__
     .define libroot __path__
 
-    .include .concat(libroot, "core/warn.asm")
-    .include .concat(libroot, "core/gpr.asm")
-    .include .concat(libroot, "core/qol.asm")
-    .include .concat(libroot, "core/enums.asm")
-    .include .concat(libroot, "core/typing.asm")
-    .include .concat(libroot, "core/header.asm")
+    .include .concat(libroot, "/core/warn.asm")
+    .include .concat(libroot, "/core/gpr.asm")
+    .include .concat(libroot, "/core/qol.asm")
+    .include .concat(libroot, "/core/enums.asm")
+    .include .concat(libroot, "/core/typing.asm")
+    .include .concat(libroot, "/core/header.asm")
 .endmacro
 
 
@@ -87,6 +95,7 @@
         .if     .xmatch(__feature__, mlsusb)    ; (mssb, lssb, msub, lsub, mssbyte, msubyte, lssbyte, lsubyte, MSSB, LSSB, MSUB, LSUB)
         .elseif .xmatch(__feature__, shift)     ; (lshift, rshift)
         .elseif .xmatch(__feature__, flush)     ; (stz, ldz)
+            .include .concat(libroot, "/memory/flush.asm")
         .elseif .xmatch(__feature__, generic)   ; (memcpy, evaluate, compare, juggle)
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN

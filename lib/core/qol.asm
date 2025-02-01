@@ -1,17 +1,30 @@
-
+; tested working
+; returns (gpr?)
+; params : (ca65_int)
 .define setreg(__regenum__) \
-    ((__regenum__ = yr) * yr) | \
-    ((__regenum__ = xr) * xr) | \
-    ((__regenum__ = ar) * ar) | \
-    (__regenum__ <> yr && __regenum__ <> xr && __regenum__ <> ar) * null))
+     ((__regenum__ = yr) * yr) | \
+     ((__regenum__ = xr) * xr) | \
+     ((__regenum__ = ar) * ar) | \
+    (((__regenum__ <> yr) && (__regenum__ <> xr) && (__regenum__ <> ar)) * null)
 
+; returns (ca65_int)
+; params : (ca65_int)
+.define setmreg(__regsnum__) \
+     ( (__regsnum__ = yr) * yr)                         | \
+     ( (__regsnum__ = xr) * xr)                         | \
+     ( (__regsnum__ = (yr + xr)) * (yr + xr))           | \
+     ( (__regsnum__ = ar) * ar)                         | \
+     ( (__regsnum__ = (yr + ar)) * (yr + ar))           | \
+     ( (__regsnum__ = (xr + ar)) * (xr + ar))           | \
+     ( (__regsnum__ = (xr + ar + yr)) * (xr + ar + yr)) | \
+     ( ((__regsnum__ <> (xr + ar + yr)) && (__regsnum__ <> (xr + yr)) && (__regsnum__ <> (ar + xr)) && (__regsnum__ <> (ar + yr)) && (__regsnum__ <> yr) && (__regsnum__ <> xr) && (__regsnum__ <> ar)) * null)
 
+; returns (igpr?)
+; params : (ca65_int)
 .define setireg(__regenum__) \
-    ((__regenum__ = yr) * yr) | \
-    ((__regenum__ = xr) * xr) | \
-    (__regenum__ <> yr && __regenum__ <> xr && __regenum__ <> ar) * null))
-
-
+     ((__regenum__ = yr) * yr) | \
+     ((__regenum__ = xr) * xr) | \
+    (((__regenum__ <> yr) && (__regenum__ <> xr) * null)
 
 .define index(collection, _index) .right(1, {.left((_index << 1) + 1, collection)})
 .define append(collection, value) {.left(.tcount(collection), collection), value}

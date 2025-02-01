@@ -450,7 +450,7 @@
     e_prgrom      = 0
     e_chrrom      = 1 
     e_mapper      = 2
-    e_system        = 3
+    e_system      = 3
     e_altnt       = 4
     e_trainer     = 5
     e_battery     = 6

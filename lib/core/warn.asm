@@ -1,4 +1,9 @@
+; tested working
 .macro deferror __error__, __level__
+    /*
+        (nb_error)__error__
+        (token)__level__
+    */
     .if     .xmatch(__error__, allow)
         __level__ .set 0
     .elseif .xmatch(__error__, out)
@@ -14,7 +19,13 @@
     .endif
 .endmacro
 
+
+; tested working
 .macro report __error__, __msg__
+    /*
+        (nb_error)__error__
+        (ca65_str)__msg__
+    */
     .ifblank __error__
         .fatal "REPORT REQUEST FAILED : NO ERROR TO REPORT"
     .endif
