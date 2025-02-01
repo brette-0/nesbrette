@@ -65,7 +65,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
     
 ``typeval int`` - Value Segment from Type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -78,7 +78,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
     
 ``typeas label, type`` - Allocate Type Define
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -86,7 +86,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     typeas Score, u32
     
 ``label typed:`` - Access Parameter Label
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -96,7 +96,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
 
 ``ilabel typed:`` - Identify Parameter Label
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -139,7 +139,7 @@ This function fetches the type assigned to the token passed. The token can alway
 
 
 ``isconst int`` - Is Type Preprocesor Constant?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -151,7 +151,7 @@ This function fetches the type assigned to the token passed. The token can alway
 
 
 ``detype type?: token`` - Decode Typing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -166,7 +166,7 @@ This function fetches the type assigned to the token passed. The token can alway
 
 
 ``null_coalesce int`` - Null Coalesce
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -177,7 +177,7 @@ This function fetches the type assigned to the token passed. The token can alway
 Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on the high level, so I decided that `null-coalescence <https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator>`_ should be created for ``nesbrette`` as the existence of ``null`` was already designed with type defaulting in mind.
 
 ``is_null int`` - is Null
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -188,7 +188,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 ``null`` is define as type '``i0``' in which typelessness is '``u0``', it can also be evaluated by comparing it to ``(1 << 31)``.
 
 ``setreg int`` - Set Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -196,7 +196,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 
 
 ``setireg int`` - Set Indexing Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -206,7 +206,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
     The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. The function will return ``null`` for GPR indicating failure, response is offloaded to handler.
 
 ``confined int, int`` - If Confined
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -220,7 +220,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 Simply encaging your code within a page can reduce the amount of updates needed, especially if using ``SMC`` - inevitably page confinement imposes an 'artificial' limit to the member's capability - but a good solution often can exceed typical demand while obeying page confinement which overall leads to more optimised code.
 
 ``index array, int`` - Index Array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -237,7 +237,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     append Array, 5
 
 ``isArray token`` - Is Array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -253,7 +253,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     Expect vast quantities of logical/syntax errors when using preprocessor arrays as they were not designed mutable and poor handling of them is likely to cause problems. I wouldn't (unless you truly believe in your skills) form a dependancy on these at your backend for threat of catastrophic code debt.
 
 ``ispo2 int`` - Is Power of two?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -264,14 +264,14 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     .endif
 
 ``abs int`` - Absolute
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
     lda #(abs ExtremeValue)
 
 ``insert_header`` - Insert Header
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -282,7 +282,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this. To fully use ``insert_header`` the user will need to modify the ``header`` constants in ``template/{scope}/constants.asm``.
 
 ``inr gpr`` - Incrment Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -296,7 +296,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
 
 ``der gpr`` - Decrment Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -308,7 +308,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
         bne @timer
 
 ``tar gpr`` - Transfer A to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -317,7 +317,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     tar inreg   ; a -> x
 
 ``tyr gpr`` - Transfer Y to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -326,7 +326,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     tyr inreg   ; y -> x
 
 ``txr gpr`` - Transfer X to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -335,7 +335,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     txr inreg   ; x -> y
 
 ``tra gpr`` - Transfer Register to a
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -344,7 +344,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     tra inreg   ; y -> a
 
 ``try gpr`` - Transfer Register to Y
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -353,7 +353,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     try inreg   ; x -> y
 
 ``trx gpr`` - Transfer Register to X
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -362,7 +362,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trx inreg   ; y -> x
 
 ``trr gpr: gpr`` - Transfer Register to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: 
 
@@ -373,7 +373,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
 
 ``ldr gpr: mode`` - Load Register
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
@@ -382,7 +382,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     bpl @task
 
 ``str gpr: mode`` - Store Register
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     
@@ -390,7 +390,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     str reg::wabs. param
 
 ``rcp typed:`` - Register Compare
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
     

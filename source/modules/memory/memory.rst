@@ -1,6 +1,12 @@
 ``memory``
 ==========
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+   
+   flush
+
 The majority of higher bit math functions is dealing with memory due to thin buses and registers. Analysing memory often can yield circumstantial optimisations, copying memory often is faster than indirectly fetching new targets and a great way to evade code debt is to utilise the well written ``juggle`` method.
 
 ``mssbyte int:`` - Most Significant Set Byte
@@ -94,49 +100,7 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 
 .. warning::
     This code hasn't been tested catastrophic results are expected.
-
-
-``stz int:`` - Store Zeroes (Flush)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    ; stz int::addr, reg::reg?, value?, unroll? 
-    ; 6c < x <= 116c
-    ; 5b < x <= 26b
-
-    stz u32: Score      ; reset score
-    temp .set Score + 2
-    stz u16: temp       ; reset high bytes of score
-    .del temp
-
-    stz u24: Name, null::null, $00, 1
-        ; wipe Name array with any registers and unroll
-
-    stz u64: Enemies, ar::yr, $ea
-        ; no unroll, use registers A and Y to wipe enemies to enemy $ea (empty)
-
-.. note::
-    Because I don't expect you to need to do much of ``stz`` I decided that I'd make the rolled solution the default when storing to a ``u24`` or of equal size. If you have PRG/CPU space to unroll then I highly suggest you do as it the rolled solution is three times slower.
-
-.. warning::
-    This code hasn't been tested catastrophic results are expected.
-
-``ldz gpr?`` - Load Zero
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    ldz
-    @empty:
-        sta Buffer, x
-        dex
-        bne @empty
-
-.. warning::
-    This code hasn't been tested catastrophic results are expected.
-
-
+    
 ``mssb a | int:`` - Most Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

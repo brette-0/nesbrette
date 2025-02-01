@@ -122,7 +122,8 @@ The majority of higher bit math functions is dealing with memory due to thin bus
 .. warning::
     This code hasn't been tested catastrophic results are expected.
 
-``ldz gpr?`` - Load Zero
+
+``ldz gpr, int$, int$`` - Load Zero
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -133,10 +134,11 @@ The majority of higher bit math functions is dealing with memory due to thin bus
         dex
         bne @empty
 
-.. warning::
-    This code hasn't been tested catastrophic results are expected.
 
+.. note::
+    This code *will* allow you to use ``lax #imm`` by passing anything to ``lax$``, by default the ``laxlevel$`` will be set to ``warning``, *however*, if no Identity Table is present and use of ``lax`` isn't specified then ``nesbrette`` will ``lda #imm => tax``.
 
+    
 ``mssb a | int:`` - Most Significant Set Bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

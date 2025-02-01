@@ -1,3 +1,5 @@
+; TODO: MIGRATE FUNCITONALITY TO ldr imm: __gpr__, $00
+
 .macro ldz __gpr__, __lax$__, __lax_level$__
     /*
 
@@ -5,12 +7,12 @@
         (opt: def)__lax$__
             ??= CONSTANTS_MEMORY_FLUSH_LAX ?? 1
         (opt: nb_error)__lax_level$__
-            ??= IllegalInstructionException ?? error
+            ??= UnstableInstructionException ?? error
     */
 
     ; check for wish to use lax (unreccomended)
     .ifnblank __lax$__
-        perform_lax .set 1
+        perform_lax .set __lax$__
     .else
         .ifdef CONSTANTS_MEMORY_FLUSH_LAX
             perform_lax = CONSTANTS_MEMORY_FLUSH_LAX
@@ -21,8 +23,8 @@
 
     ; modify rules (unreccomended)
     .ifblank __lax_level$__
-        .ifdef IllegalInstructionException
-            deferror IllegalInstructionException, lax_errorlevel
+        .ifdef UnstableInstructionException
+            deferror UnstableInstructionException, lax_errorlevel
         .else
             deferror warning, lax_errorlevel
         .endif

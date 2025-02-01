@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>flush &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">flush</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="flush">
+<h1><code class="docutils literal notranslate"><span class="pre">flush</span></code><a class="headerlink" href="#flush" title="Link to this heading">¶</a></h1>
+<section id="ldz-gpr-lax-laxlevel">
+<h2><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code><a class="headerlink" href="#ldz-gpr-lax-laxlevel" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
+    (ca65_int)          __gpr__         fails on invalid GPR
+
+optional:
+    (ca65_bool)         __lax$__        lax use flag
+    (ca65_int | token)  __laxlevel$__   contents validated
+
+dependacies:
+    libcore
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">__lax$__</span></code> is defined then <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will set the use of <code class="docutils literal notranslate"><span class="pre">lax</span></code> as the <code class="docutils literal notranslate"><span class="pre">__lax$__</span></code> flag. In the majority case in which the flag isn’t set, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will attempt to evaluate <code class="docutils literal notranslate"><span class="pre">UnstableInstructionException</span></code> which will indicate the response for this situation in current scope’s context. If none of these values exist then <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will simply <em>not</em> use <code class="docutils literal notranslate"><span class="pre">lax</span></code> of course in which it will use only <code class="docutils literal notranslate"><span class="pre">6502</span></code> instructions, as <code class="docutils literal notranslate"><span class="pre">i6502</span></code> has no advantage here.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldz</span>                     <span class="p">;</span> <span class="n">lda</span> <span class="c1">#$00                  2b 2c</span>
+<span class="n">ldz</span> <span class="n">xr</span>                  <span class="p">;</span> <span class="n">ldx</span> <span class="c1">#$00                  2b 2c</span>
+<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">yr</span><span class="p">)</span>           <span class="p">;</span> <span class="n">lda</span> <span class="c1">#$00 =&gt; tay           3b 4c</span>
+<span class="n">ldz</span> <span class="p">(</span><span class="n">xr</span> <span class="o">+</span> <span class="n">yr</span><span class="p">)</span>           <span class="p">;</span> <span class="n">ldx</span> <span class="c1">#$00 =&gt; ldy #$00      4b 4c</span>
+<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">xr</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">allow</span> <span class="p">;</span> <span class="n">lax</span> <span class="c1">#$00                  2b 2c</span>
+<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">xr</span> <span class="o">+</span> <span class="n">yr</span><span class="p">)</span>      <span class="p">;</span> <span class="n">lda</span> <span class="c1">#$00 =&gt; tax =&gt; tay    4b 6c</span>
+
+<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">xr</span> <span class="o">+</span> <span class="n">yr</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">allow</span>
+    <span class="p">;</span> <span class="n">lax</span> <span class="c1">#$00 =&gt; tay                               3b 4c</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not use unstable instructions if you care about your code <em>actually</em> being able to run on the intended hardware. If you simply don’t care about this, or think you know better than me here.</p>
+</div>
+<p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm">Source Code</a></p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">flush</span></code></a><ul>
+<li><a class="reference internal" href="#ldz-gpr-lax-laxlevel"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/memory/flush.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">flush</span></code></a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Brette.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
