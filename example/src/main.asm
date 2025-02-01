@@ -3,7 +3,10 @@
 __libroot__ "../../lib/"                ; specify location of libroot (includes libcore)
 
 .segment "HEADER"
-    header
+    header \
+        prgrom: 2, \
+        chrrom: 1, \
+        mapper: 0
 
 .segment "CODE"
 

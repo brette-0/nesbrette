@@ -1,4 +1,4 @@
-.macro __header_build __prgrom__, __chrrom__, __mapper__, __Type__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vsType__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
+.macro __header_build __prgrom__, __chrrom__, __mapper__, __system__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vssystem__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
     .literal "NES", $1a
     
     .byte (prgrom & $ff)     ; byte 4 => prg rom atm 16KiB
@@ -8,7 +8,7 @@
     .byte (((__mapper__) << 4) & $ff) | (__altnt__ * 8) | (__trainer__ * 4) | (__battery__ * 2) | (__mirror__)
 
     ; byte 7 (flags)
-    .byte (__mapper__ & $f0) | $08 | __Type__
+    .byte (__mapper__ & $f0) | $08 | __system__
 
     ; byte 8 (flags)
     .byte (__submapper__ << 4) | (__mapper__ >> 8)
@@ -74,9 +74,9 @@
     .byte __cpu__
 
     ; byte 13 (special)
-    .if __Type__ = 1
+    .if __system__ = 1
         .byte __vsType__ | __vsppu__
-    .elseif __Type__ = 3
+    .elseif __system__ = 3
         .byte (__extended__)
     .endif
 
@@ -88,57 +88,54 @@
 .endmacro
 ; https://www.nesdev.org/wiki/NES_2.0
 
-.macro __header_paramset __paramx__, __prgrom__, __chrrom__, __mapper__, __Type__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vsType__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
-    .if .left(1, __paramx__) = e_prgrom
+.macro __header_paramset __paramx__, __prgrom__, __chrrom__, __mapper__, __system__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vsType__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
+    .if .xmatch(.left(1, __paramx__), prgrom)
         prgrom .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_chrrom
+    .elseif .xmatch(.left(1, __paramx__), chrrom)
         chrrom .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_mapper
+    .elseif .xmatch(.left(1, __paramx__), mapper)
         mapper .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_Type
-        Type .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_altnt
+    .elseif .xmatch(.left(1, __paramx__), system)
+        system .set .right(1, __paramx__)
+    .elseif .xmatch(.left(1, __paramx__), altnt)
         altnt .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_trainer
+    .elseif .xmatch(.left(1, __paramx__), trainer)
         trainer .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_battery
+    .elseif .xmatch(.left(1, __paramx__), battery)
         battery .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_submapper
+    .elseif .xmatch(.left(1, __paramx__), submapper)
         submapper .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_prgram
+    .elseif .xmatch(.left(1, __paramx__), prgram)
         prgram .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_chrram
+    .elseif .xmatch(.left(1, __paramx__), chrram)
         chrram .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_mirror
+    .elseif .xmatch(.left(1, __paramx__), mirror)
         mirror .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_eeprom
+    .elseif .xmatch(.left(1, __paramx__), eeprom)
         eeprom .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_cpu
+    .elseif .xmatch(.left(1, __paramx__), cpu)
         cpu .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_vsppu
+    .elseif .xmatch(.left(1, __paramx__), vsppu)
         vsppu .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_extended
+    .elseif .xmatch(.left(1, __paramx__), extended )
         extended .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_misc
+    .elseif .xmatch(.left(1, __paramx__), misc)
         misc .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_expansion
+    .elseif .xmatch(.left(1, __paramx__), expansion)
         expansion .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = e_chrnvram
+    .elseif .xmatch(.left(1, __paramx__), chrnvram)
         chrnvram .set .right(1, __paramx__)
-    .elseif .left(1, __paramx__) = null
     .else
         .fatal "Header Key Word Argument not recognized : Please refer to TODO: DOCS LINK HERE"
     .endif
 .endmacro
 
 .macro header __param0__, __param1__, __param2__, __param3__, __param4__, __param5__, __param6__, __param7__, __param8__, __param9__, __param10__, __param11__, __param12__, __param13__, __param14__, __param15__, __param16__, __param17__
-;    .local __paramc__, prgrom, chrrom, mapper, Type, altnt, trainer, battery, mirror, submapper, chrram, cpu, vsType, vsppu, misc, expansion, prgram, eeprom, chrnvram, extended
-
     ; scope confined enums
     e_prgrom      = 0
     e_chrrom      = 1 
     e_mapper      = 2
-    e_Type        = 3
+    e_system        = 3
     e_altnt       = 4
     e_trainer     = 5
     e_battery     = 6
@@ -149,7 +146,7 @@
     e_eeprom      = 11
     e_chrnvram    = 12
     e_cpu         = 13
-    e_vsType      = 14
+    e_vstype      = 14
     e_vsppu       = 15
     e_extended    = 16
     e_misc        = 17
@@ -162,14 +159,14 @@
     prgrom      .set null
     chrrom      .set null
     mapper      .set null
-    Type        .set null
+    system      .set null
     altnt       .set null
     trainer     .set null
     battery     .set null
     mirror      .set null
     submapper   .set null
     cpu         .set null
-    vsType      .set null
+    vstype      .set null
     vsppu       .set null
     misc        .set null
     expansion   .set null
@@ -179,159 +176,83 @@
     chrnvram    .set null
     prgrom      .set null
     extended    .set null
-    
-    ; kwargs
-    param0      .set null
-    param1      .set null
-    param2      .set null
-    param3      .set null
-    param4      .set null
-    param5      .set null
-    param6      .set null
-    param7      .set null
-    param8      .set null
-    param9      .set null
-    param10     .set null
-    param11     .set null
-    param12     .set null
-    param13     .set null
-    param14     .set null
-    param15     .set null
-    param16     .set null
-    param17     .set null
 
-    .ifblank __param0__
-        param0 .set null
-    .else
-        param0 .set __param0__
+    .ifnblank __param0__
+        __header_paramset __param0__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param1__
-        param1 .set null
-    .else
-        param1 .set __param1__
+    .ifnblank __param1__
+        __header_paramset __param1__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param2__
-        param2 .set null
-    .else
-        param2 .set __param2__
+    .ifnblank __param2__
+        __header_paramset __param2__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param3__
-        param3 .set null
-    .else
-        param3 .set __param3__
+    .ifnblank __param3__
+        __header_paramset __param3__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param4__
-        param4 .set null
-    .else
-        param4 .set __param4__
+    .ifnblank __param4__
+        __header_paramset __param4__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param5__
-        param5 .set null
-    .else
-        param5 .set __param5__
+    .ifnblank __param5__
+        __header_paramset __param5__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param6__
-        param6 .set null
-    .else
-        param6 .set __param6__
+    .ifnblank __param6__
+        __header_paramset __param6__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param7__
-        param7 .set null
-    .else
-        param7 .set __param7__
+    .ifnblank __param7__
+        __header_paramset __param7__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param8__
-        param8 .set null
-    .else
-        param8 .set __param8__
+    .ifnblank __param8__
+        __header_paramset __param8__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param9__
-        param9 .set null
-    .else
-        param9 .set __param9__
+    .ifnblank __param9__
+        __header_paramset __param9__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param10__
-        param10 .set null
-    .else
-        param10 .set __param10__
+    .ifnblank __param10__
+        __header_paramset __param10__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param11__
-        param11 .set null
-    .else
-        param11 .set __param11__
+    .ifnblank __param11__
+        __header_paramset __param11__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param12__
-        param12 .set null
-    .else
-        param12 .set __param12__
+    .ifnblank __param12__
+        __header_paramset __param12__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param13__
-        param13 .set null
-    .else
-        param13 .set __param13__
+    .ifnblank __param13__
+        __header_paramset __param13__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param14__
-        param14 .set null
-    .else
-        param14 .set __param14__
+    .ifnblank __param14__
+        __header_paramset __param14__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param15__
-        param15 .set null
-    .else
-        param15 .set __param15__
+    .ifnblank __param15__
+        __header_paramset __param15__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param16__
-        param16 .set null
-    .else
-        param16 .set __param16__
+    .ifnblank __param15__
+        __header_paramset __param15__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
-    .ifblank __param17__
-        param17 .set null
-    .else
-        param17 .set __param17__
+    .ifnblank __param17__
+        __header_paramset __param17__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
-
-    
-    __header_paramset param0,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param1,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param2,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param3,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param4,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param5,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param6,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param7,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param8,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param9,  prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param10, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param11, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param12, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param13, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param14, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param15, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param16, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
-    __header_paramset param17, prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
 
     null_coalset prgrom,    1   ; 1x16KiB Mirrored
     null_coalset chrrom,    0   ; No CHR ROM
     null_coalset mapper,    0   ; NROM
-    null_coalset Type,      0   ; Standard NES/Famicom
+    null_coalset system,    0   ; Standard NES/Famicom
     null_coalset altnt,     0   ; no alt member
     null_coalset trainer,   0   ; if you enable this, it's likely a mistake
     null_coalset battery,   0   ; no battery (thats literally a crime yo)
@@ -342,12 +263,12 @@
     null_coalset eeprom,    0   ; no EEPROM
     null_coalset chrnvram,  0   ; no chrnvRAM
     null_coalset cpu,       0   ; NTSC
-    null_coalset vsType,    0   ; 
+    null_coalset vstype,    0   ; 
     null_coalset vsppu,     0   ;
     null_coalset misc,      0   ; no misc rom
     null_coalset extended,  0   ; no extension
     null_coalset expansion, 0   ; no expansion device
 
 
-    __header_build prgrom, chrrom, mapper, Type, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vsType, vsppu, extended, misc, expansion, chrnvram
+    __header_build prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
 .endmacro
