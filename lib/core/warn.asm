@@ -1,17 +1,18 @@
-.define isallowed(error_level) \
-    .xmatch(error_level, allow)
-
-.define isfatal(error_level) \
-    .xmatch(error_level, fatal)
-
-.define iserror(error_level) \
-    .xmatch(error_level, error)
-
-.define iswarning(error_level) \
-    .xmatch(error_level, warn)
-
-.define isout(error_level) \
-    .xmatch(error_level, out)
+.macro deferror __error__, __level__
+    .if     .xmatch(__error__, allow)
+        __level__ .set 0
+    .elseif .xmatch(__error__, out)
+        __level__ .set 1
+    .elseif .xmatch(__error__, warning)
+        __level__ .set 2
+    .elseif .xmatch(__error__, error)
+        __level__ .set 3
+    .elseif .xmatch(__error__, fatal)
+        __level__ .set 4
+    .else
+        __level__ .set __error__
+    .endif
+.endmacro
 
 .macro report __error__, __msg__
     .ifblank __error__
@@ -22,30 +23,20 @@
         .fatal "REPORT REQUEST FAILED : NO MESSAGE TO REPORT"
     .endif
 
-    .if isallowed __error__ 
+    .if     __error__ = 0
         .exitmacro
-    .endif
-
-    .if isfatal __error__
-        .fatal __msg__
-        .exitmacro
-    .endif
-
-    .if iserror __error__
-        .error __msg__
-        .exitmacro
-    .endif
-
-    .if iswarning __error__
-        .warning __msg__
-        .exitmacro
-    .endif
-
-    .if isout __error__
+    .elseif __error__ = 1
         .out __msg__
         .exitmacro
+    .elseif __error__ = 2
+        .warning __msg__
+        .exitmacro
+    .elseif __error__ = 3
+        .error __msg__
+        .exitmacro
+    .elseif __error__ = 4
+        .fatal __msg__
     .endif
-
     
     .fatal .sprintf("Could not handle '%s', ensure that it is configured correctly!", __error__)
 .endmacro
