@@ -1,3 +1,5 @@
+.feature c_comments
+
 /*
 
     libcore.include
@@ -22,32 +24,25 @@
 
 .setcpu "6502x"
 
-.feature c_comments
+
 .feature force_range
 .feature line_continuations
 .feature string_escapes
 .feature underline_in_numbers
 .feature bracket_as_indirect
 
-.macpack generic
-.macpack longbranch
-
-
-.undefine add
-.undefine sub   ; remove from macpack generic
-
 ; sets libroot define path and includes libcore
 .macro __libroot__ __path__
     .define libroot __path__
 
-    ;.include .concat(libroot, "warn.asm")
-    .include .concat(libroot, "header.asm")
-    ;.include .concat(libroot, "enums.asm")
-    ;.include .concat(libroot, "gpr.asm")
-    ;.include .concat(libroot, "gpr")
-    ;.include .concat(libroot, "typing")
-    .endmacro
-.endif
+    ;.include .concat(libroot, "core/warn.asm")
+    
+    ;.include .concat(libroot, "core/enums.asm")
+    ;.include .concat(libroot, "core/gpr.asm")
+    ;.include .concat(libroot, "core/gpr")
+    .include .concat(libroot, "core/typing.asm")
+    .include .concat(libroot, "core/header.asm")
+.endmacro
 
 
 .macro __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN
@@ -57,10 +52,10 @@
 .macro include __token__
     .if     .xmatch(__token__, math)        ; include math
         ; include all math
-    .elseif .xmatch(__token__, math.trig)   ; include math.trig
+    .elseif .xmatch(__token__, math_trig)   ; include math.trig
         ; check for trig tables define
         ; include trig features
-    .elseif .xmatch(__token__, math.const)  ; include only constant math features
+    .elseif .xmatch(__token__, math_const)  ; include only constant math features
         ; include all math that doesn't call to assembled code body
     .elseif .xmatch(__token__, memory)      ; include memory
         ; include all memory

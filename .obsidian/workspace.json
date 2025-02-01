@@ -161,6 +161,7 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "example/src/main.o",
     "lib/core/header.asm",
     "archive/header.asm",
     "lib/core/kwargs.asm",
@@ -171,7 +172,6 @@
     "lib/core/qol.asm",
     "lib/core/typing.asm",
     "lib/core/warn.asm",
-    "lib/core/core/typing.asm",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",

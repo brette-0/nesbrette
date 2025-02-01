@@ -127,7 +127,7 @@
 
 .define null_coalesce(n, c) ((n = null) * c) | ((n <> null) * n)
 
-.macro null_coalset(n, c)
+.macro null_coalset n, c
   n .set null_coalesce n, c
 .endmacro
 
@@ -160,4 +160,4 @@
 .macro validate_preprocint __token__
   .if __token__ & ~0
   .endif
-.endif
+.endmacro
