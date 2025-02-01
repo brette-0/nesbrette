@@ -161,6 +161,7 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "source/modules/core/header.rst",
     "example/src/main.o",
     "lib/core/header.asm",
     "archive/header.asm",
@@ -171,7 +172,6 @@
     "lib/core/gpr.asm",
     "lib/core/qol.asm",
     "lib/core/typing.asm",
-    "lib/core/warn.asm",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",
