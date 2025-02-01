@@ -126,6 +126,11 @@
 .endmacro
 
 .define null_coalesce(n, c) ((n = null) * c) | ((n <> null) * n)
+
+.macro null_coalset(n, c)
+  n .set null_coalesce n, c
+.endmacro
+
 .define is_null(n) (n = null)
 
 .macro filter_types __ctx__, __filter__, __msg__
