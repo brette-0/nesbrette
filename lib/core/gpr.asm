@@ -142,7 +142,7 @@
         .if mode = imm
             lda #__value__
             .exitmacro
-        .elseif mode = abs
+        .elseif mode = abst
             lda __value__ | $800
         .elseif mode = absy
             lda __value__ | $800, y
@@ -171,7 +171,7 @@
         .if mode = imm
             ldy #__value__
             .exitmacro
-        .elseif mode = abs
+        .elseif mode = abst
             ldy __value__ | $800
         .elseif mode = absx
             ldy __value__ | $800, x
@@ -192,7 +192,7 @@
         .if mode = imm
             ldy #__value__
             .exitmacro
-        .elseif mode = abs
+        .elseif mode = abst
             ldx __value__ | $800
         .elseif mode = absy
             ldx __value__ | $800, x
@@ -228,7 +228,7 @@
             .fatal "Invalid Operand Size"
         .endif
 
-        .if mode = abs
+        .if mode = abst
             sta __value__ | $800
         .elseif mode = absy
             sta __value__ | $800, y
@@ -254,7 +254,7 @@
             .fatal "Invalid Operand Size"
         .endif
 
-        .if mode = abs
+        .if mode = abst
             sty __value__ | $800
         .elseif mode = zp || mode = wabs
             sty __value__
@@ -270,7 +270,7 @@
             .fatal "Invalid Operand Size"
         .endif
 
-        .if mode = abs
+        .if mode = abst
             stx __value__ | $800
         .elseif mode = zp || mode = wabs
             stx __value__
@@ -326,7 +326,7 @@
         .if mode = imm
             cmp #__value__
             .exitmacro
-        .elseif mode = abs
+        .elseif mode = abst
             cmp __value__ | $800
         .elseif mode = absy
             cmp __value__ | $800, y
@@ -355,7 +355,7 @@
         .if mode = imm
             cpy #__value__
             .exitmacro
-        .elseif mode = abs
+        .elseif mode = abst
             cpy __value__ | $800
         .elseif mode = zp || mode = wabs
             cpy __value__
@@ -372,7 +372,7 @@
         .if mode = imm
             cpx #__value__
             .exitmacro
-        .elseif mode = abs
+        .elseif mode = abst
             cpx __value__ | $800
         .elseif mode = zp || mode = wabs
             cpx __value__

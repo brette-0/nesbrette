@@ -16,10 +16,6 @@
     dev:
         __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN
 
-    negates:
-        macpack generic:
-            add
-            sub
 */
 
 .setcpu "6502x"
@@ -37,6 +33,7 @@
 
     .include .concat(libroot, "core/warn.asm")
     .include .concat(libroot, "core/gpr.asm")
+    .include .concat(libroot, "core/qol.asm")
     .include .concat(libroot, "core/enums.asm")
     .include .concat(libroot, "core/typing.asm")
     .include .concat(libroot, "core/header.asm")
