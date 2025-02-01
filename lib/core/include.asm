@@ -35,10 +35,8 @@
 .macro __libroot__ __path__
     .define libroot __path__
 
-    ;.include .concat(libroot, "core/warn.asm")
-    
-    ;.include .concat(libroot, "core/enums.asm")
-    ;.include .concat(libroot, "core/gpr.asm")
+    .include .concat(libroot, "core/warn.asm")
+    .include .concat(libroot, "core/gpr.asm")
     .include .concat(libroot, "core/enums.asm")
     .include .concat(libroot, "core/typing.asm")
     .include .concat(libroot, "core/header.asm")

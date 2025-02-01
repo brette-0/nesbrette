@@ -161,8 +161,8 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "source/modules/core/header.rst",
     "example/src/main.o",
+    "source/modules/core/header.rst",
     "lib/core/header.asm",
     "archive/header.asm",
     "lib/core/kwargs.asm",
