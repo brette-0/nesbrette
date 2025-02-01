@@ -39,7 +39,7 @@
     
     ;.include .concat(libroot, "core/enums.asm")
     ;.include .concat(libroot, "core/gpr.asm")
-    ;.include .concat(libroot, "core/gpr")
+    .include .concat(libroot, "core/enums.asm")
     .include .concat(libroot, "core/typing.asm")
     .include .concat(libroot, "core/header.asm")
 .endmacro

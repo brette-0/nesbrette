@@ -153,8 +153,6 @@
     e_expansion   = 18
     end           = 19
 
-    null = (1 << 31)    ; TODO: Move this out of header
-
     ; build params
     prgrom      .set null
     chrrom      .set null
