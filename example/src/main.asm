@@ -6,7 +6,7 @@ __libroot__ "../../lib/"                ; specify location of libroot (includes 
     header \
         prgrom: 2, \
         chrrom: 1, \
-        mapper: 0
+        mapper: nrom
 
 .segment "CODE"
 
