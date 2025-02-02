@@ -372,30 +372,50 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trr yr::xr  ; y -> x
 
 
-``ldr gpr: mode`` - Load Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``ldr __reg_mode__, __value__, __cpre$__``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
-    
-    reg = ar
-    ldr reg::imm, param
-    bpl @task
 
-``str gpr: mode`` - Store Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    required:
+        (mode: gpr)         __reg_mode__    gpr and mode must be valid
+        (ca65_int)          __value__       Must be within u16 range
 
-.. code-block::
-    
-    reg = yr
-    str reg::wabs. param
+    optional:
+        (nb_error)          __cpre$__       must be valid error level
 
-``rcp typed:`` - Register Compare
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    dependacies:
+        libcore
+
+Loads any GPR with any value with any mode. This is used for the backend mostly, as the syntax here is designed to be functional above all.
+This instruction *may* throw a ``ConstantParameterRangeException`` which indicates the desired source pointer cannot be accesed entirely by the desired opcode dicated by the memory address mode. 
 
 .. code-block::
-    
-    reg = ar
-    rcp reg::zp, yr     ; needs i6502
-    bne @task
-    rcp reg::zpx, memory
-    bne @task
+
+    ldr imm: ar, $ea
+    ldr zpx: yr, $ea, warning
+
+
+``str __reg_mode__, __address__, __cpre$__, __iwle$__``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    required:
+        (mode: gpr)         __reg_mode__    gpr and mode must be valid
+        (ca65_int)          __value__       Must be within u16 range
+\
+    optional:
+        (nb_error)          __cpre$__       must be valid error level
+        (nb_error)          __iwle$__       must be valid error level
+
+    dependacies:
+        libcore
+
+Store any GPR into any address with any memory address mode. Same as ``ldr`` this syntax isn't designed to be tidy but functional and is frequently accesed by the backend. Will throw the same range exception, or may throw an ``InvalidWriteLocationException`` which indicates that you are attempting to write to ROM. If your header is set up correctly this **should** not fire on PRG-RAM Bankable mappers.
+
+.. code-block::
+
+    str wabs: ar, $ea 
+    str zpx: yr, $ea, warning
+    str zpx: yr, $ea, warning, fatal
