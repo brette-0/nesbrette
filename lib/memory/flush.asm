@@ -12,11 +12,7 @@
     ldr imm: gpr, $00
 .endmacro
 
-; stz u32: Place
-; stz u32: Place, y
-; stz u32: Place, yr
-; stz u32: Place, null: xr
-; stz u32: Place, y: xr
+; tested and working
 .macro stz __target__, __reg$__, __zero$__
     ; (nb_int: ptr) __target__
     ; (token : gpr) __reg$__
@@ -68,7 +64,7 @@
     null_coalset _stz_mode, wabs
 
     .if (_stz_reg <> ar) && (_stz_mode <> wabs)
-        .fatal "InvalidInstructionRequestException: Store X|Y, x/y is invalid!"
+        .fatal "InvalidMemoryAddressModeException: Store X|Y, x/y is invalid!"
     .endif
 
     .if !_zero

@@ -16,6 +16,8 @@
         dependacies:
             libcore
 
+    Loads any GPR with ``$00``.
+
     .. code-block::
 
         ldz                     ; lda #$00                  2b 2c

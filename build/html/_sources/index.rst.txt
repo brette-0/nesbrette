@@ -20,5 +20,6 @@ The ``nesbrette`` library is currently still seriously in development and not fo
 
    modules/modules
    theory/theory
+   theory/errors
    
    .. tables/tables

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Errors &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="theory" href="theory.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="theory.html" title="theory"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">Errors</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="errors">
+<h1><code class="docutils literal notranslate"><span class="pre">Errors</span></code><a class="headerlink" href="#errors" title="Link to this heading">¶</a></h1>
+<section id="invalidmemoryaddressmodeexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">InvalidMemoryAddressModeException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#invalidmemoryaddressmodeexception-fatal" title="Link to this heading">¶</a></h2>
+<p>Through use of the <code class="docutils literal notranslate"><span class="pre">libcore.gpr</span></code> module you have attempted to use an non-existant memory address mode. This may be because the value passed into the memory address mode parameter was invalid or that the passed memory address mode was invalid for the required instructions. Do remember that indexed direct storing belongs exclusively to <code class="docutils literal notranslate"><span class="pre">sta</span></code> and no other store instruction.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">der</span></code> cannot be used with the accumulator as the accumulator has no increment instruction. Similarly <code class="docutils literal notranslate"><span class="pre">lda</span> <span class="pre">inabs</span></code> doens’t work as <code class="docutils literal notranslate"><span class="pre">inabs</span></code> belongs only to <code class="docutils literal notranslate"><span class="pre">jmp</span></code>.</p>
+</section>
+<section id="intereferingregisteruseexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">IntereferingRegisterUseException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#intereferingregisteruseexception-fatal" title="Link to this heading">¶</a></h2>
+<p>This will raise when you attempt to complete a feature that has two GPR dependant tasks being requested to share and neither GPU could yield the desired result.</p>
+</section>
+<section id="constantparametervalueexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">ConstantParameterValueException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#constantparametervalueexception-fatal" title="Link to this heading">¶</a></h2>
+<p>This will raise when a <code class="docutils literal notranslate"><span class="pre">cas65</span></code> preprocessor parameter has a size that is either two small, negative or too simple depending on the context of the caller. Ensure that the values you pass seem appropriate.</p>
+</section>
+<section id="invalidgeneralpurposeregister-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">InvalidGeneralPurposeRegister</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#invalidgeneralpurposeregister-fatal" title="Link to this heading">¶</a></h2>
+<p>This will raise when code that takes advantage of <code class="docutils literal notranslate"><span class="pre">libcore.qol</span></code> and <code class="docutils literal notranslate"><span class="pre">libcore.gpr</span></code> has found your parameters unsatisfying. It normally means that you likely have corrupted your <code class="docutils literal notranslate"><span class="pre">gpr</span></code> parameters.</p>
+</section>
+<section id="invalidwritelocationexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">InvalidWriteLocationException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#invalidwritelocationexception-fatal" title="Link to this heading">¶</a></h2>
+<p>This occurs when attempting to perform <code class="docutils literal notranslate"><span class="pre">str</span></code> on assumed ‘ROM Space’, depending on <code class="docutils literal notranslate"><span class="pre">LIBCORE_MAPPER</span></code> this will not fire. Just because <code class="docutils literal notranslate"><span class="pre">str</span></code> didn’t find anything doesn’t mean its not there, be careful to write safe code!</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Errors</span></code></a><ul>
+<li><a class="reference internal" href="#invalidmemoryaddressmodeexception-fatal"><code class="docutils literal notranslate"><span class="pre">InvalidMemoryAddressModeException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#intereferingregisteruseexception-fatal"><code class="docutils literal notranslate"><span class="pre">IntereferingRegisterUseException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#constantparametervalueexception-fatal"><code class="docutils literal notranslate"><span class="pre">ConstantParameterValueException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#invalidgeneralpurposeregister-fatal"><code class="docutils literal notranslate"><span class="pre">InvalidGeneralPurposeRegister</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#invalidwritelocationexception-fatal"><code class="docutils literal notranslate"><span class="pre">InvalidWriteLocationException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="theory.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/theory/errors.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="theory.html" title="theory"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">Errors</span></code></a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Brette.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
