@@ -162,8 +162,8 @@
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
     "example/src/main.o",
-    "lib/memory/memcpy.asm",
     "build/html/searchindex.js.tmp",
+    "lib/memory/memcpy.asm",
     "lib/core/ldr.asm",
     "build/html/_sources/modules/memory/flush.rst.txt",
     "build/html/modules/memory/flush.html",

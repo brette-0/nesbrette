@@ -62,23 +62,29 @@
 </div>
 </div>
 </section>
-<section id="stz-target">
-<h2><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__</span></code><a class="headerlink" href="#stz-target" title="Link to this heading">¶</a></h2>
+<section id="stz-target-reg-zero">
+<h2><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__zero$__</span></code><a class="headerlink" href="#stz-target-reg-zero" title="Link to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required</span><span class="p">:</span>
-    <span class="p">(</span><span class="n">nb</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ident</span><span class="p">:</span> <span class="n">addr</span><span class="p">)</span> <span class="n">__target__</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
+    (nb: int, ident: addr) __target__
 
-<span class="n">optional</span><span class="p">:</span>
+optional:
+    (token | gpr: gpr?)     __reg$__        fails on invalid GPRs
+    (ca65_bool)             __zero$__       No room for error
 
 
-
-<span class="n">dependacies</span><span class="p">:</span>
-    <span class="n">libcore</span>
+dependacies:
+    libcore
 </pre></div>
 </div>
-<p>Explanation.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<p>Stores <code class="docutils literal notranslate"><span class="pre">$00</span></code> at set variable in memory with optional indexing with token or <code class="docutils literal notranslate"><span class="pre">enum</span></code> with optional ‘load-&gt;store’ <code class="docutils literal notranslate"><span class="pre">gpr</span></code> specifism and ‘assume gpr ‘r’ is already zero’.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stz</span> <span class="n">Score</span>               <span class="p">;</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">w_Score</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="n">c</span> <span class="p">:</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">w_Score</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="n">b</span>
+<span class="n">stz</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Score</span>          <span class="p">;</span> <span class="o">=</span>
+<span class="n">stz</span> <span class="n">ScoreLen</span><span class="p">:</span> <span class="n">Score</span>     <span class="p">;</span> <span class="o">=</span>
+<span class="n">stz</span> <span class="n">Region</span><span class="p">,</span> <span class="n">y</span>           <span class="p">;</span> <span class="o">+</span> <span class="n">w_Score</span> <span class="o">*</span> <span class="mf">1.5</span><span class="n">c</span> <span class="o">+</span><span class="mi">0</span><span class="n">b</span>
+<span class="n">stz</span> <span class="n">Region</span><span class="p">,</span> <span class="n">null</span> <span class="p">:</span> <span class="n">x</span>    <span class="p">;</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">w_Score</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="n">c</span> <span class="p">:</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">w_Score</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="n">b</span>
+<span class="n">stz</span> <span class="n">Region</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span>        <span class="p">;</span> <span class="o">-</span><span class="mi">2</span><span class="n">c</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="n">b</span>
 </pre></div>
 </div>
 </div>
@@ -98,7 +104,7 @@
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">flush</span></code></a><ul>
 <li><a class="reference internal" href="#ldz-gpr"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code></a></li>
-<li><a class="reference internal" href="#stz-target"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__</span></code></a></li>
+<li><a class="reference internal" href="#stz-target-reg-zero"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__zero$__</span></code></a></li>
 </ul>
 </li>
 </ul>
