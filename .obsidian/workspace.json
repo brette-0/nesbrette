@@ -162,6 +162,7 @@
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
     "example/src/main.o",
+    "lib/memory/memcpy.asm",
     "build/html/searchindex.js.tmp",
     "lib/core/ldr.asm",
     "build/html/_sources/modules/memory/flush.rst.txt",
@@ -171,7 +172,6 @@
     "build/html/modules/errors/errors.html",
     "build/html/modules/errors",
     "build/html/_sources/modules/core/header.rst.txt",
-    "build/html/modules/core/header.html",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",

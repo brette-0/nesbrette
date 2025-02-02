@@ -13,8 +13,7 @@ includefrom memory, flush
 .segment "CODE"    
 
 reset:
-    ldz xr
-
+    stz bi24: $200, null : xr, 1
     jmp reset
 
 .segment "VECTORS"

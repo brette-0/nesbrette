@@ -1,11 +1,11 @@
 ; tested working
 ; returns (gpr?)
 ; params : (ca65_int)
-.define setreg(__regenum__) \
-     ((__regenum__ = yr) * yr) | \
-     ((__regenum__ = xr) * xr) | \
-     ((__regenum__ = ar) * ar) | \
-    (((__regenum__ <> yr) && (__regenum__ <> xr) && (__regenum__ <> ar)) * null)
+.define setreg(__reg__) \
+     ((__reg__ = yr) * yr) | \
+     ((__reg__ = xr) * xr) | \
+     ((__reg__ = ar) * ar) | \
+    (((__reg__ <> yr) && (__reg__ <> xr) && (__reg__ <> ar)) * null)
 
 ; returns (ca65_int)
 ; params : (ca65_int)

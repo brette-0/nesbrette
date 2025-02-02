@@ -44,39 +44,22 @@
             
   <section id="flush">
 <h1><code class="docutils literal notranslate"><span class="pre">flush</span></code><a class="headerlink" href="#flush" title="Link to this heading">¶</a></h1>
-<section id="ldz-gpr-lax-laxlevel">
-<h2><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code><a class="headerlink" href="#ldz-gpr-lax-laxlevel" title="Link to this heading">¶</a></h2>
+<section id="ldz-gpr">
+<h2><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code><a class="headerlink" href="#ldz-gpr" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">includefrom</span> <span class="pre">memory,</span> <span class="pre">flush</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
-    (ca65_int)          __gpr__         fails on invalid GPR
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">ca65_int</span><span class="p">)</span>          <span class="n">__gpr__</span>         <span class="n">fails</span> <span class="n">on</span> <span class="n">invalid</span> <span class="n">GPR</span>
 
-optional:
-    (ca65_bool)         __lax$__        lax use flag
-    (ca65_int | token)  __laxlevel$__   contents validated
-
-dependacies:
-    libcore
+<span class="n">dependacies</span><span class="p">:</span>
+    <span class="n">libcore</span>
 </pre></div>
 </div>
-<p>If <code class="docutils literal notranslate"><span class="pre">__lax$__</span></code> is defined then <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will set the use of <code class="docutils literal notranslate"><span class="pre">lax</span></code> as the <code class="docutils literal notranslate"><span class="pre">__lax$__</span></code> flag. In the majority case in which the flag isn’t set, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will attempt to evaluate <code class="docutils literal notranslate"><span class="pre">UnstableInstructionException</span></code> which will indicate the response for this situation in current scope’s context. If none of these values exist then <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will simply <em>not</em> use <code class="docutils literal notranslate"><span class="pre">lax</span></code> of course in which it will use only <code class="docutils literal notranslate"><span class="pre">6502</span></code> instructions, as <code class="docutils literal notranslate"><span class="pre">i6502</span></code> has no advantage here.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldz</span>                     <span class="p">;</span> <span class="n">lda</span> <span class="c1">#$00                  2b 2c</span>
 <span class="n">ldz</span> <span class="n">xr</span>                  <span class="p">;</span> <span class="n">ldx</span> <span class="c1">#$00                  2b 2c</span>
-<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">yr</span><span class="p">)</span>           <span class="p">;</span> <span class="n">lda</span> <span class="c1">#$00 =&gt; tay           3b 4c</span>
-<span class="n">ldz</span> <span class="p">(</span><span class="n">xr</span> <span class="o">+</span> <span class="n">yr</span><span class="p">)</span>           <span class="p">;</span> <span class="n">ldx</span> <span class="c1">#$00 =&gt; ldy #$00      4b 4c</span>
-<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">xr</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">allow</span> <span class="p">;</span> <span class="n">lax</span> <span class="c1">#$00                  2b 2c</span>
-<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">xr</span> <span class="o">+</span> <span class="n">yr</span><span class="p">)</span>      <span class="p">;</span> <span class="n">lda</span> <span class="c1">#$00 =&gt; tax =&gt; tay    4b 6c</span>
-
-<span class="n">ldz</span> <span class="p">(</span><span class="n">ar</span> <span class="o">+</span> <span class="n">xr</span> <span class="o">+</span> <span class="n">yr</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">allow</span>
-    <span class="p">;</span> <span class="n">lax</span> <span class="c1">#$00 =&gt; tay                               3b 4c</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Do not use unstable instructions if you care about your code <em>actually</em> being able to run on the intended hardware. If you simply don’t care about this, or think you know better than me here.</p>
-</div>
-<p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm">Source Code</a></p>
 </div>
 </section>
 <section id="stz-target">
@@ -99,7 +82,7 @@ dependacies:
 </pre></div>
 </div>
 </div>
-<p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm">View libmem.flush Source Code on Github</a></p>
+<p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm">View Source Code on Github</a></p>
 </section>
 </section>
 
@@ -114,7 +97,7 @@ dependacies:
     <h3><a href="../../index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">flush</span></code></a><ul>
-<li><a class="reference internal" href="#ldz-gpr-lax-laxlevel"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code></a></li>
+<li><a class="reference internal" href="#ldz-gpr"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code></a></li>
 <li><a class="reference internal" href="#stz-target"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__</span></code></a></li>
 </ul>
 </li>

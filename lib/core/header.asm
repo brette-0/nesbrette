@@ -601,6 +601,10 @@
     .define LIBCORE_CHRNVRAM    chrnvram
     .define LIBCORE_EXTENDED    extended
 
-
     __header_build prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
 .endmacro
+
+.define is_prgram8000 (__mapper__) \
+    (__mapper__ = 1)  || \ 
+    (__mapper__ = 5)  || \ 
+    (__mapper__ = 69)

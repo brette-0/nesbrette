@@ -34,13 +34,40 @@
             
   <section id="errors">
 <h1><code class="docutils literal notranslate"><span class="pre">Errors</span></code><a class="headerlink" href="#errors" title="Link to this heading">¶</a></h1>
-<section id="unstableinstructionexception-fatal">
-<h2><code class="docutils literal notranslate"><span class="pre">UnstableInstructionException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#unstableinstructionexception-fatal" title="Link to this heading">¶</a></h2>
-<p>While <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> does support use of Illegal instructions, we only want to use the <em>safe</em> ones and only care to use the <em>useful</em> ones. Instructions like <code class="docutils literal notranslate"><span class="pre">xaa</span></code> and <code class="docutils literal notranslate"><span class="pre">lax</span> <span class="pre">#imm</span></code> are not much use at all and even instructions with safety nets like <code class="docutils literal notranslate"><span class="pre">shy</span></code> have little utility. NES Developers may feel inclinde to avoid illegal instructions entirely, however, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will <em>always</em> use them where its safe and useful, never will <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> use an unstable instruction without user specification.</p>
-<p>If you are seeing this in your code, its because the feature you are trying to use is attempting to use an unstable instruction. If you did not expect this, configure your call for stable instructions.</p>
+<section id="invalidmemoryaddressmodeexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">InvalidMemoryAddressModeException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#invalidmemoryaddressmodeexception-fatal" title="Link to this heading">¶</a></h2>
+<p>Through use of the <code class="docutils literal notranslate"><span class="pre">libcore.gpr</span></code> module you have attempted to use an non-existant memory address mode. This may be because the value passed into the memory address mode parameter was invalid or that the passed memory address mode was invalid for the required instructions. Do remember that indexed direct storing belongs exclusively to <code class="docutils literal notranslate"><span class="pre">sta</span></code> and no other store instruction.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">der</span></code> cannot be used with the accumulator as the accumulator has no increment instruction. Similarly <code class="docutils literal notranslate"><span class="pre">lda</span> <span class="pre">inabs</span></code> doens’t work as <code class="docutils literal notranslate"><span class="pre">inabs</span></code> belongs only to <code class="docutils literal notranslate"><span class="pre">jmp</span></code>.</p>
 <dl class="simple">
 <dt>Affects:</dt><dd><ul class="simple">
-<li><p><a class="reference external" href="https://www.url.site">LDZ</a></p></li>
+<li><p><a class="reference external" href="https://www.url.site">LDR</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="intereferingregisteruseexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">IntereferingRegisterUseException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#intereferingregisteruseexception-fatal" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Affects:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://www.url.site">STZ</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="constantparametervalueexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">ConstantParameterValueException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#constantparametervalueexception-fatal" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Affects:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://www.url.site">STR</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="invalidinstructionrequestexception-fatal">
+<h2><code class="docutils literal notranslate"><span class="pre">InvalidInstructionRequestException</span> <span class="pre">:</span> <span class="pre">fatal</span></code><a class="headerlink" href="#invalidinstructionrequestexception-fatal" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Affects:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://www.url.site">STR</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -58,7 +85,10 @@
     <h3><a href="../../index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Errors</span></code></a><ul>
-<li><a class="reference internal" href="#unstableinstructionexception-fatal"><code class="docutils literal notranslate"><span class="pre">UnstableInstructionException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#invalidmemoryaddressmodeexception-fatal"><code class="docutils literal notranslate"><span class="pre">InvalidMemoryAddressModeException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#intereferingregisteruseexception-fatal"><code class="docutils literal notranslate"><span class="pre">IntereferingRegisterUseException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#constantparametervalueexception-fatal"><code class="docutils literal notranslate"><span class="pre">ConstantParameterValueException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
+<li><a class="reference internal" href="#invalidinstructionrequestexception-fatal"><code class="docutils literal notranslate"><span class="pre">InvalidInstructionRequestException</span> <span class="pre">:</span> <span class="pre">fatal</span></code></a></li>
 </ul>
 </li>
 </ul>
