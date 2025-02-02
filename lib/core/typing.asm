@@ -1,8 +1,8 @@
 .define itype(__token__)\
-  .ident(.string(.left(1, __token__)))
+  (.ident(.string(.left(1, __token__))))
 
 .define signed(__token__)\
-  __token__ & (1 << 30)
+  (__token__ & (1 << 30))
 
 .define eindex(__offset__, __width__, __index__, __endian__)\
   ((__offset__ + __index__) * (__endian__ < 1)) | ((__offset__ + __width__ - __index__ - 1) * (__endian__ > 0))
@@ -49,7 +49,7 @@
   .string(.right(1, __token__))
 
 .define ilabel(__token__)\
-  .ident(label __token__)
+  .right(1, __token__)
 
 .define dedtype(__token__)\
   .ident(.concat("t_", label __token__))
@@ -155,9 +155,4 @@
       .fatal __msg__ 
     .endif
   .endrepeat
-.endmacro
-
-.macro validate_preprocint __token__
-  .if __token__ & ~0
-  .endif
 .endmacro

@@ -4,6 +4,8 @@
 ``ldz __gpr__, __lax$__, __laxlevel$__``
 """"""""""""""""""""""""""""""""""""""""
 
+``includefrom memory, flush``
+
 .. note::
 
     .. code-block::
@@ -36,3 +38,29 @@
         Do not use unstable instructions if you care about your code *actually* being able to run on the intended hardware. If you simply don't care about this, or think you know better than me here.
 
     `Source Code <https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm>`_
+
+``stz __target__``
+""""""""""""""""""""""""""""""""""""""""
+
+.. note::
+
+    .. code-block::
+
+        required:
+            (nb: int, ident: addr) __target__
+        
+        optional:
+
+
+
+        dependacies:
+            libcore
+
+    Explanation.
+
+    .. code-block::
+
+        
+
+
+`View libmem.flush Source Code on Github <https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm>`_

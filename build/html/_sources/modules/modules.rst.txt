@@ -8,5 +8,4 @@
    core/core
    synth/synth
    memory/memory
-   memory/flush
    math/math

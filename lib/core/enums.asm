@@ -1,8 +1,8 @@
 
 ; register
-ar   = 1
-xr   = 2
-yr   = 4
+ar   = 16
+xr   = 32
+yr   = 64
 
 ; cpu status
 zf   = 1

@@ -161,7 +161,9 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "example/src/main.o",
     "build/html/searchindex.js.tmp",
+    "lib/core/ldr.asm",
     "build/html/_sources/modules/memory/flush.rst.txt",
     "build/html/modules/memory/flush.html",
     "build/html/_sources/modules/errors/errors.rst.txt",
@@ -170,8 +172,6 @@
     "build/html/modules/errors",
     "build/html/_sources/modules/core/header.rst.txt",
     "build/html/modules/core/header.html",
-    "build/doctrees/modules/memory/flush.doctree",
-    "build/doctrees/modules/errors/errors.doctree",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",

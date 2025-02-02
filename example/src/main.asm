@@ -13,10 +13,8 @@ includefrom memory, flush
 .segment "CODE"    
 
 reset:
-    ldz (ar + xr), 1, out               ; lax #$00 with no warning (not reccomended)
-    ldz                                 ; lda #$00 (ez)
-    ldz xr                              ; ldx #$00 
-    ldz (ar + xr + yr)                  ; clean all gpr
+    ldz xr
+
     jmp reset
 
 .segment "VECTORS"

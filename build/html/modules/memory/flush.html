@@ -14,7 +14,9 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="math" href="../math/math.html" />
+    <link rel="prev" title="memory" href="memory.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -22,7 +24,15 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../math/math.html" title="math"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="memory.html" title="memory"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="memory.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">flush</span></code></a></li> 
       </ul>
     </div>  
@@ -36,6 +46,7 @@
 <h1><code class="docutils literal notranslate"><span class="pre">flush</span></code><a class="headerlink" href="#flush" title="Link to this heading">¶</a></h1>
 <section id="ldz-gpr-lax-laxlevel">
 <h2><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code><a class="headerlink" href="#ldz-gpr-lax-laxlevel" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">includefrom</span> <span class="pre">memory,</span> <span class="pre">flush</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
@@ -68,6 +79,28 @@ dependacies:
 <p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm">Source Code</a></p>
 </div>
 </section>
+<section id="stz-target">
+<h2><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__</span></code><a class="headerlink" href="#stz-target" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">nb</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ident</span><span class="p">:</span> <span class="n">addr</span><span class="p">)</span> <span class="n">__target__</span>
+
+<span class="n">optional</span><span class="p">:</span>
+
+
+
+<span class="n">dependacies</span><span class="p">:</span>
+    <span class="n">libcore</span>
+</pre></div>
+</div>
+<p>Explanation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/flush.asm">View libmem.flush Source Code on Github</a></p>
+</section>
 </section>
 
 
@@ -82,10 +115,21 @@ dependacies:
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">flush</span></code></a><ul>
 <li><a class="reference internal" href="#ldz-gpr-lax-laxlevel"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code></a></li>
+<li><a class="reference internal" href="#stz-target"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__</span></code></a></li>
 </ul>
 </li>
 </ul>
 
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="memory.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../math/math.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">math</span></code></a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -114,7 +158,15 @@ dependacies:
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../math/math.html" title="math"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="memory.html" title="memory"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="memory.html" ><code class="docutils literal notranslate"><span class="pre">memory</span></code></a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">flush</span></code></a></li> 
       </ul>
     </div>
