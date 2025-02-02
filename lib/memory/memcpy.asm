@@ -1,4 +1,15 @@
-.macro memcpy __source__, __target__, __reg$__, __modes$__
+/*
+
+    possible behaviors:
+        w_src = w_tar (good, all data is copied out)
+        w_src > w_tar (bad, some data is copied out to w_tar)
+        w_src < w_tar 
+            store 'fill' in w_tar   (not actually extra code)
+
+*/
+
+
+.macro memcpy __source__, __target__, __regs$__, __modes$__, __stwm$__, __fill$__, __zero$__
     ; (nb_int: ident) __source__ 
     ; (nb_int: ident) __target__ 
     ; (gpr) __reg$__
@@ -27,15 +38,22 @@
     l_source = .right(1, __source__)
     l_source = .right(1, __target__)
 
+    w_source = typeval t_source
+    w_target = typeval t_target
+
     ; width of task is smallest range of legal data
     w_task = .min((typeval t_source), (typeval t_target))
 
-    .if (typeval t_source) <> (typeval t_target)
-        report
-    .endif
+    ;.if (typeval t_source) <> (typeval t_target)
+    ;    report SourcreTargetWidthMismatchException, "SourceTargetWidthMismatchException: nesbrette will use the samller of the two parameters, however, this likely means some data is lost. Ensure that this what you wish before continuing."
+    ;.endif
 
     .ifnblank __reg$__
         _reg .set __reg$__
+    .endif
+
+    .if (w_source < w_target) && fill
+        stz (w_target - w_source): (eindex l_target, w_target, w_source, endian t_target), __regs$__, __zero$__
     .endif
 
     .repeat w_task, iter

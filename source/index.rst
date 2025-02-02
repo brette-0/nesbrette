@@ -23,3 +23,5 @@ The ``nesbrette`` library is currently still seriously in development and not fo
    theory/errors
    
    .. tables/tables
+
+.. TODO: Remove Long phrases from all toctrees

@@ -161,6 +161,7 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "source/modules/core/ldr.rst",
     "build/html/searchindex.js.tmp",
     "build/html/_sources/theory/errors.rst.txt",
     "build/html/theory/errors.html",
@@ -171,7 +172,6 @@
     "lib/core/ldr.asm",
     "build/html/_sources/modules/memory/flush.rst.txt",
     "build/html/modules/memory/flush.html",
-    "build/html/_sources/modules/errors/errors.rst.txt",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",
