@@ -99,6 +99,6 @@
 
     .repeat w_task, iter
         ldr m_source: _reg, eindex l_source, w_source, iter, (endian t_source)
-        str m_target: _reg, eindex l_target, t_target, iter, (endian t_target)
+        str m_target: _reg, eindex l_target, w_target, iter, (endian t_target)
     .endrepeat
 .endmacro

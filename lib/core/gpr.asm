@@ -273,7 +273,8 @@
 
     prg8000 .set is_prgram8000 LIBCORE_MAPPER
 
-    .if (iwle <> 0)  && (__address__ >= $8000) && (!prg8000)
+    ; TODO: check start and end of target
+    .if iwle && (__address__ >= $8000) && (!prg8000)
         report iwle, "InvalidWriteLocationException: Target is read only memory!"
     .endif
 

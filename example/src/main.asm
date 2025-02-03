@@ -17,10 +17,10 @@ Temp  = $200
 Temp2 = $204
 
 typeas Temp,  u32
-typeas Temp2, u32
+typeas Temp2, bu32
 
 reset:
-    memcpy Temp, Temp2, null, wabs: wabs, warning, 1
+    memcpy Temp, Temp2
     jmp reset
 
 .segment "VECTORS"
