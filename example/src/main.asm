@@ -4,6 +4,7 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
 
 ; global static includes
 includefrom memory, flush
+includefrom memory, memcpy
 
 .segment "HEADER"
     header \
@@ -12,8 +13,14 @@ includefrom memory, flush
 
 .segment "CODE"    
 
+Temp  = $200
+Temp2 = $204
+
+typeas Temp,  u32
+typeas Temp2, u32
+
 reset:
-    stz bi24: $200, null : xr, 1
+    memcpy Temp, Temp2, null, wabs: wabs, warning, 1
     jmp reset
 
 .segment "VECTORS"

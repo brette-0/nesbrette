@@ -27,3 +27,9 @@ This will raise when code that takes advantage of ``libcore.qol`` and ``libcore.
 """""""""""""""""""""""""""""""""""""""""
 
 This occurs when attempting to perform ``str`` on assumed 'ROM Space', depending on ``LIBCORE_MAPPER`` this will not fire. Just because ``str`` didn't find anything doesn't mean its not there, be careful to write safe code!
+
+
+``SourceTargetWidthMismatchException : warning``
+""""""""""""""""""""""""""""""""""""""""""""""""
+
+This occurs when attempting to perform ``str`` on assumed 'ROM Space', depending on ``LIBCORE_MAPPER`` this will not fire. Just because ``str`` didn't find anything doesn't mean its not there, be careful to write safe code!

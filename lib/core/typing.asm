@@ -30,9 +30,7 @@
     | (.xmatch(.left(1, __token__), bi64)   * ((3 << 29) + 8) ) \
     | (.xmatch(.left(1, __token__), string) * -1) \
     | (.xmatch(.left(1, __token__), token)  * -2) \
-    | (.xmatch(.left(1, __token__), x)      * -3) \
-    | (.xmatch(.left(1, __token__), y)      * -4) \
-    | (.xmatch(.left(1, __token__), acc)    * -5)
+    | (.xmatch(.left(1, __token__), r)      * -3)
 
 ; d31 = Reserved for special case
 ; d30 = signed flag (for numbers)
@@ -53,60 +51,6 @@
 
 .define dedtype(__token__)\
   .ident(.concat("t_", label __token__))
-    
-.define isnum(__token__)\
-      (.xmatch(.left(1, __token__), u8)     * 1 ) \
-    | (.xmatch(.left(1, __token__), u16)    * 2 ) \
-    | (.xmatch(.left(1, __token__), u24)    * 3 ) \
-    | (.xmatch(.left(1, __token__), u32)    * 4 ) \
-    | (.xmatch(.left(1, __token__), u64)    * 8 ) \
-    | (.xmatch(.left(1, __token__), bu8)    * 1 ) \
-    | (.xmatch(.left(1, __token__), bu16)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bu24)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bu32)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bu64)   * 1 ) \
-    | (.xmatch(.left(1, __token__), i8)     * 1 ) \
-    | (.xmatch(.left(1, __token__), i16)    * 1 ) \
-    | (.xmatch(.left(1, __token__), i24)    * 1 ) \
-    | (.xmatch(.left(1, __token__), i32)    * 1 ) \
-    | (.xmatch(.left(1, __token__), i64)    * 1 ) \
-    | (.xmatch(.left(1, __token__), bi8)    * 1 ) \
-    | (.xmatch(.left(1, __token__), bi16)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bi24)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bi32)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bi64)   * 1 ) \
-    | (.xmatch(.left(1, __token__), string) * 0) \
-    | (.xmatch(.left(1, __token__), token)  * 0) \
-    | (.xmatch(.left(1, __token__), x)      * 1) \
-    | (.xmatch(.left(1, __token__), y)      * 1) \
-    | (.xmatch(.left(1, __token__), acc)    * 1)
-
-.define isconst(__token__)\
-      (.xmatch(.left(1, __token__), u8)     * 1 ) \
-    | (.xmatch(.left(1, __token__), u16)    * 2 ) \
-    | (.xmatch(.left(1, __token__), u24)    * 3 ) \
-    | (.xmatch(.left(1, __token__), u32)    * 4 ) \
-    | (.xmatch(.left(1, __token__), u64)    * 8 ) \
-    | (.xmatch(.left(1, __token__), bu8)    * 1 ) \
-    | (.xmatch(.left(1, __token__), bu16)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bu24)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bu32)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bu64)   * 1 ) \
-    | (.xmatch(.left(1, __token__), i8)     * 1 ) \
-    | (.xmatch(.left(1, __token__), i16)    * 1 ) \
-    | (.xmatch(.left(1, __token__), i24)    * 1 ) \
-    | (.xmatch(.left(1, __token__), i32)    * 1 ) \
-    | (.xmatch(.left(1, __token__), i64)    * 1 ) \
-    | (.xmatch(.left(1, __token__), bi8)    * 1 ) \
-    | (.xmatch(.left(1, __token__), bi16)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bi24)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bi32)   * 1 ) \
-    | (.xmatch(.left(1, __token__), bi64)   * 1 ) \
-    | (.xmatch(.left(1, __token__), string) * 1) \
-    | (.xmatch(.left(1, __token__), token)  * 0) \
-    | (.xmatch(.left(1, __token__), x)      * 0) \
-    | (.xmatch(.left(1, __token__), y)      * 0) \
-    | (.xmatch(.left(1, __token__), acc)    * 0)
 
 .define endian(__type__)\
     __type__ & (1 << 29)
@@ -116,7 +60,7 @@
   .if .tcount(__typed__) > .tcount({0:0})
     .exitmacro  ; array
   .elseif .tcount(__typed__) = 1
-    __type__ .set width __typed__
+    __type__ .set (dedtype __typed__)
   .else
     __type__ .set type __typed__
     .if !__type__

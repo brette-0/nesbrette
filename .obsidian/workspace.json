@@ -165,18 +165,19 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
+    "example/src/main.o",
+    "build/html/_sources/theory/instructionreference.rst.txt",
+    "build/html/theory/instructionreference.html",
+    "build/doctrees/theory/instructionreference.doctree",
+    "lib/synth/stack.asm",
+    "lib/synth/idtable.asm",
+    "lib/synth/generic.asm",
+    "lib/synth",
     "Pasted image 20250202202940.png",
     "source/theory/ir.md",
     "source/theory/instructionreference.rst",
     "source/modules/core/gpr.rst",
     "source/modules/core/ldr.rst",
-    "build/html/searchindex.js.tmp",
-    "build/html/_sources/theory/errors.rst.txt",
-    "build/html/theory/errors.html",
-    "build/doctrees/theory/errors.doctree",
-    "source/theory/errors.rst",
-    "example/src/main.o",
-    "lib/memory/memcpy.asm",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",
@@ -209,7 +210,6 @@
     "thoughts/sqrt.md",
     "profiling/math/cmult_results/cmult_accumulator_mode_unbiased_complexity_profiling.png",
     "profiling/math/cmult_results/cmult_accumulator_mode_multiplier_profiling.png",
-    "profiling/math/cmult_results/cmult_accumulator_mode_biased_complexity_profiling.png",
-    "docs/modules/math/image-3.png"
+    "profiling/math/cmult_results/cmult_accumulator_mode_biased_complexity_profiling.png"
   ]
 }

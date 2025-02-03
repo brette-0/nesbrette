@@ -12,7 +12,6 @@
     ldr imm: gpr, $00
 .endmacro
 
-; tested and working
 .macro stz __target__, __reg$__, __zero$__
     ; (nb_int: ptr) __target__
     ; (token : gpr) __reg$__
@@ -49,7 +48,7 @@
             .fatal "InvalidGeneralPurposeRegister: loading GPR must be a valid GPR!"; invalid reg
         .endif
 
-        .if (_stz_mode - wabs) && ((ar << (_stz_mode - wabs)) = _stz_reg)
+        .if (ar << (isindexed _stz_mode)) = _stz_reg
             .fatal "IntereferingRegisterUseException: Cannot have the reading register the same as the inedxing register!"
         .endif
     .endif

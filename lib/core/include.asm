@@ -96,6 +96,8 @@
         .elseif .xmatch(__feature__, shift)     ; (lshift, rshift)
         .elseif .xmatch(__feature__, flush)     ; (stz, ldz)
             .include .concat(libroot, "/memory/flush.asm")
+        .elseif .xmatch(__feature__, memcpy)    ; (memcpy) [depends on flush]
+            .include .concat(libroot, "/memory/memcpy.asm")
         .elseif .xmatch(__feature__, generic)   ; (memcpy, evaluate, compare, juggle)
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN

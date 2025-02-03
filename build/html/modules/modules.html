@@ -80,9 +80,8 @@
 <li class="toctree-l2"><a class="reference internal" href="core/core.html#try-gpr-transfer-register-to-y"><code class="docutils literal notranslate"><span class="pre">try</span> <span class="pre">gpr</span></code> - Transfer Register to Y</a></li>
 <li class="toctree-l2"><a class="reference internal" href="core/core.html#trx-gpr-transfer-register-to-x"><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">gpr</span></code> - Transfer Register to X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="core/core.html#trr-gpr-gpr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span> <span class="pre">gpr:</span> <span class="pre">gpr</span></code> - Transfer Register to Register</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/core.html#ldr-gpr-mode-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Load Register</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/core.html#str-gpr-mode-store-register"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Store Register</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core/core.html#rcp-typed-register-compare"><code class="docutils literal notranslate"><span class="pre">rcp</span> <span class="pre">typed:</span></code> - Register Compare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/core.html#ldr-reg-mode-value-cpre"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__value__,</span> <span class="pre">__cpre$__</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/core.html#str-reg-mode-address-cpre-iwle"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__,</span> <span class="pre">__iwle$__</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="synth/synth.html"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a><ul>
@@ -148,8 +147,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="memory/memory.html"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="memory/flush.html"><code class="docutils literal notranslate"><span class="pre">flush</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="memory/flush.html#ldz-gpr-lax-laxlevel"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__,</span> <span class="pre">__lax$__,</span> <span class="pre">__laxlevel$__</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="memory/flush.html#stz-target"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory/flush.html#ldz-gpr"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory/flush.html#stz-target-reg-zero"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__zero$__</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="memory/memory.html#mssbyte-int-most-significant-set-byte"><code class="docutils literal notranslate"><span class="pre">mssbyte</span> <span class="pre">int:</span></code> - Most Significant Set Byte</a></li>

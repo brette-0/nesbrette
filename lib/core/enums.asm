@@ -44,4 +44,21 @@ set = 1
 ; handy kw to resolve jsr->rts
 return = 1
 
-null = (1 << 31)    ; can be viewed as type negative typeless
+null = (1 << 30)    ; can be viewed as type negative typeless
+
+
+.define isindexed(__mode__)\
+    ((__mode__ = imp)       * 0) | \
+    ((__mode__ = imm)       * 0) | \
+    ((__mode__ = zp )       * 0) | \
+    ((__mode__ = zpx)       * 1) | \
+    ((__mode__ = zpy)       * 2) | \
+    ((__mode__ = wabs)      * 0) | \
+    ((__mode__ = wabsx)     * 1) | \
+    ((__mode__ = wabsy)     * 2) | \
+    ((__mode__ = abst)      * 0) | \
+    ((__mode__ = absx)      * 1) | \
+    ((__mode__ = absy)      * 2) | \
+    ((__mode__ = inabsx)    * 1) | \
+    ((__mode__ = inabsy)    * 2) | \
+    ((__mode__ = inabs)     * 0)

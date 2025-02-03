@@ -371,28 +371,47 @@ typeas ArrayStart, u32
 </pre></div>
 </div>
 </section>
-<section id="ldr-gpr-mode-load-register">
-<h2><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Load Register<a class="headerlink" href="#ldr-gpr-mode-load-register" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">ar</span>
-<span class="n">ldr</span> <span class="n">reg</span><span class="p">::</span><span class="n">imm</span><span class="p">,</span> <span class="n">param</span>
-<span class="n">bpl</span> <span class="nd">@task</span>
+<section id="ldr-reg-mode-value-cpre">
+<h2><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__value__,</span> <span class="pre">__cpre$__</span></code><a class="headerlink" href="#ldr-reg-mode-value-cpre" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
+    (mode: gpr)         __reg_mode__    gpr and mode must be valid
+    (ca65_int)          __value__       Must be within u16 range
+
+optional:
+    (nb_error)          __cpre$__       must be valid error level
+
+dependacies:
+    libcore
+</pre></div>
+</div>
+<p>Loads any GPR with any value with any mode. This is used for the backend mostly, as the syntax here is designed to be functional above all.
+This instruction <em>may</em> throw a <code class="docutils literal notranslate"><span class="pre">ConstantParameterRangeException</span></code> which indicates the desired source pointer cannot be accesed entirely by the desired opcode dicated by the memory address mode.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldr imm: ar, $ea
+ldr zpx: yr, $ea, warning
 </pre></div>
 </div>
 </section>
-<section id="str-gpr-mode-store-register">
-<h2><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Store Register<a class="headerlink" href="#str-gpr-mode-store-register" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">yr</span>
-<span class="nb">str</span> <span class="n">reg</span><span class="p">::</span><span class="n">wabs</span><span class="o">.</span> <span class="n">param</span>
+<section id="str-reg-mode-address-cpre-iwle">
+<h2><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__,</span> <span class="pre">__iwle$__</span></code><a class="headerlink" href="#str-reg-mode-address-cpre-iwle" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">gpr</span><span class="p">)</span>         <span class="n">__reg_mode__</span>    <span class="n">gpr</span> <span class="ow">and</span> <span class="n">mode</span> <span class="n">must</span> <span class="n">be</span> <span class="n">valid</span>
+    <span class="p">(</span><span class="n">ca65_int</span><span class="p">)</span>          <span class="n">__value__</span>       <span class="n">Must</span> <span class="n">be</span> <span class="n">within</span> <span class="n">u16</span> <span class="nb">range</span>
 </pre></div>
 </div>
-</section>
-<section id="rcp-typed-register-compare">
-<h2><code class="docutils literal notranslate"><span class="pre">rcp</span> <span class="pre">typed:</span></code> - Register Compare<a class="headerlink" href="#rcp-typed-register-compare" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">ar</span>
-<span class="n">rcp</span> <span class="n">reg</span><span class="p">::</span><span class="n">zp</span><span class="p">,</span> <span class="n">yr</span>     <span class="p">;</span> <span class="n">needs</span> <span class="n">i6502</span>
-<span class="n">bne</span> <span class="nd">@task</span>
-<span class="n">rcp</span> <span class="n">reg</span><span class="p">::</span><span class="n">zpx</span><span class="p">,</span> <span class="n">memory</span>
-<span class="n">bne</span> <span class="nd">@task</span>
+<dl class="simple">
+<dt></dt><dd><dl class="simple">
+<dt>optional:</dt><dd><p>(nb_error)          __cpre$__       must be valid error level
+(nb_error)          __iwle$__       must be valid error level</p>
+</dd>
+<dt>dependacies:</dt><dd><p>libcore</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Store any GPR into any address with any memory address mode. Same as <code class="docutils literal notranslate"><span class="pre">ldr</span></code> this syntax isn’t designed to be tidy but functional and is frequently accesed by the backend. Will throw the same range exception, or may throw an <code class="docutils literal notranslate"><span class="pre">InvalidWriteLocationException</span></code> which indicates that you are attempting to write to ROM. If your header is set up correctly this <strong>should</strong> not fire on PRG-RAM Bankable mappers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>str wabs: ar, $ea
+str zpx: yr, $ea, warning
+str zpx: yr, $ea, warning, fatal
 </pre></div>
 </div>
 </section>
@@ -442,9 +461,8 @@ typeas ArrayStart, u32
 <li><a class="reference internal" href="#try-gpr-transfer-register-to-y"><code class="docutils literal notranslate"><span class="pre">try</span> <span class="pre">gpr</span></code> - Transfer Register to Y</a></li>
 <li><a class="reference internal" href="#trx-gpr-transfer-register-to-x"><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">gpr</span></code> - Transfer Register to X</a></li>
 <li><a class="reference internal" href="#trr-gpr-gpr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span> <span class="pre">gpr:</span> <span class="pre">gpr</span></code> - Transfer Register to Register</a></li>
-<li><a class="reference internal" href="#ldr-gpr-mode-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Load Register</a></li>
-<li><a class="reference internal" href="#str-gpr-mode-store-register"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">gpr:</span> <span class="pre">mode</span></code> - Store Register</a></li>
-<li><a class="reference internal" href="#rcp-typed-register-compare"><code class="docutils literal notranslate"><span class="pre">rcp</span> <span class="pre">typed:</span></code> - Register Compare</a></li>
+<li><a class="reference internal" href="#ldr-reg-mode-value-cpre"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__value__,</span> <span class="pre">__cpre$__</span></code></a></li>
+<li><a class="reference internal" href="#str-reg-mode-address-cpre-iwle"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__,</span> <span class="pre">__iwle$__</span></code></a></li>
 </ul>
 </li>
 </ul>
