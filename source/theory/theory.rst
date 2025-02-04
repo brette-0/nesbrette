@@ -4,7 +4,7 @@
 ``Includer``
 ~~~~~~~~
 
-What makes ``nesbrette`` so good is the high performance, clean code with the *minimal output*. The minimal output is achieved by using a 'template' that describes: the constants, the includes, the addresses, the warnings, the tables and finally a file known as the ``includer``. The job of the ``includer`` is to sysmetatically include everything it needs to and 'build' the library through a series of defines to create **only** what is deemed to be needed either by the engine or by the user.
+``nesbrette`` allows you to include modules with a basic ``include`` keyword, whats better is features that depend on certain modules can also include modules. This means the user needs only specify once what they need and then may use it to its fullest extent without needing to worry about its dependacies. ``nesbrette`` will throw warnings if a module requires a depenancy and it will notify you of what depenancies it is including as it does so, this warning can also be muted.
 
 This feture is entirely compatible with ``ca65`` lexical scopes, and while macros and defines don't obey scope, the targets they have certainly will and therefore use of instructions that depend on an assembled code body will fail if said code body hasn't been assembled available within that lexical scope. This is different to ``global`` members which do not require assembled bodies to interact with and instead are completely macro or define based.
 

@@ -15,6 +15,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Errors" href="errors.html" />
     <link rel="prev" title="math" href="../modules/math/math.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
@@ -23,6 +24,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="errors.html" title="Errors"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../modules/math/math.html" title="math"
              accesskey="P">previous</a> |</li>
@@ -40,7 +44,7 @@
 <h1><code class="docutils literal notranslate"><span class="pre">theory</span></code><a class="headerlink" href="#theory" title="Link to this heading">¶</a></h1>
 <section id="includer">
 <h2><code class="docutils literal notranslate"><span class="pre">Includer</span></code><a class="headerlink" href="#includer" title="Link to this heading">¶</a></h2>
-<p>What makes <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> so good is the high performance, clean code with the <em>minimal output</em>. The minimal output is achieved by using a ‘template’ that describes: the constants, the includes, the addresses, the warnings, the tables and finally a file known as the <code class="docutils literal notranslate"><span class="pre">includer</span></code>. The job of the <code class="docutils literal notranslate"><span class="pre">includer</span></code> is to sysmetatically include everything it needs to and ‘build’ the library through a series of defines to create <strong>only</strong> what is deemed to be needed either by the engine or by the user.</p>
+<p><code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> allows you to include modules with a basic <code class="docutils literal notranslate"><span class="pre">include</span></code> keyword, whats better is features that depend on certain modules can also include modules. This means the user needs only specify once what they need and then may use it to its fullest extent without needing to worry about its dependacies. <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will throw warnings if a module requires a depenancy and it will notify you of what depenancies it is including as it does so, this warning can also be muted.</p>
 <p>This feture is entirely compatible with <code class="docutils literal notranslate"><span class="pre">ca65</span></code> lexical scopes, and while macros and defines don’t obey scope, the targets they have certainly will and therefore use of instructions that depend on an assembled code body will fail if said code body hasn’t been assembled available within that lexical scope. This is different to <code class="docutils literal notranslate"><span class="pre">global</span></code> members which do not require assembled bodies to interact with and instead are completely macro or define based.</p>
 </section>
 <section id="typing">
@@ -93,6 +97,11 @@
     <p class="topless"><a href="../modules/math/math.html"
                           title="previous chapter"><code class="docutils literal notranslate"><span class="pre">math</span></code></a></p>
   </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="errors.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">Errors</span></code></a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -120,6 +129,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="errors.html" title="Errors"
+             >next</a> |</li>
         <li class="right" >
           <a href="../modules/math/math.html" title="math"
              >previous</a> |</li>

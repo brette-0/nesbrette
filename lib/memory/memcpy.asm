@@ -46,14 +46,15 @@
         m_source .set  .left(1, __modes$__)
         m_target .set .right(1, __modes$__)
 
-        .if     (m_source > inabs) || (m_source < imp)
-            .fatal ""   ; invalid mam
+        .if   (m_source > absx)
+            .fatal "UnsupportedFeatureException: memcpy will never use indirectness, its always slow."          ; unsupported
         .elseif (m_target > inabs) || (m_target < imp)
-            .fatal ""   ; invalid mam
+            .fatal "InvalidMemoryAddressModeException: This memory address mode isnt recognized."               ; erroneous mam
         .elseif i_source && (i_source = i_target)
-            .fatal ""   ; conflict gpr 
+            .fatal "IntereferingRegisterUseException: Cannot index by same register used for data transfer."    ; conflict gpr 
+        .elseif (i_source <> ar) && (i_target <> ar)
+            .fatal "InvalidMemoryAddressModeException: Cannot store X/Y with indexed memory address mode."      ; invalid mam
         .endif
-        ; TODO: handle invalid instructions AOT here
     .endif
 
     ; stwm = __stwm$__ ?? (SourceTargetWidthMismatchException ?? warning)
@@ -87,7 +88,7 @@
     .ifnblank __zero$__
         zero = __zero$__
     .else   
-        zero = 0
+        zero = _reg
     .endif
 
     .if     w_source < w_target
@@ -96,12 +97,10 @@
         report stwm, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
     .endif
 
-    .if zero
-        .if (w_source < w_target) && fill
-            .repeat w_target - w_source, iter
-                str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
-            .endrepeat
-        .endif
+    .if (zero <> _reg) && (w_source < w_target) && fill
+        .repeat w_target - w_source, iter
+            str m_target: zero, eindex l_target, w_target, (w_target - w_source + iter), e_target
+        .endrepeat
     .endif
 
     .repeat .min(w_source, w_target), iter
@@ -109,12 +108,10 @@
         str m_target: _reg, eindex l_target, w_target, iter, (endian t_target)
     .endrepeat
 
-    .if !zero
-        ldz _reg
-        .if (w_source < w_target) && fill
-            .repeat w_target - w_source, iter
-                str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
-            .endrepeat
-        .endif
+    .if (zero = _reg) && (w_source < w_target) && fill
+        ldz zero
+        .repeat w_target - w_source, iter
+            str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
+        .endrepeat
     .endif
 .endmacro

@@ -22,18 +22,20 @@
 /*
 
     TODO: Globally including procedures shoulld have a warning circumstance
-
+    TODO: All modules to have .ifndef=>def
+    TODO: Modules to include depenancies (warn when doing so)
+            AutomaticDependancyInclusionException level
 */
 
 .setcpu "6502x"
 
 
-.feature force_range
-.feature line_continuations
-.feature string_escapes
-.feature underline_in_numbers
-.feature bracket_as_indirect
-.feature dollar_in_identifiers
+.feature force_range            ; wiithout this so much would break
+.feature line_continuations     ; without this the library would look terrible
+.feature string_escapes         ; these are useful for bigger projects
+.feature underline_in_numbers   ; there is no reason to disable this
+.feature bracket_as_indirect    ; used to indicate indirect (duh)
+.feature dollar_in_identifiers  ; used to indicate optional parameter
 
 ; sets libroot define path and includes libcore
 .macro __libroot__ __path__
@@ -47,9 +49,9 @@
     .include .concat(libroot, "/core/header.asm")
 .endmacro
 
-
-.macro __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN
-    .fatal "includefrom requires valid feature token"
+; error case: when you are trying to include something that doesn't exist from something that does
+.macro __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
+    .fatal .sprintf("UnrecognizedModuleException: %s is not a recognized module of %s!", __feature__, __moduletok__)
 .endmacro
 
 .macro include __token__
@@ -78,7 +80,7 @@
     .elseif .xmatch(__moduletok__, memory)  ; include memory
         module .set 1   ; memory has id 1
     .else
-        .fatal "includefrom requires valid parent module"
+        .fatal .sprintf("parent module '%s' not a recognized module!", __moduletok__)
     .endif
 
     .if     module = 0  ; math
@@ -89,18 +91,18 @@
         .elseif .xmatch(__feature__, div)       ; (div)
         .elseif .xmatch(__feature__, trig)      ; (trig)
         .else
-            __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN
+            __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif
     .elseif module = 1  ; memory
         .if     .xmatch(__feature__, mlsusb)    ; (mssb, lssb, msub, lsub, mssbyte, msubyte, lssbyte, lsubyte, MSSB, LSSB, MSUB, LSUB)
         .elseif .xmatch(__feature__, shift)     ; (lshift, rshift)
-        .elseif .xmatch(__feature__, flush)     ; (stz, ldz)
+        .elseif .xmatch(__feature__, flush)     ; (stz, ldz) ?? stz --> flush (MAKE LDZ CORE?)
             .include .concat(libroot, "/memory/flush.asm")
-        .elseif .xmatch(__feature__, memcpy)    ; (memcpy) [depends on flush]
+        .elseif .xmatch(__feature__, memcpy)    ; (memcpy)(MAKE MEMCPY CORE?)
             .include .concat(libroot, "/memory/memcpy.asm")
-        .elseif .xmatch(__feature__, generic)   ; (memcpy, evaluate, compare, juggle)
+        .elseif .xmatch(__feature__, generic)   ; (evaluate, compare, juggle)
         .else
-            __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN
+            __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif
     .endif
 

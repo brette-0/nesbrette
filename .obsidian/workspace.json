@@ -165,8 +165,9 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "example/src/main.o",
     "build/html/searchindex.js.tmp",
+    "example/src/main.o",
+    "source/modules/memory/memcpy.rst",
     "build/html/_sources/theory/instructionreference.rst.txt",
     "build/html/theory/instructionreference.html",
     "build/doctrees/theory/instructionreference.doctree",
@@ -177,7 +178,6 @@
     "Pasted image 20250202202940.png",
     "source/theory/ir.md",
     "source/theory/instructionreference.rst",
-    "source/modules/core/gpr.rst",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",

@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>memcpy &#8212; nesbrette 0.1 documentation</title>
+    <title>memcpy t:source, t:target &#8212; nesbrette 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
     
@@ -14,9 +14,7 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="eval" href="eval.html" />
-    <link rel="prev" title="MSSByte &amp; LSSByte" href="m%2Clsxb.html" /> 
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -24,16 +22,8 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="eval.html" title="eval"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="m%2Clsxb.html" title="MSSByte &amp; LSSByte"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="memory.html" accesskey="U">memory</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">memcpy</span></code></a></li> 
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">memcpy</span> <span class="pre">t:source,</span> <span class="pre">t:target</span></code></a></li> 
       </ul>
     </div>  
 
@@ -42,18 +32,42 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="memcpy">
-<h1><code class="docutils literal notranslate"><span class="pre">memcpy</span></code><a class="headerlink" href="#memcpy" title="Link to this heading">¶</a></h1>
-<section id="mempcy-int-src-int-tar-copy-out-memory">
-<h2><code class="docutils literal notranslate"><span class="pre">mempcy</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Copy out Memory<a class="headerlink" href="#mempcy-int-src-int-tar-copy-out-memory" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+  <p><code class="docutils literal notranslate"><span class="pre">memcpy</span></code>
+——–=-</p>
+<section id="memcpy-t-source-t-target">
+<h1><code class="docutils literal notranslate"><span class="pre">memcpy</span> <span class="pre">t:source,</span> <span class="pre">t:target</span></code><a class="headerlink" href="#memcpy-t-source-t-target" title="Link to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">includefrom</span> <span class="pre">memory,</span> <span class="pre">memcpy</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
+    (ca65_int)          __gpr__         fails on invalid GPR
+    (int: ptr)          __source__
+    (int: ptr)          __target__
+
+optional:
+    (gpr)               __reg$__        fails on invalid GPR
+    (mode: mode)        __modes$__      fails on invalid modes
+    (error)             __stwm$__       fails on invalid error level
+    (ca65_bool)         __fill$__
+    (gpr)               __zero$__       fails on invalid GPR
+
+dependacies:
+    libcore
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Because I don’t expect you to need to do much of <code class="docutils literal notranslate"><span class="pre">stz</span></code> I decided that I’d make the rolled solution the default when storing to a <code class="docutils literal notranslate"><span class="pre">u24</span></code> or of equal size. If you have PRG/CPU space to unroll then I highly suggest you do as it the rolled solution is three times slower.</p>
+<p>Transfers one variable to another variable with a ‘clone’ operation with width and endian context. Always stores as much as the target type requires, but if the source width is shorter than the target then by default the target will have zeroes in its higher bytes.</p>
+<p>To prevent redundant loads, you can pass a register that holds zero into the <code class="docutils literal notranslate"><span class="pre">__zero$__</span></code> parameter. Without a non-null definition for <code class="docutils literal notranslate"><span class="pre">__zero$__</span></code>, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will load a zero into the ‘data GPR’ after performing the transfer ensuring that a GPR’s value is a deterministic constant at the end (zero).</p>
+<p><code class="docutils literal notranslate"><span class="pre">memcpy</span></code> can also peform indexed transfers between registers for advanced memory handling with use of the <code class="docutils literal notranslate"><span class="pre">__mode$__</span></code> parameter. Naturally be wary of what ‘instructions’ have what memory address modes when specifying register and modes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">memcpy</span></code> may raise a <code class="docutils literal notranslate"><span class="pre">SourceTargetWidthMismatchException</span></code> in which the operations are of differing widths. Now while this is supported by <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code>, its quite possible that it was done on accident and therefore has the optional <code class="docutils literal notranslate"><span class="pre">__stwm$__</span></code> parameter to set the error level of this occurance.</p>
+<p>Finally you may choose to opt out of ‘filling’ by setting <code class="docutils literal notranslate"><span class="pre">__fill$__</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>. Should it be that the source is greater than the target <em>only</em> enough information to fit the width of the target will be specified.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">memcpy</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Target</span>
+<span class="n">memcpy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span>
+<span class="n">mempcy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">xr</span>
+<span class="n">mempcy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">absx</span><span class="p">:</span> <span class="n">absy</span>
+<span class="n">mempcy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">fatal</span>
+<span class="n">mempcy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="mi">0</span>
+<span class="n">mempcy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">yr</span>
+</pre></div>
 </div>
-</section>
+<p><a class="reference external" href="https://github.com/brette-0/nesbrette/blob/main/lib/memory/memcpy.asm">View Source Code on Github</a></p>
 </section>
 
 
@@ -63,26 +77,6 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">memcpy</span></code></a><ul>
-<li><a class="reference internal" href="#mempcy-int-src-int-tar-copy-out-memory"><code class="docutils literal notranslate"><span class="pre">mempcy</span> <span class="pre">int::src,</span> <span class="pre">int::tar</span></code> - Copy out Memory</a></li>
-</ul>
-</li>
-</ul>
-
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="m%2Clsxb.html"
-                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">MSSByte</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">LSSByte</span></code></a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="eval.html"
-                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">eval</span></code></a></p>
-  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -110,16 +104,8 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="eval.html" title="eval"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="m%2Clsxb.html" title="MSSByte &amp; LSSByte"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Modules</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="memory.html" >memory</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">memcpy</span></code></a></li> 
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">memcpy</span> <span class="pre">t:source,</span> <span class="pre">t:target</span></code></a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
