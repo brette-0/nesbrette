@@ -34,9 +34,6 @@
     .endif
     null_coalset _reg, ar
 
-    
-
-    
     m_source .set null
     m_target .set null
 
@@ -83,18 +80,27 @@
     .else   
         fill = 1
     .endif
+
+    ; fill = __fill$__ ?? 1
+    .ifnblank __zero$__
+        zero = __zero$__
+    .else   
+        zero = 0
+    .endif
     
     ; width of task is smallest range of legal data
     w_task = .min(w_source, w_target)
 
     .if     w_source < w_target
-        report SourceTargetWidthMismatchException, "SourceTargetWidthMismatchException: nesbrette will write trailing zeroes into the target."
+        report stwm, "SourceTargetWidthMismatchException: nesbrette will write trailing zeroes into the target."
     .elseif w_source > w_target
-        report SourceTargetWidthMismatchException, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
+        report stwm, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
     .endif
 
     .if (w_source < w_target) && fill
-        stz (w_target - w_source): (eindex l_target, w_target, w_source, endian t_target), __regs$__, __zero$__
+        .out .sprintf("%d", (w_target - w_source))
+        .out .sprintf("%d", ((w_target - w_source) | endian t_target))
+        __stz_typeless eindex l_target, w_target, w_source, endian t_target, ((endian t_target) | (w_target - w_source)), _reg, _mode, zero
     .endif
 
     .repeat w_task, iter

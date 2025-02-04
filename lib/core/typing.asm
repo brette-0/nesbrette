@@ -32,13 +32,15 @@
     | (.xmatch(.left(1, __token__), token)  * -2) \
     | (.xmatch(.left(1, __token__), r)      * -3)
 
+
+typectx = (3 << 29)
 ; d31 = Reserved for special case
 ; d30 = signed flag (for numbers)
 ; d29 = endian flag (for numbers)
 ; (d0-d11) value segment
 
 .define typeval(__type__)\
-  (__type__) & %11111111111
+  ((__type__ >= 0) * (__type__ & ~typectx)) | ((__type__ < 0) * null)
 
 .define typeas(__label__, __type__)\
   .ident(.sprintf("t_%s", .string(__label__))) .set type __type__
@@ -53,7 +55,7 @@
   .ident(.concat("t_", label __token__))
 
 .define endian(__type__)\
-    __type__ & (1 << 29)
+  (__type__ & (1 << 29))
 
 
 .macro detype __typed__, __type__
@@ -64,7 +66,7 @@
   .else
     __type__ .set type __typed__
     .if !__type__
-      __type .set itype __typed__
+      __type__ .set .left(1, __typed__)
     .endif
   .endif
 .endmacro

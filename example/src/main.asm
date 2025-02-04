@@ -16,10 +16,11 @@ includefrom memory, memcpy
 Temp  = $200
 Temp2 = $204
 
-typeas Temp,  u32
-typeas Temp2, bu32
+typeas Temp,  bu24
+typeas Temp2, u32
 
 reset:
+    ;stz t_Temp: Temp
     memcpy Temp, Temp2
     jmp reset
 
