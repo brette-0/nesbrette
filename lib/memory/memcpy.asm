@@ -89,9 +89,6 @@
     .else   
         zero = 0
     .endif
-    
-    ; width of task is smallest range of legal data
-    w_task = .min(w_source, w_target)
 
     .if     w_source < w_target
         report stwm, "SourceTargetWidthMismatchException: nesbrette will write trailing zeroes into the target."
@@ -99,13 +96,25 @@
         report stwm, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
     .endif
 
-    ; stz delta of target-source widths with 
-    .if (w_source < w_target) && fill
-        __stz_typeless eindex l_target, w_target, w_source, e_target, (e_target | (w_target - w_source)), _reg, m_target, zero
+    .if zero
+        .if (w_source < w_target) && fill
+            .repeat w_target - w_source, iter
+                str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
+            .endrepeat
+        .endif
     .endif
 
-    .repeat w_task, iter
+    .repeat .min(w_source, w_target), iter
         ldr m_source: _reg, eindex l_source, w_source, iter, (endian t_source)
         str m_target: _reg, eindex l_target, w_target, iter, (endian t_target)
     .endrepeat
+
+    .if !zero
+        ldz _reg
+        .if (w_source < w_target) && fill
+            .repeat w_target - w_source, iter
+                str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
+            .endrepeat
+        .endif
+    .endif
 .endmacro

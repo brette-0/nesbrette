@@ -166,6 +166,7 @@
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
     "example/src/main.o",
+    "build/html/searchindex.js.tmp",
     "build/html/_sources/theory/instructionreference.rst.txt",
     "build/html/theory/instructionreference.html",
     "build/doctrees/theory/instructionreference.doctree",
@@ -177,7 +178,6 @@
     "source/theory/ir.md",
     "source/theory/instructionreference.rst",
     "source/modules/core/gpr.rst",
-    "source/modules/core/ldr.rst",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",

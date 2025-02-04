@@ -7,12 +7,12 @@
 | `inr`   | Increment R                      | `2c`    | `1b`   | `libcore.gpr`                |     |
 | `der`   | Decrement R                      | `2c`    | `2b`   | `libcore.gpr`                |     |
 | `tar`   | Transfer A to R                  | `2c`    | `1b`   | `libcore.gpr`                |     |
-| `txr`   | Transfer X to R                  | `2-~4c` | `1-3b` | `libcore.gpr`                |     |
-| `txy`   | Transfer Y to R                  | `2-~4c` | `1-3b` | `libcore.gpr`                |     |
+| `txr`   | Transfer X to R                  | `2-~4c` | `1-3b` | `libcore.gpr` `synth.i6502`  |     |
+| `txy`   | Transfer Y to R                  | `2-~4c` | `1-3b` | `libcore.gpr` `synth.i6502`  |     |
 | `tra`   | Transfer R to A                  | `2c`    | `1b`   | `libcore.gpr`                |     |
-| `trx`   | Transfer R to X                  | `2-~4c` | `1-3b` | `libcore.gpr`                |     |
-| `try`   | Transfer R to Y                  | `2-~4c` | `1-3b` | `libcore.gpr`                |     |
-| `trr`   | Transfer R to R                  | `2-~4c` | `1-3b` | `libcore.gpr`                |     |
+| `trx`   | Transfer R to X                  | `2-~4c` | `1-3b` | `libcore.gpr` `synth.i6502`  |     |
+| `try`   | Transfer R to Y                  | `2-~4c` | `1-3b` | `libcore.gpr` `synth.i6502`  |     |
+| `trr`   | Transfer R to R                  | `2-~4c` | `1-3b` | `libcore.gpr` `synth.i6502`  |     |
 | `ldr`   | Load R with Mode                 | `2-~6c` | `2-3b` | `libcore.gpr`                |     |
 | `str`   | Store R with Mode                | `2-~6c` | `2-3b` | `libcore.gpr`                |     |
 | `cpr`   | Compare R with Mode              | `2-~6c` | `2-3b` | `libcore.gpr`                |     |
@@ -52,10 +52,7 @@
 | `xor`   | Bitflip R                        |         | `3b`   | `synth.i6502` `libcore.gpr`  |     |
 | `cmpx`  | Compare A, X                     |         | `3b`   | `synth.i6502`                |     |
 | `cmpy`  | Compare A, y                     |         | `3b`   | `synth.i6502`                |     |
-| `xcpy`  | Compare X, Y                     |         | `3b`   | `synth.i6502`                |     |
-| `ycpx`  | Compare Y, X                     |         | `3b`   | `synth.i6502`                |     |
 | `cpr`   | Compare by R by R                |         | `3b`   | `libcore.gpr` `synth.i6502`  |     |
-| `laxi`  | Load A Immediate                 |         |        | `synth.i6502x`               |     |
 | `tyxa`  | Transfer Y to X \| A             |         |        | `synth.i6502x`               |     |
 | `biti`  | Bitcheck Constant                |         |        | `synth.i6502`                |     |
 | `bib`   | Bitcheck Branch                  |         |        | `synth.s6502`                |     |
@@ -87,29 +84,27 @@
 | `msub`  | Most Significant Unset Bit       |         |        | `mem.mlussb`                 |     |
 | `lssb`  | Least Significant Set Bit        |         |        | `mem.mlussb`                 |     |
 | `lsub`  | Least Significant Unset Bit      |         |        | `mem.mlussb`                 |     |
-| `jmx`   | Jump Complex                     |         |        |                              |     |
 | `sex`   | Sign extend                      |         |        | `libcore.typing`             |     |
-
 Uncertain of when to include:
 
-| Opcode | Name                         | Purpose | Speed | Size | Hardware |
-| ------ | ---------------------------- | ------- | ----- | ---- | -------- |
-| `ans`  | Add with Carry by Stack      |         |       |      |          |
-| `sbs`  | Subtract with Carry by Stack |         |       |      |          |
-| `ans`  | Bitmask by Stack             |         |       |      |          |
-| `ors`  | Bitset by Stack              |         |       |      |          |
-| `eos`  | Bitflip by Stack             |         |       |      |          |
-| `lss`  | Left Shift Stack             |         |       |      |          |
-| `rss`  | Right Shift Stack            |         |       |      |          |
-| `rrs`  | Right Roll Stack             |         |       |      |          |
-| `rls`  | Left Roll Stack              |         |       |      |          |
-| `des`  | Decrement Stack              |         |       |      |          |
-| `ins`  | Increment Stack              |         |       |      |          |
-|        |                              |         |       |      |          |
-|        |                              |         |       |      |          |
-|        |                              |         |       |      |          |
-|        |                              |         |       |      |          |
-|        |                              |         |       |      |          |
-|        |                              |         |       |      |          |
-|        |                              |         |       |      |          |
+| Opcode | Name                         | Purpose | Speed | Size           | Hardware |
+| ------ | ---------------------------- | ------- | ----- | -------------- | -------- |
+| `ans`  | Add with Carry by Stack      |         |       |                |          |
+| `sbs`  | Subtract with Carry by Stack |         |       |                |          |
+| `ans`  | Bitmask by Stack             |         |       |                |          |
+| `ors`  | Bitset by Stack              |         |       |                |          |
+| `eos`  | Bitflip by Stack             |         |       |                |          |
+| `lss`  | Left Shift Stack             |         |       |                |          |
+| `rss`  | Right Shift Stack            |         |       |                |          |
+| `rrs`  | Right Roll Stack             |         |       |                |          |
+| `rls`  | Left Roll Stack              |         |       |                |          |
+| `des`  | Decrement Stack              |         |       |                |          |
+| `ins`  | Increment Stack              |         |       |                |          |
+| `jmx`  | Jump Complex                 |         |       |                |          |
+| `laxi` | Load AX Immediate            |         |       | `synth.i6502x` |          |
+|        |                              |         |       |                |          |
+|        |                              |         |       |                |          |
+|        |                              |         |       |                |          |
+|        |                              |         |       |                |          |
+|        |                              |         |       |                |          |
 

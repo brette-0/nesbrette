@@ -76,14 +76,14 @@
     ; parameter 'hotswap' for mode:reg
     .if _reg < ar
         .if _mode < ar
-            .fatal .sprintf("ConstantParameterValueException: neither l:%d or r:%d is large enough to be either a register or a memory address mode.", _reg, _mode)
+            .fatal .sprintf("ConstantParameterValueException: neither l:%x or r:%x is large enough to be either a register or a memory address mode.", _reg, _mode)
         .endif
         _temp .set _mode
         _mode .set _reg
         _reg  .set _temp
     .elseif _mode > inabs
         .if _reg > yr
-            .fatal .sprintf("ConstantParameterValueException: both l:%d amd r:%d is too large to be either a register or a memory address mode.", _reg, _mode)
+            .fatal .sprintf("ConstantParameterValueException: both l:%x amd r:%x is too large to be either a register or a memory address mode.", _reg, _mode)
         .endif
         _temp .set _mode
         _mode .set _reg
@@ -197,20 +197,20 @@
     ; parameter 'hotswap' for mode:reg
     .if _reg < ar
         .if _mode < ar
-            .fatal .sprintf("ConstantParameterValueException: neither l:%d or r:%d is large enough to be either a register or a memory address mode.", _reg, _mode)
+            .fatal .sprintf("ConstantParameterValueException: neither l:%x or r:%x is large enough to be either a register or a memory address mode.", _reg, _mode)
         .endif
         _temp .set _mode
         _mode .set _reg
         _reg  .set _temp
     .elseif _mode > inabs
         .if _reg > yr
-            .fatal .sprintf("ConstantParameterValueException: both parameters l:%d or r:%d are too large to be either a register or a memory address mode.", _reg, _mode)
+            .fatal .sprintf("ConstantParameterValueException: both parameters l:%x or r:%x are too large to be either a register or a memory address mode.", _reg, _mode)
         .endif
         _temp .set _mode
         _mode .set _reg
         _reg  .set _temp
     .endif
-
+    
     .if (_mode = inabs) || (_mode = imp) || (_mode = imm)
         .fatal "InvalidMemoryAddressModeException : str cannot load by indirect unindexed, immediate or with implied operand"
     .endif
@@ -306,14 +306,14 @@
     ; parameter 'hotswap' for mode:reg
     .if _cpr_reg < ar
         .if _cpr_mode < ar
-            .fatal .sprintf("ConstantParameterValueException: neither l:%d or r:%d is large enough to be either a register or a memory address mode.", _reg, _mode)
+            .fatal .sprintf("ConstantParameterValueException: neither l:%x or r:%x is large enough to be either a register or a memory address mode.", _reg, _mode)
         .endif
         _cpr_temp .set _cpr_mode
         _cpr_mode .set _cpr_reg
         _cpr_reg  .set _cpr_temp
     .elseif _cpr_mode > inabs
         .if _reg > yr
-            .fatal .sprintf("ConstantParameterValueException: both l:%d amd r:%d is too large to be either a register or a memory address mode.", _reg, _mode)
+            .fatal .sprintf("ConstantParameterValueException: both l:%x amd r:%x is too large to be either a register or a memory address mode.", _reg, _mode)
         .endif
         _cpr_temp .set _cpr_mode
         _cpr_mode .set _cpr_reg
