@@ -27,6 +27,8 @@
     detype __source__, t_source
     detype __target__, t_target
 
+    e_target = endian t_target
+
     ; _reg = __reg$__ ?? ar
     _reg .set null
     .ifnblank __reg$__
@@ -97,10 +99,9 @@
         report stwm, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
     .endif
 
+    ; stz delta of target-source widths with 
     .if (w_source < w_target) && fill
-        .out .sprintf("%d", (w_target - w_source))
-        .out .sprintf("%d", ((w_target - w_source) | endian t_target))
-        __stz_typeless eindex l_target, w_target, w_source, endian t_target, ((endian t_target) | (w_target - w_source)), _reg, _mode, zero
+        __stz_typeless eindex l_target, w_target, w_source, e_target, (e_target | (w_target - w_source)), _reg, m_target, zero
     .endif
 
     .repeat w_task, iter

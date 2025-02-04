@@ -13,13 +13,12 @@
 .endmacro
 
 .macro __stz_typeless l_target, t_target, _reg, _mode, _zero
-
     .if !_zero
         ldr _reg: imm, $00
     .endif
 
     .repeat typeval t_target, iter
-        str _reg: _mode, eindex l_target, (typeval t_target), iter, endian t_target
+        str _reg: _mode, eindex l_target, typeval t_target, iter, endian t_target
     .endrepeat
 .endmacro
 

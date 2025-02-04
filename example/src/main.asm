@@ -16,8 +16,8 @@ includefrom memory, memcpy
 Temp  = $200
 Temp2 = $204
 
-typeas Temp,  bu24
-typeas Temp2, u32
+typeas Temp,  bu16
+typeas Temp2, bu32
 
 reset:
     ;stz t_Temp: Temp

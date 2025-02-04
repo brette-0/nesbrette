@@ -5,7 +5,7 @@
   (__token__ & (1 << 30))
 
 .define eindex(__offset__, __width__, __index__, __endian__)\
-  ((__offset__ + __index__) * (__endian__ < 1)) | ((__offset__ + __width__ - __index__ - 1) * (__endian__ > 0))
+  ((__offset__ + __index__) * (0 = __endian__)) | ((__offset__ + __width__ - __index__ - 1) * (0 <> __endian__))
 
 .define type(__token__)\
       (.xmatch(.left(1, __token__), u8)     * 1 ) \

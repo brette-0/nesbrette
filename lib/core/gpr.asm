@@ -165,6 +165,8 @@
 .endmacro
 
 .macro str __typed__, __address__, __cpre$__, __iwle$__
+    .local _reg, _mode, _temp, cpre, iwle
+
     .if .paramcount < 2
         .fatal "str requires two operands : (__mode__ : __reg__) & __address__"
     .endif
@@ -189,80 +191,80 @@
         deferror __iwle$__, iwle
     .endif
 
-    _str_reg    .set  .left(1, __typed__)
-    _str_mode   .set .right(1, __typed__)
+    _reg    .set  .left(1, __typed__)
+    _mode   .set .right(1, __typed__)
 
     ; parameter 'hotswap' for mode:reg
-    .if _str_reg < ar
-        .if _str_mode < ar
+    .if _reg < ar
+        .if _mode < ar
             .fatal .sprintf("ConstantParameterValueException: neither l:%d or r:%d is large enough to be either a register or a memory address mode.", _reg, _mode)
         .endif
-        _str_temp .set _str_mode
-        _str_mode .set _str_reg
-        _str_reg  .set _str_temp
-    .elseif _str_mode > inabs
-        .if _str_reg > yr
+        _temp .set _mode
+        _mode .set _reg
+        _reg  .set _temp
+    .elseif _mode > inabs
+        .if _reg > yr
             .fatal .sprintf("ConstantParameterValueException: both parameters l:%d or r:%d are too large to be either a register or a memory address mode.", _reg, _mode)
         .endif
-        _str_temp .set _str_mode
-        _str_mode .set _str_reg
-        _str_reg  .set _str_temp
+        _temp .set _mode
+        _mode .set _reg
+        _reg  .set _temp
     .endif
 
-    .if (_str_mode = inabs) || (_str_mode = imp) || (_str_mode = imm)
+    .if (_mode = inabs) || (_mode = imp) || (_mode = imm)
         .fatal "InvalidMemoryAddressModeException : str cannot load by indirect unindexed, immediate or with implied operand"
     .endif
 
-    .if ((_str_mode = zp) || (_str_mode = zpx) || (_str_mode = zpy) || (_str_mode = inabsy) || (_str_mode = inabsx) || (_str_mode = imm)) && (__address__ > $ff)
+    .if ((_mode = zp) || (_mode = zpx) || (_mode = zpy) || (_mode = inabsy) || (_mode = inabsx) || (_mode = imm)) && (__address__ > $ff)
         report cpre, "ConstantParameterRangeException: The provided value will cannot fit entirely within the operand length of the requested memory address mode."
     .endif
 
-    .if     _str_reg = ar
-        .if     _str_mode = inabsy
+    .if     _reg = ar
+        .if     _mode = inabsy
             sta [__address__], y
-        .elseif _str_mode = inabsx
+        .elseif _mode = inabsx
             sta [__address__, x]
-        .elseif _str_mode = abst
+        .elseif _mode = abst
             sta (__address__ | $800)
-        .elseif _str_mode = absy
+        .elseif _mode = absy
             sta (__address__ | $800), y
-        .elseif _str_mode = absx
+        .elseif _mode = absx
             sta (__address__ | $800), x
-        .elseif (_str_mode = zp) || (_str_mode = wabs)
+        .elseif (_mode = zp) || (_mode = wabs)
             sta __address__
-        .elseif (_str_mode = zpx) || (_str_mode = wabsx)
+        .elseif (_mode = zpx) || (_mode = wabsx)
             sta __address__, x
-        .elseif (_str_mode = zpy) || (_str_mode = wabsy)
+        .elseif (_mode = zpy) || (_mode = wabsy)
             sta __address__, y
         .else
             .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
         .endif
 
-    .elseif _str_reg = xr
-        .if (_str_mode = zpx) || (_str_mode = wabsy) || (_str_mode = absy) || (_str_mode = wabsx) || (_str_mode = absx) || (_str_mode = inabsy) || (_str_mode = inabsx)
+    .elseif _reg = xr
+        .if (_mode = zpx) || (_mode = wabsy) || (_mode = absy) || (_mode = wabsx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
             .fatal "InvalidMemoryAddressModeException : str(x) cannot load by indexed wabs/abs or indirect"
         .endif
 
-        .if     _str_mode = abst
+        .if     _mode = abst
             stx (__address__ | $800)
-        .elseif (_str_mode = zp) || (_str_mode = wabs)
+        .elseif (_mode = zp) || (_mode = wabs)
             stx __address__
-        .elseif (_str_mode = zpy)
+        .elseif (_mode = zpy)
             stx __address__, y
         .else
             .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
         .endif
     
-    .elseif _str_reg = yr
-        .if (_str_mode = zpx) || (_str_mode = wabsy) || (_str_mode = absy) || (_str_mode = wabsx) || (_str_mode = absx) || (_str_mode = inabsy) || (_str_mode = inabsx)
+    .elseif _reg = yr
+        .if (_mode = zpx) || (_mode = wabsy) || (_mode = absy) || (_mode = wabsx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
             .fatal "InvalidMemoryAddressModeException : str(y) cannot load by indirect unindexed or with implied operand"
         .endif
 
-        .if     _str_mode = abst
+        .if     _mode = abst
             sty (_mode | $800)
-        .elseif (_str_mode = zp) || (_str_mode = wabs)
+        .elseif (_mode = zp) || (_mode = wabs)
             sty __address__
-        .elseif (_str_mode = zpx)
+        .elseif (_mode = zpx)
             sty __address__, x
         .else
             .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
