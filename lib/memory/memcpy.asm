@@ -1,15 +1,9 @@
 /*
-
-    possible behaviors:
-        w_src = w_tar (good, all data is copied out)
-        w_src > w_tar (bad, some data is copied out to w_tar)
-        w_src < w_tar 
-            store 'fill' in w_tar   (not actually extra code)
-
+    TODO: Test 'order of steps' parameter '__order$__'
 */
 
 
-.macro memcpy __source__, __target__, __reg$__, __modes$__, __stwm$__, __fill$__, __zero$__
+.macro memcpy __source__, __target__, __reg$__, __modes$__, __stwm$__, __fill$__, __zero$__, __order$__
     .local t_source, t_target, i_source, i_target, m_source, m_target, r_source, r_target, w_source, w_target, l_source, l_target, _reg, stwm
     
     ; (nb_int: ident) __source__ 
@@ -91,16 +85,20 @@
         zero = _reg
     .endif
 
+    .if (w_source < w_target) && fill && .blank(__order$__)
+        .if (zero = _reg)
+            ldz zero
+        .endif
+
+        .repeat w_target - w_source, iter
+            str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
+        .endrepeat
+    .endif
+
     .if     w_source < w_target
         report stwm, "SourceTargetWidthMismatchException: nesbrette will write trailing zeroes into the target."
     .elseif w_source > w_target
         report stwm, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
-    .endif
-
-    .if (zero <> _reg) && (w_source < w_target) && fill
-        .repeat w_target - w_source, iter
-            str m_target: zero, eindex l_target, w_target, (w_target - w_source + iter), e_target
-        .endrepeat
     .endif
 
     .repeat .min(w_source, w_target), iter
@@ -108,8 +106,11 @@
         str m_target: _reg, eindex l_target, w_target, iter, (endian t_target)
     .endrepeat
 
-    .if (zero = _reg) && (w_source < w_target) && fill
-        ldz zero
+    .if (w_source < w_target) && fill && (!.blank(__order$__))
+        .if (zero = _reg)
+            ldz zero
+        .endif
+
         .repeat w_target - w_source, iter
             str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
         .endrepeat

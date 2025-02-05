@@ -5,6 +5,7 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
 ; global static includes
 ;includefrom memory, flush
 ;includefrom memory, memcpy
+includefrom memory, compare
 
 .segment "HEADER"
     header \
@@ -20,7 +21,7 @@ typeas Temp,  u32
 typeas Temp2, u32
 
 reset:
-
+    compare Temp, Temp2
     jmp reset
 
 .segment "VECTORS"

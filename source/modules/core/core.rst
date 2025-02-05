@@ -404,7 +404,7 @@ This instruction *may* throw a ``ConstantParameterRangeException`` which indicat
     required:
         (mode: gpr)         __reg_mode__    gpr and mode must be valid
         (ca65_int)          __value__       Must be within u16 range
-\
+
     optional:
         (nb_error)          __cpre$__       must be valid error level
         (nb_error)          __iwle$__       must be valid error level
@@ -419,3 +419,26 @@ Store any GPR into any address with any memory address mode. Same as ``ldr`` thi
     str wabs: ar, $ea 
     str zpx: yr, $ea, warning
     str zpx: yr, $ea, warning, fatal
+
+``cpr __reg_mode__, __address__, __cpre$__``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    required:
+        (mode: gpr)         __reg_mode__    gpr and mode must be valid
+        (ca65_int)          __value__       Must be within u16 range
+
+    optional:
+        (nb_error)          __cpre$__       must be valid error level
+
+    dependacies:
+        libcore
+
+Compares any register against a memory location with a specified memory address mode. This instruction *may* throw a 
+``ConstantParameterRangeException`` which indicates the desired source pointer cannot be accesed entirely by the desired opcode dicated by the memory address mode. 
+
+.. code-block::
+
+    cpr wabs: ar, $ea 
+    cpr  zpx: yr, $ea, warnings

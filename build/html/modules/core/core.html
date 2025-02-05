@@ -393,25 +393,42 @@ ldr zpx: yr, $ea, warning
 </section>
 <section id="str-reg-mode-address-cpre-iwle">
 <h2><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__,</span> <span class="pre">__iwle$__</span></code><a class="headerlink" href="#str-reg-mode-address-cpre-iwle" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required</span><span class="p">:</span>
-    <span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">gpr</span><span class="p">)</span>         <span class="n">__reg_mode__</span>    <span class="n">gpr</span> <span class="ow">and</span> <span class="n">mode</span> <span class="n">must</span> <span class="n">be</span> <span class="n">valid</span>
-    <span class="p">(</span><span class="n">ca65_int</span><span class="p">)</span>          <span class="n">__value__</span>       <span class="n">Must</span> <span class="n">be</span> <span class="n">within</span> <span class="n">u16</span> <span class="nb">range</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
+    (mode: gpr)         __reg_mode__    gpr and mode must be valid
+    (ca65_int)          __value__       Must be within u16 range
+
+optional:
+    (nb_error)          __cpre$__       must be valid error level
+    (nb_error)          __iwle$__       must be valid error level
+
+dependacies:
+    libcore
 </pre></div>
 </div>
-<dl class="simple">
-<dt></dt><dd><dl class="simple">
-<dt>optional:</dt><dd><p>(nb_error)          __cpre$__       must be valid error level
-(nb_error)          __iwle$__       must be valid error level</p>
-</dd>
-<dt>dependacies:</dt><dd><p>libcore</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <p>Store any GPR into any address with any memory address mode. Same as <code class="docutils literal notranslate"><span class="pre">ldr</span></code> this syntax isn’t designed to be tidy but functional and is frequently accesed by the backend. Will throw the same range exception, or may throw an <code class="docutils literal notranslate"><span class="pre">InvalidWriteLocationException</span></code> which indicates that you are attempting to write to ROM. If your header is set up correctly this <strong>should</strong> not fire on PRG-RAM Bankable mappers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>str wabs: ar, $ea
 str zpx: yr, $ea, warning
 str zpx: yr, $ea, warning, fatal
+</pre></div>
+</div>
+</section>
+<section id="cpr-reg-mode-address-cpre">
+<h2><code class="docutils literal notranslate"><span class="pre">cpr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__</span></code><a class="headerlink" href="#cpr-reg-mode-address-cpre" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
+    (mode: gpr)         __reg_mode__    gpr and mode must be valid
+    (ca65_int)          __value__       Must be within u16 range
+
+optional:
+    (nb_error)          __cpre$__       must be valid error level
+
+dependacies:
+    libcore
+</pre></div>
+</div>
+<p>Compares any register against a memory location with a specified memory address mode. This instruction <em>may</em> throw a
+<code class="docutils literal notranslate"><span class="pre">ConstantParameterRangeException</span></code> which indicates the desired source pointer cannot be accesed entirely by the desired opcode dicated by the memory address mode.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cpr wabs: ar, $ea
+cpr  zpx: yr, $ea, warnings
 </pre></div>
 </div>
 </section>
@@ -463,6 +480,7 @@ str zpx: yr, $ea, warning, fatal
 <li><a class="reference internal" href="#trr-gpr-gpr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span> <span class="pre">gpr:</span> <span class="pre">gpr</span></code> - Transfer Register to Register</a></li>
 <li><a class="reference internal" href="#ldr-reg-mode-value-cpre"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__value__,</span> <span class="pre">__cpre$__</span></code></a></li>
 <li><a class="reference internal" href="#str-reg-mode-address-cpre-iwle"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__,</span> <span class="pre">__iwle$__</span></code></a></li>
+<li><a class="reference internal" href="#cpr-reg-mode-address-cpre"><code class="docutils literal notranslate"><span class="pre">cpr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -100,7 +100,12 @@
             .include .concat(libroot, "/memory/flush.asm")
         .elseif .xmatch(__feature__, memcpy)    ; (memcpy)(MAKE MEMCPY CORE?)
             .include .concat(libroot, "/memory/memcpy.asm")
-        .elseif .xmatch(__feature__, generic)   ; (evaluate, compare, juggle)
+        .elseif .xmatch(__feature__, compare)   ; (compare)
+            .include .concat(libroot, "/memory/compare.asm")
+        .elseif .xmatch(__feature__, evaluate)  ; (evaluate)
+            .include .concat(libroot, "/memory/compare.asm")
+        .elseif .xmatch(__feature__, juggle)    ; (juggle)
+            .include .concat(libroot, "/memory/compare.asm")
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif
