@@ -26,7 +26,8 @@
      ((__regenum__ = xr) * xr) | \
     (((__regenum__ <> yr) && (__regenum__ <> xr) * null)
 
-.define index(collection, _index) .right(1, {.left((_index << 1) + 1, collection)})
+.define strindex(c, i) .right(1, {.left(1 + (i << 1), c)})
+.define index(collection, _index) ((i >= 0) * .right(1, {.left(1 + (i << 1), c)})) | ((i < 0) * .left(1, {.right(1 + (abs i << 1), c)}))
 .define append(collection, value) {.left(.tcount(collection), collection), value}
 
 

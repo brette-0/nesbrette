@@ -94,18 +94,18 @@
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif
     .elseif module = 1  ; memory
-        .if     .xmatch(__feature__, mlsusb)    ; (mssb, lssb, msub, lsub, mssbyte, msubyte, lssbyte, lsubyte, MSSB, LSSB, MSUB, LSUB)
+        .if     .xmatch(__feature__, xsxb)      ; (mssb, lssb, msub, lsub, mssbyte, msubyte, lssbyte, lsubyte, MSSB, LSSB, MSUB, LSUB)
+            .include .concat(libroot, "/memory/xsxb.asm")
         .elseif .xmatch(__feature__, shift)     ; (lshift, rshift)
+            .include .concat(libroot, "/memory/shift.asm")
         .elseif .xmatch(__feature__, flush)     ; (stz, ldz) ?? stz --> flush (MAKE LDZ CORE?)
             .include .concat(libroot, "/memory/flush.asm")
         .elseif .xmatch(__feature__, memcpy)    ; (memcpy)(MAKE MEMCPY CORE?)
             .include .concat(libroot, "/memory/memcpy.asm")
         .elseif .xmatch(__feature__, compare)   ; (compare)
             .include .concat(libroot, "/memory/compare.asm")
-        .elseif .xmatch(__feature__, evaluate)  ; (evaluate)
-            .include .concat(libroot, "/memory/compare.asm")
-        .elseif .xmatch(__feature__, juggle)    ; (juggle)
-            .include .concat(libroot, "/memory/compare.asm")
+;        .elseif .xmatch(__feature__, juggle)    ; (juggle) [ DEPRECATED ]
+;            .include .concat(libroot, "/memory/juggle.asm")
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif

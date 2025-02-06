@@ -21,6 +21,7 @@
     detype __source__, t_source
     detype __target__, t_target
 
+    e_source = endian t_source
     e_target = endian t_target
 
     ; _reg = __reg$__ ?? ar
@@ -101,9 +102,11 @@
         report stwm, "SourceTargetWidthMismatchException: Target cannot store all data, and therefore will only store a masked result."
     .endif
 
+    e_temp = (endian t_source) = (endian t_target)
+    ; endianness is only consequential if different
     .repeat .min(w_source, w_target), iter
-        ldr m_source: _reg, eindex l_source, w_source, iter, (endian t_source)
-        str m_target: _reg, eindex l_target, w_target, iter, (endian t_target)
+        ldr m_source: _reg, eindex l_source, w_source, iter, 1
+        str m_target: _reg, eindex l_target, w_target, iter, (e_source = e_target)
     .endrepeat
 
     .if (w_source < w_target) && fill && (!.blank(__order$__))

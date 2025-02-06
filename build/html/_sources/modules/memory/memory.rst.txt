@@ -36,7 +36,9 @@ To prevent redundant loads, you can pass a register that holds zero into the ``_
 
 ``memcpy`` may raise a ``SourceTargetWidthMismatchException`` in which the operations are of differing widths. Now while this is supported by ``nesbrette``, its quite possible that it was done on accident and therefore has the optional ``__stwm$__`` parameter to set the error level of this occurance.
 
-Finally you may choose to opt out of 'filling' by setting ``__fill$__`` to ``0``. Should it be that the source is greater than the target *only* enough information to fit the width of the target will be specified.
+Optionally, you may choose to opt out of 'filling' by setting ``__fill$__`` to ``0``. Should it be that the source is greater than the target *only* enough information to fit the width of the target will be specified.
+
+One thing to note for technical uses, ``memcpy`` *always* copies *from* the right and store *either to or from* depending on endian *difference*. Since information is accessed from the right, that means the 'masked out' information are lower bytes and thus ``memcpy u32 => u24`` is not an appropraite way to transfer memory to lower width type. This is because Memory Copy shouldn't acknowledge the value of the source and reading from right to left ensure that data can be 'nudged' a relative distance shorter than the width of the source preventing overlap and corruption.
 
 .. code-block::
 
@@ -139,3 +141,25 @@ Finally you may choose to opt out of 'filling' by setting ``__fill$__`` to ``0``
         compare Source, Target, yr
         compare Source, Target, yr, wabs: wabsx
         compare Source, Target, yr, wabs: wabsx, $ff
+
+
+``rshift __amt__``
+~~~~~~~~~~~~~~~~~~
+
+
+``rshift __t:int__, __amt__``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``lshift __amt__``
+~~~~~~~~~~~~~~~~~~
+
+
+``lshift __t:int__, __amt__``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``shift __amt__``
+~~~~~~~~~~~~~~~~~~
+
+
+``shift __t:int__, __amt__``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

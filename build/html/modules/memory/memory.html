@@ -67,7 +67,8 @@ dependacies:
 <p>To prevent redundant loads, you can pass a register that holds zero into the <code class="docutils literal notranslate"><span class="pre">__zero$__</span></code> parameter. Without a non-null definition for <code class="docutils literal notranslate"><span class="pre">__zero$__</span></code>, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will load a zero into the ‘data GPR’ after performing the transfer ensuring that a GPR’s value is a deterministic constant at the end (zero).</p>
 <p><code class="docutils literal notranslate"><span class="pre">memcpy</span></code> can also peform indexed transfers between registers for advanced memory handling with use of the <code class="docutils literal notranslate"><span class="pre">__mode$__</span></code> parameter. Naturally be wary of what ‘instructions’ have what memory address modes when specifying register and modes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">memcpy</span></code> may raise a <code class="docutils literal notranslate"><span class="pre">SourceTargetWidthMismatchException</span></code> in which the operations are of differing widths. Now while this is supported by <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code>, its quite possible that it was done on accident and therefore has the optional <code class="docutils literal notranslate"><span class="pre">__stwm$__</span></code> parameter to set the error level of this occurance.</p>
-<p>Finally you may choose to opt out of ‘filling’ by setting <code class="docutils literal notranslate"><span class="pre">__fill$__</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>. Should it be that the source is greater than the target <em>only</em> enough information to fit the width of the target will be specified.</p>
+<p>Optionally, you may choose to opt out of ‘filling’ by setting <code class="docutils literal notranslate"><span class="pre">__fill$__</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>. Should it be that the source is greater than the target <em>only</em> enough information to fit the width of the target will be specified.</p>
+<p>One thing to note for technical uses, <code class="docutils literal notranslate"><span class="pre">memcpy</span></code> <em>always</em> copies <em>from</em> the right and store <em>either to or from</em> depending on endian <em>difference</em>. Since information is accessed from the right, that means the ‘masked out’ information are lower bytes and thus <code class="docutils literal notranslate"><span class="pre">memcpy</span> <span class="pre">u32</span> <span class="pre">=&gt;</span> <span class="pre">u24</span></code> is not an appropraite way to transfer memory to lower width type. This is because Memory Copy shouldn’t acknowledge the value of the source and reading from right to left ensure that data can be ‘nudged’ a relative distance shorter than the width of the source preventing overlap and corruption.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">memcpy</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span> <span class="n">u32</span><span class="p">:</span> <span class="n">Target</span>
 <span class="n">memcpy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span>
 <span class="n">mempcy</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">xr</span>
@@ -159,6 +160,24 @@ compare Source, Target, yr, wabs: wabsx, $ff
 </div>
 </div>
 </section>
+<section id="rshift-amt">
+<h2><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__amt__</span></code><a class="headerlink" href="#rshift-amt" title="Link to this heading">¶</a></h2>
+</section>
+<section id="rshift-t-int-amt">
+<h2><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code><a class="headerlink" href="#rshift-t-int-amt" title="Link to this heading">¶</a></h2>
+</section>
+<section id="lshift-amt">
+<h2><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">__amt__</span></code><a class="headerlink" href="#lshift-amt" title="Link to this heading">¶</a></h2>
+</section>
+<section id="lshift-t-int-amt">
+<h2><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code><a class="headerlink" href="#lshift-t-int-amt" title="Link to this heading">¶</a></h2>
+</section>
+<section id="shift-amt">
+<h2><code class="docutils literal notranslate"><span class="pre">shift</span> <span class="pre">__amt__</span></code><a class="headerlink" href="#shift-amt" title="Link to this heading">¶</a></h2>
+</section>
+<section id="shift-t-int-amt">
+<h2><code class="docutils literal notranslate"><span class="pre">shift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code><a class="headerlink" href="#shift-t-int-amt" title="Link to this heading">¶</a></h2>
+</section>
 </section>
 
 
@@ -176,6 +195,12 @@ compare Source, Target, yr, wabs: wabsx, $ff
 <li><a class="reference internal" href="#ldz-gpr"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code></a></li>
 <li><a class="reference internal" href="#stz-target-reg-zero"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__zero$__</span></code></a></li>
 <li><a class="reference internal" href="#compare-source-target-reg-modes-fallback"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__modes$__,</span> <span class="pre">__fallback$__</span></code></a></li>
+<li><a class="reference internal" href="#rshift-amt"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__amt__</span></code></a></li>
+<li><a class="reference internal" href="#rshift-t-int-amt"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code></a></li>
+<li><a class="reference internal" href="#lshift-amt"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">__amt__</span></code></a></li>
+<li><a class="reference internal" href="#lshift-t-int-amt"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code></a></li>
+<li><a class="reference internal" href="#shift-amt"><code class="docutils literal notranslate"><span class="pre">shift</span> <span class="pre">__amt__</span></code></a></li>
+<li><a class="reference internal" href="#shift-t-int-amt"><code class="docutils literal notranslate"><span class="pre">shift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code></a></li>
 </ul>
 </li>
 </ul>
