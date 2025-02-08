@@ -3,23 +3,6 @@
 
 To refer to how to use ``nesbrette`` core features, please refer to `tutorials <https://nesbrette.readthedocs.io/en/latest/index.html>`_ .Use of the following methods will not yield immediate benefit, the ``core`` member set is designed to clarify and optimise nesbrette engine behaviors and therefore should only really be used for advanced expansions of ``nesbrette``.
 
-``itype label:`` - Identify Type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .macro MyMacro __param__
-        
-        paramtype = itype __param__
-        .if (isnum paramtype)
-            .out "It is a Number!"
-        .else
-            .out "It is not a Number!"
-        .endif
-    .endmacro
-    
-
-
 ``signed token`` - Query Sign Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -85,35 +68,6 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     Score = $0300
     typeas Score, u32
     
-``label typed:`` - Access Parameter Label
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .macro MyMacro __param__
-
-        .out .sprintf("%d", label __param__)
-    .endmacro
-
-``ilabel typed:`` - Identify Parameter Label
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .macro MyMacro __param__
-        .local temp
-
-        temp = ilabel __param__
-        
-        .if temp > $8000
-            .fatal "Cannot store to ROM"
-        .else
-            sta temp
-        .endif
-    .endmacro
-
-Yields the parameter label Identify, must be stored before use. Retains Scope of caller and scope lexis cannot be passed down because ``.ident`` (native ``ca65`` preprocessor directive) cannot identify scopes and is, therefore, scope constrained.
-
 ``dedtype int`` - Deduce Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -194,6 +148,27 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 
     thisreg = setreg __param__
 
+``setmreg int`` - Set Multiple Registers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    thisreg = setreg __param__
+
+``setmam int`` - Set Memory Address Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    thisreg = setreg __param__
+
+``mamreg int`` - Indexing Register of Memory Address Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    thisreg = setreg __param__
+
 
 ``setireg int`` - Set Indexing Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -219,38 +194,6 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 
 Simply encaging your code within a page can reduce the amount of updates needed, especially if using ``SMC`` - inevitably page confinement imposes an 'artificial' limit to the member's capability - but a good solution often can exceed typical demand while obeying page confinement which overall leads to more optimised code.
 
-``index array, int`` - Index Array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .define MyArray {2, 5, 7}
-
-    .out .sprintf("%d", (index MyArray, 1))
-
-``append array, token`` - Append Array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .define Array {2, 5, 7}
-    append Array, 5
-
-``isArray token`` - Is Array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .define MyArray {2, 5, 7}
-
-    .if (isArray MyArray)
-        .out "Woah, that's sure a lot of numbers"
-    .else
-        .out "boo, too few numbers"
-    .endif
-
-.. warning::
-    Expect vast quantities of logical/syntax errors when using preprocessor arrays as they were not designed mutable and poor handling of them is likely to cause problems. I wouldn't (unless you truly believe in your skills) form a dependancy on these at your backend for threat of catastrophic code debt.
 
 ``ispo2 int`` - Is Power of two?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -269,17 +212,6 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 .. code-block::
 
     lda #(abs ExtremeValue)
-
-``insert_header`` - Insert Header
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .segment "HEADER"
-    insert_header
-
-.. note::
-    The specification used with ``insert_header`` is `iNES <https://www.nesdev.org/wiki/NES_2.0>`_ 2. ``insert__header`` is the define that indicates if ``core`` has been included. There is no reason to use any other format than ``iNES2`` as of writing this. To fully use ``insert_header`` the user will need to modify the ``header`` constants in ``template/{scope}/constants.asm``.
 
 ``inr gpr`` - Incrment Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

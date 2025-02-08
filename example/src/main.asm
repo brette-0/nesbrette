@@ -14,16 +14,20 @@ includefrom memory, shift
         prgrom: 1, \
         mapper: nrom
 
-.segment "CODE"    
 
-Temp  = $200
-Temp2 = $204
+.segment "MEMORY"
+Temp  := $200
+Temp2 := $204
 
+
+.segment "CODE"
 typeas Temp,  u32
 typeas Temp2, u32
 
 reset:
-    rshift Temp, 9
+
+    memcpy Temp, Temp2
+        ;rshift Temp, 9
     jmp reset
 
 .segment "VECTORS"

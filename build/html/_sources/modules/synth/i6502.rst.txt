@@ -180,13 +180,3 @@ Because the value at any index in an `Identity Table <https://www.nesdev.org/wik
     ldx #$10
     lda #$20
     tyxa        ; a, x => $30
-
-``laxi`` - Load A & X with Immediate
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: 
-
-    laxi $10    ; a, x => $10
-
-.. warning::
-    Do not use ``lax #imm`` as immediate opcode as it is **unstable** with chaotic entropy on Hardware and is not supported in `Mesen2 <https://mesen.ca>`_.

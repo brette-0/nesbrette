@@ -4,7 +4,7 @@
 The majority of higher bit math functions is dealing with memory due to thin buses and registers. Analysing memory often can yield circumstantial optimisations, copying memory often is faster than indirectly fetching new targets and a great way to evade code debt is to utilise the well written ``juggle`` method.
 
 
-``memcpy t:source, t:target``
+``memcpy t:source, t:target, __reg$__, __modes$__, __stwm$__, __fill$__, __zero$__, __order$__``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``includefrom memory, memcpy``
@@ -38,7 +38,7 @@ To prevent redundant loads, you can pass a register that holds zero into the ``_
 
 Optionally, you may choose to opt out of 'filling' by setting ``__fill$__`` to ``0``. Should it be that the source is greater than the target *only* enough information to fit the width of the target will be specified.
 
-One thing to note for technical uses, ``memcpy`` *always* copies *from* the right and store *either to or from* depending on endian *difference*. Since information is accessed from the right, that means the 'masked out' information are lower bytes and thus ``memcpy u32 => u24`` is not an appropraite way to transfer memory to lower width type. This is because Memory Copy shouldn't acknowledge the value of the source and reading from right to left ensure that data can be 'nudged' a relative distance shorter than the width of the source preventing overlap and corruption.
+``memcpy`` will access source offset from different ends depending on the positivity of the source-target offset delta. Should it be that the target is *ahead* of the source information then we will copy data from the right, then how it is stored is dependant on the similarity of the source-target endians. The purpose of this is to negate possible corruption when moving chunks of a width greater than the distance they will move.
 
 .. code-block::
 

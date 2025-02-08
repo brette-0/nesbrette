@@ -1,3 +1,50 @@
+.define setmam(__mam__) \
+        ((__mam__ = imp))    * imp   ) | \
+        ((__mam__ = imm))    * imm   ) | \
+        ((__mam__ = zp))     * zp    ) | \
+        ((__mam__ = zpx))    * zpx   ) | \
+        ((__mam__ = zpy))    * zpy   ) | \
+        ((__mam__ = wabs))   * wabs  ) | \
+        ((__mam__ = wabsx))  * wabsx ) | \
+        ((__mam__ = wabsy))  * wabsy ) | \
+        ((__mam__ = abst))   * abst  ) | \
+        ((__mam__ = absx))   * absx  ) | \
+        ((__mam__ = absy))   * absy  ) | \
+        ((__mam__ = inabs))  * inabs ) | \
+        ((__mam__ = inabsx)) * inabsx) | \
+        ((__mam__ = inabsy)) * inabsy) | \
+        (((__mam__ <> imp   ) && \
+          (__mam__ <> imm   ) && \
+          (__mam__ <> zp    ) && \
+          (__mam__ <> zpx   ) && \
+          (__mam__ <> zpy   ) && \
+          (__mam__ <> wabs  ) && \
+          (__mam__ <> wabsx ) && \
+          (__mam__ <> wabsy ) && \
+          (__mam__ <> abst  ) && \
+          (__mam__ <> absx  ) && \
+          (__mam__ <> absy  ) && \
+          (__mam__ <> inabs ) && \
+          (__mam__ <> inabsx) && \
+          (__mam__ <> inabsy)  ) \
+          * null)
+
+.define mamreg(__mam__) \
+        ((__mam__ = imp))    * null) | \
+        ((__mam__ = imm))    * null) | \
+        ((__mam__ = zp))     * null) | \
+        ((__mam__ = zpx))    * xr  ) | \
+        ((__mam__ = zpy))    * yr  ) | \
+        ((__mam__ = wabs))   * null) | \
+        ((__mam__ = wabsx))  * xr  ) | \
+        ((__mam__ = wabsy))  * yr  ) | \
+        ((__mam__ = abst))   * null) | \
+        ((__mam__ = absx))   * xr  ) | \
+        ((__mam__ = absy))   * yr  ) | \
+        ((__mam__ = inabs))  * null) | \
+        ((__mam__ = inabsx)) * xr  ) | \
+        ((__mam__ = inabsy)) * yr  )
+
 ; tested working
 ; returns (gpr?)
 ; params : (ca65_int)
@@ -25,13 +72,6 @@
      ((__regenum__ = yr) * yr) | \
      ((__regenum__ = xr) * xr) | \
     (((__regenum__ <> yr) && (__regenum__ <> xr) * null)
-
-.define strindex(c, i) .right(1, {.left(1 + (i << 1), c)})
-.define index(collection, _index) ((i >= 0) * .right(1, {.left(1 + (i << 1), c)})) | ((i < 0) * .left(1, {.right(1 + (abs i << 1), c)}))
-.define append(collection, value) {.left(.tcount(collection), collection), value}
-
-
-.define isarray(unindicated_token) (.tcount(.left(2, unindicated_token)) = 2)
 
 .define ispo2(n) ((n - 1) & n) = 0
 .define abs(n) .max(n, -n)
