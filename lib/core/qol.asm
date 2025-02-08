@@ -1,18 +1,18 @@
 .define setmam(__mam__) \
-        ((__mam__ = imp))    * imp   ) | \
-        ((__mam__ = imm))    * imm   ) | \
-        ((__mam__ = zp))     * zp    ) | \
-        ((__mam__ = zpx))    * zpx   ) | \
-        ((__mam__ = zpy))    * zpy   ) | \
-        ((__mam__ = wabs))   * wabs  ) | \
-        ((__mam__ = wabsx))  * wabsx ) | \
-        ((__mam__ = wabsy))  * wabsy ) | \
-        ((__mam__ = abst))   * abst  ) | \
-        ((__mam__ = absx))   * absx  ) | \
-        ((__mam__ = absy))   * absy  ) | \
-        ((__mam__ = inabs))  * inabs ) | \
-        ((__mam__ = inabsx)) * inabsx) | \
-        ((__mam__ = inabsy)) * inabsy) | \
+        ((__mam__ = imp)    * imp   ) | \
+        ((__mam__ = imm)    * imm   ) | \
+        ((__mam__ = zp)     * zp    ) | \
+        ((__mam__ = zpx)    * zpx   ) | \
+        ((__mam__ = zpy)    * zpy   ) | \
+        ((__mam__ = wabs)   * wabs  ) | \
+        ((__mam__ = wabsx)  * wabsx ) | \
+        ((__mam__ = wabsy)  * wabsy ) | \
+        ((__mam__ = abst)   * abst  ) | \
+        ((__mam__ = absx)   * absx  ) | \
+        ((__mam__ = absy)   * absy  ) | \
+        ((__mam__ = inabs)  * inabs ) | \
+        ((__mam__ = inabsx) * inabsx) | \
+        ((__mam__ = inabsy) * inabsy) | \
         (((__mam__ <> imp   ) && \
           (__mam__ <> imm   ) && \
           (__mam__ <> zp    ) && \
@@ -30,20 +30,20 @@
           * null)
 
 .define mamreg(__mam__) \
-        ((__mam__ = imp))    * null) | \
-        ((__mam__ = imm))    * null) | \
-        ((__mam__ = zp))     * null) | \
-        ((__mam__ = zpx))    * xr  ) | \
-        ((__mam__ = zpy))    * yr  ) | \
-        ((__mam__ = wabs))   * null) | \
-        ((__mam__ = wabsx))  * xr  ) | \
-        ((__mam__ = wabsy))  * yr  ) | \
-        ((__mam__ = abst))   * null) | \
-        ((__mam__ = absx))   * xr  ) | \
-        ((__mam__ = absy))   * yr  ) | \
-        ((__mam__ = inabs))  * null) | \
-        ((__mam__ = inabsx)) * xr  ) | \
-        ((__mam__ = inabsy)) * yr  )
+        ((__mam__ = imp)    * null) | \
+        ((__mam__ = imm)    * null) | \
+        ((__mam__ = zp)     * null) | \
+        ((__mam__ = zpx)    * xr  ) | \
+        ((__mam__ = zpy)    * yr  ) | \
+        ((__mam__ = wabs)   * null) | \
+        ((__mam__ = wabsx)  * xr  ) | \
+        ((__mam__ = wabsy)  * yr  ) | \
+        ((__mam__ = abst)   * null) | \
+        ((__mam__ = absx)   * xr  ) | \
+        ((__mam__ = absy)   * yr  ) | \
+        ((__mam__ = inabs)  * null) | \
+        ((__mam__ = inabsx) * xr  ) | \
+        ((__mam__ = inabsy) * yr  )
 
 ; tested working
 ; returns (gpr?)

@@ -4,7 +4,7 @@
 
 
 .macro memcpy __source__, __target__, __reg$__, __modes$__, __stwm$__, __fill$__, __zero$__, __order$__
-    .local t_source, t_target, i_source, i_target, m_source, m_target, r_source, r_target, w_source, w_target, l_source, l_target, _reg, stwm
+    .local fill, order, zero, e_temp, e_source, e_target, t_source, t_target, i_source, i_target, m_source, m_target, r_source, r_target, w_source, w_target, l_source, l_target, _reg, stwm
     
     ; (nb_int: ident) __source__ 
     ; (nb_int: ident) __target__ 
@@ -41,13 +41,20 @@
         m_source .set  .left(1, __modes$__)
         m_target .set .right(1, __modes$__)
 
-        .if   (m_source > absx)
-            .fatal "UnsupportedFeatureException: memcpy will never use indirectness, its always slow."          ; unsupported
-        .elseif (m_target > inabs) || (m_target < imp)
+        m_source .set setmam m_source
+        m_target .set setmam m_target
+
+        .if     is_null m_source
             .fatal "InvalidMemoryAddressModeException: This memory address mode isnt recognized."               ; erroneous mam
-        .elseif i_source && (i_source = i_target)
-            .fatal "IntereferingRegisterUseException: Cannot index by same register used for data transfer."    ; conflict gpr 
-        .elseif (i_source <> ar) && (i_target <> ar)
+        .elseif is_null m_target
+            .fatal "InvalidMemoryAddressModeException: This memory address mode isnt recognized."               ; erroneous mam
+        .elseif m_source > absx ; TODO: sprintf bad params
+            .fatal "UnsupportedFeatureException: memcpy will never use indirectness, its always slow."          ; unsupported
+        .elseif m_target > absx
+            .fatal "UnsupportedFeatureException: memcpy will never use indirectness, its always slow."          ; unsupported
+        .elseif _reg = mamreg m_source
+            .fatal "InvalidMemoryAddressModeException: Cannot store X/Y with indexed memory address mode."      ; invalid mam
+        .elseif _reg = mamreg m_target
             .fatal "InvalidMemoryAddressModeException: Cannot store X/Y with indexed memory address mode."      ; invalid mam
         .endif
     .endif
@@ -79,20 +86,27 @@
         fill = 1
     .endif
 
-    ; fill = __fill$__ ?? 1
+    ; fill = __order$__ ?? 1
+    .ifnblank __order$__
+        order = __order$__
+    .else   
+        order = 1
+    .endif
+
+    ; fill = __zero$__ ?? 1
     .ifnblank __zero$__
         zero = __zero$__
     .else   
         zero = _reg
     .endif
 
-    .if (w_source < w_target) && fill && .blank(__order$__)
+    .if (w_source < w_target) && fill && (!order)
         .if (zero = _reg)
             ldz zero
         .endif
 
         .repeat w_target - w_source, iter
-            str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
+            str m_target: zero, eindex l_target, w_target, (w_target - w_source + iter), e_target
         .endrepeat
     .endif
 
@@ -109,13 +123,13 @@
         str m_target: _reg, eindex l_target, w_target, iter, (e_source = e_target)  ; invert transfer flag
     .endrepeat
 
-    .if (w_source < w_target) && fill && (!.blank(__order$__))
+    .if (w_source < w_target) && fill && order
         .if (zero = _reg)
             ldz zero
         .endif
 
         .repeat w_target - w_source, iter
-            str m_target: _reg, eindex l_target, w_target, (w_target - w_source + iter), e_target
+            str m_target: zero, eindex l_target, w_target, (w_target - w_source + iter), e_target
         .endrepeat
     .endif
 .endmacro

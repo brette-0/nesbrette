@@ -21,12 +21,14 @@ Temp2 := $204
 
 
 .segment "CODE"
-typeas Temp,  u32
+typeas Temp,  u24
 typeas Temp2, u32
 
 reset:
+    ldx #$00
 
-    memcpy Temp, Temp2
+    
+
         ;rshift Temp, 9
     jmp reset
 
