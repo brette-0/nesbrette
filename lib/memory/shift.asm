@@ -83,10 +83,10 @@ includefrom memory, flush
     t_temp2 = l_target + transamt
 
     .if transamt
-        memcpy t_temp: l_target, t_temp: t_temp2, reg, mode: mode, error, 0, zero, last
+        memcpy t_temp: l_target, t_temp: t_temp2, reg, mode: mode, error, 0, zero, 0
     .endif
 
-    stz transamt: l_target, reg, 1
+    stz transamt: l_target, reg, 0
 
     .repeat shiftamt, _
         lsr l_target + transamt
@@ -169,7 +169,7 @@ includefrom memory, flush
 
     t_target .set null
 
-    l_target = .right(1, __param0__)
+    l_target .set .right(1, __param0__)
     detype __param0__, t_target
     w_target = typeval t_target
 
@@ -177,19 +177,21 @@ includefrom memory, flush
     shiftamt = __param1__ & %111    ; amount of bits to shift
 
     t_temp  = w_target - transamt
-    t_temp2 = l_target - transamt
+    t_temp2 = l_target + transamt
 
     .if transamt
-        memcpy t_temp: l_target, t_temp: t_temp2, reg, mode: mode, error, 0, zero, last
+        memcpy t_temp: t_temp2, t_temp: l_target, reg, mode: mode, error, 0, zero, 0
     .endif
 
-    stz transamt: (l_target - transamt), reg, 1
+    t_temp3 = l_target + w_target - transamt
+
+    stz transamt: t_temp3, reg, 0
 
     .repeat shiftamt, _
-        lsr l_target - transamt
+        asl l_target + transamt
         .repeat t_temp, iter
             .if iter > 0
-                ror l_target - transamt - iter
+                rol l_target + transamt - iter
             .endif
         .endrepeat
     .endrepeat

@@ -119,8 +119,8 @@
     e_temp = (endian t_source) = (endian t_target)
     ; endianness is only consequential if different
     .repeat .min(w_source, w_target), iter
-        ldr m_source: _reg, eindex l_source, w_source, iter, (l_target > l_source)  ; determine polarity
-        str m_target: _reg, eindex l_target, w_target, iter, (e_source = e_target)  ; invert transfer flag
+        ldr m_source: _reg, eindex l_source, w_source, iter, (l_target > l_source)                          ; determine polarity
+        str m_target: _reg, eindex l_target, w_target, iter, (l_target > l_source) ^ (e_source <> e_target) ; invert transfer flag
     .endrepeat
 
     .if (w_source < w_target) && fill && order

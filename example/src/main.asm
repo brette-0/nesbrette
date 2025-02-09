@@ -25,9 +25,7 @@ typeas Temp,  u24
 typeas Temp2, u32
 
 reset:
-    ldx #$00
-
-    
+    rshift Temp, 9
 
         ;rshift Temp, 9
     jmp reset
