@@ -25,11 +25,23 @@
     e_target = endian t_target
 
     ; _reg = __reg$__ ?? ar
-    _reg .set null
-    .ifnblank __reg$__
+
+    .ifblank __reg$__
+        _reg .set ar
+    .else
         _reg .set __reg$__
+        _reg .set setreg _reg
+        
+        .if is_null _reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid register!", __reg$__)
+        .endif
     .endif
-    null_coalset _reg, ar
+
+    ;_reg .set null
+    ;.ifnblank __reg$__
+    ;    _reg .set __reg$__
+    ;.endif
+    ;null_coalset _reg, ar
 
     m_source .set null
     m_target .set null
@@ -48,7 +60,7 @@
             .fatal "InvalidMemoryAddressModeException: This memory address mode isnt recognized."               ; erroneous mam
         .elseif is_null m_target
             .fatal "InvalidMemoryAddressModeException: This memory address mode isnt recognized."               ; erroneous mam
-        .elseif m_source > absx ; TODO: sprintf bad params
+        .elseif m_source > absx
             .fatal "UnsupportedFeatureException: memcpy will never use indirectness, its always slow."          ; unsupported
         .elseif m_target > absx
             .fatal "UnsupportedFeatureException: memcpy will never use indirectness, its always slow."          ; unsupported
@@ -80,26 +92,32 @@
     w_target = typeval t_target
 
     ; fill = __fill$__ ?? 1
-    .ifnblank __fill$__
-        fill = __fill$__
-    .else   
+    .ifblank __fill$_
         fill = 1
+    .elseif is_null __fill$__
+        fill = 1
+    .else
+        fill = __fill$__
     .endif
 
     ; fill = __order$__ ?? 1
-    .ifnblank __order$__
-        order = __order$__
-    .else   
+    .ifblank __order$__
         order = 1
+    .elseif is_null __order$__
+        order = 1 
+    .else   
+        order = __order$__
     .endif
 
     ; fill = __zero$__ ?? 1
-    .ifnblank __zero$__
+    .ifblank __zero$__
+        zero = 1
+    .elseif is_null __zero$__
+        zero =  1
+    .else
         zero = __zero$__
-    .else   
-        zero = _reg
     .endif
-
+    
     .if (w_source < w_target) && fill && (!order)
         .if (zero = _reg)
             ldz zero

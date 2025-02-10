@@ -28,6 +28,9 @@
     .ifblank __inv$__
         l_reg = xr
         h_reg = yr
+    .elseif __inv$__ = null
+        l_reg = xr
+        h_reg = yr
     .else
         l_reg = .right(1, __reg$__)
         h_reg =  .left(1, __reg$__)
@@ -35,8 +38,12 @@
         h_reg .set ireg h_reg
         l_reg .set ireg l_reg
 
-        .if h_reg = l_reg
-            .fatal "" ; clash
+        .if     is_null h_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif is_null l_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif h_reg = l_reg
+            .fatal "InterferingRegisterUseException: MSSByte register cannot be the same as MSSB register."
         .endif
     .endif
 
@@ -90,8 +97,12 @@
         h_reg .set ireg h_reg
         l_reg .set ireg l_reg
 
-        .if h_reg = l_reg
-            .fatal "" ; clash
+        .if     is_null h_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif is_null l_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif h_reg = l_reg
+            .fatal "InterferingRegisterUseException: LSSByte register cannot be the same as LSSB register."
         .endif
     .endif
 
@@ -142,8 +153,12 @@
         h_reg .set ireg h_reg
         l_reg .set ireg l_reg
 
-        .if h_reg = l_reg
-            .fatal "" ; clash
+        .if     is_null h_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif is_null l_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif h_reg = l_reg
+            .fatal "InterferingRegisterUseException: MSUByte register cannot be the same as MSUB register."
         .endif
     .endif
 
@@ -195,8 +210,12 @@
         h_reg .set ireg h_reg
         l_reg .set ireg l_reg
 
-        .if h_reg = l_reg
-            .fatal "" ; clash
+        .if     is_null h_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif is_null l_reg
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid indexing register!", __reg$__)
+        .elseif h_reg = l_reg
+            .fatal "InterferingRegisterUseException: LSUByte register cannot be the same as LSUB register."
         .endif
     .endif
 
