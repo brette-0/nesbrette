@@ -1,17 +1,10 @@
 includefrom memory, memcpy
 includefrom memory, flush
 
-.macro __rshift __amt__, __zero__
+.macro __rshift __amt__, __cpve__
     .if __amt__ > 7
-        report 1, "Fucky doo"
-        .if     __zero__ = ar
-        .elseif __zero__ = xr
-            txa
-        .elseif __zero__ = yr
-            tya
-        .else
-            lda #$00
-        .endif
+        report 3, .sprintf("Requested Shift Amount '%d' exceeds register width of 8", __amt__)
+        lda #$00
     .endif
 
     .if __amt__ > 5
@@ -26,48 +19,64 @@ includefrom memory, flush
     .endif
 .endmacro
 
-; TODO: see if we can clean up calling case
-.macro rshift __param0__, __param1__, __zero$__, __reg$__, __mode$__
-    .local mode, zero, l_target, t_target, w_target
+.macro rshift __param0__, __param1__, __zero$__, __reg$__, __mode$__, __cpve$__
+    .local mode, zero, l_target, t_target, w_target, cpve
+
+    cpve .set null
+
+    .ifblank __param1__
+        ; acc mode
+
+        __rshift __param0__ ; for now I dont think can be variable
+        .exitmacro
+    .endif
+
+    .ifblank __cpve$__
+        deferror error,     cpve 
+    .else
+        deferror __cpve$__, cpve
+    .endif
+
 
     .ifblank __reg$__
+        reg .set ar
+    .elseif __reg$__ = null
         reg .set ar
     .else
         reg .set __reg$__
         reg .set setreg __reg$__
 
         .if is_null reg
-            .fatal ""
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid register!", __reg$__)
         .endif
     .endif
 
     .ifblank __mode$__
+        mode .set wabs
+    .elseif __mode$__ = null
         mode .set wabs
     .else
         mode .set __mode$__
         mode .set setmam mode
 
         .if is_null mode
-            .fatal
+            .fatal .sprintf("InvalidMemoryAddressModeException: '%d' is not a valid memory address mode!", __mode$__)
         .endif
 
         .if reg = mamreg mode
-            .fatal
+            .fatal "InterferingRegisterUseException: data register cannot be the same as indexing register."
         .endif
     .endif
 
     .ifblank __zero$__
         zero = null
+    .elseif __zero$__= null
+        zero = null
     .else
         zero = setreg __zero$__
         .if is_null zero
-            .fatal ""   ; fatal error
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid register!", __zero$__)
         .endif
-    .endif
-
-    .ifblank __param1__
-        __rshift __param0__, zero
-        .exitmacro
     .endif
 
     t_target .set null
@@ -98,17 +107,10 @@ includefrom memory, flush
     .endrepeat
 .endmacro
 
-.macro __lshift __amt__, __zero__
+.macro __lshift __amt__
     .if __amt__ > 7
-        report 1, "Fucky doo"
-        .if     __zero__ = ar
-        .elseif __zero__ = xr
-            txa
-        .elseif __zero__ = yr
-            tya
-        .else
-            lda #$00
-        .endif
+        report 3, .sprintf("Requested Shift Amount '%d' exceeds register width of 8", __amt__)
+        lda #$00
     .endif
 
     .if __amt__ > 5
@@ -123,48 +125,53 @@ includefrom memory, flush
     .endif
 .endmacro
 
-; TODO: see if we can clean up calling case
 .macro lshift __param0__, __param1__, __zero$__, __reg$__, __mode$__
     .local mode, zero, l_target, t_target, w_target
 
+    .ifblank __param1__
+        __lshift __param0__
+        .exitmacro
+    .endif
+
     .ifblank __reg$__
+        reg .set ar
+    .elseif __reg$__ = null
         reg .set ar
     .else
         reg .set __reg$__
         reg .set setreg __reg$__
 
         .if is_null reg
-            .fatal ""
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid register!", __reg$__)
         .endif
     .endif
 
     .ifblank __mode$__
+        mode .set wabs
+    .elseif __mode$__ = null
         mode .set wabs
     .else
         mode .set __mode$__
         mode .set setmam mode
 
         .if is_null mode
-            .fatal
+            .fatal .sprintf("InvalidMemoryAddressModeException: '%d' is not a valid memory address mode!", __mode$__)
         .endif
 
         .if reg = mamreg mode
-            .fatal
+            .fatal "InterferingRegisterUseException: data register cannot be the same as indexing register."
         .endif
     .endif
 
     .ifblank __zero$__
         zero = null
+    .elseif __zero$__= null
+        zero = null
     .else
         zero = setreg __zero$__
         .if is_null zero
-            .fatal ""   ; fatal error
+            .fatal .sprintf("InvalidGeneralPurposeRegister: '%d' is not a valid register!", __zero$__)
         .endif
-    .endif
-
-    .ifblank __param1__
-        __lshift __param0__, zero
-        .exitmacro
     .endif
 
     t_target .set null

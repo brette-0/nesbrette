@@ -25,9 +25,8 @@ typeas Temp,  u24
 typeas Temp2, u32
 
 reset:
-    rshift Temp, 9
+    rshift 7
 
-        ;rshift Temp, 9
     jmp reset
 
 .segment "VECTORS"

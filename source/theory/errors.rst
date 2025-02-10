@@ -32,4 +32,4 @@ This occurs when attempting to perform ``str`` on assumed 'ROM Space', depending
 ``SourceTargetWidthMismatchException : warning``
 """"""""""""""""""""""""""""""""""""""""""""""""
 
-This occurs when attempting to perform ``str`` on assumed 'ROM Space', depending on ``LIBCORE_MAPPER`` this will not fire. Just because ``str`` didn't find anything doesn't mean its not there, be careful to write safe code!
+This error occurs when attempting to use two different width numbers with a method that may logically depend on the equal widths.
