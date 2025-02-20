@@ -28,7 +28,8 @@
                         reasoning : N does not behave in a semantically typical
                                     way alike how Z and C does.
                     }
-                C   - Greater than or equal to
+                C   - Greater than or equal to#
+                    TODO: Make C be signed compare
                 V   - Greater than
 
 
@@ -79,22 +80,53 @@
         ; if we have reached here there are two possibilities
         ; load[r] <> comp[r] || fallback <> comp[r]
 
-        bcc smaller
+    /*
+
+        If sign difference with negative value, early exit
+
+    */
+    .if signed t_source && (!signed t_target)
+        ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
+        bmi exit
+        ; unsigned compare now suffices
+
+        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target 
+        bcc exit
+    .elseif signed t_target && (!signed t_source)
+        ldr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        bpl exit
+        ; unsigned compare now suffices
+
+        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target 
+        bcs exit
+    .elseif signed t_source && signed t_target
+        ldr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        cpr r_data: imm, $80
+        ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
+        
+
+        bcs @__negative
+        bmi exit1
+
+        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        bcs exit1
+        bcc exit
+
+        @__negative:
+        bpl exit1
+
+        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        bcc exit1
+        beq exit1
+        bcs exit
+        
+    .endif
+
+    exit1:
         ora #(CF + OF)
 
-        smaller:
-
-; TODO: FAULTY (see header)
-;    ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
-;    cpr r_data: m_comp, eindex l_target, w_target, (w_target - 1), endian t_target
-
-;    bpl nosigndiff
-;    ora #NF
-;    nosigndiff:
-
     exit:
-    pha
-    plp ; ststat (not warranting a whole ass dependancy)
+        pha
+        plp ; ststat (not warranting a whole ass dependancy)
 .endmacro
-
 .endif
