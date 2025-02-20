@@ -4,30 +4,28 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
 
 ; include statics
 includefrom memory, compare
+includefrom synth, stack
 
 .segment "HEADER"
     header \
         prgrom: 1, \
         mapper: nrom
 
+.segment "MEMORY"
+
 .segment "CODE"
 
 Temp1:
-    .word $1122, $3344
+    .byte $11, $22, $33, $44
 
 Temp2:
-    .word $5566, $7788
+    .byte $55, $66, $77, $88
 
 typeas Temp1, u32
 typeas Temp2, u32
 
-.macro MyMacro Param1, Param2
-
-.endmacro
-
-
 reset:
-
+    compare Temp1, Temp2
 
 
 .segment "VECTORS"

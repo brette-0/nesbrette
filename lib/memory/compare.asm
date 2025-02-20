@@ -118,8 +118,8 @@
 
         smaller:
 
-    ldr r_data: m_load, eindex l_source, w_source, w_source, endian t_source
-    cpr r_data: m_comp, eindex l_target, w_target, w_target, endian t_target
+    ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
+    cpr r_data: m_comp, eindex l_target, w_target, (w_target - 1), endian t_target
 
     bpl nosigndiff
     ora #NF

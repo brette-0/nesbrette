@@ -19,15 +19,15 @@
     .ifnblank __cf$__
         sec
     .endif
-    adc #__amt$__
+    adc #_neg_amt
 .endmacro
 
 .macro sasl
     .local ahead
 
-    bpl @ahead
+    bpl ahead
         ora #$40
-    @ahead:
+    ahead:
 
     asl
 .endmacro
@@ -35,15 +35,15 @@
 .macro slsr
     .local ahead
 
-    bpl @ahead
+    bpl ahead
         ora #$40
-    @ahead:
+    ahead:
     
     asl
 .endmacro
 
 .macro irol
-    cmp $80
+    cmp #$80
     rol
 .endmacro
 
@@ -51,10 +51,10 @@
     .local ahead
 
     lsr
-    bcc @ahead
+    bcc ahead
     ora #$80
 
-    @ahead:
+    ahead:
 .endmacro
 
 
@@ -68,21 +68,21 @@
 
     .ifnblank __flag_state$__
         .if     __flag_state$__ = (nf + clear)
-            bmi @ahead
+            bmi ahead
         .elseif __flag_state$__ = (nf + set)
-            bpl @ahead
+            bpl ahead
         .elseif __flag_state$__ = (of + clear)
-            bvs @ahead
+            bvs ahead
         .elseif __flag_state$__ = (of + set)
-            bvc @ahead
+            bvc ahead
         .elseif __flag_state$__ = (cf + clear)
-            bcs @ahead
+            bcs ahead
         .elseif __flag_state$__ = (cf + set)
-            bcc @ahead
+            bcc ahead
         .elseif __flag_state$__ = (zf + clear)
-            bne @ahead
+            bne ahead
         .elseif __flag_state$__ = (zf + set)
-            beq @ahead
+            beq ahead
         .else
     .endif
 
@@ -123,7 +123,7 @@
     php
     rti 
 
-    @ahead:
+    ahead:
 .endmacro
 
 .macro labs __target__
@@ -140,7 +140,7 @@
 
 .macro laxbs __target__
     lax ($800 | __target__)
-.endif
+.endmacro
 
 .macro lrbs __reg_target__
 
@@ -197,7 +197,7 @@
     _sex_l_source = .right(1, _sex_t_source)
 
     ldr imm: __reg$__,  eindex _sex_l_source, _sex_w_source, _sex_w_source, endian _sex_t_source
-    bmi @negative
+    bmi negative
 
     ldz __reg$__
     .repeat _sex_w_source - 1, iter
@@ -205,7 +205,7 @@
     .endrepeat
 
     ; conditionless branch
-    beq @ahead
+    beq ahead
 
     negative:
         ldr imm: negative, $ff
@@ -213,5 +213,5 @@
             str wabs: __reg$__, eindex _sex_l_source, _sex_w_source, iter, endian _sex_t_source
         .endrepeat
 
-    @ahead:
+    ahead:
 .endmacro

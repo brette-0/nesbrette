@@ -81,6 +81,8 @@
         module .set 0   ; math has id 0
     .elseif .xmatch(__moduletok__, memory)  ; include memory
         module .set 1   ; memory has id 1
+    .elseif .xmatch(__moduletok__, synth)   ; include synth
+        module .set 2   ; synth has id 12
     .else
         .fatal .sprintf("parent module '%s' not a recognized module!", __moduletok__)
     .endif
@@ -108,6 +110,16 @@
             .include .concat(libroot, "/memory/compare.asm")
 ;        .elseif .xmatch(__feature__, juggle)    ; (juggle) [ DEPRECATED ]
 ;            .include .concat(libroot, "/memory/juggle.asm")
+        .else
+            __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
+        .endif
+    .elseif module = 2  ; synth
+        .if     .xmatch(__feature__, generic)
+            .include .concat(libroot, "/synth/generic.asm")
+        .elseif .xmatch(__feature__, idtable)
+            .include .concat(libroot, "/synth/idtable.asm")
+        .elseif .xmatch(__feature__, stack)
+            .include .concat(libroot, "/synth/stack.asm")
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif
