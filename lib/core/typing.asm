@@ -45,14 +45,11 @@ typectx = (3 << 29)
 .define typeas(__label__, __type__)\
   .ident(.sprintf("t_%s", .string(__label__))) .set type __type__
 
-.define label(__token__)\
+.define __label(__token__)\
   .string(.right(1, __token__))
 
-.define ilabel(__token__)\
-  .right(1, __token__)
-
 .define dedtype(__token__)\
-  .ident(.concat("t_", label __token__))
+  .ident(.concat("t_", __label __token__))
 
 .define endian(__type__)\
   (__type__ & (1 << 29))

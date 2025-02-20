@@ -2,6 +2,7 @@
     TODO: Test 'order of steps' parameter '__order$__'
 */
 
+.ifndef memcpy
 
 .macro memcpy __source__, __target__, __reg$__, __modes$__, __stwm$__, __fill$__, __zero$__, __order$__
     .local fill, order, zero, e_temp, e_source, e_target, t_source, t_target, i_source, i_target, m_source, m_target, r_source, r_target, w_source, w_target, l_source, l_target, _reg, stwm
@@ -151,3 +152,5 @@
         .endrepeat
     .endif
 .endmacro
+
+.endif

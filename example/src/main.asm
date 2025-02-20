@@ -2,32 +2,33 @@
 
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
 
-; global static includes
-;includefrom memory, flush
-;includefrom memory, memcpy
-;includefrom memory, compare
-;includefrom memory, xsxb
-includefrom memory, shift
+; include statics
+includefrom memory, compare
 
 .segment "HEADER"
     header \
         prgrom: 1, \
         mapper: nrom
 
-
-.segment "MEMORY"
-Temp  := $200
-Temp2 := $204
-
-
 .segment "CODE"
-typeas Temp,  u24
+
+Temp1:
+    .word $1122, $3344
+
+Temp2:
+    .word $5566, $7788
+
+typeas Temp1, u32
 typeas Temp2, u32
 
-reset:
-    rshift 7
+.macro MyMacro Param1, Param2
 
-    jmp reset
+.endmacro
+
+
+reset:
+
+
 
 .segment "VECTORS"
     .addr $0000

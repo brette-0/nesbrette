@@ -5,14 +5,14 @@ xr   = 32
 yr   = 64
 
 ; cpu status
-zf   = 1
-cf   = 2
-if   = 4
-df   = 8
-bf   = 16
+ZF   = 1
+CF   = 2
+IF   = 4
+DF   = 8
+BF   = 16
 ; 
-of   = 64
-nf   = 128
+OF   = 64
+NF   = 128
 
 ; endian
 little = 1

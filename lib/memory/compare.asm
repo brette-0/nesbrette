@@ -1,3 +1,5 @@
+.ifndef compare
+
 .macro compare __source__, __target__, __reg$__, __modes$__, __fallback$__
     .local phase2, exit, smaller, w_source, w_target, t_target, t_source, l_target, l_source, _reg, m_comp, m_load, fallback
 
@@ -29,6 +31,9 @@
             compare Source, Target, wabsx: wabsy
     */
 
+    t_target .set null
+    t_source .set null
+
     detype __target__, t_target
     detype __source__, t_source
 
@@ -38,10 +43,6 @@
     .if (!w_source) || (!w_source)
         ; invalid type
     .endif
-
-    ;.if (!isconst t_source) || (!isconst t_target)
-    ;    ; invalid type
-    ;.endif
 
     l_source = .right(1, __source__)
     l_target = .right(1, __target__)
@@ -105,7 +106,7 @@
         .endrepeat
     .endif
 
-    ora #zf + cf
+    ora #ZF + CF
     bne exit
     
     phase2:
@@ -113,18 +114,20 @@
         ; load[r] <> comp[r] || fallback <> comp[r]
 
         bcc smaller
-        ora #(cf + of)
+        ora #(CF + OF)
 
         smaller:
 
     ldr r_data: m_load, eindex l_source, w_source, w_source, endian t_source
     cpr r_data: m_comp, eindex l_target, w_target, w_target, endian t_target
 
-    bpl @nosigndiff
-    ora #nf
-    @nosigndiff:
+    bpl nosigndiff
+    ora #NF
+    nosigndiff:
 
     exit:
     pha
     plp ; ststat (not warranting a whole ass dependancy)
 .endmacro
+
+.endif

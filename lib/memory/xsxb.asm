@@ -1,3 +1,5 @@
+.ifndef xsxb
+
 .macro xsxb __task__, __target__, __reg$__, __inv$__
 
     .if     __task__ = 0
@@ -76,6 +78,16 @@
     exit:
 .endmacro
 
+.macro __lssb __reg__
+    ldr imm: __reg__, $00
+
+    loop:
+        inr __reg__
+        ror
+        bcc loop
+        
+.endmacro
+
 .macro lssb __target__, __reg$__, __inv$__
     .local l_target, t_target, w_target
 
@@ -84,8 +96,20 @@
         h ?? xr => mssB
     */
 
+    .ifblank __target__
+        ; acc mode
+
+        __lssb xr
+        .exitmacro
+    .endif
+
     detype __target__, t_target
     w_target = t_target
+
+    .if !is_null setreg t_target
+        __lssb t_target
+        .exitmacro
+    .endif
 
     .ifblank __inv$__
         l_reg = xr
@@ -245,3 +269,5 @@
         
     exit:
 .endmacro
+
+.endif

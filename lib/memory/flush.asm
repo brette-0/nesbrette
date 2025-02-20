@@ -1,3 +1,5 @@
+.ifndef ldz
+
 ; tested and working
 .macro ldz __gpr__
     /*
@@ -12,17 +14,7 @@
     ldr imm: gpr, $00
 .endmacro
 
-.macro __stz_typeless l_target, t_target, _reg, _mode, _zero
-    .if !_zero
-        ldr _reg: imm, $00
-    .endif
-
-    .repeat typeval t_target, iter
-        str _reg: _mode, eindex l_target, typeval t_target, iter, endian t_target
-    .endrepeat
-.endmacro
-
-; typed validation handler
+; typed validation handler (needs another full test)
 .macro stz __target__, __reg$__, __zero$__
     .local _reg, _mode, t_target, w_target, _zero
     ; (nb_int: ptr) __target__
@@ -85,4 +77,14 @@
     .endif
 
     __stz_typeless l_target, w_target, _reg, _mode, _zero
+
+    .if !_zero
+        ldr _reg: imm, $00
+    .endif
+
+    .repeat w_target, iter
+        str _reg: _mode, eindex l_target, w_target, iter, endian t_target
+    .endrepeat
 .endmacro
+
+.endif

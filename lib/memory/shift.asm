@@ -1,3 +1,15 @@
+.ifndef shift
+
+.ifndef memcpy
+    ::dependancies .set ::dependancies + 1
+    ; lihmem::memcpy is macro only at 0 bytes thus doesn't need a size change
+.endif
+
+.ifndef ldz
+    ::dependancies .set ::dependancies + 1
+    ; libmem::flush is macro only at 0 bytes thus doesn't need a size change
+.endif
+
 includefrom memory, memcpy
 includefrom memory, flush
 
@@ -212,3 +224,5 @@ includefrom memory, flush
         lshift num
     .endif
 .endmacro
+
+.endif
