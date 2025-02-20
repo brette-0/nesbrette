@@ -2,10 +2,10 @@
 
 .macro compare __source__, __target__, __reg$__, __modes$__, __fallback$__
     .local phase2, exit, smaller, w_source, w_target, t_target, t_source, l_target, l_source, _reg, m_comp, m_load, fallback
-
     /*
 
         TODO: Rewrite optional parameter validation
+        TODO: MOVE FIXED OFFSET TO RAM REQUEST SYSTEM
 
         (int: ptr)  __source__
         (int: ptr)  __target__
@@ -38,6 +38,8 @@
             compare Source, Target, wabsx: wabsy
     */
 
+    request temp, 2
+
     t_target .set null
     t_source .set null
 
@@ -56,19 +58,43 @@
     
     ; validate modes and registers
 
+    .ifblank __reg$__
+        r_data = yr
+    .else
+        r_data = setireg __reg$__
+    .endif
+
+    .ifblank __modes$__
+        m_load = wabs
+        m_comp = wabs
+    .else
+        m_load = setmam .left( 1, __modes$__)
+        m_comp = setmam .right(1, __modes$__)
+    .endif
+
+; TODO: SCAN IS BACKWARDS NOW, IT FINDS THE HIGHEST DELTA BYTE
+;       SUBTRACTIONS WILL THEN USE INDEXED DIRECT
+;       USES TEMP MEM FOR DELTAS       
+;
+;       Z is bitwise equality. N is math equality
+
     lda #$00
 
     .repeat w_target, iter
-        ldr r_data: m_load, eindex l_source, w_source, iter, endian t_source
-        cpr r_data: m_comp, eindex l_target, w_target, iter, endian t_target
+        ldr r_data: m_load, eindex l_source, w_source, iter, endian ~t_source
+        cpr r_data: m_comp, eindex l_target, w_target, iter, endian ~t_target
         bne phase2
     .endrepeat
+
+    str r_data: wabs, temp  ; store largest delta -
+    ldr r_data: (wabsx + (r_comp = yr)), eindex l_target, w_target, iter, endian ~t_target
+    str r_data: wabs, temp+1; store larget delta +
 
     .if .max(0, w_source - w_target)
         ldr r_data: imm, fallback
     
         .repeat .max(0, w_source - w_target), iter
-            cpr r_data: m_comp, eindex l_target, w_target, (iter + w_source - w_target), endian t_target
+            cpr r_data: m_comp, eindex l_target, w_target, (iter + w_source - w_target), ~endian t_target
             bne phase2
         .endrepeat
     .endif
@@ -85,41 +111,43 @@
         If sign difference with negative value, early exit
 
     */
+
     .if signed t_source && (!signed t_target)
-        ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
+        ldr r_data: wabs, temp
         bmi exit
         ; unsigned compare now suffices
 
-        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target 
+        cpr r_data: wabs, (temp + 1)
         bcc exit
     .elseif signed t_target && (!signed t_source)
-        ldr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        ldr r_data: wabs, temp
         bpl exit
         ; unsigned compare now suffices
 
-        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target 
+        cpr r_data: wabs, (temp + 1)
         bcs exit
     .elseif signed t_source && signed t_target
-        ldr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        ldr r_data: wabs, (temp + 1)
         cpr r_data: imm, $80
-        ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
+        ldr r_data: wabs, temp
         
 
-        bcs @__negative
+        bcs __negative
         bmi exit1
 
-        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        cpr r_data: wabs, (temp + 1)
         bcs exit1
         bcc exit
 
-        @__negative:
+        __negative:
         bpl exit1
 
-        cpr r_data: m_load, eindex l_target, w_target, (w_target - 1), endian t_target
+        cpr r_data: wabs, (temp + 1)
         bcc exit1
         beq exit1
         bcs exit
-        
+    .else
+        bcc exit
     .endif
 
     exit1:

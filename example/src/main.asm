@@ -3,8 +3,7 @@
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
 
 ; include statics
-includefrom memory, compare
-includefrom synth, stack
+;includefrom memory, compare
 
 .segment "HEADER"
     header \
@@ -16,16 +15,19 @@ includefrom synth, stack
 .segment "CODE"
 
 Temp1:
-    .byte $00, $00, $00, $00
+    .word $0000
 
 Temp2:
-    .byte $00, $00, $00, $01
+    .word $0001
 
-typeas Temp1, u32
-typeas Temp2, u32
+; Z is total equivalence
+; N is numerical equivlance
+
+typeas Temp1, u16
+typeas Temp2, i16
 
 reset:
-    compare Temp1, Temp2
+    ;compare Temp1, Temp2
 
 
 .segment "VECTORS"
