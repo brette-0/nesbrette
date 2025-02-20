@@ -5,6 +5,8 @@
 
     /*
 
+        TODO: Rewrite optional parameter validation
+
         (int: ptr)  __source__
         (int: ptr)  __target__
 
@@ -20,10 +22,14 @@
 
         response:
             cpu stat
-                Z   - equal to                  : requirement
-                N   - sign equality             : also kind of cool
-                C   - Greater than or equal to  : requirement
-                V   - Greater than              : cool as fuck
+                Z   - equal to
+                [ TODO: USE N FLAG FOR SIGNED DIFFERENCE WITH SIGNED ARRAY TYPES ]
+                    {
+                        reasoning : N does not behave in a semantically typical
+                                    way alike how Z and C does.
+                    }
+                C   - Greater than or equal to
+                V   - Greater than
 
 
         usage:
@@ -40,54 +46,14 @@
     w_source = typeval t_source
     w_target = typeval t_target
 
-    .if (!w_source) || (!w_source)
+    .if (!w_source) || (!w_target)
         ; invalid type
     .endif
 
     l_source = .right(1, __source__)
     l_target = .right(1, __target__)
-
-    .ifblank __reg$__
-        r_data .set yr
-    .else
-        r_data .set __reg$__
-        r_data .set setireg r_data
-
-        .if is_null r_data
-            .fatal ; invalid ireg
-        .endif
-    .endif
-
-    .ifblank __fallback$__
-        fallback .set $00
-    .else
-        fallback .set __fallback$__
-
-        .if is_null r_data
-            .fatal ; invalid ireg
-        .endif
-    .endif
-
     
-
-    .ifblank __modes$__
-        m_load .set wabs
-        m_comp .set wabs
-    .else
-        m_load .set  .left(1, __modes$__)
-        m_comp .set .right(1, __modes$__)
-
-        m_load .set setireg __modes$__
-        m_comp .set setireg __modes$__
-
-        .if is_null r_load
-            .fatal ""
-        .endif
-
-        .if is_null r_comp
-            .fatal ""
-        .endif
-    .endif
+    ; validate modes and registers
 
     lda #$00
 
@@ -118,12 +84,13 @@
 
         smaller:
 
-    ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
-    cpr r_data: m_comp, eindex l_target, w_target, (w_target - 1), endian t_target
+; TODO: FAULTY (see header)
+;    ldr r_data: m_load, eindex l_source, w_source, (w_source - 1), endian t_source
+;    cpr r_data: m_comp, eindex l_target, w_target, (w_target - 1), endian t_target
 
-    bpl nosigndiff
-    ora #NF
-    nosigndiff:
+;    bpl nosigndiff
+;    ora #NF
+;    nosigndiff:
 
     exit:
     pha

@@ -5,8 +5,8 @@ xr   = 32
 yr   = 64
 
 ; cpu status
-ZF   = 1
-CF   = 2
+CF   = 1
+ZF   = 2
 IF   = 4
 DF   = 8
 BF   = 16

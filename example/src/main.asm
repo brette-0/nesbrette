@@ -16,10 +16,10 @@ includefrom synth, stack
 .segment "CODE"
 
 Temp1:
-    .byte $11, $22, $33, $44
+    .byte $00, $00, $00, $00
 
 Temp2:
-    .byte $55, $66, $77, $88
+    .byte $00, $00, $00, $01
 
 typeas Temp1, u32
 typeas Temp2, u32
