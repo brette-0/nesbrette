@@ -1,5 +1,8 @@
 .include "../../lib/core/include.asm"   ; include the include system (fun right?)
 
+TEMP_RAM_END   = $0100
+TEMP_RAM_START = $0000
+
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
 
 ; include statics
@@ -27,7 +30,7 @@ typeas Temp1, u16
 typeas Temp2, i16
 
 reset:
-    ;compare Temp1, Temp2
+    compare Temp1, Temp2
 
 
 .segment "VECTORS"

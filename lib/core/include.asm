@@ -47,6 +47,7 @@
     .include .concat(libroot, "/core/enums.asm")
     .include .concat(libroot, "/core/typing.asm")
     .include .concat(libroot, "/core/header.asm")
+    .include .concat(libroot, "/core/memory.asm")
 
     .include .concat(libroot, "/ca65hl/ca65hl.h")
 .endmacro

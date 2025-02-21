@@ -22,15 +22,10 @@
 
         response:
             cpu stat
-                Z   - equal to
-                [ TODO: USE N FLAG FOR SIGNED DIFFERENCE WITH SIGNED ARRAY TYPES ]
-                    {
-                        reasoning : N does not behave in a semantically typical
-                                    way alike how Z and C does.
-                    }
-                C   - Greater than or equal to#
-                    TODO: Make C be signed compare
+                Z   - equal to bitwise
+                C   - Greater than or equal to
                 V   - Greater than
+                N   - equal to numerically (TODO: Make work)
 
 
         usage:
@@ -38,7 +33,7 @@
             compare Source, Target, wabsx: wabsy
     */
 
-    request temp, 2
+    malloc temp, 2
 
     t_target .set null
     t_source .set null
@@ -86,21 +81,38 @@
         bne phase2
     .endrepeat
 
-    str r_data: wabs, temp  ; store largest delta -
-    ldr r_data: (wabsx + (r_comp = yr)), eindex l_target, w_target, iter, endian ~t_target
-    str r_data: wabs, temp+1; store larget delta +
-
     .if .max(0, w_source - w_target)
         ldr r_data: imm, fallback
     
         .repeat .max(0, w_source - w_target), iter
-            cpr r_data: m_comp, eindex l_target, w_target, (iter + w_source - w_target), ~endian t_target
+            cpr r_data: m_comp, eindex l_target, w_target, (iter + w_source - w_target), endian ~t_target
             bne phase2
         .endrepeat
     .endif
 
-    ora #ZF + CF
-    bne exit
+    .if     endian t_source = endian t_target
+        ora #ZF + CF + NF
+    .else
+        ; load hibyte
+        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
+        cpr r_data: imm, $80
+        ldr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
+
+        bcs __n_q
+        ; __p_q
+        bmi __p_n
+        ora #ZF + CF + NF
+        bne exit
+
+        __p_n:
+        ora #ZF + CF
+        bne exit
+
+        __n_q:
+        bmi __p_n
+        ora #ZF + CF + NF
+        bne exit
+    .endif
     
     phase2:
         ; if we have reached here there are two possibilities
@@ -112,29 +124,36 @@
 
     */
 
+    str r_data: wabs, temp  ; store largest delta -
+    ldr r_data: (wabsx + (r_comp = yr)), eindex l_target, w_target, iter, endian ~t_target
+    str r_data: wabs, temp+1; store larget delta +
+
     .if signed t_source && (!signed t_target)
-        ldr r_data: wabs, temp
+        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
         bmi exit
         ; unsigned compare now suffices
 
-        cpr r_data: wabs, (temp + 1)
+        ldr r_data: wabs, temp
+        cpr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
         bcc exit
     .elseif signed t_target && (!signed t_source)
-        ldr r_data: wabs, temp
+        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
         bpl exit
         ; unsigned compare now suffices
 
-        cpr r_data: wabs, (temp + 1)
+        ldr r_data: wabs, temp
+        cpr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
         bcs exit
     .elseif signed t_source && signed t_target
-        ldr r_data: wabs, (temp + 1)
+        ldr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
         cpr r_data: imm, $80
-        ldr r_data: wabs, temp
+        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
         
 
         bcs __negative
         bmi exit1
 
+        ldr r_data: wabs, temp
         cpr r_data: wabs, (temp + 1)
         bcs exit1
         bcc exit
@@ -142,6 +161,7 @@
         __negative:
         bpl exit1
 
+        ldr r_data: wabs, temp
         cpr r_data: wabs, (temp + 1)
         bcc exit1
         beq exit1
@@ -156,5 +176,8 @@
     exit:
         pha
         plp ; ststat (not warranting a whole ass dependancy)
+
+    ; memory cleanup
+    dealloc temp, 2
 .endmacro
 .endif
