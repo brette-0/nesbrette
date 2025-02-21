@@ -1,11 +1,12 @@
 .ifndef compare
 
-.macro compare __source__, __target__, __reg$__, __modes$__, __fallback$__
+.macro compare __source__, __target__, __modes$__, __fallback$__
     .local phase2, exit, smaller, w_source, w_target, t_target, t_source, l_target, l_source, _reg, m_comp, m_load, fallback
     /*
 
         TODO: Rewrite optional parameter validation
-        TODO: MOVE FIXED OFFSET TO RAM REQUEST SYSTEM
+        TODO: Write Width Mismatch Fallback
+        TODO: Optimise ldr=>cpr situations with dual ireg
 
         (int: ptr)  __source__
         (int: ptr)  __target__
@@ -25,15 +26,47 @@
                 Z   - equal to bitwise
                 C   - Greater than or equal to
                 V   - Greater than
-                N   - equal to numerically (TODO: Make work)
+                N   - equal to numerically
 
 
         usage:
             compare Source, Target
             compare Source, Target, wabsx: wabsy
+
+
+        tests:
+            Unsigned | Unsigned 
+                PASSING BITWISE EQUALITY CHECK
+                PASSING NUMERICAL EQUALITY CHECK
+                PASSING >= CHECK
+                PASSING > CHECK
+            
+            Unsigned | Signed 
+            
+
+
+
+
+            Signed | Unsigned 
+            
+
+
+
+
+            Signed | Ssigned 
+            
+
+
+
+
+            
     */
 
-    malloc temp, 2
+    srcdelta .set null
+    tardelta .set null
+
+    malloc srcdelta, 1
+    malloc tardelta, 1
 
     t_target .set null
     t_source .set null
@@ -51,13 +84,7 @@
     l_source = .right(1, __source__)
     l_target = .right(1, __target__)
     
-    ; validate modes and registers
-
-    .ifblank __reg$__
-        r_data = yr
-    .else
-        r_data = setireg __reg$__
-    .endif
+    r_comp = xr
 
     .ifblank __modes$__
         m_load = wabs
@@ -67,36 +94,28 @@
         m_comp = setmam .right(1, __modes$__)
     .endif
 
-; TODO: SCAN IS BACKWARDS NOW, IT FINDS THE HIGHEST DELTA BYTE
-;       SUBTRACTIONS WILL THEN USE INDEXED DIRECT
-;       USES TEMP MEM FOR DELTAS       
-;
-;       Z is bitwise equality. N is math equality
-
     lda #$00
+    
+    .if endian w_target
+        ldr xr: imm, w_target
+    .else
+        tar xr
+    .endif
 
     .repeat w_target, iter
-        ldr r_data: m_load, eindex l_source, w_source, iter, endian ~t_source
-        cpr r_data: m_comp, eindex l_target, w_target, iter, endian ~t_target
+        ldr yr: m_comp, eindex l_target, w_target, iter, endian ~t_target
+        cpr yr: m_load, eindex l_source, w_source, iter, endian ~t_source
         bne phase2
+        ner xr, (endian w_target)
     .endrepeat
-
-    .if .max(0, w_source - w_target)
-        ldr r_data: imm, fallback
-    
-        .repeat .max(0, w_source - w_target), iter
-            cpr r_data: m_comp, eindex l_target, w_target, (iter + w_source - w_target), endian ~t_target
-            bne phase2
-        .endrepeat
-    .endif
 
     .if     endian t_source = endian t_target
         ora #ZF + CF + NF
     .else
         ; load hibyte
-        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
-        cpr r_data: imm, $80
-        ldr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
+        ldr yr: m_load, eindex l_source, w_source, 0, endian ~t_source
+        cpr yr: imm, $80
+        ldr yr: m_comp, eindex l_target, w_target, 0, endian ~t_target
 
         bcs __n_q
         ; __p_q
@@ -124,45 +143,46 @@
 
     */
 
-    str r_data: wabs, temp  ; store largest delta -
-    ldr r_data: (wabsx + (r_comp = yr)), eindex l_target, w_target, iter, endian ~t_target
-    str r_data: wabs, temp+1; store larget delta +
+    ; fetch values for numerical compare
+    str yr: wabs, tardelta  ; store largest delta (source-target) from target 
+    
+    ldr yr: wabsx, l_source ; fetch from target where indexed
+    str yr: wabs, srcdelta  ; store largest delta (source-target) from source
+
+    ; Y CONTAINTS SOURCE DELTA
+    ; X IS STALE
 
     .if signed t_source && (!signed t_target)
-        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
+        ldr xr: m_load, eindex l_source, w_source, 0, endian ~t_source
         bmi exit
         ; unsigned compare now suffices
 
-        ldr r_data: wabs, temp
-        cpr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
+        cpr yr: wabs, tardelta
         bcc exit
     .elseif signed t_target && (!signed t_source)
-        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
+        ldr xr: m_load, eindex l_source, w_source, 0, endian ~t_source
         bpl exit
         ; unsigned compare now suffices
 
-        ldr r_data: wabs, temp
-        cpr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
+        cpr yr: wabs, tardelta
         bcs exit
     .elseif signed t_source && signed t_target
-        ldr r_data: m_comp, eindex l_target, w_target, 0, endian ~t_target
-        cpr r_data: imm, $80
-        ldr r_data: m_load, eindex l_source, w_source, 0, endian ~t_source
+        ldr xr: m_comp, eindex l_target, w_target, 0, endian ~t_target
+        cpr xr: imm, $80
+        ldr xr: m_load, eindex l_source, w_source, 0, endian ~t_source
         
 
         bcs __negative
         bmi exit1
 
-        ldr r_data: wabs, temp
-        cpr r_data: wabs, (temp + 1)
+        cpr yr: wabs, tardelta
         bcs exit1
         bcc exit
 
         __negative:
         bpl exit1
 
-        ldr r_data: wabs, temp
-        cpr r_data: wabs, (temp + 1)
+        cpr yr: wabs, tardelta
         bcc exit1
         beq exit1
         bcs exit
@@ -178,6 +198,7 @@
         plp ; ststat (not warranting a whole ass dependancy)
 
     ; memory cleanup
-    dealloc temp, 2
+    dealloc tardelta, 1
+    dealloc srcdelta, 1
 .endmacro
 .endif

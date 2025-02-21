@@ -24,6 +24,22 @@
     .endif
 .endmacro
 
+.macro ner __target__, __dir$__
+    .ifblank __dir$__
+        .if __target__ > 0
+            inr __target__
+        .else
+            der .max(__target__, -__target__)
+        .endif
+    .else
+        .if __dir$__
+            der __target__
+        .else
+            inr __target__
+        .endif
+    .endif
+.endmacro
+
 ; teseted and working
 .macro tar __target__
     .ifblank __target__
@@ -142,7 +158,7 @@
     
     .elseif _reg = yr
 
-                .if (_mode = zpx) || (_mode = wabsx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
+                .if (_mode = zpx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
             .fatal "InvalidMemoryAddressModeException : ldr(y) cannot load by indirect unindexed or with implied operand"
         .endif
 

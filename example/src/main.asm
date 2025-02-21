@@ -6,7 +6,7 @@ TEMP_RAM_START = $0000
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
 
 ; include statics
-;includefrom memory, compare
+includefrom memory, compare
 
 .segment "HEADER"
     header \
@@ -18,13 +18,10 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
 .segment "CODE"
 
 Temp1:
-    .word $0000
-
-Temp2:
     .word $0001
 
-; Z is total equivalence
-; N is numerical equivlance
+Temp2:
+    .word $0000
 
 typeas Temp1, u16
 typeas Temp2, i16
