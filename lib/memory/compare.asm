@@ -6,7 +6,6 @@
 
         TODO: Rewrite optional parameter validation
         TODO: Write Width Mismatch Fallback
-        TODO: Optimise ldr=>cpr situations with dual ireg
 
         (int: ptr)  __source__
         (int: ptr)  __target__
@@ -16,9 +15,8 @@
 
 
         limits:
-            uses ar for bitmath
-            requires xr|yr as dr
-                no wabsr | absr
+            needs a, x & y
+            needs 2 bytes of nb_temp-ram
 
 
         response:
@@ -31,35 +29,7 @@
 
         usage:
             compare Source, Target
-            compare Source, Target, wabsx: wabsy
-
-
-        tests:
-            Unsigned | Unsigned 
-                PASSING BITWISE EQUALITY CHECK
-                PASSING NUMERICAL EQUALITY CHECK
-                PASSING >= CHECK
-                PASSING > CHECK
-            
-            Unsigned | Signed 
-            
-
-
-
-
-            Signed | Unsigned 
-            
-
-
-
-
-            Signed | Ssigned 
-            
-
-
-
-
-            
+            compare Source, Target, $00
     */
 
     srcdelta .set null
@@ -97,11 +67,7 @@
     and #~(CF + NF + OF + ZF)
     
     ; this looks wrong, but its right because we index backwards naturally
-    .if endian w_source
-        tax
-    .else
-        ldx #w_source - 1
-    .endif
+    ldx #eindex 0, w_source, 0, (!e_source)
 
     .repeat w_target - 1, iter
         ldy eindex l_target, w_target, iter, endian ~t_target
@@ -158,32 +124,24 @@
     ; Y CONTAINTS SOURCE DELTA
     ; X IS DELTA BYTE OFFSET
 
-    ; unsigned against signed
-    .if (!s_source) && s_target
 
-        ldx eindex l_source, w_source, 0, (!e_source)
-        bmi exit1   ; if b0d0 is set, the value cannot be reached by signed
-
-        ldx eindex l_target, w_source, 0, (!e_source)
-        bmi exit1   ; if b0d0 is set on target then target is negative, source is always larger
-
-        ; otherwise its safe to comapre as unsigned
-        cpy tardelta
-        bcc exit
-    ; signed against unsigned
+    .if     (!s_source) && s_target
+        tempbranch  = exit1
+        tempnum     = l_target
     .elseif s_source && (!s_target)
+        tempbranch = exit
+        tempnum     = l_source
+    .endif
 
-        ldx eindex l_target, w_source, 0, (!e_source)
-        bmi exit    ; if b0d0 is set, the value cannot be reached by signed
-
-        ldx eindex l_source, w_source, 0, (!e_source)
-        bmi exit    ; if b0d0 is set on source then source is negative, target is always larger
+    ; unsigned against signed
+    .if s_source <> s_target
+        ldx eindex tempnum, w_source, 0, (!e_source)
+        bmi tempbranch  ; if b0d0 is set on target then target is negative, source is always larger
 
         ; otherwise its safe to comapre as unsigned
         cpy tardelta
         bcc exit
-
-    ; signed vs signed
+    
     .elseif s_source && s_target
         ldx eindex l_target, w_target, 0, (!e_target)
         cpx #$80
@@ -192,16 +150,14 @@
         bcs __negative
         bmi exit        ; tS [skips V and C ][ sets V and C ]
 
+        __compare:
         cpy tardelta    ; ts 
         bcs exit1
         bcc exit
 
         __negative:
+        bmi __compare   ; TS
         bpl exit1       ; Ts [ sets V and C ]
-
-        cpy tardelta    ; TS
-        bcs exit1
-        bcc exit
     .else
     ; unsigned vs
         bcs exit
