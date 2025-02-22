@@ -97,18 +97,23 @@
     and #~(CF + NF + OF + ZF)
     
     ; this looks wrong, but its right because we index backwards naturally
-    .if endian w_target
-        tar xr
+    .if endian w_source
+        tax
     .else
-        ldr xr: imm, (w_target - 1)
+        ldx #w_source - 1
     .endif
 
-    .repeat w_target, iter
-        ldr yr: m_comp, eindex l_target, w_target, iter, endian ~t_target
-        cpr yr: m_load, eindex l_source, w_source, iter, endian ~t_source
+    .repeat w_target - 1, iter
+        ldy eindex l_target, w_target, iter, endian ~t_target
+        cpy eindex l_source, w_source, iter, endian ~t_source
         bne phase2
         ner xr, (!endian w_target)
     .endrepeat
+
+    ldy eindex l_target, w_target, (w_target - 1), endian ~t_target
+    cpy eindex l_source, w_source, (w_target - 1), endian ~t_source
+    bne phase2
+
 
     e_source = endian t_source
     e_target = endian t_target
@@ -121,9 +126,9 @@
         bne exit
     .else
         ; load hibyte
-        ldr yr: m_load, eindex l_source, w_source, 0, (!e_source)
+        ldy eindex l_source, w_source, 0, (!e_source)
         bmi _n
-        ldr yr: m_comp, eindex l_target, w_target, 0, (!e_target)
+        ldy eindex l_target, w_target, 0, (!e_target)
         bmi _n
 
         ora #ZF + CF + NF
@@ -145,50 +150,60 @@
     */
 
     ; fetch values for numerical compare
-    str yr: wabs, tardelta  ; store largest delta (source-target) from target 
+    sty tardelta            ; store largest delta (source-target) from target 
     
-    ldr yr: wabsx, l_source ; fetch from target where indexed
-    str yr: wabs, srcdelta  ; store largest delta (source-target) from source
+    ldy l_source, x         ; fetch from target where indexed
+    sty srcdelta            ; store largest delta (source-target) from source
 
     ; Y CONTAINTS SOURCE DELTA
-    ; X IS STALE
+    ; X IS DELTA BYTE OFFSET
 
-    .if s_source && (!s_target)
-        ldr xr: m_load, eindex l_source, w_source, 0, (!e_source)
-        bmi exit
-        ; unsigned compare now suffices
+    ; unsigned against signed
+    .if (!s_source) && s_target
 
-        cpr yr: wabs, tardelta
+        ldx eindex l_source, w_source, 0, (!e_source)
+        bmi exit1   ; if b0d0 is set, the value cannot be reached by signed
+
+        ldx eindex l_target, w_source, 0, (!e_source)
+        bmi exit1   ; if b0d0 is set on target then target is negative, source is always larger
+
+        ; otherwise its safe to comapre as unsigned
+        cpy tardelta
         bcc exit
+    ; signed against unsigned
     .elseif s_source && (!s_target)
-        ldr xr: m_load, eindex l_source, w_source, 0, (!e_source)
-        bpl exit
-        
-        ; unsigned compare now suffices
 
-        cpr yr: wabs, tardelta
-        bcs exit
+        ldx eindex l_target, w_source, 0, (!e_source)
+        bmi exit    ; if b0d0 is set, the value cannot be reached by signed
+
+        ldx eindex l_source, w_source, 0, (!e_source)
+        bmi exit    ; if b0d0 is set on source then source is negative, target is always larger
+
+        ; otherwise its safe to comapre as unsigned
+        cpy tardelta
+        bcc exit
+
+    ; signed vs signed
     .elseif s_source && s_target
-        ldr xr: m_comp, eindex l_target, w_target, 0, (!e_target)
-        cpr xr: imm, $80
-        ldr xr: m_load, eindex l_source, w_source, 0, (!e_source)
-        
+        ldx eindex l_target, w_target, 0, (!e_target)
+        cpx #$80
+        ldx eindex l_source, w_source, 0, (!e_source)
 
         bcs __negative
-        bmi exit1
+        bmi exit        ; tS [skips V and C ][ sets V and C ]
 
-        cpr yr: wabs, tardelta
+        cpy tardelta    ; ts 
         bcs exit1
         bcc exit
 
         __negative:
-        bpl exit1
+        bpl exit1       ; Ts [ sets V and C ]
 
-        cpr yr: wabs, tardelta
-        bcc exit1
-        beq exit1
-        bcs exit
+        cpy tardelta    ; TS
+        bcs exit1
+        bcc exit
     .else
+    ; unsigned vs
         bcs exit
     .endif
 
