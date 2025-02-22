@@ -18,13 +18,13 @@ includefrom memory, compare
 .segment "CODE"
 
 Temp1:
-    .word $0001
+    .byte $ff, $ff
 
 Temp2:
-    .word $0000
+    .byte $ff, $ff
 
-typeas Temp1, u16
-typeas Temp2, i16
+typeas Temp1, i16
+typeas Temp2, u16
 
 reset:
     compare Temp1, Temp2

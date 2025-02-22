@@ -83,8 +83,6 @@
 
     l_source = .right(1, __source__)
     l_target = .right(1, __target__)
-    
-    r_comp = xr
 
     .ifblank __modes$__
         m_load = wabs
@@ -94,42 +92,45 @@
         m_comp = setmam .right(1, __modes$__)
     .endif
 
-    lda #$00
+    php         ; ldsstat
+    pla
+    and #~(CF + NF + OF + ZF)
     
+    ; this looks wrong, but its right because we index backwards naturally
     .if endian w_target
-        ldr xr: imm, w_target
-    .else
         tar xr
+    .else
+        ldr xr: imm, (w_target - 1)
     .endif
 
     .repeat w_target, iter
         ldr yr: m_comp, eindex l_target, w_target, iter, endian ~t_target
         cpr yr: m_load, eindex l_source, w_source, iter, endian ~t_source
         bne phase2
-        ner xr, (endian w_target)
+        ner xr, (!endian w_target)
     .endrepeat
 
-    .if     endian t_source = endian t_target
+    e_source = endian t_source
+    e_target = endian t_target
+
+    s_source = signed t_source
+    s_target = signed t_target
+
+    .if    s_source = s_target
         ora #ZF + CF + NF
+        bne exit
     .else
         ; load hibyte
-        ldr yr: m_load, eindex l_source, w_source, 0, endian ~t_source
-        cpr yr: imm, $80
-        ldr yr: m_comp, eindex l_target, w_target, 0, endian ~t_target
+        ldr yr: m_load, eindex l_source, w_source, 0, (!e_source)
+        bmi _n
+        ldr yr: m_comp, eindex l_target, w_target, 0, (!e_target)
+        bmi _n
 
-        bcs __n_q
-        ; __p_q
-        bmi __p_n
         ora #ZF + CF + NF
         bne exit
 
-        __p_n:
+        _n:
         ora #ZF + CF
-        bne exit
-
-        __n_q:
-        bmi __p_n
-        ora #ZF + CF + NF
         bne exit
     .endif
     
@@ -152,24 +153,25 @@
     ; Y CONTAINTS SOURCE DELTA
     ; X IS STALE
 
-    .if signed t_source && (!signed t_target)
-        ldr xr: m_load, eindex l_source, w_source, 0, endian ~t_source
+    .if s_source && (!s_target)
+        ldr xr: m_load, eindex l_source, w_source, 0, (!e_source)
         bmi exit
         ; unsigned compare now suffices
 
         cpr yr: wabs, tardelta
         bcc exit
-    .elseif signed t_target && (!signed t_source)
-        ldr xr: m_load, eindex l_source, w_source, 0, endian ~t_source
+    .elseif s_source && (!s_target)
+        ldr xr: m_load, eindex l_source, w_source, 0, (!e_source)
         bpl exit
+        
         ; unsigned compare now suffices
 
         cpr yr: wabs, tardelta
         bcs exit
-    .elseif signed t_source && signed t_target
-        ldr xr: m_comp, eindex l_target, w_target, 0, endian ~t_target
+    .elseif s_source && s_target
+        ldr xr: m_comp, eindex l_target, w_target, 0, (!e_target)
         cpr xr: imm, $80
-        ldr xr: m_load, eindex l_source, w_source, 0, endian ~t_source
+        ldr xr: m_load, eindex l_source, w_source, 0, (!e_source)
         
 
         bcs __negative
@@ -187,7 +189,7 @@
         beq exit1
         bcs exit
     .else
-        bcc exit
+        bcs exit
     .endif
 
     exit1:
