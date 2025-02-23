@@ -32,12 +32,6 @@
             compare Source, Target, $00
     */
 
-    srcdelta .set null
-    tardelta .set null
-
-    malloc srcdelta, 1
-    malloc tardelta, 1
-
     t_target .set null
     t_source .set null
 
@@ -62,6 +56,39 @@
         m_comp = setmam .right(1, __modes$__)
     .endif
 
+    srcdelta .set null
+    tardelta .set null
+
+    malloc srcdelta, 1
+    malloc tardelta, 1
+
+    fill .set null
+    .if w_source <> w_target
+        
+        malloc fill, 1
+    .endif
+
+    .if w_source > w_target
+        .if signed w_target
+            lda eindex l_target, w_target, 0, (!e_target)
+            eor #$80
+            rol         ; C = ~d7, A <<= 1
+            lda #$ff    ; C = ~d7,  A = $ff
+            adc #$00    ; A = (ctx & 0x80) ? 0xff : 0x00;
+        .else
+            fill .set $00
+        .endif
+    .elseif
+        .if signed w_source
+            lda eindex l_source, w_source, 0, (!e_source)
+            eor #$80
+            rol         ; C = ~d7, A <<= 1
+            lda #$ff    ; C = ~d7,  A = $ff
+            adc #$00    ; A = (ctx & 0x80) ? 0xff : 0x00;
+        .else
+            fill .set $00
+        .endif
+    .endif
     php         ; ldsstat
     pla
     and #~(CF + NF + OF + ZF)
@@ -69,17 +96,65 @@
     ; this looks wrong, but its right because we index backwards naturally
     ldx #eindex 0, w_source, 0, (!e_source)
 
-    .repeat w_target - 1, iter
-        ldy eindex l_target, w_target, iter, endian ~t_target
-        cpy eindex l_source, w_source, iter, endian ~t_source
+    .if     w_source = w_target
+        .repeat w_target - 1, iter
+            ldy eindex l_target, w_target, iter, endian ~t_target
+            cpy eindex l_source, w_source, iter, endian ~t_source
+            bne phase2
+            ner xr, (!endian w_target)
+        .endrepeat
+
+        ldy eindex l_target, w_target, (w_target - 1), endian ~t_target
+        cpy eindex l_source, w_source, (w_target - 1), endian ~t_source
         bne phase2
-        ner xr, (!endian w_target)
-    .endrepeat
+    .elseif w_target > w_source
+        ; mam changes because signed may result negative
+        .if signed t_source
+            ldy fill
+        .else
+            ldy #fill
+        .endif
 
-    ldy eindex l_target, w_target, (w_target - 1), endian ~t_target
-    cpy eindex l_source, w_source, (w_target - 1), endian ~t_source
-    bne phase2
+        .repeat w_target - w_source, iter
+            cpy eindex l_source, w_source, iter, endian ~t_source
+            bne phase2
+            ner xr, (!endian w_target)
+        .endrepeat
 
+        .repeat w_source - 1, iter
+            ldy eindex l_target, w_target, iter, endian ~t_target
+            cpy eindex l_source, w_source, (iter + w_target - w_source), endian ~t_source
+            bne phase2
+            ner xr, (!endian w_target)
+        .endrepeat
+
+        ldy eindex l_target, w_target, (w_target - 1), endian ~t_target
+        cpy eindex l_source, w_source, (w_target - 1), endian ~t_source
+        bne phase2
+    .else
+        .if signed t_target
+            ldy fill
+        .else
+            ldy #fill
+        .endif
+        
+        .repeat w_source - w_target, iter
+            cpy eindex l_target, w_target, iter, endian ~t_target
+            bne phase2
+            ner xr, (!endian w_target)
+        .endrepeat
+
+        .repeat w_source - 1, iter
+            ldy eindex l_target, w_target, (iter + w_source - w_target), endian ~t_target
+            cpy eindex l_source, w_source, iter, endian ~t_source
+            bne phase2
+            ner xr, (!endian w_target)
+        .endrepeat
+
+        ldy eindex l_target, w_target, (w_target - 1), endian ~t_target
+        cpy eindex l_source, w_source, (w_target - 1), endian ~t_source
+        bne phase2
+    .endif
 
     e_source = endian t_source
     e_target = endian t_target
@@ -92,11 +167,23 @@
         bne exit
     .else
         ; load hibyte
-        ldy eindex l_source, w_source, 0, (!e_source)
-        bmi _n
-        ldy eindex l_target, w_target, 0, (!e_target)
-        bmi _n
 
+        .if     w_source >= w_target
+            ldy eindex l_source, w_source, 0, (!e_source)
+            bmi _n
+        .elseif s_source
+            ldy fill
+            bmi _n
+        .endif
+
+        .if     w_target >= w_source
+            ldy eindex l_target, w_target, 0, (!e_target)
+            bmi _n
+        .elseif s_target
+            ldy fill
+            bmi _n
+        .endif
+        
         ora #ZF + CF + NF
         bne exit
 
@@ -124,28 +211,44 @@
     ; Y CONTAINTS SOURCE DELTA
     ; X IS DELTA BYTE OFFSET
 
-
-    .if     (!s_source) && s_target
-        tempbranch  = exit1
-        tempnum     = l_target
-    .elseif s_source && (!s_target)
-        tempbranch = exit
-        tempnum     = l_source
-    .endif
-
     ; unsigned against signed
-    .if s_source <> s_target
-        ldx eindex tempnum, w_source, 0, (!e_source)
-        bmi tempbranch  ; if b0d0 is set on target then target is negative, source is always larger
+    .if     (!s_source) && s_target
+        .if w_target >= w_source
+            ldx eindex l_target, w_source, 0, (!e_source)
+            bmi exit1  ; if b0d0 is set on target then target is negative, source is always larger
+        .elseif s_target
+            ldx fill
+            bmi exit1
+        .endif
 
         ; otherwise its safe to comapre as unsigned
         cpy tardelta
         bcc exit
-    
+    .elseif s_source && (!s_target)
+        .if w_source >= w_target
+            ldx eindex l_source, w_source, 0, (!e_source)
+            bmi exit  ; if b0d0 is set on target then target is negative, source is always larger
+        .elseif s_source
+            ldx fill
+            bmi exit
+        .endif
+
+        ; otherwise its safe to comapre as unsigned
+        cpy tardelta
+        bcc exit
     .elseif s_source && s_target
-        ldx eindex l_target, w_target, 0, (!e_target)
+        .if w_target >= w_source
+            ldx eindex l_target, w_target, 0, (!e_target)
+        .else
+            ldx fill
+        .endif
         cpx #$80
-        ldx eindex l_source, w_source, 0, (!e_source)
+        
+        .if w_source >= w_target
+            ldx eindex l_source, w_source, 0, (!e_source)
+        .else
+            ldx fill
+        .endif
 
         bcs __negative
         bmi exit        ; tS [skips V and C ][ sets V and C ]
@@ -171,7 +274,35 @@
         plp ; ststat (not warranting a whole ass dependancy)
 
     ; memory cleanup
+    .if w_source <> w_target
+        dealloc fill, 1
+    .endif
+
     dealloc tardelta, 1
     dealloc srcdelta, 1
 .endmacro
+
+.macro __compare__ldrsrcmsb __reg__
+    .if w_source < w_target
+        .if signed w_source
+            ldr __reg__: wabs, fill
+        .else
+            ldr __reg__: imm, fill
+        .endif
+    .else
+    .endif
+.endmacro
+
+.macro __compare__ldrtarmsb __reg__
+    .if w_target < w_source
+        .if signed w_target
+            ldr __reg__: wabs, fill
+        .else
+            ldr __reg__: imm, fill
+        .endif
+    .else
+        ldr __reg__: wabs,  eindex w_target, w_target, 0, (!e_target)
+    .endif
+.endmacro
+
 .endif
