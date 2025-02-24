@@ -187,6 +187,7 @@
 ; sex u8: Health, u16: Health
 ; sex u8: Here, bu16: There
 ; TODO: Optimize All cases
+; TODO: sex paramterless that does as is on nesdev site but for all regs
 .macro sex __source__, __target__, __reg$__
     .local ahead, negative
 

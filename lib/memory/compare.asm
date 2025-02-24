@@ -1,23 +1,20 @@
 .ifndef compare
 
-.macro compare __source__, __target__, __modes$__, __fallback$__
+.macro compare __source__, __target__
     .local phase2, exit, smaller, w_source, w_target, t_target, t_source, l_target, l_source, _reg, m_comp, m_load, fallback
     /*
 
         TODO: Rewrite optional parameter validation
         TODO: Write Width Mismatch Fallback
-
+        TODO: Consider Constant $ff, $01 instead of calculated
         (int: ptr)  __source__
         (int: ptr)  __target__
-
-        (gpr)       __reg$__
-        (mam: mam)  __modes$__
-
 
         limits:
             needs a, x & y
             needs 2 bytes of nb_temp-ram
-
+            
+            needs 1 extra byte of nb_temp-ram for compares in which the smaller array is signed
 
         response:
             cpu stat
@@ -25,11 +22,6 @@
                 C   - Greater than or equal to
                 V   - Greater than
                 N   - equal to numerically
-
-
-        usage:
-            compare Source, Target
-            compare Source, Target, $00
     */
 
     t_target .set null
@@ -71,20 +63,20 @@
     .if w_source > w_target
         .if signed w_target
             lda eindex l_target, w_target, 0, (!e_target)
-            eor #$80
-            rol         ; C = ~d7, A <<= 1
-            lda #$ff    ; C = ~d7,  A = $ff
-            adc #$00    ; A = (ctx & 0x80) ? 0xff : 0x00;
+            ora #$7f
+            bmi __isneg
+            lda #$00
+            __isneg:    ; effective sex
         .else
             fill .set $00
         .endif
     .elseif
         .if signed w_source
             lda eindex l_source, w_source, 0, (!e_source)
-            eor #$80
-            rol         ; C = ~d7, A <<= 1
-            lda #$ff    ; C = ~d7,  A = $ff
-            adc #$00    ; A = (ctx & 0x80) ? 0xff : 0x00;
+            ora #$7f
+            bmi __isneg
+            lda #$00
+            __isneg:    ; effective sex
         .else
             fill .set $00
         .endif
@@ -281,28 +273,4 @@
     dealloc tardelta, 1
     dealloc srcdelta, 1
 .endmacro
-
-.macro __compare__ldrsrcmsb __reg__
-    .if w_source < w_target
-        .if signed w_source
-            ldr __reg__: wabs, fill
-        .else
-            ldr __reg__: imm, fill
-        .endif
-    .else
-    .endif
-.endmacro
-
-.macro __compare__ldrtarmsb __reg__
-    .if w_target < w_source
-        .if signed w_target
-            ldr __reg__: wabs, fill
-        .else
-            ldr __reg__: imm, fill
-        .endif
-    .else
-        ldr __reg__: wabs,  eindex w_target, w_target, 0, (!e_target)
-    .endif
-.endmacro
-
 .endif
