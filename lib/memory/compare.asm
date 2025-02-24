@@ -1,12 +1,15 @@
+includefrom synth, generic
+
 .ifndef compare
 
-.macro compare __source__, __target__
+.macro compare __source__, __target__, __skip$__
     .local phase2, exit, smaller, w_source, w_target, t_target, t_source, l_target, l_source, _reg, m_comp, m_load, fallback
     /*
 
         TODO: Rewrite optional parameter validation
         TODO: Write Width Mismatch Fallback
-        TODO: Consider Constant $ff, $01 instead of calculated
+        TODO: Optimise sex for lesser width
+
         (int: ptr)  __source__
         (int: ptr)  __target__
 
@@ -23,6 +26,12 @@
                 V   - Greater than
                 N   - equal to numerically
     */
+
+    .ifblank __skip$__
+        skip = 0
+    .else
+        skip = __skip$__ 
+    .endif
 
     t_target .set null
     t_source .set null
@@ -55,32 +64,37 @@
     malloc tardelta, 1
 
     fill .set null
-    .if w_source <> w_target
-        
-        malloc fill, 1
+    .if !skip
+        .if     s_source && (w_source < w_target)
+            malloc fill, 1
+        .elseif s_target && (w_target < w_source)
+            malloc fill, 1
+        .else
+            fill .set $00
+        .endif
     .endif
 
-    .if w_source > w_target
-        .if signed w_target
-            lda eindex l_target, w_target, 0, (!e_target)
-            ora #$7f
-            bmi __isneg
-            lda #$00
-            __isneg:    ; effective sex
-        .else
-            fill .set $00
-        .endif
-    .elseif
-        .if signed w_source
-            lda eindex l_source, w_source, 0, (!e_source)
-            ora #$7f
-            bmi __isneg
-            lda #$00
-            __isneg:    ; effective sex
-        .else
-            fill .set $00
-        .endif
-    .endif
+    ;.if w_source > w_target
+    ;    .if signed w_target
+    ;        lda eindex l_target, w_target, 0, (!e_target)
+    ;        ora #$7f
+    ;        bmi __isneg
+    ;        lda #$00
+    ;        __isneg:    ; effective sex
+    ;    .else
+    ;        fill .set $00
+    ;    .endif
+    ;.elseif
+    ;    .if signed w_source
+    ;        lda eindex l_source, w_source, 0, (!e_source)
+    ;        ora #$7f
+    ;        bmi __isneg
+    ;        lda #$00
+    ;        __isneg:    ; effective sex
+    ;    .else
+    ;        fill .set $00
+    ;    .endif
+    ;.endif
     php         ; ldsstat
     pla
     and #~(CF + NF + OF + ZF)
@@ -102,9 +116,10 @@
     .elseif w_target > w_source
         ; mam changes because signed may result negative
         .if signed t_source
-            ldy fill
+            ldy eindex l_source, w_source, 0, (!e_source)
+            sex yr
         .else
-            ldy #fill
+            ldy #$00
         .endif
 
         .repeat w_target - w_source, iter
@@ -185,82 +200,83 @@
     .endif
     
     phase2:
-        ; if we have reached here there are two possibilities
-        ; load[r] <> comp[r] || fallback <> comp[r]
+        .if !skip
+            ; if we have reached here there are two possibilities
+            ; load[r] <> comp[r] || fallback <> comp[r]
 
-    /*
+        /*
 
-        If sign difference with negative value, early exit
+            If sign difference with negative value, early exit
 
-    */
+        */
 
-    ; fetch values for numerical compare
-    sty tardelta            ; store largest delta (source-target) from target 
-    
-    ldy l_source, x         ; fetch from target where indexed
-    sty srcdelta            ; store largest delta (source-target) from source
-
-    ; Y CONTAINTS SOURCE DELTA
-    ; X IS DELTA BYTE OFFSET
-
-    ; unsigned against signed
-    .if     (!s_source) && s_target
-        .if w_target >= w_source
-            ldx eindex l_target, w_source, 0, (!e_source)
-            bmi exit1  ; if b0d0 is set on target then target is negative, source is always larger
-        .elseif s_target
-            ldx fill
-            bmi exit1
-        .endif
-
-        ; otherwise its safe to comapre as unsigned
-        cpy tardelta
-        bcc exit
-    .elseif s_source && (!s_target)
-        .if w_source >= w_target
-            ldx eindex l_source, w_source, 0, (!e_source)
-            bmi exit  ; if b0d0 is set on target then target is negative, source is always larger
-        .elseif s_source
-            ldx fill
-            bmi exit
-        .endif
-
-        ; otherwise its safe to comapre as unsigned
-        cpy tardelta
-        bcc exit
-    .elseif s_source && s_target
-        .if w_target >= w_source
-            ldx eindex l_target, w_target, 0, (!e_target)
-        .else
-            ldx fill
-        .endif
-        cpx #$80
+        ; fetch values for numerical compare
+        sty tardelta            ; store largest delta (source-target) from target 
         
-        .if w_source >= w_target
-            ldx eindex l_source, w_source, 0, (!e_source)
+        ldy l_source, x         ; fetch from target where indexed
+        sty srcdelta            ; store largest delta (source-target) from source
+
+        ; Y CONTAINTS SOURCE DELTA
+        ; X IS DELTA BYTE OFFSET
+
+        ; unsigned against signed
+        .if     (!s_source) && s_target
+            .if w_target >= w_source
+                ldx eindex l_target, w_source, 0, (!e_source)
+                bmi exit1  ; if b0d0 is set on target then target is negative, source is always larger
+            .elseif s_target
+                ldx fill
+                bmi exit1
+            .endif
+
+            ; otherwise its safe to comapre as unsigned
+            cpy tardelta
+            bcc exit
+        .elseif s_source && (!s_target)
+            .if w_source >= w_target
+                ldx eindex l_source, w_source, 0, (!e_source)
+                bmi exit  ; if b0d0 is set on target then target is negative, source is always larger
+            .elseif s_source
+                ldx fill
+                bmi exit
+            .endif
+
+            ; otherwise its safe to comapre as unsigned
+            cpy tardelta
+            bcc exit
+        .elseif s_source && s_target
+            .if w_target >= w_source
+                ldx eindex l_target, w_target, 0, (!e_target)
+            .else
+                ldx fill
+            .endif
+            cpx #$80
+            
+            .if w_source >= w_target
+                ldx eindex l_source, w_source, 0, (!e_source)
+            .else
+                ldx fill
+            .endif
+
+            bcs __negative
+            bmi exit        ; tS [skips V and C ][ sets V and C ]
+
+            __compare:
+            cpy tardelta    ; ts 
+            bcs exit1
+            bcc exit
+
+            __negative:
+            bmi __compare   ; TS
+            bpl exit1       ; Ts [ sets V and C ]
         .else
-            ldx fill
+        ; unsigned vs
+            bcs exit
         .endif
 
-        bcs __negative
-        bmi exit        ; tS [skips V and C ][ sets V and C ]
-
-        __compare:
-        cpy tardelta    ; ts 
-        bcs exit1
-        bcc exit
-
-        __negative:
-        bmi __compare   ; TS
-        bpl exit1       ; Ts [ sets V and C ]
-    .else
-    ; unsigned vs
-        bcs exit
+        exit1:
+            ora #(CF + OF)
     .endif
-
-    exit1:
-        ora #(CF + OF)
-
     exit:
         pha
         plp ; ststat (not warranting a whole ass dependancy)

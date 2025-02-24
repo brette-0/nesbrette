@@ -103,7 +103,7 @@ Optionally, you may choose to opt out of 'filling' by setting ``__fill$__`` to `
         stz Region, null : x    ; (4 * w_Score) + 2c : (3 * w_Score) + 2b 
         stz Region, y, 1        ; -2c, -2b
 
-``compare __source__, __target__``
+``compare __source__, __target__, __skip$__``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``includefrom memory, compare``

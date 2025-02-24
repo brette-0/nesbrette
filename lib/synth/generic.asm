@@ -183,36 +183,41 @@
     .endif
 .endmacro
 
+; sex ar
+; sex ar, t:label
+.macro sex __reg__, __context$__
+    .local is_signed, l_context, w_context, t_context
 
-; sex u8: Health, u16: Health
-; sex u8: Here, bu16: There
-; TODO: Optimize All cases
-; TODO: sex paramterless that does as is on nesdev site but for all regs
-.macro sex __source__, __target__, __reg$__
-    .local ahead, negative
+    is_signed .set 1
+    
+    .ifblank __context$__
+        t_context .set null
+        detype __context$__, t_context
+        w_context = width t_context
+        is_signed = signed t_context
 
-    ; sign extend source into target
+        l_context = .right(1, __context$__)
 
-    detype __source__, _sex_t_source
-    _sex_w_source = typeval _sex_t_source
-    _sex_l_source = .right(1, _sex_t_source)
+        .if is_signed
+            ldr eindex l_context, w_context, 0, endian ~t_context
+        .endif
+    .endif
 
-    ldr imm: __reg$__,  eindex _sex_l_source, _sex_w_source, _sex_w_source, endian _sex_t_source
-    bmi negative
-
-    ldz __reg$__
-    .repeat _sex_w_source - 1, iter
-        stz wabs: __reg$__, eindex _sex_l_source, _sex_w_source, iter, endian _sex_t_source
-    .endrepeat
-
-    ; conditionless branch
-    beq ahead
-
-    negative:
-        ldr imm: negative, $ff
-        .repeat _sex_w_source - 1, iter
-            str wabs: __reg$__, eindex _sex_l_source, _sex_w_source, iter, endian _sex_t_source
-        .endrepeat
-
-    ahead:
+    .if is_signed
+        ; validate __reg__ as reg
+        reg = __reg___
+        .if reg = ar
+            ora #$7f
+            bmi negative
+            lda #$00
+            negative:
+        .else
+            cpr imm: reg, $80
+            bcs negative
+            ldr imm: reg, $00
+            negative:
+        .endif
+    .else
+        ldr imm: reg, $00
+    .endif
 .endmacro
