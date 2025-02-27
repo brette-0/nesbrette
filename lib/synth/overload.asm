@@ -1,55 +1,34 @@
 ; TODO: Add ca65hl support
 
-.macro lax __operand__, __index__
-    .local pass
+INCLUDES_SYNTH_OVERLOAD := null ; to check if included
 
-    .if .xmatch(.left(1, __rightside__) = #)
+.macro __lax __operand__, __index__
+    .if .match(.left(1, __operand__), #)
+        .out "Alpha"
         .ifnblank __index__
             .byte $ab, __operand__
-        .elseif __operand__ = $00
+        .elseif .right(.tcount(__operand__) - 1, __operand__) = $00
             .byte $ab, $00
+        .else
+            lda __operand__
+            tax
         .endif
-        lda __rightside__
-        tax
         .exitmacro
     .endif
 
-    .repeat .tcount(__rightside__), iter
-        .if .xmatch(.left(1, .right(iter, __rightside__)), ,)
-            index   =  iter
-        .endif
-    .endrepeat
-
-    .ifnblank __index__
-        .if .xmatch(.left(1, __operand__), [)
-            operand = .left(index - 1, .right(index, __operand__))
-            .byte $b3, __operand__
-        .elseif .xmatch(__index__, y)
-            operand = .right(index, __operand__)
-            .if __operand__ > $ff
-                .byte $bf, __operand__
-            .else
-                .byte $b7, __operand__
-            .endif
-            ; absy, zpy
-        .elseif .xmatch(__index__, x)
-            operand = .right(index, __operand__)
-            ; absx | zpx
-            .fatal  ; not valid
-        .endif
+    .feature ubiquitous_idents -
+    .ifblank __index__
+        lax __operand__
+    .elseif  .xmatch(__index__, y)
+        lax __operand__, y
     .else
-        .if .xmatch(.left(1, __operand__), [)
-            operand = .left(index - 1, .right(index, __operand__))
-            .byte $a3, __operand__
-        .else
-            .if __operand__ > $ff
-                .byte $af, __operand__
-            .else
-                .byte $a7, __operand__
-            .endif
-        .endif
+        .fatal
     .endif
+
+    .feature ubiquitous_idents +
 .endmacro
+
+.feature ubiquitous_idents +
 
 ; TODO: dev these
 .macro sed __target__
@@ -75,42 +54,180 @@
     d_reg     .set null
 
     .ifnblank __ptr__
-        loptr_reg .set xr
-        hiptr_reg .set yr
-        
-        .if !is_null __ptr__
-            loptr_reg .set .left( 1, __ptr__)
-            loptr_reg .set .right(1, __ptr__)
-            
+        loptr_reg .set .left( 1, __ptr__)
+        hiptr_reg .set .right(1, __ptr__)
+
+        .if (loptr_reg <> null) && (hiptr_reg <> null)
             loptr_reg .set setreg loptr_reg
             hiptr_reg .set setreg hiptr_reg
 
             .if     is_null loptr_reg
-                .fatal
+                .fatal ""
             .elseif is_null hiptr_reg
-                .fatal
+                .fatal ""
+            .endif
+
+            .if     loptr_reg = xr
+                ldx #.lobyte(* + 2 + (2 * .blank(__data__)))
+            .elseif loptr_reg = yr
+                ldy #.lobyte(* + 2 + (2 * .blank(__data__)))
+            .else
+                lda #.lobyte(* + 2 + (2 * .blank(__data__)))
+            .endif
+
+            .if     hiptr_reg = xr
+                ldx #.hibyte(* + 2 + (2 * .blank(__data__)))
+            .elseif hiptr_reg = yr
+                ldy #.hibyte(* + 2 + (2 * .blank(__data__)))
+            .else
+                lda #.hibyte(* + 2 + (2 * .blank(__data__)))
             .endif
         .endif
 
-        ldr loptr_reg: imm, .lobyte(* + 4 + (2 * .blank(__data__)))
-        ldr hiptr_reg: imm, .hibyte(* + 2 + (2 * .blank(__data__)))
-    .endif
+        .ifnblank __data__
+            ralloc d_reg, loptr_reg, hiptr_reg
+            ldr imm: d_reg, __data__
+        .endif
 
-    .ifnblank __data__
-        ralloc d_reg, loptr_reg, hiptr_reg
-        ldr imm: d_reg, __data__
-    .endif
-
-    .byte $00
-    .ifnblank __operand__
-        .byte __operand__
-    .else
-        .ifdef  CONFIG_DEFAULT_BRK_OPERAND
-            .if CONFIG_DEFAULT_BRK_OPERAND
+        .byte $00
+        .ifnblank __operand__
+            .byte __operand__
+        .else
+            .ifdef  CONFIG_DEFAULT_BRK_OPERAND
+                .if CONFIG_DEFAULT_BRK_OPERAND
+                    .byte $00
+                .endif
+            .else
                 .byte $00
             .endif
-        .else
-            .byte $00
         .endif
     .endif
 .endmacro
+
+.macro beq __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        beq __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bne __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bne __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bpl __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bpl __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bmi __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bmi __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bcs __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bcs __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bcc __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bcc __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bvs __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bvs __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+.macro bvc __relative__ 
+    .if .match(__relative__, 0)
+        .byte $f0, __relative__
+    .elseif .def(__relative__) .and .const((*-2)-(__relative__)) .and ((*+2)-(__relative__) <= 127)
+        .feature ubiquitous_idents -
+        bvc __relative__
+        .feature ubiquitous_idents +
+    .else
+        .byte $f0, __relative__
+    .endif
+.endmacro
+
+/*
+
+    adc x
+    adc y
+
+    and x
+    and y
+
+    ora x
+    ora y
+
+    eor x
+    eor y
+
+    sbc x
+    sbc y
+
+    bit #imm
+
+    txy
+    tyx
+
+    cmp x
+    cmp y
+
+    cpx y
+    cpy x
+
+
+
+*/

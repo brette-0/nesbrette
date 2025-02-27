@@ -4,7 +4,8 @@ TEMP_RAM_END   = $0100
 TEMP_RAM_START = $0000
 
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
-;includefrom synth, overload
+
+includefrom synth, overload
 
 
 .segment "HEADER"
@@ -26,7 +27,9 @@ typeas Temp1, i16
 typeas Temp2, i16
 
 reset:
-    lax Temp1[1]
+    jmp reset
+
+    ahead:
 
 .segment "VECTORS"
     .addr $0000

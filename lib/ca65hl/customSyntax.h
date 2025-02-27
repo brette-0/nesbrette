@@ -232,7 +232,15 @@
     ; --------------------------------------------------------------------------------------------
     ; Output instruction:
     .feature ubiquitous_idents -    ; allow normal instruction table look ups
-    _OUT                            ; output instruction as standard ca65 6502 syntax
+    .if .xmatch(instr, lax)
+        .ifdef INCLUDES_SYNTH_OVERLOAD
+            __lax op, index
+        .else
+            _OUT
+        .endif
+    .else
+        _OUT
+    .endif                          ; output instruction as standard ca65 6502 syntax
     .feature ubiquitous_idents +    ; allow overloading mnemonics again
     ; --------------------------------------------------------------------------------------------
     .if CUSTOM_SYNTAX::OUTPUT_CUSTOM_SYNTAX 
@@ -323,22 +331,54 @@
     ___EvalInstrList sty operand, index
 .endmacro
 .macro adc operand, index
-    ___EvalInstrList adc operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(operand, x) && .defined(TABLE_ID)
+        adc TABLE_ID, x
+    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
+        adc TABLE_ID, y
+    .else
+        ___EvalInstrList adc operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro and operand, index
-    ___EvalInstrList and operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(operand, x) && .defined(TABLE_ID)
+        and TABLE_ID, x
+    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
+        and TABLE_ID, y
+    .else
+        ___EvalInstrList and operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro asl operand, index
     ___EvalInstrList asl operand, index
 .endmacro
 .macro cmp operand, index
-    ___EvalInstrList cmp operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(operand, x) && .defined(TABLE_ID)
+        cmp TABLE_ID, x
+    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
+        cmp TABLE_ID, y
+    .else
+        ___EvalInstrList cmp operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro dec operand, index
     ___EvalInstrList dec operand, index
 .endmacro
 .macro eor operand, index
-    ___EvalInstrList eor operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(operand, x) && .defined(TABLE_ID)
+        eor TABLE_ID, x
+    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
+        eor TABLE_ID, y
+    .else
+        ___EvalInstrList eor operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro inc operand, index
     ___EvalInstrList inc operand, index
@@ -347,7 +387,15 @@
     ___EvalInstrList lsr operand, index
 .endmacro
 .macro ora operand, index
-    ___EvalInstrList ora operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(operand, x) && .defined(TABLE_ID)
+        ora TABLE_ID, x
+    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
+        ora TABLE_ID, y
+    .else
+        ___EvalInstrList ora operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro rol operand, index
     ___EvalInstrList rol operand, index
@@ -356,16 +404,30 @@
     ___EvalInstrList ror operand, index
 .endmacro
 .macro sbc operand, index
-    ___EvalInstrList sbc operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(operand, x) && .defined(TABLE_ID)
+        sbc TABLE_ID, x
+    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
+        sbc TABLE_ID, y
+    .else
+        ___EvalInstrList sbc operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro bit operand, index
-    ___EvalInstrList bit operand, index
+    .feature ubiquitous_idents -
+    .if     .xmatch(.left(1, operand), #)
+        bit TABLE_ID + .right(.tcount(operand) - 1, operand)
+    .else
+        ___EvalInstrList and operand, index
+    .endif
+    .feature ubiquitous_idents +
 .endmacro
 .macro cpx operand, index
-    ___EvalInstrList cpx operand, index
+    ___EvalInstrList and operand, index
 .endmacro
 .macro cpy operand, index
-    ___EvalInstrList cpy operand, index
+    ___EvalInstrList and operand, index
 .endmacro
 .macro jmp operand, index
     ___EvalInstrList jmp operand, index

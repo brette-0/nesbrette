@@ -422,15 +422,16 @@
         .fatal  ; needs target
     .endif
 
-    .ifblank __used1_
-        __send__ = ar
-    .elseif is_null __used1_
-    .elseif __used1_ = ar
-        __send__ = xr
-    .elseif __used1_ = xr
-        __send__ = yr
-    .elseif __used1_ = yr
-        __send__ = ar
+    .ifblank __used1__
+        __send__ .set ar
+    .elseif is_null __used1__
+        __send__ .set ar
+    .elseif __used1__ = ar
+        __send__ .set xr
+    .elseif __used1__ = xr
+        __send__ .set yr
+    .elseif __used1__ = yr
+        __send__ .set ar
     .endif
 
     ; at the end
