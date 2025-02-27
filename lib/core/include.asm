@@ -121,6 +121,8 @@
             .include .concat(libroot, "/synth/idtable.asm")
         .elseif .xmatch(__feature__, stack)
             .include .concat(libroot, "/synth/stack.asm")
+        .elseif .xmatch(__feature__, overload)
+            .include .concat(libroot, "/synth/overload.asm")
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif

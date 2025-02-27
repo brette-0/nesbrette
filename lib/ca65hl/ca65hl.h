@@ -70,7 +70,7 @@
 ::CA65HL_H = 1
 
 ; Set the following to 0 to disable customSyntax for instructions:
-; ::CA65HL_USE_CUSTOM_SYNTAX = 0
+; ::CA65HL_USE_CUSTOM_SYNTAX = 1
 
 ; Set the following for warnings from ca65hl: (0 to 2)
  ::CA65HL_WARNING_LEVEL = 2

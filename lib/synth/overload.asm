@@ -1,12 +1,5 @@
-; lax #num              lda #num : tax
+; TODO: Add ca65hl support
 
-
-/*
-
-    lda [foo, x]
-    lda foo
-
-*/
 .macro lax __operand__, __index__
     .local pass
 

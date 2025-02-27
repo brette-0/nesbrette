@@ -367,57 +367,6 @@
 .macro cpy operand, index
     ___EvalInstrList cpy operand, index
 .endmacro
-.macro inx operand, index
-    ___EvalInstrList inx operand, index
-.endmacro
-.macro iny operand, index
-    ___EvalInstrList iny operand, index
-.endmacro
-.macro bcc operand, index
-    ___EvalInstrList bcc operand, index
-.endmacro
-.macro bcs operand, index
-    ___EvalInstrList bcs operand, index
-.endmacro
-.macro beq operand, index
-    ___EvalInstrList beq operand, index
-.endmacro
-.macro bne operand, index
-    ___EvalInstrList bne operand, index
-.endmacro
-.macro bpl operand, index
-    ___EvalInstrList bpl operand, index
-.endmacro
-.macro bmi operand, index
-    ___EvalInstrList bmi operand, index
-.endmacro
-.macro brk operand, index
-    ___EvalInstrList brk operand, index
-.endmacro
-.macro bvc operand, index
-    ___EvalInstrList bvc operand, index
-.endmacro
-.macro bvs operand, index
-    ___EvalInstrList bvs operand, index
-.endmacro
-.macro clc operand, index
-    ___EvalInstrList clc operand, index
-.endmacro
-.macro cld operand, index
-    ___EvalInstrList cld operand, index
-.endmacro
-.macro cli operand, index
-    ___EvalInstrList cli operand, index
-.endmacro
-.macro clv operand, index
-    ___EvalInstrList clv operand, index
-.endmacro
-.macro dex operand, index
-    ___EvalInstrList dex operand, index
-.endmacro
-.macro dey operand, index
-    ___EvalInstrList dey operand, index
-.endmacro
 .macro jmp operand, index
     ___EvalInstrList jmp operand, index
 .endmacro
@@ -427,50 +376,29 @@
 .macro nop operand, index
     ___EvalInstrList nop operand, index
 .endmacro
-.macro pha operand, index
-    ___EvalInstrList pha operand, index
+.macro slo operand, index
+    ___EvalInstrList slo operand, index
 .endmacro
-.macro php operand, index
-    ___EvalInstrList php operand, index
+.macro rla operand, index
+    ___EvalInstrList rla operand, index
 .endmacro
-.macro pla operand, index
-    ___EvalInstrList pla operand, index
+.macro sre operand, index
+    ___EvalInstrList sre operand, index
 .endmacro
-.macro plp operand, index
-    ___EvalInstrList plp operand, index
+.macro rra operand, index
+    ___EvalInstrList rra operand, index
 .endmacro
-.macro rti operand, index
-    ___EvalInstrList rti operand, index
+.macro sax operand, index
+    ___EvalInstrList sax operand, index
 .endmacro
-.macro rts operand, index
-    ___EvalInstrList rts operand, index
+.macro lax operand, index
+    ___EvalInstrList lax operand, index
 .endmacro
-.macro sec operand, index
-    ___EvalInstrList sec operand, index
+.macro dcp operand, index
+    ___EvalInstrList dcp operand, index
 .endmacro
-.macro sed operand, index
-    ___EvalInstrList sed operand, index
-.endmacro
-.macro sei operand, index
-    ___EvalInstrList sei operand, index
-.endmacro
-.macro tax operand, index
-    ___EvalInstrList tax operand, index
-.endmacro
-.macro tay operand, index
-    ___EvalInstrList tay operand, index
-.endmacro
-.macro tsx operand, index
-    ___EvalInstrList tsx operand, index
-.endmacro
-.macro txa operand, index
-    ___EvalInstrList txa operand, index
-.endmacro
-.macro txs operand, index
-    ___EvalInstrList txs operand, index
-.endmacro
-.macro tya operand, index
-    ___EvalInstrList tya operand, index
+.macro isc operand, index
+    ___EvalInstrList isc operand, index
 .endmacro
 
 .endif ; .ifndef ::_CUSTOM_SYNTAX_H
