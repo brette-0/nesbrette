@@ -2,7 +2,7 @@ includefrom synth, generic
 
 .ifndef compare
 
-.macro compare __source__, __target__, __skip$__
+.macro compare __source__, __target__, __skip$__, __ram$__
     .local phase2, exit, smaller, w_source, w_target, t_target, t_source, l_target, l_source, _reg, m_comp, m_load, fallback
     /*
 
@@ -31,6 +31,12 @@ includefrom synth, generic
         skip = 0
     .else
         skip = __skip$__ 
+    .endif
+
+    .ifblank __ram$__
+        ramstarve = 0
+    .else
+        ramstarve = __ram$__
     .endif
 
     t_target .set null
@@ -74,27 +80,6 @@ includefrom synth, generic
         .endif
     .endif
 
-    ;.if w_source > w_target
-    ;    .if signed w_target
-    ;        lda eindex l_target, w_target, 0, (!e_target)
-    ;        ora #$7f
-    ;        bmi __isneg
-    ;        lda #$00
-    ;        __isneg:    ; effective sex
-    ;    .else
-    ;        fill .set $00
-    ;    .endif
-    ;.elseif
-    ;    .if signed w_source
-    ;        lda eindex l_source, w_source, 0, (!e_source)
-    ;        ora #$7f
-    ;        bmi __isneg
-    ;        lda #$00
-    ;        __isneg:    ; effective sex
-    ;    .else
-    ;        fill .set $00
-    ;    .endif
-    ;.endif
     php         ; ldsstat
     pla
     and #~(CF + NF + OF + ZF)
@@ -115,11 +100,9 @@ includefrom synth, generic
         bne phase2
     .elseif w_target > w_source
         ; mam changes because signed may result negative
-        .if signed t_source
-            ldy eindex l_source, w_source, 0, (!e_source)
-            sex yr
-        .else
-            ldy #$00
+        sex yr, __source__
+        .if s_source && (!ramstarve)
+            sty fill
         .endif
 
         .repeat w_target - w_source, iter
@@ -139,12 +122,11 @@ includefrom synth, generic
         cpy eindex l_source, w_source, (w_target - 1), endian ~t_source
         bne phase2
     .else
-        .if signed t_target
-            ldy fill
-        .else
-            ldy #fill
+        sex yr, __target__
+        .if s_target && (!ramstarve)
+            sty fill
         .endif
-        
+
         .repeat w_source - w_target, iter
             cpy eindex l_target, w_target, iter, endian ~t_target
             bne phase2

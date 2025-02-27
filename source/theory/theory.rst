@@ -35,4 +35,20 @@ Modern programming languages allow functions to share the same name as long as t
 
 On the NES there exists a few memory address modes that ``nesbrette`` has enums for. These enums are used in much of the library to ensure that the correct register is being used, or to enable indexing by checking the parameters as a collection. The main reason is to ensure that some instructions are assembled in the intended address mode. For example, some code should *only* use zero page memory for its speed, or perhaps you need to force usage of absolute even for addresses within the zero page for code alignment. 
 
+``Label Stack``
+~~~~~~~~~~~~~~~
+
+RAM management is a *crucial* element of NESDev, a common practice is to use ``.res Label, Length`` but this method prevents the user from choosing where exactly the data is stored in CPU Space and doesn't help with the case of handling temporary memory.  With the current method the user may choose from: Hardcoding targets for certain functions, or using integer literals and dedicated an area of RAM to temp usage.
+
+Unfortunately both are terribly impractical, the former is bad because it's simply wastes RAM by not sharing the temorary space between functions and the latter is terrible because temporary functions run the risk of overwriting the other's contents if a complex hierachy of features are used.
+
+``nesbrette`` solves this in a *fairly* classy way by creating a system in which a preprocessor function will allocate an offset in temp ram to a label as it's being evaluated. At the end of a feature that uses RAM, a feature is also used to de-allocate the label from RAM to ensure that RAM is only marked as used where the function has lifetime.
+
+Because of how preprocessor works, it seems reasonable that zero fragmentation will occur with no loss of functionality or loss of performance by any metric from this method. This is because ``nesbrette`` provides the features ``malloc`` and ``dealloc`` to log when ram has a consistent semantic within the context.
+
+``Register Parameterisation``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Of the Control Instructions on the ``6502`` many share functionality between register use, which is why when designing ``nesbrette`` I need to paramtersie these instructions in order to maintain functionality of the function but gain from removing the arbitrary limtiation of register specficiation. To clarify, instead of always using ``ldx, cpx, stx, dex, inx``, I can use ``ldr, cpr, str, der, inr`` and pass ``__reg__`` to ensure the user decides what register to use ensuring no conflicts of register when calling.
+
 .. build tasks

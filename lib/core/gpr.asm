@@ -401,3 +401,40 @@
         .fatal "InvalidGeneralPurposeRegister: cpr requires use of singular GPRs (a xOR x xor Y)"
     .endif
 .endmacro
+
+.macro iralloc __send__, __used__
+    .ifblank __send__
+        .fatal  ; needs target
+    .endif
+
+    .ifblank __used__
+        __send__ .set yr
+    .elseif __used__ = xr
+        __send__ .set yr
+    .else
+        __send__ .set xr
+    .endif
+.endmacro
+
+; TODO: Consider migrating from recusrsive to collection parameter
+.macro ralloc __send__, __used1__, __used2__
+    .ifblank __send__
+        .fatal  ; needs target
+    .endif
+
+    .ifblank __used1_
+        __send__ = ar
+    .elseif is_null __used1_
+    .elseif __used1_ = ar
+        __send__ = xr
+    .elseif __used1_ = xr
+        __send__ = yr
+    .elseif __used1_ = yr
+        __send__ = ar
+    .endif
+
+    ; at the end
+    .ifnblank __used2__
+        ralloc __send__, __used2__
+    .endif
+.endmacro
