@@ -28,7 +28,7 @@ typeas Temp2, i16
 
 
 reset:
-    jsr $8000, y
+    
 .segment "VECTORS"
     .addr $0000
     .addr reset
