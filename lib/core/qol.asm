@@ -77,6 +77,12 @@
 .define abs(n) .max(n, -n)
 .define confined(o, w) .hibyte(o) = .hibyte(o + w)
 
+.macro callback __target__ 
+    lda #>(__target__ - 1)
+    pha
+    lda #>(__target__ - 1)
+    pha
+.endmacro
 
 ; TAKEN FROM CC65 SRC AS IS AND IS TESTED
 

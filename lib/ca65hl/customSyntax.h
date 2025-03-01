@@ -137,6 +137,12 @@
 
 .macro ___arraySyntax instr, op, index
 
+    ; nesbrette
+
+    .local ptr
+
+    ; ca65hl
+
     .local open
     .local close
     .local reg
@@ -238,6 +244,104 @@
         .else
             _OUT
         .endif
+    .elseif .xmatch(instr, jmp)
+        .ifnblank index
+            .if .xmatch(index, x)
+                ; jmp abs, x
+                
+                malloc ptr, 2
+                
+                pha
+                clc
+                txa
+                adc #.lobyte(op)
+                sta ptr
+                and #$00
+                rol
+                adc #.hibyte(op)
+                sta ptr + 1
+                pla
+
+                jmp [ptr]
+
+                dealloc ptr, 2
+
+
+            .elseif .xmatch(index, y)
+                ; jmp abs, y
+
+                malloc ptr, 2
+                
+                pha
+                clc
+                tya
+                adc #.lobyte(op)
+                sta ptr
+                and #$00
+                rol
+                adc #.hibyte(op)
+                sta ptr + 1
+                pla
+
+                jmp [ptr]
+
+                dealloc ptr, 2
+            .else
+                _OUT
+            .endif
+        .else   ; TODO: add jmp foo[y|x] support
+            _OUT
+        .endif
+    .elseif .xmatch(instr, jsr)
+        .ifnblank index
+            .if .xmatch(index, x)
+                ; jsr abs, x
+                
+                malloc ptr, 2
+                mallco temp, 1
+
+                sta temp
+                callback exit
+                
+                clc
+                txa
+                adc #.lobyte(op)
+                sta ptr
+                and #$00
+                rol
+                adc #.hibyte(op)
+                sta ptr + 1
+
+                jmp [ptr]
+                exit:
+
+                dealloc temp, 1
+                dealloc ptr, 2
+
+
+            .elseif .xmatch(index, y)
+                ; jsr abs, y
+
+                malloc ptr, 2
+                
+                clc
+                tya
+                adc #.lobyte(op)
+                sta ptr
+                and #$00
+                rol
+                adc #.hibyte(op)
+                sta ptr + 1
+
+                jmp [ptr]
+
+                dealloc ptr, 2
+            .else
+                _OUT
+            .endif
+        .else   ; TODO: add jmp foo[y|x] support
+            _OUT
+        .endif
     .else
         _OUT
     .endif                          ; output instruction as standard ca65 6502 syntax
@@ -313,9 +417,53 @@
 ; Overload mnemonics to allow custom syntax for all instructions
 
 .macro lda operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            lda [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList lda operand, index
 .endmacro
 .macro sta operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            sta [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList sta operand, index
 .endmacro
 .macro ldx operand, index
@@ -331,28 +479,96 @@
     ___EvalInstrList sty operand, index
 .endmacro
 .macro adc operand, index
+    .local ptr
+
     .feature ubiquitous_idents -
     .if     .xmatch(operand, x) && .defined(TABLE_ID)
         adc TABLE_ID, x
     .elseif .xmatch(operand, y) && .defined(TABLE_ID)
         adc TABLE_ID, y
-    .else
-        ___EvalInstrList adc operand, index
     .endif
     .feature ubiquitous_idents +
+
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            adc [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
+    ___EvalInstrList adc operand, index
 .endmacro
 .macro and operand, index
+    .local ptr
+
     .feature ubiquitous_idents -
     .if     .xmatch(operand, x) && .defined(TABLE_ID)
         and TABLE_ID, x
     .elseif .xmatch(operand, y) && .defined(TABLE_ID)
         and TABLE_ID, y
-    .else
-        ___EvalInstrList and operand, index
     .endif
     .feature ubiquitous_idents +
+
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            and [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
+    ___EvalInstrList and operand, index
 .endmacro
 .macro asl operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            asl [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList asl operand, index
 .endmacro
 .macro cmp operand, index
@@ -367,52 +583,231 @@
     .feature ubiquitous_idents +
 .endmacro
 .macro dec operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            dec [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList dec operand, index
 .endmacro
 .macro eor operand, index
+    .local ptr
+
     .feature ubiquitous_idents -
     .if     .xmatch(operand, x) && .defined(TABLE_ID)
         eor TABLE_ID, x
     .elseif .xmatch(operand, y) && .defined(TABLE_ID)
         eor TABLE_ID, y
-    .else
-        ___EvalInstrList eor operand, index
     .endif
     .feature ubiquitous_idents +
+
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            eor [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
+    ___EvalInstrList eor operand, index
 .endmacro
 .macro inc operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            inc [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList inc operand, index
 .endmacro
 .macro lsr operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            lsr [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList lsr operand, index
 .endmacro
 .macro ora operand, index
+    .local ptr
+
     .feature ubiquitous_idents -
     .if     .xmatch(operand, x) && .defined(TABLE_ID)
         ora TABLE_ID, x
     .elseif .xmatch(operand, y) && .defined(TABLE_ID)
         ora TABLE_ID, y
-    .else
-        ___EvalInstrList ora operand, index
     .endif
     .feature ubiquitous_idents +
+
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            ora [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
+    ___EvalInstrList ora operand, index
 .endmacro
 .macro rol operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            rol [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList rol operand, index
 .endmacro
 .macro ror operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            ror [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList ror operand, index
 .endmacro
 .macro sbc operand, index
+    .local ptr
+
     .feature ubiquitous_idents -
     .if     .xmatch(operand, x) && .defined(TABLE_ID)
         sbc TABLE_ID, x
     .elseif .xmatch(operand, y) && .defined(TABLE_ID)
         sbc TABLE_ID, y
-    .else
-        ___EvalInstrList sbc operand, index
     .endif
     .feature ubiquitous_idents +
+
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            sbc [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
+    ___EvalInstrList sbc operand, index
 .endmacro
 .macro bit operand, index
     .feature ubiquitous_idents -
@@ -429,37 +824,315 @@
 .macro cpy operand, index
     ___EvalInstrList and operand, index
 .endmacro
+
+; TODO: Make jmp foo[y|x] work
 .macro jmp operand, index
-    ___EvalInstrList jmp operand, index
+    .local ptr
+
+    .if .xmatch(.left(1, operand), [)
+        .ifnblank index
+            .if .xmatch(.right(1, index), ])
+                ; jmp [zp, x]
+                malloc ptr, 2
+
+                pha
+                lda .right(.tcount(operand)-1, operand), x
+                sta ptr
+                lda .right(.tcount(operand)-1, operand) + 1, x
+                sta ptr
+                pla
+
+                jmp [ptr]
+                
+                dealloc ptr, 2
+            .elseif .xmatch(index, y)
+                ; jmp [zp], y
+                malloc ptr, 2
+                
+                pha
+                clc
+                tya
+                adc operand
+                sta ptr
+                and #$00
+                rol
+                adc operand + 1
+                sta ptr + 1              
+                pla
+                jmp [ptr]
+
+                dealloc ptr, 2
+            .endif
+        .else
+            ; jmp [inabs]
+            .feature ubiquitous_idents -
+            
+            jmp operand
+
+            .feature ubiquitous_idents +
+        .endif
+    .else
+        ; jmp foo[bar]
+        ___EvalInstrList jmp operand, index
+    .endif
 .endmacro
 .macro jsr operand, index
-    ___EvalInstrList jsr operand, index
+    .local ptr, temp
+
+    .if .xmatch(.left(1, operand), [)
+        .ifnblank index
+            .if .xmatch(.right(1, index), ])
+                ; jmp [zp, x]
+                .feature ubiquitous_idents -
+                malloc ptr, 2
+                malloc temp, 1
+
+                sta temp
+                callback exit
+
+                lda .right(.tcount(operand)-1, operand), x
+                sta ptr
+                lda .right(.tcount(operand)-1, operand) + 1, x
+                sta ptr
+            
+                lda temp
+                jmp [ptr]
+                exit:
+                
+                dealloc temp, 1
+                dealloc ptr, 2
+                .feature ubiquitous_idents +
+            .elseif .xmatch(index, y)
+                ; jmp [zp], y
+                .feature ubiquitous_idents -
+                
+                malloc ptr, 2
+                malloc temp, 1
+
+                sta temp
+
+                callback exit
+                
+                clc
+                tya
+                adc .left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+                sta ptr
+                and #$00
+                rol
+                adc .left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand)) + 1
+                sta ptr + 1              
+                lda temp
+
+                jmp [ptr]
+                exit:
+
+                dealloc temp, 1
+                dealloc ptr, 2
+
+                .feature ubiquitous_idents +
+            .endif
+        .else
+            ; jsr [inabs]
+            .feature ubiquitous_idents -
+            
+            malloc temp, 1
+            sta temp
+
+            callback exit
+            
+            lda temp
+            dealloc temp, 1
+            jmp operand
+
+            exit:
+            .feature ubiquitous_idents +
+        .endif
+    .else
+        ; jmp foo[bar]
+
+
+        ___EvalInstrList jmp operand, index
+    .endif
 .endmacro
 .macro nop operand, index
     ___EvalInstrList nop operand, index
 .endmacro
 .macro slo operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            slo [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList slo operand, index
 .endmacro
 .macro rla operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            rla [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList rla operand, index
 .endmacro
 .macro sre operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            sre [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList sre operand, index
 .endmacro
 .macro rra operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            rra [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList rra operand, index
 .endmacro
 .macro sax operand, index
     ___EvalInstrList sax operand, index
 .endmacro
 .macro lax operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            lax [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList lax operand, index
 .endmacro
 .macro dcp operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            dcp [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList dcp operand, index
 .endmacro
 .macro isc operand, index
+    .local ptr
+    .ifblank index
+        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
+            
+            .feature ubiquitous_idents -
+
+            malloc ptr, 2
+
+            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr
+            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
+            sty ptr + 1
+
+            ldy #$00
+            isc [ptr], y
+            .feature ubiquitous_idents +
+            
+
+            dealloc ptr, 2
+            .exitmacro
+        .endif
+    .endif
     ___EvalInstrList isc operand, index
 .endmacro
 
