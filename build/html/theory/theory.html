@@ -69,6 +69,17 @@
 <h2><code class="docutils literal notranslate"><span class="pre">Memory</span> <span class="pre">Address</span> <span class="pre">Modes</span></code><a class="headerlink" href="#memory-address-modes" title="Link to this heading">¶</a></h2>
 <p>On the NES there exists a few memory address modes that <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> has enums for. These enums are used in much of the library to ensure that the correct register is being used, or to enable indexing by checking the parameters as a collection. The main reason is to ensure that some instructions are assembled in the intended address mode. For example, some code should <em>only</em> use zero page memory for its speed, or perhaps you need to force usage of absolute even for addresses within the zero page for code alignment.</p>
 </section>
+<section id="label-stack">
+<h2><code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Stack</span></code><a class="headerlink" href="#label-stack" title="Link to this heading">¶</a></h2>
+<p>RAM management is a <em>crucial</em> element of NESDev, a common practice is to use <code class="docutils literal notranslate"><span class="pre">.res</span> <span class="pre">Label,</span> <span class="pre">Length</span></code> but this method prevents the user from choosing where exactly the data is stored in CPU Space and doesn’t help with the case of handling temporary memory.  With the current method the user may choose from: Hardcoding targets for certain functions, or using integer literals and dedicated an area of RAM to temp usage.</p>
+<p>Unfortunately both are terribly impractical, the former is bad because it’s simply wastes RAM by not sharing the temorary space between functions and the latter is terrible because temporary functions run the risk of overwriting the other’s contents if a complex hierachy of features are used.</p>
+<p><code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> solves this in a <em>fairly</em> classy way by creating a system in which a preprocessor function will allocate an offset in temp ram to a label as it’s being evaluated. At the end of a feature that uses RAM, a feature is also used to de-allocate the label from RAM to ensure that RAM is only marked as used where the function has lifetime.</p>
+<p>Because of how preprocessor works, it seems reasonable that zero fragmentation will occur with no loss of functionality or loss of performance by any metric from this method. This is because <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> provides the features <code class="docutils literal notranslate"><span class="pre">malloc</span></code> and <code class="docutils literal notranslate"><span class="pre">dealloc</span></code> to log when ram has a consistent semantic within the context.</p>
+</section>
+<section id="register-parameterisation">
+<h2><code class="docutils literal notranslate"><span class="pre">Register</span> <span class="pre">Parameterisation</span></code><a class="headerlink" href="#register-parameterisation" title="Link to this heading">¶</a></h2>
+<p>Of the Control Instructions on the <code class="docutils literal notranslate"><span class="pre">6502</span></code> many share functionality between register use, which is why when designing <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> I need to paramtersie these instructions in order to maintain functionality of the function but gain from removing the arbitrary limtiation of register specficiation. To clarify, instead of always using <code class="docutils literal notranslate"><span class="pre">ldx,</span> <span class="pre">cpx,</span> <span class="pre">stx,</span> <span class="pre">dex,</span> <span class="pre">inx</span></code>, I can use <code class="docutils literal notranslate"><span class="pre">ldr,</span> <span class="pre">cpr,</span> <span class="pre">str,</span> <span class="pre">der,</span> <span class="pre">inr</span></code> and pass <code class="docutils literal notranslate"><span class="pre">__reg__</span></code> to ensure the user decides what register to use ensuring no conflicts of register when calling.</p>
+</section>
 </section>
 
 
@@ -87,6 +98,8 @@
 <li><a class="reference internal" href="#warning"><code class="docutils literal notranslate"><span class="pre">Warning</span></code></a></li>
 <li><a class="reference internal" href="#call-handler"><code class="docutils literal notranslate"><span class="pre">Call</span> <span class="pre">Handler</span></code></a></li>
 <li><a class="reference internal" href="#memory-address-modes"><code class="docutils literal notranslate"><span class="pre">Memory</span> <span class="pre">Address</span> <span class="pre">Modes</span></code></a></li>
+<li><a class="reference internal" href="#label-stack"><code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Stack</span></code></a></li>
+<li><a class="reference internal" href="#register-parameterisation"><code class="docutils literal notranslate"><span class="pre">Register</span> <span class="pre">Parameterisation</span></code></a></li>
 </ul>
 </li>
 </ul>

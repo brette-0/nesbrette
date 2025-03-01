@@ -80,25 +80,13 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
 
 This function fetches the type assigned to the token passed. The token can always be evluated as ``t_{token}`` and should always have the same scope as the target token.
 
-``isnum int`` - Is Type Numerical?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block::
-
-    .if (isnum Score)
-        .out "Score is number, passing..."
-    .else
-        .fatal "Failed : Incorrect Type"
-    .endif
-
-
-``isconst int`` - Is Type Preprocesor Constant?
+``isdecimal int`` - Is Type Decimal?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
-    .if (isconst Score)
-        .out "Score is Constant, passing..."
+    .if (isdecimal Score)
+        .out "Score is Decimal, passing..."
     .else
         .fatal "Failed : Incorrect Type"
     .endif
@@ -176,6 +164,17 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 .. code-block::
 
     thisireg = setireg __param__
+
+.. note::
+    The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. The function will return ``null`` for GPR indicating failure, response is offloaded to handler.
+
+``ralloc out, int, int`` - Allocate Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    ralloc MyReg, ThisReg, ThatReg
+        ; loads MyReg with Enum for the register that isnt either ThisReg or ThatReg
 
 .. note::
     The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. The function will return ``null`` for GPR indicating failure, response is offloaded to handler.
@@ -304,7 +303,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trr yr::xr  ; y -> x
 
 
-``ldr __reg_mode__, __value__, __cpre$__``
+``ldr mode: reg, int, error`` - Load Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -328,7 +327,7 @@ This instruction *may* throw a ``ConstantParameterRangeException`` which indicat
     ldr zpx: yr, $ea, warning
 
 
-``str __reg_mode__, __address__, __cpre$__, __iwle$__``
+``str mode: reg, int, error, error`` - Store Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -352,7 +351,7 @@ Store any GPR into any address with any memory address mode. Same as ``ldr`` thi
     str zpx: yr, $ea, warning
     str zpx: yr, $ea, warning, fatal
 
-``cpr __reg_mode__, __address__, __cpre$__``
+``cpr mode: reg, int, error`` - Compare Register
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
@@ -374,3 +373,21 @@ Compares any register against a memory location with a specified memory address 
 
     cpr wabs: ar, $ea 
     cpr  zpx: yr, $ea, warnings
+
+``contains int, int, int, int, int...`` - Contains xmatch
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    required:
+        (ca65_int)          __item__        Value to compare against rightside
+        (ca65_int)          {x}_            100 labels to comparea against
+
+    dependacies:
+        libcore
+
+Recursively compares up to 100 times using ``.xmatch`` with context against item and sets context to ``null`` on match.
+
+.. code-block::
+
+    contains Secret, UnsafeAreas

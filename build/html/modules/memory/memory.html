@@ -126,36 +126,67 @@ dependacies:
 </div>
 </div>
 </section>
-<section id="compare-source-target-reg-modes-fallback">
-<h2><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__modes$__,</span> <span class="pre">__fallback$__</span></code><a class="headerlink" href="#compare-source-target-reg-modes-fallback" title="Link to this heading">¶</a></h2>
+<section id="compare-source-target-skip">
+<h2><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__skip$__</span></code><a class="headerlink" href="#compare-source-target-skip" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">includefrom</span> <span class="pre">memory,</span> <span class="pre">compare</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>required:
-    (int: ptr)              __source__
-    (int: ptr)              __target__
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required</span><span class="p">:</span>
+    <span class="p">(</span><span class="nb">int</span><span class="p">:</span> <span class="n">ptr</span><span class="p">)</span>              <span class="n">__source__</span>
+    <span class="p">(</span><span class="nb">int</span><span class="p">:</span> <span class="n">ptr</span><span class="p">)</span>              <span class="n">__target__</span>
 
-optional:
-    (gpr)                   __reg$__            fails on invalid GPR
-    (mam: mam)              __modes$__          fails on invalid modes
-    (ca65_int)              __fallback$__       accessed immediately
+<span class="n">uses</span><span class="p">:</span>
+    <span class="n">a</span>                       <span class="n">CPU</span> <span class="n">Status</span> <span class="n">Payload</span>
+    <span class="n">x</span>                       <span class="n">Off</span><span class="o">-</span><span class="n">Hand</span> <span class="n">Register</span>
+    <span class="n">y</span>                       <span class="n">Data</span> <span class="n">Register</span>
 
-dependacies:
-    libcore
+    <span class="n">ram</span><span class="p">:</span>
+        <span class="n">srcdelta</span> <span class="mi">1</span>          <span class="n">Source</span> <span class="n">at</span> <span class="n">Greatest</span> <span class="n">Numerical</span> <span class="n">Difference</span>
+        <span class="n">tardelta</span> <span class="mi">1</span>          <span class="n">Target</span> <span class="n">at</span> <span class="n">Greatest</span> <span class="n">Numerical</span> <span class="n">Difference</span>
+
+        <span class="o">//</span> <span class="n">when</span> <span class="n">comparing</span> <span class="n">different</span> <span class="n">length</span> <span class="n">arrays</span><span class="p">,</span> <span class="n">where</span> <span class="n">the</span> <span class="n">shorter</span>
+        <span class="o">//</span> <span class="ow">is</span> <span class="n">negative</span><span class="p">,</span> <span class="n">compare</span> <span class="n">will</span> <span class="n">request</span> <span class="n">an</span> <span class="n">additional</span> <span class="n">byte</span>
+
+        <span class="n">fill</span>     <span class="mi">1</span>          <span class="s1">&#39;Const&#39;</span> <span class="n">to</span> <span class="n">contextualise</span> <span class="n">OOB</span> <span class="n">Accesses</span><span class="o">.</span>
+<span class="n">dependacies</span><span class="p">:</span>
+    <span class="n">libcore</span>
 </pre></div>
 </div>
 <p>Compares two arrays against each other as if they were architecture words for the following responses in CPU Status:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Z</span> <span class="o">=</span> <span class="n">On</span> <span class="n">Equal</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">On</span> <span class="n">Numerical</span> <span class="n">Equivalence</span>
 <span class="n">C</span> <span class="o">=</span> <span class="n">On</span> <span class="n">Equal</span> <span class="ow">or</span> <span class="n">Greater</span> <span class="n">Than</span>
 <span class="n">V</span> <span class="o">=</span> <span class="n">On</span> <span class="n">Greater</span> <span class="n">Than</span>
-<span class="n">N</span> <span class="o">=</span> <span class="n">On</span> <span class="n">Sign</span> <span class="n">Difference</span>
 </pre></div>
 </div>
+<p>Optimisations:</p>
+<p><strong>1. Cast to Unsigned</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data1 = $200
+data2 = $200
+
+typeas data1, i32
+typeas data2, i32
+
+compare data1, data2
+compare u32: data1, u32: data2
+</pre></div>
+</div>
+<p>If <em>any</em> number is deterministically positive up to this point, you can compare with a cast to unsigned (which is free) which removes signature checks. However, if this is done with numbers that <em>may</em> be neative, you may run the risk of producing erroneous outcomes.</p>
+<p><strong>2. Cast to Smaller</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data1 = $200
+data2 = $200
+
+typeas data1, i32
+typeas data2, i32
+
+compare data1, data2
+compare i16: data1, i16: data2
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">compare</span></code> will scan <em>all</em> the bytes given until it finds difference, which means there is a size and speed penalty to be paid for <em>potential</em> difference. If you can prove that at a certain point a variable contains constant memory then you should design your code to acknowledge that and <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> assists you here by allowing you to cast to smaller number types to redundant cycles.</p>
+<p>It should be noted that <code class="docutils literal notranslate"><span class="pre">compare</span></code> does not require the types to match endians, signature or width and smaller width <em>always</em> results in gained speed performance. However, it <em>should</em> be noted that while calling <code class="docutils literal notranslate"><span class="pre">compare</span></code> comes with a base <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">byte</span></code> nesbrette label stack penalty, should you have the smaller array be signed then you incur an dditional <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">byte</span></code> of nesbrette label stack being consumed.</p>
 <p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>compare Source, Target
-compare Source, Target, yr
-compare Source, Target, yr, wabs: wabsx
-compare Source, Target, yr, wabs: wabsx, $ff
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">compare</span> <span class="n">Source</span><span class="p">,</span> <span class="n">Target</span>
 </pre></div>
 </div>
 </div>
@@ -194,7 +225,7 @@ compare Source, Target, yr, wabs: wabsx, $ff
 <li><a class="reference internal" href="#memcpy-t-source-t-target-reg-modes-stwm-fill-zero-order"><code class="docutils literal notranslate"><span class="pre">memcpy</span> <span class="pre">t:source,</span> <span class="pre">t:target,</span> <span class="pre">__reg$__,</span> <span class="pre">__modes$__,</span> <span class="pre">__stwm$__,</span> <span class="pre">__fill$__,</span> <span class="pre">__zero$__,</span> <span class="pre">__order$__</span></code></a></li>
 <li><a class="reference internal" href="#ldz-gpr"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code></a></li>
 <li><a class="reference internal" href="#stz-target-reg-zero"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__zero$__</span></code></a></li>
-<li><a class="reference internal" href="#compare-source-target-reg-modes-fallback"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__modes$__,</span> <span class="pre">__fallback$__</span></code></a></li>
+<li><a class="reference internal" href="#compare-source-target-skip"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__skip$__</span></code></a></li>
 <li><a class="reference internal" href="#rshift-amt"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__amt__</span></code></a></li>
 <li><a class="reference internal" href="#rshift-t-int-amt"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code></a></li>
 <li><a class="reference internal" href="#lshift-amt"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">__amt__</span></code></a></li>

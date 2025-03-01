@@ -1,0 +1,1 @@
+; Worlds best Console Crash Screen

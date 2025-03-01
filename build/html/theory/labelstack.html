@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Label Stack &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Label Stack</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="label-stack">
+<h1>Label Stack<a class="headerlink" href="#label-stack" title="Link to this heading">¶</a></h1>
+<p>RAM management is a <em>crucial</em> element of NESDev, a common practice is to use <code class="docutils literal notranslate"><span class="pre">.res</span> <span class="pre">Label,</span> <span class="pre">Length</span></code> but this method prevents the user from choosing where exactly the data is stored in CPU Space and doesn’t help with the case of handling temporary memory.  With the current method the user may choose from: Hardcoding targets for certain functions, or using integer literals and dedicated an area of RAM to temp usage.</p>
+<p>Unfortunately both are terribly impractical, the former is bad because it’s simply wastes RAM by not sharing the temorary space between functions and the latter is terrible because temporary functions run the risk of overwriting the other’s contents if a complex hierachy of features are used.</p>
+<p><code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> solves this in a <em>fairly</em> classy way by creating a system in which a preprocessor function will allocate an offset in temp ram to a label as it’s being evaluated. At the end of a feature that uses RAM, a feature is also used to de-allocate the label from RAM to ensure that RAM is only marked as used where the function has lifetime.</p>
+<p>Because of how preprocessor works, it seems reasonable that zero fragmentation will occur with no loss of functionality or loss of performance by any metric from this method. This is because <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> provides the features <code class="docutils literal notranslate"><span class="pre">malloc</span></code> and <code class="docutils literal notranslate"><span class="pre">dealloc</span></code> to log when ram has a consistent semantic within the context.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/theory/labelstack.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Label Stack</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Brette.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

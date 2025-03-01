@@ -9,7 +9,7 @@ Inputs:
 Physics:
     - ``rigidbody``
         - ``Raycasting``
-        - ``Hitboxes``
+        - ``Collision``
         - ``Vector Forces``
         - ``Normalized Forces``
 

@@ -27,9 +27,7 @@ typeas Temp1, i16
 typeas Temp2, i16
 
 reset:
-    jmp reset
-
-    ahead:
+    
 
 .segment "VECTORS"
     .addr $0000

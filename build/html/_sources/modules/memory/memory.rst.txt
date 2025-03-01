@@ -103,7 +103,7 @@ Optionally, you may choose to opt out of 'filling' by setting ``__fill$__`` to `
         stz Region, null : x    ; (4 * w_Score) + 2c : (3 * w_Score) + 2b 
         stz Region, y, 1        ; -2c, -2b
 
-``compare __source__, __target__, __reg$__, __modes$__, __fallback$__``
+``compare __source__, __target__, __skip$__``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``includefrom memory, compare``
@@ -116,11 +116,19 @@ Optionally, you may choose to opt out of 'filling' by setting ``__fill$__`` to `
             (int: ptr)              __source__          
             (int: ptr)              __target__          
             
-        optional:
-            (gpr)                   __reg$__            fails on invalid GPR
-            (mam: mam)              __modes$__          fails on invalid modes
-            (ca65_int)              __fallback$__       accessed immediately
+        uses:
+            a                       CPU Status Payload
+            x                       Off-Hand Register
+            y                       Data Register
+
+            ram:
+                srcdelta 1          Source at Greatest Numerical Difference
+                tardelta 1          Target at Greatest Numerical Difference
+
+                // when comparing different length arrays, where the shorter
+                // is negative, compare will request an additional byte
         
+                fill     1          'Const' to contextualise OOB Accesses.
         dependacies:
             libcore
 
@@ -129,18 +137,50 @@ Optionally, you may choose to opt out of 'filling' by setting ``__fill$__`` to `
     .. code-block::
         
         Z = On Equal
+        N = On Numerical Equivalence
         C = On Equal or Greater Than
         V = On Greater Than
-        N = On Sign Difference
 
+    Optimisations:
+
+    **1. Cast to Unsigned**
+    
+    .. code-block::
+        
+        data1 = $200
+        data2 = $200
+
+        typeas data1, i32
+        typeas data2, i32
+
+        compare data1, data2
+        compare u32: data1, u32: data2
+        
+    If *any* number is deterministically positive up to this point, you can compare with a cast to unsigned (which is free) which removes signature checks. However, if this is done with numbers that *may* be neative, you may run the risk of producing erroneous outcomes.
+
+    **2. Cast to Smaller**
+    
+    .. code-block::
+        
+        data1 = $200
+        data2 = $200
+
+        typeas data1, i32
+        typeas data2, i32
+
+        compare data1, data2
+        compare i16: data1, i16: data2
+        
+    ``compare`` will scan *all* the bytes given until it finds difference, which means there is a size and speed penalty to be paid for *potential* difference. If you can prove that at a certain point a variable contains constant memory then you should design your code to acknowledge that and ``nesbrette`` assists you here by allowing you to cast to smaller number types to redundant cycles.
+
+    It should be noted that ``compare`` does not require the types to match endians, signature or width and smaller width *always* results in gained speed performance. However, it *should* be noted that while calling ``compare`` comes with a base ``2 byte`` nesbrette label stack penalty, should you have the smaller array be signed then you incur an dditional ``1 byte`` of nesbrette label stack being consumed.
+    
     Usage:
 
     .. code-block::
 
         compare Source, Target
-        compare Source, Target, yr
-        compare Source, Target, yr, wabs: wabsx
-        compare Source, Target, yr, wabs: wabsx, $ff
+
 
 
 ``rshift __amt__``

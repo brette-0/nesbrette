@@ -45,128 +45,6 @@
   <section id="i6502-i6502x">
 <h1><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code><a class="headerlink" href="#i6502-i6502x" title="Link to this heading">¶</a></h1>
 <p>Because the value at any index in an <a class="reference external" href="https://www.nesdev.org/wiki/Identity_table">Identity Table</a> is the same as the index, it is possible to use our GPRs as operands for read only instructions. The table required is only <code class="docutils literal notranslate"><span class="pre">256</span></code> bytes in size, if page aligned they should all complete in <code class="docutils literal notranslate"><span class="pre">4</span></code> cycles taking up <code class="docutils literal notranslate"><span class="pre">3</span></code> bytes except for <code class="docutils literal notranslate"><span class="pre">laxi</span></code> which only takes <code class="docutils literal notranslate"><span class="pre">3</span></code> cycles.</p>
-<section id="adx-add-x-with-carry">
-<h2><code class="docutils literal notranslate"><span class="pre">adx</span></code> - Add X with Carry<a class="headerlink" href="#adx-add-x-with-carry" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$10
-lda #$20
-clc
-adx         ; a =&gt; $30
-</pre></div>
-</div>
-</section>
-<section id="ady-add-y-with-carry">
-<h2><code class="docutils literal notranslate"><span class="pre">ady</span></code> - Add Y with Carry<a class="headerlink" href="#ady-add-y-with-carry" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldy #$10
-lda #$20
-clc
-ady         ; a =&gt; $30
-</pre></div>
-</div>
-</section>
-<section id="sbx-subtract-x-with-carry">
-<h2><code class="docutils literal notranslate"><span class="pre">sbx</span></code> - Subtract X with Carry<a class="headerlink" href="#sbx-subtract-x-with-carry" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$10
-lda #$20
-sec
-sbx         ; a =&gt; $10
-</pre></div>
-</div>
-</section>
-<section id="sby-subtract-y-with-carry">
-<h2><code class="docutils literal notranslate"><span class="pre">sby</span></code> - Subtract Y with Carry<a class="headerlink" href="#sby-subtract-y-with-carry" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldy #$10
-lda #$20
-sec
-sby         ; a =&gt; $30
-</pre></div>
-</div>
-</section>
-<section id="orax-bitset-or-by-x">
-<h2><code class="docutils literal notranslate"><span class="pre">orax</span></code> - Bitset/or By X<a class="headerlink" href="#orax-bitset-or-by-x" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$18
-lda #$28s
-orax        ; a =&gt; $38
-</pre></div>
-</div>
-</section>
-<section id="oray-bitset-or-by-y">
-<h2><code class="docutils literal notranslate"><span class="pre">oray</span></code> - Bitset/or by Y<a class="headerlink" href="#oray-bitset-or-by-y" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldy #$18
-lda #$28
-oray        ; a =&gt; $30
-</pre></div>
-</div>
-</section>
-<section id="andx-mask-and-by-x">
-<h2><code class="docutils literal notranslate"><span class="pre">andx</span></code> - Mask/and by X<a class="headerlink" href="#andx-mask-and-by-x" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$f0
-lda #$cd
-andx        ; a =&gt; $c0
-</pre></div>
-</div>
-</section>
-<section id="andy-mask-and-by-y">
-<h2><code class="docutils literal notranslate"><span class="pre">andy</span></code> - Mask/and by Y<a class="headerlink" href="#andy-mask-and-by-y" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldy #$f0
-lda #$cd
-andy        ; a =&gt; $c0
-</pre></div>
-</div>
-</section>
-<section id="eorx-flip-eor-xor-by-x">
-<h2><code class="docutils literal notranslate"><span class="pre">eorx</span></code> - Flip/eor/xor by X<a class="headerlink" href="#eorx-flip-eor-xor-by-x" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$18
-lda #$28
-adx         ; a =&gt; $30
-</pre></div>
-</div>
-</section>
-<section id="eory-flip-eor-xor-by-y">
-<h2><code class="docutils literal notranslate"><span class="pre">eory</span></code> - Flip/eor/xor by Y<a class="headerlink" href="#eory-flip-eor-xor-by-y" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$18
-lda #$28
-eory        ; a =&gt; $30
-</pre></div>
-</div>
-</section>
-<section id="biti-bitcheck-immediate">
-<h2><code class="docutils literal notranslate"><span class="pre">biti</span></code> - Bitcheck Immediate<a class="headerlink" href="#biti-bitcheck-immediate" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>biti $cd
-</pre></div>
-</div>
-</section>
-<section id="cmpx-compare-against-x">
-<h2><code class="docutils literal notranslate"><span class="pre">cmpx</span></code> - Compare against X<a class="headerlink" href="#cmpx-compare-against-x" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldx</span> <span class="c1">#$10</span>
-<span class="n">lda</span> <span class="c1">#$20</span>
-<span class="n">xcmp</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-</section>
-<section id="cmpy-compare-against-y">
-<h2><code class="docutils literal notranslate"><span class="pre">cmpy</span></code> - Compare against Y<a class="headerlink" href="#cmpy-compare-against-y" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldy</span> <span class="c1">#$10</span>
-<span class="n">lda</span> <span class="c1">#$20</span>
-<span class="n">ycmp</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-</section>
-<section id="cpyx-compare-x-against-y">
-<h2><code class="docutils literal notranslate"><span class="pre">cpyx</span></code> - Compare X against Y<a class="headerlink" href="#cpyx-compare-x-against-y" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldy</span> <span class="c1">#$10</span>
-<span class="n">ldx</span> <span class="c1">#$20</span>
-<span class="n">xcpy</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-</section>
-<section id="cpxy-compare-y-against-x">
-<h2><code class="docutils literal notranslate"><span class="pre">cpxy</span></code> - Compare Y against X<a class="headerlink" href="#cpxy-compare-y-against-x" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldx</span> <span class="c1">#$10</span>
-<span class="n">ldy</span> <span class="c1">#$20</span>
-<span class="n">ycpx</span>        <span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-</pre></div>
-</div>
-</section>
 <section id="txy-transfer-x-to-y">
 <h2><code class="docutils literal notranslate"><span class="pre">txy</span></code> - Transfer X to Y<a class="headerlink" href="#txy-transfer-x-to-y" title="Link to this heading">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldx #$10
@@ -197,12 +75,45 @@ tyx         ; x =&gt; $10
 <p>This performs <code class="docutils literal notranslate"><span class="pre">biti</span> <span class="pre">$40</span></code> and therefore if you wish to set both Overflow and Negative then you can use <code class="docutils literal notranslate"><span class="pre">biti</span> <span class="pre">$c0</span></code> .</p>
 </div>
 </section>
-<section id="tyxa-transfer-y-to-both-x-and-a">
-<h2><code class="docutils literal notranslate"><span class="pre">tyxa</span></code> - Transfer Y to both X and A<a class="headerlink" href="#tyxa-transfer-y-to-both-x-and-a" title="Link to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ldy #$30
-ldx #$10
-lda #$20
-tyxa        ; a, x =&gt; $30
+<section id="adc-r-add-r-with-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">adc</span> <span class="pre">r</span></code> - Add R with Carry<a class="headerlink" href="#adc-r-add-r-with-carry" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adc</span> <span class="n">x</span>
+<span class="n">adc</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="sbc-r-subtract-r-with-carry">
+<h2><code class="docutils literal notranslate"><span class="pre">sbc</span> <span class="pre">r</span></code> - Subtract R with Carry<a class="headerlink" href="#sbc-r-subtract-r-with-carry" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbc</span> <span class="n">x</span>
+<span class="n">sbc</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="cmp-r-compare-against-r">
+<h2><code class="docutils literal notranslate"><span class="pre">cmp</span> <span class="pre">r</span></code> - Compare against R<a class="headerlink" href="#cmp-r-compare-against-r" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmp</span> <span class="n">x</span>
+<span class="n">cmp</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="and-r-mask-by-r">
+<h2><code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">r</span></code> - Mask by R<a class="headerlink" href="#and-r-mask-by-r" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ow">and</span> <span class="n">x</span>
+<span class="ow">and</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="ora-r-set-bits-r">
+<h2><code class="docutils literal notranslate"><span class="pre">ora</span> <span class="pre">r</span></code> - Set bits R<a class="headerlink" href="#ora-r-set-bits-r" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ora</span> <span class="n">x</span>
+<span class="n">ora</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="eor-r-bitflip-by-r">
+<h2><code class="docutils literal notranslate"><span class="pre">eor</span> <span class="pre">r</span></code> - Bitflip by R<a class="headerlink" href="#eor-r-bitflip-by-r" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eor</span> <span class="n">x</span>
+<span class="n">eor</span> <span class="n">y</span>
 </pre></div>
 </div>
 </section>
@@ -219,25 +130,15 @@ tyxa        ; a, x =&gt; $30
     <h3><a href="../../index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a><ul>
-<li><a class="reference internal" href="#adx-add-x-with-carry"><code class="docutils literal notranslate"><span class="pre">adx</span></code> - Add X with Carry</a></li>
-<li><a class="reference internal" href="#ady-add-y-with-carry"><code class="docutils literal notranslate"><span class="pre">ady</span></code> - Add Y with Carry</a></li>
-<li><a class="reference internal" href="#sbx-subtract-x-with-carry"><code class="docutils literal notranslate"><span class="pre">sbx</span></code> - Subtract X with Carry</a></li>
-<li><a class="reference internal" href="#sby-subtract-y-with-carry"><code class="docutils literal notranslate"><span class="pre">sby</span></code> - Subtract Y with Carry</a></li>
-<li><a class="reference internal" href="#orax-bitset-or-by-x"><code class="docutils literal notranslate"><span class="pre">orax</span></code> - Bitset/or By X</a></li>
-<li><a class="reference internal" href="#oray-bitset-or-by-y"><code class="docutils literal notranslate"><span class="pre">oray</span></code> - Bitset/or by Y</a></li>
-<li><a class="reference internal" href="#andx-mask-and-by-x"><code class="docutils literal notranslate"><span class="pre">andx</span></code> - Mask/and by X</a></li>
-<li><a class="reference internal" href="#andy-mask-and-by-y"><code class="docutils literal notranslate"><span class="pre">andy</span></code> - Mask/and by Y</a></li>
-<li><a class="reference internal" href="#eorx-flip-eor-xor-by-x"><code class="docutils literal notranslate"><span class="pre">eorx</span></code> - Flip/eor/xor by X</a></li>
-<li><a class="reference internal" href="#eory-flip-eor-xor-by-y"><code class="docutils literal notranslate"><span class="pre">eory</span></code> - Flip/eor/xor by Y</a></li>
-<li><a class="reference internal" href="#biti-bitcheck-immediate"><code class="docutils literal notranslate"><span class="pre">biti</span></code> - Bitcheck Immediate</a></li>
-<li><a class="reference internal" href="#cmpx-compare-against-x"><code class="docutils literal notranslate"><span class="pre">cmpx</span></code> - Compare against X</a></li>
-<li><a class="reference internal" href="#cmpy-compare-against-y"><code class="docutils literal notranslate"><span class="pre">cmpy</span></code> - Compare against Y</a></li>
-<li><a class="reference internal" href="#cpyx-compare-x-against-y"><code class="docutils literal notranslate"><span class="pre">cpyx</span></code> - Compare X against Y</a></li>
-<li><a class="reference internal" href="#cpxy-compare-y-against-x"><code class="docutils literal notranslate"><span class="pre">cpxy</span></code> - Compare Y against X</a></li>
 <li><a class="reference internal" href="#txy-transfer-x-to-y"><code class="docutils literal notranslate"><span class="pre">txy</span></code> - Transfer X to Y</a></li>
 <li><a class="reference internal" href="#tyx-transfer-y-to-x"><code class="docutils literal notranslate"><span class="pre">tyx</span></code> - Transfer Y to X</a></li>
 <li><a class="reference internal" href="#sev-set-overflow"><code class="docutils literal notranslate"><span class="pre">sev</span></code> - Set Overflow</a></li>
-<li><a class="reference internal" href="#tyxa-transfer-y-to-both-x-and-a"><code class="docutils literal notranslate"><span class="pre">tyxa</span></code> - Transfer Y to both X and A</a></li>
+<li><a class="reference internal" href="#adc-r-add-r-with-carry"><code class="docutils literal notranslate"><span class="pre">adc</span> <span class="pre">r</span></code> - Add R with Carry</a></li>
+<li><a class="reference internal" href="#sbc-r-subtract-r-with-carry"><code class="docutils literal notranslate"><span class="pre">sbc</span> <span class="pre">r</span></code> - Subtract R with Carry</a></li>
+<li><a class="reference internal" href="#cmp-r-compare-against-r"><code class="docutils literal notranslate"><span class="pre">cmp</span> <span class="pre">r</span></code> - Compare against R</a></li>
+<li><a class="reference internal" href="#and-r-mask-by-r"><code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">r</span></code> - Mask by R</a></li>
+<li><a class="reference internal" href="#ora-r-set-bits-r"><code class="docutils literal notranslate"><span class="pre">ora</span> <span class="pre">r</span></code> - Set bits R</a></li>
+<li><a class="reference internal" href="#eor-r-bitflip-by-r"><code class="docutils literal notranslate"><span class="pre">eor</span> <span class="pre">r</span></code> - Bitflip by R</a></li>
 </ul>
 </li>
 </ul>

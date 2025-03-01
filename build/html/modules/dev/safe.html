@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Syntax &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">Syntax</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="syntax">
+<h1><code class="docutils literal notranslate"><span class="pre">Syntax</span></code><a class="headerlink" href="#syntax" title="Link to this heading">¶</a></h1>
+<section id="ins-ppustat-access-with-shadow">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">PPUSTAT</span></code> - Access (with Shadow?)<a class="headerlink" href="#ins-ppustat-access-with-shadow" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="n">sta</span> <span class="n">PPUCTRL</span>
+<span class="n">sta</span> <span class="n">SPPUCTRL</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">lda</span> <span class="n">PPUCTRL</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-irqstatus-access-erroneous-with-shadow">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!IRQSTATUS</span></code> - Access Erroneous (with Shadow?)<a class="headerlink" href="#ins-irqstatus-access-erroneous-with-shadow" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>; store
+str IRQSTATUS   ; read only needs no shadow reg
+
+str PPUCTRL
+str SPPUCTRL    ; weird to use ! here, but shadow is needed
+
+; read
+ldr IRQSTATUS   ; read only needs no ! but works
+
+ldr SSPUCTRL    ; loads shadow if needed
+</pre></div>
+</div>
+</section>
+<section id="ins-ppuctrl-access-without-shadow">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">*PPUCTRL</span></code> - Access without Shadow<a class="headerlink" href="#ins-ppuctrl-access-without-shadow" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="n">PPUCTRL</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="n">PPUCTRL</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-r-indexed-access-r">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">tar,</span> <span class="pre">r</span></code> - Indexed Access R<a class="headerlink" href="#ins-tar-r-indexed-access-r" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-r-indexed-access-forbidden-r">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!tar,</span> <span class="pre">r</span></code> - Indexed Access Forbidden R<a class="headerlink" href="#ins-tar-r-indexed-access-forbidden-r" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-r-indexed-access-r-with-ca65hl">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">tar[r]</span></code> - Indexed Access R with ca65hl<a class="headerlink" href="#ins-tar-r-indexed-access-r-with-ca65hl" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">r</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">r</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-r-indexed-access-forbidden-r-with-ca65hl">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!tar[r]</span></code> - Indexed Access Forbidden R with ca65hl<a class="headerlink" href="#ins-tar-r-indexed-access-forbidden-r-with-ca65hl" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">r</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">r</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-indirect-access">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar]</span></code> - Indirect Access<a class="headerlink" href="#ins-tar-indirect-access" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldy</span> <span class="c1">#$00</span>
+<span class="n">ins</span> <span class="p">[</span><span class="n">tar</span><span class="p">],</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-x-indexed-indirect-access">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar,</span> <span class="pre">x]</span></code> - Indexed Indirect Access<a class="headerlink" href="#ins-tar-x-indexed-indirect-access" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="p">[</span><span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="p">[</span><span class="n">PPUCTRL</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="ins-tar-y-indirect-indexed-access">
+<h2><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar,</span> <span class="pre">y]</span></code> - Indirect Indexed Access<a class="headerlink" href="#ins-tar-y-indirect-indexed-access" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">store</span>
+<span class="nb">str</span> <span class="p">[</span><span class="n">PPUCTRL</span><span class="p">],</span> <span class="n">y</span>
+
+<span class="p">;</span> <span class="n">read</span>
+<span class="n">ldr</span> <span class="p">[</span><span class="n">PPUCTRL</span><span class="p">],</span> <span class="n">y</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Syntax</span></code></a><ul>
+<li><a class="reference internal" href="#ins-ppustat-access-with-shadow"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">PPUSTAT</span></code> - Access (with Shadow?)</a></li>
+<li><a class="reference internal" href="#ins-irqstatus-access-erroneous-with-shadow"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!IRQSTATUS</span></code> - Access Erroneous (with Shadow?)</a></li>
+<li><a class="reference internal" href="#ins-ppuctrl-access-without-shadow"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">*PPUCTRL</span></code> - Access without Shadow</a></li>
+<li><a class="reference internal" href="#ins-tar-r-indexed-access-r"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">tar,</span> <span class="pre">r</span></code> - Indexed Access R</a></li>
+<li><a class="reference internal" href="#ins-tar-r-indexed-access-forbidden-r"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!tar,</span> <span class="pre">r</span></code> - Indexed Access Forbidden R</a></li>
+<li><a class="reference internal" href="#ins-tar-r-indexed-access-r-with-ca65hl"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">tar[r]</span></code> - Indexed Access R with ca65hl</a></li>
+<li><a class="reference internal" href="#ins-tar-r-indexed-access-forbidden-r-with-ca65hl"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!tar[r]</span></code> - Indexed Access Forbidden R with ca65hl</a></li>
+<li><a class="reference internal" href="#ins-tar-indirect-access"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar]</span></code> - Indirect Access</a></li>
+<li><a class="reference internal" href="#ins-tar-x-indexed-indirect-access"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar,</span> <span class="pre">x]</span></code> - Indexed Indirect Access</a></li>
+<li><a class="reference internal" href="#ins-tar-y-indirect-indexed-access"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar,</span> <span class="pre">y]</span></code> - Indirect Indexed Access</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/dev/safe.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">Syntax</span></code></a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Brette.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

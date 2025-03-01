@@ -79,69 +79,9 @@
     eor IDTABLE, _reg
 .endmacro
 
-.macro adx__reg__
-    adr xr
-.endmacro
-
-.macro sbx __reg__
-    sbr xr
-.endmacro
-
-.macro anx __reg__
-    anr xr
-.endmacro
-
-.macro orx __reg__
-    orr xr
-.endmacro
-
-.macro eox __reg__
-    xor xr
-.endmacro
-
-.macro ady __reg__
-    adr yr
-.endmacro
-
-.macro sby __reg__
-    sbr yr
-.endmacro
-
-.macro any __reg__
-    anr yr
-.endmacro
-
-.macro ory __reg__
-    orr yr
-.endmacro
-
-.macro eoy __reg__
-    xor yr
-.endmacro
-
-.macro biti __const__
-    bit IDTABLE + __const__
-.endif
-
 .macro sev __nf$__
-    biti $40 + ($80 * .ifnblank(__nf$__))
+    bit IDTABLE + $40 + ($80 * .ifnblank(__nf$__))
 .endif
-
-.macro laxi __const__
-    lax IDTABLE + __const__
-.endmacro
-
-.macro tyxa
-    lax IDTABLE, y
-.endmacro
-
-.macro cmpy
-    cmp IDTABLE, y
-.endmacro
-
-.macro cmpx
-    cmp IDTABLE, x
-.endmacro
 
 .macro cmpr __reg__
     _cmpr_reg = setireg __reg__
@@ -192,6 +132,7 @@
     .endif
 .endmacro
 
+; TODO: make trr work
 .macro trr
 .endmacro
 

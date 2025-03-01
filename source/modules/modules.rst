@@ -9,3 +9,4 @@
    synth/synth
    memory/memory
    math/math
+   dev/dev

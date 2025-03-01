@@ -57,8 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#typeval-int-value-segment-from-type"><code class="docutils literal notranslate"><span class="pre">typeval</span> <span class="pre">int</span></code> - Value Segment from Type</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#typeas-label-type-allocate-type-define"><code class="docutils literal notranslate"><span class="pre">typeas</span> <span class="pre">label,</span> <span class="pre">type</span></code> - Allocate Type Define</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#dedtype-int-deduce-type"><code class="docutils literal notranslate"><span class="pre">dedtype</span> <span class="pre">int</span></code> - Deduce Type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#isnum-int-is-type-numerical"><code class="docutils literal notranslate"><span class="pre">isnum</span> <span class="pre">int</span></code> - Is Type Numerical?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#isconst-int-is-type-preprocesor-constant"><code class="docutils literal notranslate"><span class="pre">isconst</span> <span class="pre">int</span></code> - Is Type Preprocesor Constant?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#isdecimal-int-is-type-decimal"><code class="docutils literal notranslate"><span class="pre">isdecimal</span> <span class="pre">int</span></code> - Is Type Decimal?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#detype-type-token-decode-typing"><code class="docutils literal notranslate"><span class="pre">detype</span> <span class="pre">type?:</span> <span class="pre">token</span></code> - Decode Typing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#null-coalesce-int-null-coalesce"><code class="docutils literal notranslate"><span class="pre">null_coalesce</span> <span class="pre">int</span></code> - Null Coalesce</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#is-null-int-is-null"><code class="docutils literal notranslate"><span class="pre">is_null</span> <span class="pre">int</span></code> - is Null</a></li>
@@ -67,6 +66,7 @@
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#setmam-int-set-memory-address-mode"><code class="docutils literal notranslate"><span class="pre">setmam</span> <span class="pre">int</span></code> - Set Memory Address Mode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#mamreg-int-indexing-register-of-memory-address-mode"><code class="docutils literal notranslate"><span class="pre">mamreg</span> <span class="pre">int</span></code> - Indexing Register of Memory Address Mode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#setireg-int-set-indexing-register"><code class="docutils literal notranslate"><span class="pre">setireg</span> <span class="pre">int</span></code> - Set Indexing Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#ralloc-out-int-int-allocate-register"><code class="docutils literal notranslate"><span class="pre">ralloc</span> <span class="pre">out,</span> <span class="pre">int,</span> <span class="pre">int</span></code> - Allocate Register</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#confined-int-int-if-confined"><code class="docutils literal notranslate"><span class="pre">confined</span> <span class="pre">int,</span> <span class="pre">int</span></code> - If Confined</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#ispo2-int-is-power-of-two"><code class="docutils literal notranslate"><span class="pre">ispo2</span> <span class="pre">int</span></code> - Is Power of two?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#abs-int-absolute"><code class="docutils literal notranslate"><span class="pre">abs</span> <span class="pre">int</span></code> - Absolute</a></li>
@@ -79,9 +79,10 @@
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#try-gpr-transfer-register-to-y"><code class="docutils literal notranslate"><span class="pre">try</span> <span class="pre">gpr</span></code> - Transfer Register to Y</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#trx-gpr-transfer-register-to-x"><code class="docutils literal notranslate"><span class="pre">trx</span> <span class="pre">gpr</span></code> - Transfer Register to X</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#trr-gpr-gpr-transfer-register-to-register"><code class="docutils literal notranslate"><span class="pre">trr</span> <span class="pre">gpr:</span> <span class="pre">gpr</span></code> - Transfer Register to Register</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#ldr-reg-mode-value-cpre"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__value__,</span> <span class="pre">__cpre$__</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#str-reg-mode-address-cpre-iwle"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__,</span> <span class="pre">__iwle$__</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#cpr-reg-mode-address-cpre"><code class="docutils literal notranslate"><span class="pre">cpr</span> <span class="pre">__reg_mode__,</span> <span class="pre">__address__,</span> <span class="pre">__cpre$__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#ldr-mode-reg-int-error-load-register"><code class="docutils literal notranslate"><span class="pre">ldr</span> <span class="pre">mode:</span> <span class="pre">reg,</span> <span class="pre">int,</span> <span class="pre">error</span></code> - Load Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#str-mode-reg-int-error-error-store-register"><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">mode:</span> <span class="pre">reg,</span> <span class="pre">int,</span> <span class="pre">error,</span> <span class="pre">error</span></code> - Store Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#cpr-mode-reg-int-error-compare-register"><code class="docutils literal notranslate"><span class="pre">cpr</span> <span class="pre">mode:</span> <span class="pre">reg,</span> <span class="pre">int,</span> <span class="pre">error</span></code> - Compare Register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/core/core.html#contains-int-int-int-int-int-contains-xmatch"><code class="docutils literal notranslate"><span class="pre">contains</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int...</span></code> - Contains xmatch</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="modules/synth/synth.html"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a><ul>
@@ -101,25 +102,15 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="modules/synth/i6502.html"><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#adx-add-x-with-carry"><code class="docutils literal notranslate"><span class="pre">adx</span></code> - Add X with Carry</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#ady-add-y-with-carry"><code class="docutils literal notranslate"><span class="pre">ady</span></code> - Add Y with Carry</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#sbx-subtract-x-with-carry"><code class="docutils literal notranslate"><span class="pre">sbx</span></code> - Subtract X with Carry</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#sby-subtract-y-with-carry"><code class="docutils literal notranslate"><span class="pre">sby</span></code> - Subtract Y with Carry</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#orax-bitset-or-by-x"><code class="docutils literal notranslate"><span class="pre">orax</span></code> - Bitset/or By X</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#oray-bitset-or-by-y"><code class="docutils literal notranslate"><span class="pre">oray</span></code> - Bitset/or by Y</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#andx-mask-and-by-x"><code class="docutils literal notranslate"><span class="pre">andx</span></code> - Mask/and by X</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#andy-mask-and-by-y"><code class="docutils literal notranslate"><span class="pre">andy</span></code> - Mask/and by Y</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#eorx-flip-eor-xor-by-x"><code class="docutils literal notranslate"><span class="pre">eorx</span></code> - Flip/eor/xor by X</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#eory-flip-eor-xor-by-y"><code class="docutils literal notranslate"><span class="pre">eory</span></code> - Flip/eor/xor by Y</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#biti-bitcheck-immediate"><code class="docutils literal notranslate"><span class="pre">biti</span></code> - Bitcheck Immediate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#cmpx-compare-against-x"><code class="docutils literal notranslate"><span class="pre">cmpx</span></code> - Compare against X</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#cmpy-compare-against-y"><code class="docutils literal notranslate"><span class="pre">cmpy</span></code> - Compare against Y</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#cpyx-compare-x-against-y"><code class="docutils literal notranslate"><span class="pre">cpyx</span></code> - Compare X against Y</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#cpxy-compare-y-against-x"><code class="docutils literal notranslate"><span class="pre">cpxy</span></code> - Compare Y against X</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#txy-transfer-x-to-y"><code class="docutils literal notranslate"><span class="pre">txy</span></code> - Transfer X to Y</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#tyx-transfer-y-to-x"><code class="docutils literal notranslate"><span class="pre">tyx</span></code> - Transfer Y to X</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#sev-set-overflow"><code class="docutils literal notranslate"><span class="pre">sev</span></code> - Set Overflow</a></li>
-<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#tyxa-transfer-y-to-both-x-and-a"><code class="docutils literal notranslate"><span class="pre">tyxa</span></code> - Transfer Y to both X and A</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#adc-r-add-r-with-carry"><code class="docutils literal notranslate"><span class="pre">adc</span> <span class="pre">r</span></code> - Add R with Carry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#sbc-r-subtract-r-with-carry"><code class="docutils literal notranslate"><span class="pre">sbc</span> <span class="pre">r</span></code> - Subtract R with Carry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#cmp-r-compare-against-r"><code class="docutils literal notranslate"><span class="pre">cmp</span> <span class="pre">r</span></code> - Compare against R</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#and-r-mask-by-r"><code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">r</span></code> - Mask by R</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#ora-r-set-bits-r"><code class="docutils literal notranslate"><span class="pre">ora</span> <span class="pre">r</span></code> - Set bits R</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/i6502.html#eor-r-bitflip-by-r"><code class="docutils literal notranslate"><span class="pre">eor</span> <span class="pre">r</span></code> - Bitflip by R</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="modules/synth/stack.html"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a><ul>
@@ -142,13 +133,22 @@
 <li class="toctree-l4"><a class="reference internal" href="modules/synth/stack.html#rrs-right-roll-stack-at-stack-pointer"><code class="docutils literal notranslate"><span class="pre">rrs</span></code> - Right Roll Stack at Stack Pointer</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="modules/synth/overload.html"><code class="docutils literal notranslate"><span class="pre">overload</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/overload.html#brk-byte-reg-reg-byte-break-with-options"><code class="docutils literal notranslate"><span class="pre">brk</span> <span class="pre">byte,</span> <span class="pre">reg:</span> <span class="pre">reg,</span> <span class="pre">byte</span></code> - Break with Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/overload.html#bit-abs-zp-imm-bitcheck-with-idtable-immediate"><code class="docutils literal notranslate"><span class="pre">bit</span> <span class="pre">abs,</span> <span class="pre">zp,</span> <span class="pre">#imm</span></code> - Bitcheck with idtable Immediate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/overload.html#sed-convert-to-bcd"><code class="docutils literal notranslate"><span class="pre">sed</span></code> - Convert to BCD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/overload.html#cld-convert-from-bcd"><code class="docutils literal notranslate"><span class="pre">cld</span></code> - Convert from BCD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/overload.html#bxx-branch-variants-with-literal-operand-support"><code class="docutils literal notranslate"><span class="pre">bxx</span></code> - Branch Variants with Literal Operand Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/synth/overload.html#lax-zp-zpy-abs-absy-inabsx-inabsy-imm-safe-load-ax"><code class="docutils literal notranslate"><span class="pre">lax</span> <span class="pre">zp|zpy|abs|absy|inabsx|inabsy|imm</span></code> -Safe Load AX</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="modules/memory/memory.html"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#memcpy-t-source-t-target-reg-modes-stwm-fill-zero-order"><code class="docutils literal notranslate"><span class="pre">memcpy</span> <span class="pre">t:source,</span> <span class="pre">t:target,</span> <span class="pre">__reg$__,</span> <span class="pre">__modes$__,</span> <span class="pre">__stwm$__,</span> <span class="pre">__fill$__,</span> <span class="pre">__zero$__,</span> <span class="pre">__order$__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#ldz-gpr"><code class="docutils literal notranslate"><span class="pre">ldz</span> <span class="pre">__gpr__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#stz-target-reg-zero"><code class="docutils literal notranslate"><span class="pre">stz</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__zero$__</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#compare-source-target-reg-modes-fallback"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__reg$__,</span> <span class="pre">__modes$__,</span> <span class="pre">__fallback$__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#compare-source-target-skip"><code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">__source__,</span> <span class="pre">__target__,</span> <span class="pre">__skip$__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#rshift-amt"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__amt__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#rshift-t-int-amt"><code class="docutils literal notranslate"><span class="pre">rshift</span> <span class="pre">__t:int__,</span> <span class="pre">__amt__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/memory/memory.html#lshift-amt"><code class="docutils literal notranslate"><span class="pre">lshift</span> <span class="pre">__amt__</span></code></a></li>
@@ -178,6 +178,22 @@
 <li class="toctree-l3"><a class="reference internal" href="modules/math/math.html#acsc-gpr-arcosecant-of-theta"><code class="docutils literal notranslate"><span class="pre">acsc</span> <span class="pre">gpr</span></code> - Arcosecant of Theta</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="modules/dev/dev.html"><code class="docutils literal notranslate"><span class="pre">dev</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/dev/safe.html"><code class="docutils literal notranslate"><span class="pre">Syntax</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-ppustat-access-with-shadow"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">PPUSTAT</span></code> - Access (with Shadow?)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-irqstatus-access-erroneous-with-shadow"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!IRQSTATUS</span></code> - Access Erroneous (with Shadow?)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-ppuctrl-access-without-shadow"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">*PPUCTRL</span></code> - Access without Shadow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-r-indexed-access-r"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">tar,</span> <span class="pre">r</span></code> - Indexed Access R</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-r-indexed-access-forbidden-r"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!tar,</span> <span class="pre">r</span></code> - Indexed Access Forbidden R</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-r-indexed-access-r-with-ca65hl"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">tar[r]</span></code> - Indexed Access R with ca65hl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-r-indexed-access-forbidden-r-with-ca65hl"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">!tar[r]</span></code> - Indexed Access Forbidden R with ca65hl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-indirect-access"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar]</span></code> - Indirect Access</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-x-indexed-indirect-access"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar,</span> <span class="pre">x]</span></code> - Indexed Indirect Access</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/dev/safe.html#ins-tar-y-indirect-indexed-access"><code class="docutils literal notranslate"><span class="pre">ins</span> <span class="pre">[tar,</span> <span class="pre">y]</span></code> - Indirect Indexed Access</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theory/theory.html"><code class="docutils literal notranslate"><span class="pre">theory</span></code></a><ul>
@@ -186,6 +202,8 @@
 <li class="toctree-l2"><a class="reference internal" href="theory/theory.html#warning"><code class="docutils literal notranslate"><span class="pre">Warning</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="theory/theory.html#call-handler"><code class="docutils literal notranslate"><span class="pre">Call</span> <span class="pre">Handler</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="theory/theory.html#memory-address-modes"><code class="docutils literal notranslate"><span class="pre">Memory</span> <span class="pre">Address</span> <span class="pre">Modes</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/theory.html#label-stack"><code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Stack</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/theory.html#register-parameterisation"><code class="docutils literal notranslate"><span class="pre">Register</span> <span class="pre">Parameterisation</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theory/errors.html"><code class="docutils literal notranslate"><span class="pre">Errors</span></code></a><ul>

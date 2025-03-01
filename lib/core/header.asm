@@ -1,3 +1,5 @@
+; TODO: Check for impossible cart elements (INCOMPATIBLE WITH MAPPERS)
+
 .macro __header_build __prgrom__, __chrrom__, __mapper__, __system__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vssystem__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
     .literal "NES", $1a
     
@@ -252,60 +254,84 @@
 
 .macro __header_extended __kwarg__, __extended__
     .if .xmatch(.right(1, __kwarg__), standard) || .xmatch(.right(1, __kwarg__), STANDARD)
+        .define LIBCORE_EXTENDED standard
         __extended__ .set 0
     .elseif .xmatch(.right(1, __kwarg__), vs) || .xmatch(.right(1, __kwarg__), VS)
+        .define LIBCORE_EXTENDED vs
         __extended__ .set 1
     .elseif .xmatch(.right(1, __kwarg__), pc10) || .xmatch(.right(1, __kwarg__), PC10) || .xmatch(.right(1, __kwarg__), playchoice10) || .xmatch(.right(1, __kwarg__), PLAYCHOICE10)
+        .define LIBCORE_EXTENDED pc10
         __extended__ .set 2
     .elseif .xmatch(.right(1, __kwarg__), decimal) || .xmatch(.right(1, __kwarg__), DECIMAL)
+        .define LIBCORE_EXTENDED decimal
         __extended__ .set 3
     .elseif .xmatch(.right(1, __kwarg__), epsm) || .xmatch(.right(1, __kwarg__), EPSM)
+        .define LIBCORE_EXTENDED epsm
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), vt01) || .xmatch(.right(1, __kwarg__), VT01)
+        .define LIBCORE_EXTENDED vt01
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), vt02) || .xmatch(.right(1, __kwarg__), VT02)
+        .define LIBCORE_EXTENDED vt02
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), vt03) || .xmatch(.right(1, __kwarg__), VT03)
+        .define LIBCORE_EXTENDED vt03
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), vt09) || .xmatch(.right(1, __kwarg__), VT09)
+        .define LIBCORE_EXTENDED vt09
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), vt32) || .xmatch(.right(1, __kwarg__), VT32)
+        .define LIBCORE_EXTENDED vt32
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), vt369) || .xmatch(.right(1, __kwarg__), VT369)
+        .define LIBCORE_EXTENDED vt369
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), umc) || .xmatch(.right(1, __kwarg__), UMC)
+        .define LIBCORE_EXTENDED umc
         __extended__ .set 4
     .elseif .xmatch(.right(1, __kwarg__), fns) || .xmatch(.right(1, __kwarg__), FNS)
+        .define LIBCORE_EXTENDED fns
         __extended__ .set 4
     .else
+        .define LIBCORE_EXTENDED standard
         __extended__ .set .right(1, __kwarg__)
     .endif
 .endmacro
 
 .macro __header_cpu __kwarg__, __cpu__
 .if .xmatch(.right(1, __kwarg__), ntsc) || .xmatch(.right(1, __kwarg__), rp2c02) || .xmatch(.right(1, __kwarg__), NTSC) || .xmatch(.right(1, __kwarg__), RP2C02)
+        .define LIBCORE_CPU ntsc
         __cpu__ .set 0
     .elseif .xmatch(.right(1, __kwarg__), pal) || .xmatch(.right(1, __kwarg__), rp2c07) || .xmatch(.right(1, __kwarg__), PAL) || .xmatch(.right(1, __kwarg__), RP2C07)
+        .define LIBCORE_CPU pal
         __cpu__ .set 1
     .elseif .xmatch(.right(1, __kwarg__), dendy) || .xmatch(.right(1, __kwarg__), ua6538) || .xmatch(.right(1, __kwarg__), DENDY) || .xmatch(.right(1, __kwarg__), UA6538)
+        .define LIBCORE_CPU dendy
         __cpu__ .set 2
     .elseif .xmatch(.right(1, __kwarg__), multi) || .xmatch(.right(1, __kwarg__), MULTI)
+        .define LIBCORE_CPU multi
         __cpu__ .set 3
     .else
+        .define LIBCORE_CPU ntsc
         __cpu__ .set .right(1, __kwarg__)
     .endif
 .endmacro
 
 .macro __header_system __kwarg__, __system__
 .if .xmatch(.right(1, __kwarg__), standard) || .xmatch(.right(1, __kwarg__), STANDARD)
+        .define LIBCORE_SYSTEM standard
         __system__ .set 0
     .elseif .xmatch(.right(1, __kwarg__), vs) || .xmatch(.right(1, __kwarg__), VS)
+        .define LIBCORE_SYSTEM vs
         __system__ .set 1
     .elseif .xmatch(.right(1, __kwarg__), playchoice) || .xmatch(.right(1, __kwarg__), playchoice10) || .xmatch(.right(1, __kwarg__), pc10) || .xmatch(.right(1, __kwarg__), PLAYCHOICE) || .xmatch(.right(1, __kwarg__), PLAYCHOICE10) || .xmatch(.right(1, __kwarg__), PC10)
+        .define LIBCORE_SYSTEM playchoice
         __system__ .set 2
     .elseif .xmatch(.right(1, __kwarg__), extended) || .xmatch(.right(1, __kwarg__), EXTENDED)
+        .define LIBCORE_SYSTEM extended
         __system__ .set 3
     .else
+        .define LIBCORE_SYSTEM standard
         __system__ .set .right(1, __kwarg__)
     .endif
 .endmacro
@@ -313,92 +339,125 @@
 .macro __header_mapper __kwarg__, __mapper__
     .if .xmatch(.right(1, __kwarg__), nrom) || .xmatch(.right(1, __kwarg__), NROM)
         __mapper__ .set 0
+        .define LIBCORE_MAPPER nrom
     .elseif .xmatch(.right(1, __kwarg__), mmc1) || .xmatch(.right(1, __kwarg__), MMC1)
         __mapper__ .set 1
+        .define LIBCORE_MAPPER mmc1
     .elseif .xmatch(.right(1, __kwarg__), uxrom) || .xmatch(.right(1, __kwarg__), UXROM)
         __mapper__ .set 2
+        .define LIBCORE_MAPPER uxrom
     .elseif .xmatch(.right(1, __kwarg__), cnrom) || .xmatch(.right(1, __kwarg__), CNROM)
         __mapper__ .set 3
-    .elseif .xmatch(.right(1, __kwarg__), mmc3) || .xmatch(.right(1, __kwarg__), MMC3) || .xmatch(.right(1, __kwarg__), mmc6 || .xmatch(.right(1, __kwarg__), MMC6) || .xmatch(.right(1, __kwarg__), txrom) || .xmatch(.right(1, __kwarg__), TXROM)
+        .define LIBCORE_MAPPER cnrom
+    .elseif .xmatch(.right(1, __kwarg__), mmc3) || .xmatch(.right(1, __kwarg__), MMC3) || .xmatch(.right(1, __kwarg__), mmc6) || .xmatch(.right(1, __kwarg__), MMC6) || .xmatch(.right(1, __kwarg__), txrom) || .xmatch(.right(1, __kwarg__), TXROM)
         __mapper__ .set 4
+        .define LIBCORE_MAPPER mmc3
     .elseif .xmatch(.right(1, __kwarg__), mmc5) || .xmatch(.right(1, __kwarg__), MMC5) || .xmatch(.right(1, __kwarg__), exrom) || .xmatch(.right(1, __kwarg__), EXROM)
         __mapper__ .set 5
+        .define LIBCORE_MAPPER mmc5
     .elseif .xmatch(.right(1, __kwarg__), axrom) || .xmatch(.right(1, __kwarg__), AXROM)
         __mapper__ .set 7
+        .define LIBCORE_MAPPER axrom
     .elseif .xmatch(.right(1, __kwarg__), mmc2) || .xmatch(.right(1, __kwarg__), MMC2) || .xmatch(.right(1, __kwarg__), pxrom) || .xmatch(.right(1, __kwarg__), PXROM)
         __mapper__ .set 9
+        .define LIBCORE_MAPPER mmc2
     .elseif .xmatch(.right(1, __kwarg__), mmc4) || .xmatch(.right(1, __kwarg__), MMC4) || .xmatch(.right(1, __kwarg__), fxrom) || .xmatch(.right(1, __kwarg__), FXROM)
         __mapper__ .set 10
+        .define LIBCORE_MAPPER mmc4
     .elseif .xmatch(.right(1, __kwarg__), colordreams) || .xmatch(.right(1, __kwarg__), COLORDREAMS)
         __mapper__ .set 11
+        .define LIBCORE_MAPPER colordreams
     .elseif .xmatch(.right(1, __kwarg__), cprom) || .xmatch(.right(1, __kwarg__), CPROM)
         __mapper__ .set 13
-    .elseif .xmatch(.right(1, __kwarg__), contraf16) || .xmatch(.right(1, __kwarg__), CONTRF16)
-        __mapper__ .set 15
-    .elseif .xmatch(.right(1, __kwarg__), eprom24c02) || .xmatch(.right(1, __kwarg__), EPROM24C02)
-        __mapper__ .set 16
-    .elseif .xmatch(.right(1, __kwarg__), ss8806) || .xmatch(.right(1, __kwarg__), SS8806)
-        __mapper__ .set 18
+        .define LIBCORE_MAPPER cprom
     .elseif .xmatch(.right(1, __kwarg__), n163) || .xmatch(.right(1, __kwarg__), N163)
         __mapper__ .set 19
+        .define LIBCORE_MAPPER n163
     .elseif .xmatch(.right(1, __kwarg__), vrc4) || .xmatch(.right(1, __kwarg__), VRC4)
         __mapper__ .set 21
+        .define LIBCORE_MAPPER vrc4
     .elseif .xmatch(.right(1, __kwarg__), vrc6) || .xmatch(.right(1, __kwarg__), VRC6)
         __mapper__ .set 24
+        .define LIBCORE_MAPPER vrc6
     .elseif .xmatch(.right(1, __kwarg__), bnrom) || .xmatch(.right(1, __kwarg__), BNROM)
         __mapper__ .set 34
+        .define LIBCORE_MAPPER bnrom
     .elseif .xmatch(.right(1, __kwarg__), gxrom) || .xmatch(.right(1, __kwarg__), GXROM)
         __mapper__ .set 66
+        .define LIBCORE_MAPPER gxrom
     .elseif .xmatch(.right(1, __kwarg__), afterburner) || .xmatch(.right(1, __kwarg__), AFTERBURNER)
         __mapper__ .set 68
+        .define LIBCORE_MAPPER afterburner
     .elseif .xmatch(.right(1, __kwarg__), fme7) || .xmatch(.right(1, __kwarg__), FME7) || .xmatch(.right(1, __kwarg__), s5b) || .xmatch(.right(1, __kwarg__), S5B)
         __mapper__ .set 69
+        .define LIBCORE_MAPPER fme7
     .elseif .xmatch(.right(1, __kwarg__), camerica) || .xmatch(.right(1, __kwarg__), CAMERICA)
         __mapper__ .set 71
+        .define LIBCORE_MAPPER camerica
     .elseif .xmatch(.right(1, __kwarg__), vrc3) || .xmatch(.right(1, __kwarg__), VRC3)
         __mapper__ .set 73
+        .define LIBCORE_MAPPER vrc3
     .elseif .xmatch(.right(1, __kwarg__), piratemmc3) || .xmatch(.right(1, __kwarg__), PIRATEMMC3)
         __mapper__ .set 74
+        .define LIBCORE_MAPPER piratemmc3
     .elseif .xmatch(.right(1, __kwarg__), vrc1) || .xmatch(.right(1, __kwarg__), VRC1)
         __mapper__ .set 75
+        .define LIBCORE_MAPPER vrc1
     .elseif .xmatch(.right(1, __kwarg__), n109) || .xmatch(.right(1, __kwarg__), N109)
         __mapper__ .set 76
+        .define LIBCORE_MAPPER n109
     .elseif .xmatch(.right(1, __kwarg__), nina03) || .xmatch(.right(1, __kwarg__), NINA03)
         __mapper__ .set 79
+        .define LIBCORE_MAPPER nina03
     .elseif .xmatch(.right(1, __kwarg__), vrc7) || .xmatch(.right(1, __kwarg__), VRC7)
         __mapper__ .set 85
+        .define LIBCORE_MAPPER vrc7
     .elseif .xmatch(.right(1, __kwarg__), jf13) || .xmatch(.right(1, __kwarg__), JF13)
         __mapper__ .set 86
+        .define LIBCORE_MAPPER jf13
     .elseif .xmatch(.right(1, __kwarg__), senjou) || .xmatch(.right(1, __kwarg__), SENJOU)
         __mapper__ .set 94
+        .define LIBCORE_MAPPER senjou
     .elseif .xmatch(.right(1, __kwarg__), event) || .xmatch(.right(1, __kwarg__), EVENT)
         __mapper__ .set 105
+        .define LIBCORE_MAPPER event
     .elseif .xmatch(.right(1, __kwarg__), piratenina03) || .xmatch(.right(1, __kwarg__), PIRATENINA03)
         __mapper__ .set 113
+        .define LIBCORE_MAPPER piratenina03
     .elseif .xmatch(.right(1, __kwarg__), txsrom) || .xmatch(.right(1, __kwarg__), TXSROM)
         __mapper__ .set 118
+        .define LIBCORE_MAPPER txsrom
     .elseif .xmatch(.right(1, __kwarg__), tqrom) || .xmatch(.right(1, __kwarg__), TQROM)
         __mapper__ .set 119
+        .define LIBCORE_MAPPER tqrom
     .elseif .xmatch(.right(1, __kwarg__), eprom24c01) || .xmatch(.right(1, __kwarg__), EPROM24C01)
         __mapper__ .set 159
+        .define LIBCORE_MAPPER eprom24c01
     .elseif .xmatch(.right(1, __kwarg__), subor) || .xmatch(.right(1, __kwarg__), SUBOR)
         __mapper__ .set 166
+        .define LIBCORE_MAPPER subor
     .elseif .xmatch(.right(1, __kwarg__), climber) || .xmatch(.right(1, __kwarg__), CLIMBER)
         __mapper__ .set 180
+        .define LIBCORE_MAPPER climber
     .elseif .xmatch(.right(1, __kwarg__), cnromprot) || .xmatch(.right(1, __kwarg__), CNROMPROT)
         __mapper__ .set 185
+        .define LIBCORE_MAPPER cnromprot
     .elseif .xmatch(.right(1, __kwarg__), piratemmc3b) || .xmatch(.right(1, __kwarg__), PIRATEMMC3B)
         __mapper__ .set 192
+        .define LIBCORE_MAPPER piratemmc3b
     .elseif .xmatch(.right(1, __kwarg__), dxrom) || .xmatch(.right(1, __kwarg__), DXROM)
         __mapper__ .set 206
+        .define LIBCORE_MAPPER dxrom
     .elseif .xmatch(.right(1, __kwarg__), n175) || .xmatch(.right(1, __kwarg__), N175)
         __mapper__ .set 210
+        .define LIBCORE_MAPPER n175
     .elseif .xmatch(.right(1, __kwarg__), action52) || .xmatch(.right(1, __kwarg__), ACTION52)
         __mapper__ .set 228
+        .define LIBCORE_MAPPER action52
     .else
+        .define LIBCORE_MAPPER nrom         ; we have no clue
         __mapper__ .set .right(1, __kwarg__)
     .endif
-
 .endmacro
 
 .macro __header_paramset __paramx__, __prgrom__, __chrrom__, __mapper__, __system__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vsType__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
@@ -581,26 +640,255 @@
     null_coalset extended,  0   ; no extension
     null_coalset expansion, 0   ; no expansion device
     
-    .define LIBCORE_PRGROM      prgrom
-    .define LIBCORE_CHRROM      chrrom
-    .define LIBCORE_MAPPER      mapper
-    .define LIBCORE_SYSTEM      system
-    .define LIBCORE_ALTNT       altnt
-    .define LIBCORE_TRAINER     trainer
-    .define LIBCORE_BATTERY     battery
-    .define LIBCORE_MIRROR      mirror
-    .define LIBCORE_SUBMAPPER   submapper
-    .define LIBCORE_CPU         system
-    .define LIBCORE_VSTYPE      vstype
-    .define LIBCORE_VSPPU       vsppu
-    .define LIBCORE_MISC        misc
-    .define LIBCORE_EXPANSION   expansion
-    .define LIBCORE_PRGRAM      prgram
-    .define LIBCORE_EEPROM      eeprom
-    .define LIBCORE_CHRRAM      chrram
-    .define LIBCORE_CHRNVRAM    chrnvram
-    .define LIBCORE_EXTENDED    extended
+    ::LIBCORE_PRGROM        = prgrom
+    ::LIBCORE_CHRROM        = chrrom
+    ::LIBCORE_MAPPER_NUM    = mapper
+    ::LIBCORE_SYSTEM_NUM    = system
+    ::LIBCORE_ALTNT         = altnt
+    ::LIBCORE_TRAINER       = trainer
+    ::LIBCORE_BATTERY       = battery
+    ::LIBCORE_MIRROR        = mirror
+    ::LIBCORE_SUBMAPPER     = submapper
+    ::LIBCORE_CPU_NUM       = system
+    ::LIBCORE_VSTYPE        = vstype
+    ::LIBCORE_VSPPU         = vsppu
+    ::LIBCORE_MISC          = misc
+    ::LIBCORE_EXPANSION_NUM = expansion
+    ::LIBCORE_PRGRAM        = prgram
+    ::LIBCORE_EEPROM        = eeprom
+    ::LIBCORE_CHRRAM        = chrram
+    ::LIBCORE_CHRNVRAM      = chrnvram
+    ::LIBCORE_EXTENDED_NUM  = extended
 
+    .define LIBCORE_READONLY         
+    .define LIBCORE_WRITEONLY        PPUCTRL, PPUMASK, PPUSCROLL, OAMADDR, OAMDATA, OAMDMA, PPUADDR, PPUDATA
+    .define LIBCORE_STRICT_READONLY  PPUSTAT, PPUSTATUS
+    .define LIBCORE_STRICT_WRITEONLY PPUOPENBUS
+
+    ; ALLOW STORED WRITES TO ROM (without overrule) IF IDTABLE INCLUDED
+
+    .if     .xmatch(LIBCORE_MAPPER, nrom) || .xmatch(LIBCORE_MAPPER, NROM)
+        ; nrom
+        ::LIBCORE_EXRAM_START = 0
+        ::LIBCORE_EXRAM_END   = 0
+        
+        .define CartWriteMask(__tar__) 0 ; never allow write to ROM
+    .elseif .xmatch(LIBCORE_MAPPER, mmc1) || .xmatch(LIBCORE_MAPPER, MMC1)
+        ; mmc1
+        ::LIBCORE_EXRAM_START = 0
+        ::LIBCORE_EXRAM_END   = 0
+
+        ;.define CartWriteMask(__tar__) \
+        ;    ((__tar__ >= $6000) && (__tar__ < $8000) * (::LIBCORE_PRGRAM > 0)) | \   ; if targetting PRGRAM check PRGRAM present | TODO: check if this is even right
+        ;
+            ((__tar__ >= $8000) && (__tar__ <= $ffff))                              ; mmc1 uses shift register through writes to ROM
+    .elseif .xmatch(LIBCORE_MAPPER, uxrom) || .xmatch(LIBCORE_MAPPER, UXROM)
+        ; uxrom
+        ::LIBCORE_EXRAM_START = 0
+        ::LIBCORE_EXRAM_END   = 0
+
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ <= $ffff))                              ; uxrom uses writes to ROM
+    .elseif .xmatch(LIBCORE_MAPPER, cnrom) || .xmatch(LIBCORE_MAPPER, CNROM)
+        ; cnrom
+        ::LIBCORE_EXRAM_START = 0
+        ::LIBCORE_EXRAM_END   = 0
+
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $6000) && (__tar__ < $8000))                              ; cnrom uses writes to what normally is prgram area
+    .elseif .xmatch(LIBCORE_MAPPER, mmc3) || .xmatch(LIBCORE_MAPPER, MMC3) || .xmatch(LIBCORE_MAPPER, mmc6) || .xmatch(LIBCORE_MAPPER, MMC6) || .xmatch(LIBCORE_MAPPER, txrom) || .xmatch(LIBCORE_MAPPER, TXROM)
+        ; mmc3, mmc6, txrom
+        ::LIBCORE_EXRAM_START = 0
+        ::LIBCORE_EXRAM_END   = 0
+
+        .define BankCtrl $8000   ; even ROM space is bankswitch type
+        .define BankData $8001   ; odd  ROM space is bankswitch data
+
+        .define Mirroring  $a000
+        .define PRGRAMCtrl $a001 ; WP | PRGRAM Toggle
+        
+        .define IRQLatch   $c000
+        .define IRQReload  $c001
+
+        .define IRQDisable $e000
+        .define IRQEnable  $e001
+
+        ; uses writes to ROM for MMC communication
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ <= $ffff))   
+
+    .elseif .xmatch(LIBCORE_MAPPER, mmc5) || .xmatch(LIBCORE_MAPPER, MMC5) || .xmatch(LIBCORE_MAPPER, exrom) || .xmatch(LIBCORE_MAPPER, EXROM)
+        ; mmc5, exrom
+        ::LIBCORE_EXRAM_START = $5c00
+        ::LIBCORE_EXRAM_END   = $6000
+        
+        .define PRGMODE        $5100
+        .define CHRMODE        $5101
+        .define PRGRAMWP1      $5102
+        .define PRGRAMWP2      $5103
+        .define exRAMMode      $5104
+        .define NTMapping      $5105
+        .define FillTile       $5106
+        .define FillColour     $5107
+        
+        .define VSplitMode     $5200
+        .define VSplitScroll   $5201 
+        .define VSplitBank     $5202
+        .define IRQScanline    $5203
+        .define IRQStatus      $5204
+        .define MultiplyLo     $5205
+        .define MultiplyHi     $5206
+
+        .define PRGRAMBankCtrl $5113
+        .define PRGFineCtrl0   $5114
+        .define PRGFineCtrl1   $5115
+        .define PRGFineCtrl2   $5116
+        .define PRGFineCtrl3   $5117
+        .define PRGCoarse0     $5115
+        .define PRGCoarse1     $5117
+
+        .define CHRFine0        $5120
+        .define CHRFine1        $5121
+        .define CHRFine2        $5122
+        .define CHRFine3        $5123
+        .define CHRFine4        $5124
+        .define CHRFine5        $5125
+        .define CHRFine6        $5126
+        .define CHRFine7        $5127
+        .define CHRSemiFine0    $5121
+        .define CHRSemiFine1    $5123
+        .define CHRSemiFine2    $5125
+        .define CHRSemiFine3    $5127
+        .define CHRSemiCoarse0  $5123
+        .define CHRSemiCoarse1  $5127
+        .define CHRCorase       $5127
+
+        .define CHRFine04       $5128
+        .define CHRFine15       $5129
+        .define CHRFine26       $512a
+        .define CHRFine37       $512b
+        .define CHRSemiFine02   $5129
+        .define CHRSemiFine13   $512b
+        ; SemiCoarse and Corase do the same at $512b
+
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ < $e000))   ; $e000 onwards is ROM only
+
+    .elseif .xmatch(LIBCORE_MAPPER, axrom) || .xmatch(LIBCORE_MAPPER, AXROM)
+        ; axrom
+        ; uses writes to ROM for MMC communication
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ <= $ffff))  
+    .elseif .xmatch(LIBCORE_MAPPER, mmc2) || .xmatch(LIBCORE_MAPPER, MMC2) || .xmatch(LIBCORE_MAPPER, pxrom) || .xmatch(LIBCORE_MAPPER, PXROM)
+        ; mmc2, pxrom
+
+        .define PGRSwitch    $a000
+        .define CHRSwitch0FD $b000
+        .define CHRSwitch1FD $c000
+        .define CHRSwitch0FE $d000
+        .define CHRSwitch1FE $e000
+        .define Mirroring    $f000
+
+        ; uses writes to ROM for MMC communication
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= a8000) && (__tar__ <= $ffff))   
+        
+    .elseif .xmatch(LIBCORE_MAPPER, mmc4) || .xmatch(LIBCORE_MAPPER, MMC4) || .xmatch(LIBCORE_MAPPER, fxrom) || .xmatch(LIBCORE_MAPPER, FXROM)
+        ; mmc4, fxrom
+        .define PGRSwitch $a000
+
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= a8000) && (__tar__ <= $afff))  
+        
+    .elseif .xmatch(LIBCORE_MAPPER, colordreams) || .xmatch(LIBCORE_MAPPER, COLORDREAMS)
+        ; colordreams
+
+        .define Bankswitch $8000
+        ; uses writes to ROM for MMC communication
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ <= $ffff)) 
+    .elseif .xmatch(LIBCORE_MAPPER, cprom) || .xmatch(LIBCORE_MAPPER, CPROM)
+        ; cprom
+
+        .define Bankswitch $8000
+        ; uses writes to ROM for MMC communication
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ <= $ffff)) 
+    .elseif .xmatch(LIBCORE_MAPPER, n163) || .xmatch(LIBCORE_MAPPER, N163)
+        ; n163
+
+        .define RAMDataPort  $4800
+        .define IRQCounterLo $5000
+        .define IRQCounterHi $5800
+        .define CHRNTSelect  $8000
+        .define PRGSwitch0   $e000
+        .define PRGSwitch1   $e800
+        .define PRGSwitch2   $f000
+        .define exRAMWP      $f800
+
+        ; uses writes to ROM for MMC communication
+        .define CartWriteMask(__tar__)\
+            ((__tar__ >= $8000) && (__tar__ <= $ffff))
+    .elseif .xmatch(LIBCORE_MAPPER, vrc4) || .xmatch(LIBCORE_MAPPER, VRC4)
+        ; vrc4
+    .elseif .xmatch(LIBCORE_MAPPER, vrc6) || .xmatch(LIBCORE_MAPPER, VRC6)
+        ; vrc6
+    .elseif .xmatch(LIBCORE_MAPPER, bnrom) || .xmatch(LIBCORE_MAPPER, BNROM)
+        ; bnrom
+    .elseif .xmatch(LIBCORE_MAPPER, gxrom) || .xmatch(LIBCORE_MAPPER, GXROM)
+        ; gxrom
+    .elseif .xmatch(LIBCORE_MAPPER, afterburner) || .xmatch(LIBCORE_MAPPER, AFTERBURNER)
+        ; afterburner
+    .elseif .xmatch(LIBCORE_MAPPER, fme7) || .xmatch(LIBCORE_MAPPER, FME7) || .xmatch(LIBCORE_MAPPER, s5b) || .xmatch(LIBCORE_MAPPER, S5B)
+        ; fme7, s5b
+    .elseif .xmatch(LIBCORE_MAPPER, camerica) || .xmatch(LIBCORE_MAPPER, CAMERICA)
+        ; camerica
+    .elseif .xmatch(LIBCORE_MAPPER, vrc3) || .xmatch(LIBCORE_MAPPER, VRC3)
+        ; vrc3
+    .elseif .xmatch(LIBCORE_MAPPER, piratemmc3) || .xmatch(LIBCORE_MAPPER, PIRATEMMC3)
+        ; piratemmc3
+    .elseif .xmatch(LIBCORE_MAPPER, vrc1) || .xmatch(LIBCORE_MAPPER, VRC1)
+        ; vrc1
+    .elseif .xmatch(LIBCORE_MAPPER, n109) || .xmatch(LIBCORE_MAPPER, N109)
+        ; n109
+    .elseif .xmatch(LIBCORE_MAPPER, nina03) || .xmatch(LIBCORE_MAPPER, NINA03)
+        ; nina03
+    .elseif .xmatch(LIBCORE_MAPPER, vrc7) || .xmatch(LIBCORE_MAPPER, VRC7)
+        ; vrc7
+    .elseif .xmatch(LIBCORE_MAPPER, jf13) || .xmatch(LIBCORE_MAPPER, JF13)
+        ; jf13
+    .elseif .xmatch(LIBCORE_MAPPER, senjou) || .xmatch(LIBCORE_MAPPER, SENJOU)
+        ; senjou
+    .elseif .xmatch(LIBCORE_MAPPER, event) || .xmatch(LIBCORE_MAPPER, EVENT)
+        ; event
+    .elseif .xmatch(LIBCORE_MAPPER, piratenina03) || .xmatch(LIBCORE_MAPPER, PIRATENINA03)
+        ; piratenina03
+    .elseif .xmatch(LIBCORE_MAPPER, txsrom) || .xmatch(LIBCORE_MAPPER, TXSROM)
+        ; txsrom
+    .elseif .xmatch(LIBCORE_MAPPER, tqrom) || .xmatch(LIBCORE_MAPPER, TQROM)
+        ; tqrom
+    .elseif .xmatch(LIBCORE_MAPPER, eprom24c01) || .xmatch(LIBCORE_MAPPER, EPROM24C01)
+        ; eprom24c01
+    .elseif .xmatch(LIBCORE_MAPPER, subor) || .xmatch(LIBCORE_MAPPER, SUBOR)
+        ; subor
+    .elseif .xmatch(LIBCORE_MAPPER, climber) || .xmatch(LIBCORE_MAPPER, CLIMBER)
+        ; climber
+    .elseif .xmatch(LIBCORE_MAPPER, cnromprot) || .xmatch(LIBCORE_MAPPER, CNROMPROT)
+        ; cnromprot
+    .elseif .xmatch(LIBCORE_MAPPER, piratemmc3b) || .xmatch(LIBCORE_MAPPER, PIRATEMMC3B)
+        ; piratemmc3b
+    .elseif .xmatch(LIBCORE_MAPPER, dxrom) || .xmatch(LIBCORE_MAPPER, DXROM)
+        ; dxrom
+    .elseif .xmatch(LIBCORE_MAPPER, n175) || .xmatch(LIBCORE_MAPPER, N175)
+        ; n175
+    .elseif .xmatch(LIBCORE_MAPPER, action52) || .xmatch(LIBCORE_MAPPER, ACTION52)
+        ; action52
+    .else
+        .fatal
+    .endif
+
+    ; TODO: Based on Mapper, setup Mapper Defines
+    ;       Enables warnings for certain regs
     __header_build prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
 .endmacro
 

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>overload &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="memory" href="../memory/memory.html" />
+    <link rel="prev" title="stack" href="stack.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../memory/memory.html" title="memory"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="stack.html" title="stack"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="synth.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">overload</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="overload">
+<h1><code class="docutils literal notranslate"><span class="pre">overload</span></code><a class="headerlink" href="#overload" title="Link to this heading">¶</a></h1>
+<p>The following instructions overload the existing <code class="docutils literal notranslate"><span class="pre">6502</span></code> mnemonics, be it enabling illegal instruction support for <code class="docutils literal notranslate"><span class="pre">ca65hl/CustomSyntax</span></code>, or enabling safety features for <code class="docutils literal notranslate"><span class="pre">lax</span></code>, fixing the quirks of <code class="docutils literal notranslate"><span class="pre">brk</span></code>’s ungenerated but thrown-away operand or attatching whole new functions to the unused <code class="docutils literal notranslate"><span class="pre">sed</span></code> and <code class="docutils literal notranslate"><span class="pre">cld</span></code> there is a world to be gained from mnemonic overloading.</p>
+<section id="brk-byte-reg-reg-byte-break-with-options">
+<h2><code class="docutils literal notranslate"><span class="pre">brk</span> <span class="pre">byte,</span> <span class="pre">reg:</span> <span class="pre">reg,</span> <span class="pre">byte</span></code> - Break with Options<a class="headerlink" href="#brk-byte-reg-reg-byte-break-with-options" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>brk                 ; brk $00
+brk $02             ; brk $02
+brk null            ; brk
+brk $02, yr: xr     ; ldxy PC : brk $02
+brk $02, ar: xr, 3  ; ldax PC : ldy #$03 : brk
+</pre></div>
+</div>
+</section>
+<section id="bit-abs-zp-imm-bitcheck-with-idtable-immediate">
+<h2><code class="docutils literal notranslate"><span class="pre">bit</span> <span class="pre">abs,</span> <span class="pre">zp,</span> <span class="pre">#imm</span></code> - Bitcheck with idtable Immediate<a class="headerlink" href="#bit-abs-zp-imm-bitcheck-with-idtable-immediate" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>bit PPUSTAT
+bit $00
+
+table id
+bit #$42
+</pre></div>
+</div>
+</section>
+<section id="sed-convert-to-bcd">
+<h2><code class="docutils literal notranslate"><span class="pre">sed</span></code> - Convert to BCD<a class="headerlink" href="#sed-convert-to-bcd" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$10
+sed ; a = $16
+</pre></div>
+</div>
+</section>
+<section id="cld-convert-from-bcd">
+<h2><code class="docutils literal notranslate"><span class="pre">cld</span></code> - Convert from BCD<a class="headerlink" href="#cld-convert-from-bcd" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>lda #$16
+cld ; a = $10
+</pre></div>
+</div>
+</section>
+<section id="bxx-branch-variants-with-literal-operand-support">
+<h2><code class="docutils literal notranslate"><span class="pre">bxx</span></code> - Branch Variants with Literal Operand Support<a class="headerlink" href="#bxx-branch-variants-with-literal-operand-support" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>beq ahead   ; branch to ahead
+beq $02     ; branch ahead $02
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All instructions below require <code class="docutils literal notranslate"><span class="pre">CONSTANTS_NESBRETTE_SYNTH_STACK_ADVANCED</span></code> as they are not required or useful to the majority of even advanded stack use. Seriously evaluate the totality of your circumstances before utilising these.</p>
+</div>
+</section>
+<section id="lax-zp-zpy-abs-absy-inabsx-inabsy-imm-safe-load-ax">
+<h2><code class="docutils literal notranslate"><span class="pre">lax</span> <span class="pre">zp|zpy|abs|absy|inabsx|inabsy|imm</span></code> -Safe Load AX<a class="headerlink" href="#lax-zp-zpy-abs-absy-inabsx-inabsy-imm-safe-load-ax" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lax</span> <span class="c1">#$00    ; lax #$00 (safe)</span>
+<span class="n">lax</span> <span class="c1">#$01    ; lda #$00 : tax</span>
+<span class="n">lax</span> <span class="c1">#$01, ! ; lax #$01 (unsafe)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">overload</span></code></a><ul>
+<li><a class="reference internal" href="#brk-byte-reg-reg-byte-break-with-options"><code class="docutils literal notranslate"><span class="pre">brk</span> <span class="pre">byte,</span> <span class="pre">reg:</span> <span class="pre">reg,</span> <span class="pre">byte</span></code> - Break with Options</a></li>
+<li><a class="reference internal" href="#bit-abs-zp-imm-bitcheck-with-idtable-immediate"><code class="docutils literal notranslate"><span class="pre">bit</span> <span class="pre">abs,</span> <span class="pre">zp,</span> <span class="pre">#imm</span></code> - Bitcheck with idtable Immediate</a></li>
+<li><a class="reference internal" href="#sed-convert-to-bcd"><code class="docutils literal notranslate"><span class="pre">sed</span></code> - Convert to BCD</a></li>
+<li><a class="reference internal" href="#cld-convert-from-bcd"><code class="docutils literal notranslate"><span class="pre">cld</span></code> - Convert from BCD</a></li>
+<li><a class="reference internal" href="#bxx-branch-variants-with-literal-operand-support"><code class="docutils literal notranslate"><span class="pre">bxx</span></code> - Branch Variants with Literal Operand Support</a></li>
+<li><a class="reference internal" href="#lax-zp-zpy-abs-absy-inabsx-inabsy-imm-safe-load-ax"><code class="docutils literal notranslate"><span class="pre">lax</span> <span class="pre">zp|zpy|abs|absy|inabsx|inabsy|imm</span></code> -Safe Load AX</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="stack.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../memory/memory.html"
+                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">memory</span></code></a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/synth/overload.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../memory/memory.html" title="memory"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="stack.html" title="stack"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="synth.html" ><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">overload</span></code></a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Brette.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

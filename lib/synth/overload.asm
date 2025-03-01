@@ -1,7 +1,6 @@
-; TODO: Add ca65hl support
+.ifndef INCLUDES_SYNTH_OVERLOAD
 
 INCLUDES_SYNTH_OVERLOAD := null ; to check if included
-
 .macro __lax __operand__, __index__
     .if .match(.left(1, __operand__), #)
         .out "Alpha"
@@ -200,34 +199,4 @@ INCLUDES_SYNTH_OVERLOAD := null ; to check if included
     .endif
 .endmacro
 
-/*
-
-    adc x
-    adc y
-
-    and x
-    and y
-
-    ora x
-    ora y
-
-    eor x
-    eor y
-
-    sbc x
-    sbc y
-
-    bit #imm
-
-    txy
-    tyx
-
-    cmp x
-    cmp y
-
-    cpx y
-    cpy x
-
-
-
-*/
+.endif
