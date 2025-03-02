@@ -5,9 +5,6 @@ TEMP_RAM_START = $0000
 
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
 
-includefrom synth, overload
-
-
 .segment "HEADER"
     header \
         prgrom: 1, \
@@ -26,9 +23,12 @@ Temp2:
 typeas Temp1, i16
 typeas Temp2, i16
 
+; TODO: fix libcore::overload::lax
+
+TABLE_ID:
 
 reset:
-    
+
 .segment "VECTORS"
     .addr $0000
     .addr reset

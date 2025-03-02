@@ -1,0 +1,16 @@
+Block:
+    reads, writes on STACK
+    execute on any kind of deterministic ram, open bus, register space
+    Situations with Dummy Reads for open bus, register space
+    Situations with Dummy writes for open bus, register space
+
+    Writes to ROM
+
+
+'Unsafe Regions'
+
+Stack ($100-$200, $900-$a00, $1100 - $1200, $1900-$1a00)
+PPU   ($2000-$4000)
+APU   ($4000-$4020)
+
+The rest is cart space, must be defined by libcore::header

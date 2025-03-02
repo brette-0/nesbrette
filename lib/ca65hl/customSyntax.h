@@ -135,11 +135,32 @@
 ;   Example:
 ; > lda foo[ 4 + x ] ; becomes: lda foo+4, x
 
+.define __READINSTRUCTIONS\
+    lda, ldx, ldy, lax,\
+    ora, eor, and,\
+    inc, dec, isc, dcp,\
+    lsr, asl, sre, slo,\
+    ror, rol, rra, rla,\
+    cmp, cpx, cpy,\
+    adc, sbc, bit,\
+    jmp, jsr    ; because you read them as opcode
+
+.define __WRITEINSTRUCTIONS\
+    sta, stx, sty, sax,\
+    inc, dec, isc, dcp,\
+    lsr, asl, sre, slo,\
+    ror, rol, rra, rla
+
+.define __RMWINSTRUCTIONS\
+    inc, dec, isc, dcp,\
+    lsr, asl, sre, slo,\
+    ror, rol, rra, rla
+
 .macro ___arraySyntax instr, op, index
 
     ; nesbrette
 
-    .local ptr
+    .local resp
 
     ; ca65hl
 
@@ -238,18 +259,26 @@
     ; --------------------------------------------------------------------------------------------
     ; Output instruction:
     .feature ubiquitous_idents -    ; allow normal instruction table look ups
-    .if .xmatch(instr, lax)
-        .ifdef INCLUDES_SYNTH_OVERLOAD
-            __lax op, index
-        .else
-            _OUT
-        .endif
-    .else
-            _OUT
-        .endif
-    .else
-        _OUT
-    .endif                          ; output instruction as standard ca65 6502 syntax
+    
+    resp .set 0
+    contains resp, instr, __READINSTRUCTIONS
+
+    .if resp
+        SYSREAD op, index
+    .endif
+
+    
+    contains resp, instr, __WRITEINSTRUCTIONS
+    .if resp
+        SYSWRITE op, index
+    .endif
+
+    ;contains resp, instr, __RMWINSTRUCTIONS
+    ;,if resp
+    ;    RMWDUMMYWRITECHECK op, index
+    ;.endif
+
+    _OUT                            ; output instruction as standard ca65 6502 syntax
     .feature ubiquitous_idents +    ; allow overloading mnemonics again
     ; --------------------------------------------------------------------------------------------
     .if CUSTOM_SYNTAX::OUTPUT_CUSTOM_SYNTAX 
@@ -321,263 +350,6 @@
 ; --------------------------------------------------------------------------------------------
 ; Overload mnemonics to allow custom syntax for all instructions
 
-.macro lda operand, index
-    ___EvalInstrList lda operand, index
-.endmacro
-.macro sta operand, index
-    .local ptr
-    .ifblank index
-        .if .xmatch(.left(1, operand), [) && .xmatch(.right(1, operand), ])
-            
-            .feature ubiquitous_idents -
-
-            malloc ptr, 2
-
-            ldy #<.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
-            sty ptr
-            ldy #>.left(.tcount(operand) - 2, .right(.tcount(operand) - 1, operand))
-            sty ptr + 1
-
-            ldy #$00
-            sta [ptr], y
-            .feature ubiquitous_idents +
-            
-
-            dealloc ptr, 2
-            .exitmacro
-        .endif
-    .endif
-    ___EvalInstrList sta operand, index
-.endmacro
-.macro ldx operand, index
-    ___EvalInstrList ldx operand, index
-.endmacro
-.macro stx operand, index
-    ___EvalInstrList stx operand, index
-.endmacro
-.macro ldy operand, index
-    ___EvalInstrList ldy operand, index
-.endmacro
-.macro sty operand, index
-    ___EvalInstrList sty operand, index
-.endmacro
-.macro adc operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(operand, x) && .defined(TABLE_ID)
-        adc TABLE_ID, x
-    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
-        adc TABLE_ID, y
-    .else
-        ___EvalInstrList adc operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro and operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(operand, x) && .defined(TABLE_ID)
-        and TABLE_ID, x
-    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
-        and TABLE_ID, y
-    .else
-        ___EvalInstrList and operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro asl operand, index
-    ___EvalInstrList asl operand, index
-.endmacro
-.macro cmp operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(operand, x) && .defined(TABLE_ID)
-        cmp TABLE_ID, x
-    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
-        cmp TABLE_ID, y
-    .else
-        ___EvalInstrList cmp operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro dec operand, index
-    ___EvalInstrList dec operand, index
-.endmacro
-.macro eor operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(operand, x) && .defined(TABLE_ID)
-        eor TABLE_ID, x
-    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
-        eor TABLE_ID, y
-    .else
-        ___EvalInstrList eor operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro inc operand, index
-    ___EvalInstrList inc operand, index
-.endmacro
-.macro lsr operand, index
-    ___EvalInstrList lsr operand, index
-.endmacro
-.macro ora operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(operand, x) && .defined(TABLE_ID)
-        ora TABLE_ID, x
-    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
-        ora TABLE_ID, y
-    .else
-        ___EvalInstrList ora operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro rol operand, index
-    ___EvalInstrList rol operand, index
-.endmacro
-.macro ror operand, index
-    ___EvalInstrList ror operand, index
-.endmacro
-.macro sbc operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(operand, x) && .defined(TABLE_ID)
-        sbc TABLE_ID, x
-    .elseif .xmatch(operand, y) && .defined(TABLE_ID)
-        sbc TABLE_ID, y
-    .else
-        ___EvalInstrList sbc operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro bit operand, index
-    .feature ubiquitous_idents -
-    .if     .xmatch(.left(1, operand), #)
-        bit TABLE_ID + .right(.tcount(operand) - 1, operand)
-    .else
-        ___EvalInstrList and operand, index
-    .endif
-    .feature ubiquitous_idents +
-.endmacro
-.macro cpx operand, index
-    ___EvalInstrList and operand, index
-.endmacro
-.macro cpy operand, index
-    ___EvalInstrList and operand, index
-.endmacro
-
-; TODO: Make jmp foo[y|x] work
-.macro jmp operand, index
-    .local ptr
-
-    .if .xmatch(.left(1, operand), [)
-        .ifblank index
-            jmp operand
-        .elseif .xmatch(.right(1, operand), ])
-            pha
-            lda operand, x
-            sta ptr
-            lda operand + 1, x
-            sta ptr
-            pla
-
-            jmp [ptr]
-        .elseif
-            pha
-            lda operand, y
-            sta ptr
-            lda operand + 1, y
-            sta ptr
-            pla
-
-            jmp [ptr]
-        .endif
-    .else
-        ___EvalInstrList jmp operand, index
-    .endif
-.endmacro
-.macro jsr operand, index
-    .local ptr, temp, exit
-
-    ptr  .set null
-    temp .set null
-
-
-
-    .if .xmatch(.left(1, operand), [)
-        .ifblank index
-            malloc temp, 1
-            
-            sta temp
-            callback exit
-            lda temp
-            
-            jmp operand
-            exit:
-
-            dealloc temp, 1
-        .elseif .xmatch(.right(1, operand), ])
-            
-            malloc ptr,  2
-            malloc temp, 1
-
-            sta temp
-            callback exit
-            lda operand, x
-            sta ptr
-            lda operand + 1, x
-            sta ptr
-            lda temp
-
-            jmp [ptr]
-            exit:
-
-            dealloc temp, 1
-            dealloc ptr,  2
-        .elseif
-
-            malloc ptr,  2
-            malloc temp, 1
-
-            sta temp
-            callback exit
-            lda operand, y
-            sta ptr
-            lda operand + 1, y
-            sta ptr
-            lda temp
-
-            jmp [ptr]
-            exit:
-
-            dealloc temp, 1
-            dealloc ptr,  2
-        .endif
-    .else
-        ___EvalInstrList jsr operand, index
-    .endif
-.endmacro
-.macro nop operand, index
-    ___EvalInstrList nop operand, index
-.endmacro
-.macro slo operand, index
-    ___EvalInstrList slo operand, index
-.endmacro
-.macro rla operand, index
-    ___EvalInstrList rla operand, index
-.endmacro
-.macro sre operand, index
-    ___EvalInstrList sre operand, index
-.endmacro
-.macro rra operand, index
-    ___EvalInstrList rra operand, index
-.endmacro
-.macro sax operand, index
-    ___EvalInstrList sax operand, index
-.endmacro
-.macro lax operand, index
-    ___EvalInstrList lax operand, index
-.endmacro
-.macro dcp operand, index
-    ___EvalInstrList dcp operand, index
-.endmacro
-.macro isc operand, index
-    ___EvalInstrList isc operand, index
-.endmacro
+; moved to libcore::overloads
 
 .endif ; .ifndef ::_CUSTOM_SYNTAX_H

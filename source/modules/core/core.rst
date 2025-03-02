@@ -391,3 +391,21 @@ Recursively compares up to 100 times using ``.xmatch`` with context against item
 .. code-block::
 
     contains Secret, UnsafeAreas
+
+``rule token, int`` - Modify local rule profile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    required:
+        (token)             __rule__        The rule type to be changed
+        (token | nb_error)  __param__       May be +, -, blank or error level.
+
+    dependacies:
+        libcore
+
+Creates or modifies the rules in the local environment for potentially harmful accesses, if modified in the global scope said modifications will persist in lower scopes as the new default.
+
+.. code-block::
+
+    rule AllowErroneousAcccess, allow

@@ -41,13 +41,15 @@
 .macro __libroot__ __path__
     .define libroot __path__
 
-    .include .concat(libroot, "/core/warn.asm")
-    .include .concat(libroot, "/core/gpr.asm")
-    .include .concat(libroot, "/core/qol.asm")
-    .include .concat(libroot, "/core/enums.asm")
-    .include .concat(libroot, "/core/typing.asm")
-    .include .concat(libroot, "/core/header.asm")
-    .include .concat(libroot, "/core/memory.asm")
+    .include .concat(libroot, "/core/warn.asm")     ; configurable warnings
+    .include .concat(libroot, "/core/gpr.asm")      ; register macro paramterisation
+    .include .concat(libroot, "/core/qol.asm")      ; qol for dev time
+    .include .concat(libroot, "/core/enums.asm")    ; TODO: rename defines.asm
+    .include .concat(libroot, "/core/typing.asm")   ; Variable Type System
+    .include .concat(libroot, "/core/header.asm")   ; Header and lib config
+    .include .concat(libroot, "/core/memory.asm")   ; Preproc Label Management
+    .include .concat(libroot, "/core/rules.asm")    ; Rule System for safe development
+    .include .concat(libroot, "/core/overload.asm") ; overloaded instruction mnemonics
 
     .include .concat(libroot, "/ca65hl/ca65hl.h")
 .endmacro
@@ -121,8 +123,6 @@
             .include .concat(libroot, "/synth/idtable.asm")
         .elseif .xmatch(__feature__, stack)
             .include .concat(libroot, "/synth/stack.asm")
-        .elseif .xmatch(__feature__, overload)
-            .include .concat(libroot, "/synth/overload.asm")
         .else
             __RAISE_FATAL_INCLUDEFROM_BAD_TOKEN __feature__, __moduletok__
         .endif
