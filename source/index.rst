@@ -21,7 +21,7 @@ The ``nesbrette`` library is currently still seriously in development and not fo
    modules/modules
    theory/theory
    theory/errors
-   
+   theory/tutorials
    .. tables/tables
 
 .. TODO: Remove Long phrases from all toctrees
