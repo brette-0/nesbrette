@@ -1,10 +1,13 @@
 ``core``
-========
+########
 
 To refer to how to use ``nesbrette`` core features, please refer to `tutorials <https://nesbrette.readthedocs.io/en/latest/index.html>`_ .Use of the following methods will not yield immediate benefit, the ``core`` member set is designed to clarify and optimise nesbrette engine behaviors and therefore should only really be used for advanced expansions of ``nesbrette``.
 
+``typing``
+**********
+
 ``signed token`` - Query Sign Type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -17,7 +20,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
 
 ``endian token`` - Query Sign Type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -30,14 +33,14 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
     
 ``eindex int:, int`` - Endian Index
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
     lda eindex Health, 0
     
 ``type type: label`` - Type of
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -48,7 +51,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
     
 ``typeval int`` - Value Segment from Type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -61,7 +64,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     .endmacro
     
 ``typeas label, type`` - Allocate Type Define
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -69,7 +72,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
     typeas Score, u32
     
 ``dedtype int`` - Deduce Type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -81,7 +84,7 @@ To refer to how to use ``nesbrette`` core features, please refer to `tutorials <
 This function fetches the type assigned to the token passed. The token can always be evluated as ``t_{token}`` and should always have the same scope as the target token.
 
 ``isdecimal int`` - Is Type Decimal?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -93,7 +96,7 @@ This function fetches the type assigned to the token passed. The token can alway
 
 
 ``detype type?: token`` - Decode Typing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -108,7 +111,7 @@ This function fetches the type assigned to the token passed. The token can alway
 
 
 ``null_coalesce int`` - Null Coalesce
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -119,7 +122,7 @@ This function fetches the type assigned to the token passed. The token can alway
 Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on the high level, so I decided that `null-coalescence <https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator>`_ should be created for ``nesbrette`` as the existence of ``null`` was already designed with type defaulting in mind.
 
 ``is_null int`` - is Null
-~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""
 
 .. code-block::
 
@@ -129,29 +132,32 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 
 ``null`` is define as type '``i0``' in which typelessness is '``u0``', it can also be evaluated by comparing it to ``(1 << 31)``.
 
+``synth``
+**********
+
 ``setreg int`` - Set Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""
 
 .. code-block::
 
     thisreg = setreg __param__
 
 ``setmreg int`` - Set Multiple Registers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
     thisreg = setreg __param__
 
 ``setmam int`` - Set Memory Address Mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
     thisreg = setreg __param__
 
 ``mamreg int`` - Indexing Register of Memory Address Mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -159,7 +165,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
 
 
 ``setireg int`` - Set Indexing Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -169,7 +175,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
     The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. The function will return ``null`` for GPR indicating failure, response is offloaded to handler.
 
 ``ralloc out, int, int`` - Allocate Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -180,7 +186,7 @@ Perhaps the one feature I really like about ``C#`` is how it handles ``null`` on
     The above ``setreg`` and ``setireg`` expects unvalidated parameters to error check against the register indicator enums. It should be noted that these operations do not have contextual memory for prior calls within scope and therefore will not yield an error if two registers are requested for differing operations. The function will return ``null`` for GPR indicating failure, response is offloaded to handler.
 
 ``confined int, int`` - If Confined
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -195,7 +201,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
 
 ``ispo2 int`` - Is Power of two?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -206,14 +212,17 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     .endif
 
 ``abs int`` - Absolute
-~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""
 
 .. code-block::
 
     lda #(abs ExtremeValue)
 
+``register``
+************
+
 ``inr gpr`` - Incrment Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -227,7 +236,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
 
 ``der gpr`` - Decrment Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -239,7 +248,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
         bne @timer
 
 ``tar gpr`` - Transfer A to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -248,7 +257,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     tar inreg   ; a -> x
 
 ``tyr gpr`` - Transfer Y to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -257,7 +266,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     tyr inreg   ; y -> x
 
 ``txr gpr`` - Transfer X to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -266,7 +275,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     txr inreg   ; x -> y
 
 ``tra gpr`` - Transfer Register to a
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -275,7 +284,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     tra inreg   ; y -> a
 
 ``try gpr`` - Transfer Register to Y
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -284,7 +293,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     try inreg   ; x -> y
 
 ``trx gpr`` - Transfer Register to X
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -293,7 +302,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trx inreg   ; y -> x
 
 ``trr gpr: gpr`` - Transfer Register to Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
 
@@ -304,7 +313,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
 
 ``ldr mode: reg, int, error`` - Load Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -328,7 +337,7 @@ This instruction *may* throw a ``ConstantParameterRangeException`` which indicat
 
 
 ``str mode: reg, int, error, error`` - Store Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -352,7 +361,7 @@ Store any GPR into any address with any memory address mode. Same as ``ldr`` thi
     str zpx: yr, $ea, warning, fatal
 
 ``cpr mode: reg, int, error`` - Compare Register
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -374,8 +383,11 @@ Compares any register against a memory location with a specified memory address 
     cpr wabs: ar, $ea 
     cpr  zpx: yr, $ea, warnings
 
+``rules``
+*********
+
 ``contains int, int, int, int, int...`` - Contains xmatch
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -393,7 +405,7 @@ Recursively compares up to 100 times using ``.xmatch`` with context against item
     contains Secret, UnsafeAreas
 
 ``rule token, int`` - Modify local rule profile
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -409,3 +421,99 @@ Creates or modifies the rules in the local environment for potentially harmful a
 .. code-block::
 
     rule AllowErroneousAcccess, allow
+
+``overload``
+============
+
+The following instructions overload the existing ``6502`` mnemonics, be it enabling illegal instruction support for ``ca65hl/CustomSyntax``, or enabling safety features for ``lax``, fixing the quirks of ``brk``'s ungenerated but thrown-away operand or attatching whole new functions to the unused ``sed`` and ``cld`` there is a world to be gained from mnemonic overloading.
+
+``brk byte, reg: reg, byte`` - Break with Options
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. code-block:: 
+
+    brk                 ; brk $00
+    brk $02             ; brk $02
+    brk null            ; brk
+    brk $02, yr: xr     ; ldxy PC : brk $02
+    brk $02, ar: xr, 3  ; ldax PC : ldy #$03 : brk
+    
+
+``bit abs, zp, #imm`` - Bitcheck with idtable Immediate
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. code-block:: 
+
+    bit PPUSTAT
+    bit $00
+
+    table id
+    bit #$42
+    
+``sed`` - Convert to BCD
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. code-block:: 
+
+    lda #$10
+    sed ; a = $16
+
+``cld`` - Convert from BCD
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. code-block:: 
+
+    lda #$16
+    cld ; a = $10
+
+``bxx`` - Branch Variants with Literal Operand Support
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. code-block:: 
+
+    beq ahead   ; branch to ahead
+    beq $02     ; branch ahead $02
+
+.. warning::
+    All instructions below require ``CONSTANTS_NESBRETTE_SYNTH_STACK_ADVANCED`` as they are not required or useful to the majority of even advanded stack use. Seriously evaluate the totality of your circumstances before utilising these.
+
+``lax zp|zpy|abs|absy|inabsx|inabsy|imm`` -Safe Load AX
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+.. code-block:: 
+
+    lax #$00    ; lax #$00 (safe)
+    lax #$01    ; lda #$00 : tax
+    lax #$01, ! ; lax #$01 (unsafe)
+
+``jsr abs|inabs`` Jump to subroutine with indirect
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+.. code-block:: 
+
+    jsr Target  ; call to target
+    jsr [ptr]   ; call to location at ptr
+
+``jmp abs|absy|absx|inabs`` Jump with indexing
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+.. code-block::
+    
+    jmp Target  ; jump to target
+    jmp JT, x   ; jump to location at JT, x
+    jmp JT, y   ; jump to location at JT, y
+
+    jmp [ptr]   ; jump to location at ptr
+
+``defines``
+**********
+
+``include``
+**********
+
+``report``
+**********
+
+``table``
+**********
+
+``typing``
+**********

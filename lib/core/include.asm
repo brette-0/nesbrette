@@ -38,20 +38,34 @@
 .feature dollar_in_identifiers  ; used to indicate optional parameter
 
 ; sets libroot define path and includes libcore
-.macro __libroot__ __path__
+.macro __libroot__ __path__, __sys$__
     .define libroot __path__
 
-    .include .concat(libroot, "/core/warn.asm")     ; configurable warnings
-    .include .concat(libroot, "/core/gpr.asm")      ; register macro paramterisation
-    .include .concat(libroot, "/core/qol.asm")      ; qol for dev time
-    .include .concat(libroot, "/core/enums.asm")    ; TODO: rename defines.asm
-    .include .concat(libroot, "/core/typing.asm")   ; Variable Type System
-    .include .concat(libroot, "/core/header.asm")   ; Header and lib config
-    .include .concat(libroot, "/core/memory.asm")   ; Preproc Label Management
-    .include .concat(libroot, "/core/rules.asm")    ; Rule System for safe development
-    .include .concat(libroot, "/core/overload.asm") ; overloaded instruction mnemonics
+    .include .concat(libroot, "/core/report.asm")           ; configurable warnings
+    .include .concat(libroot, "/core/register.asm")         ; register macro paramterisation
+    .include .concat(libroot, "/core/synth.asm")            ; qol for dev time
+    .include .concat(libroot, "/core/defines.asm")          ; defines
+    .include .concat(libroot, "/core/typing.asm")           ; Variable Type System
+    
+    .ifblank __sys$__
+        .include .concat(libroot, "/core/nes/header.asm")   ; Header and lib config
+        .define LIBCORE_ROM NES
+    .elseif .xmatch(__sys$__, nes)
+        .define LIBCORE_ROM NES
+        .include .concat(libroot, "/core/nes/header.asm")   ; Header and lib config
+    .elseif .xmatch(__sys$__, fds)
+        .define LIBCORE_ROM FDS
+        .include .concat(libroot, "/core/fds/header.asm")   ; Header and lib config
+    .endif
+    
+    .include .concat(libroot, "/core/memory.asm")           ; Preproc Label Management
+    .include .concat(libroot, "/core/rules.asm")            ; Rule System for safe development
+    .include .concat(libroot, "/core/overload.asm")         ; overloaded instruction mnemonics
 
     .include .concat(libroot, "/ca65hl/ca65hl.h")
+
+    ::TEMP_RAM_START .set 0
+    ::TEMP_RAM_END   .set $100
 .endmacro
 
 ; error case: when you are trying to include something that doesn't exist from something that does

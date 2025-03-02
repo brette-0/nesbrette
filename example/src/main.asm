@@ -1,8 +1,5 @@
 .include "../../lib/core/include.asm"   ; include the include system (fun right?)
 
-TEMP_RAM_END   = $0100
-TEMP_RAM_START = $0000
-
 __libroot__ "../../lib"                 ; specify location of libroot (includes libcore)
 
 .segment "HEADER"
@@ -24,9 +21,6 @@ typeas Temp1, i16
 typeas Temp2, i16
 
 ; TODO: fix libcore::overload::lax
-
-TABLE_ID:
-
 reset:
 
 .segment "VECTORS"

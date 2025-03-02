@@ -28,13 +28,12 @@
 
     APU Space is treated as reg 'hunk'
 
-    TODO: generate labels for IO Space
+    ; TODO: generate labels for FDS (conditionally)
+    ; TODO: preents access to nesbrette allocated RAM if allocated at that time
 
     ; GENERATE SEPERATE RULES FOR INDEXING as Mapper Defines
     new access:
         ins [ptr]
-
-    TODO: make rules modifiable with macro
 
 */
 
@@ -46,6 +45,7 @@
     ;       lda [cpuspcace_reg, x]
     ;       lda [cpuscpace_reg], y
     ; Any loads that could dummy read cpuspace reg
+    ; TODO: add read shadow support
 
     aets .set null
     aea  .set null
@@ -109,9 +109,17 @@
         .endif
     .endif
 
-    ; TODO: Consider CPU Test stuff (not needed)
     .if (__target__ >= $4000) && (__target__ <= $4014)
         report aea, "string"
+    .endif
+
+    .if .xmatch(LIBCORE_ROM, nes)
+        report aea, "string"
+    .else
+        .if __target__ & $fff0 = $4020
+            report aea, "string"
+        .endif
+        ; $403x is read only
     .endif
 .endmacro
 
@@ -164,6 +172,15 @@
         ; check if there exists a shadow register
         report aea, "string"
     .endif
+
+    .if .xmatch(LIBCORE_ROM, nes)
+        report aea, "string"
+    .else
+        .if __target__ & $fff0 = $4030
+            report aea, "string"
+        .endif
+        ; $403x is read only
+    .endif
 .endmacro
 
 .macro RMWDUMMYWRITECHECK __operand__, __index__
@@ -192,6 +209,8 @@
     .endif
 .endmacro
 
+
+; TODO: add rules for use/not shadow registers, lax safety
 .macro rule __rule__, __param0__
     ; no variables are local to the macro, but the to the macro caller
     .if     .xmatch(__rule__, AllowAccessToStack)
