@@ -1,4 +1,5 @@
 ; TODO: Check for impossible cart elements (INCOMPATIBLE WITH MAPPERS)
+; TODO: Add argument 'noshadow' for there being no shadow mappers generated AT ALL
 
 .macro __header_build __prgrom__, __chrrom__, __mapper__, __system__, __altnt__, __trainer__, __battery__, __submapper__, __prgram__, __chrram__, __mirror__, __eeprom__, __cpu__, __vssystem__, __vsppu__, __extended__, __misc__, __expansion__, __chrnvram__
     .literal "NES", $1a
@@ -499,12 +500,14 @@
         __header_expansion __paramx__, __expansion__
     .elseif .xmatch(.left(1, __paramx__), chrnvram)
         chrnvram .set .right(1, __paramx__)
+    .elseif .xmatch(.left(1, __paramx__), noshadow)
+        .define noshadow
     .else
         .fatal "Header Key Word Argument not recognized : Please refer to TODO: DOCS LINK HERE"
     .endif
 .endmacro
 
-.macro header __param0__, __param1__, __param2__, __param3__, __param4__, __param5__, __param6__, __param7__, __param8__, __param9__, __param10__, __param11__, __param12__, __param13__, __param14__, __param15__, __param16__, __param17__
+.macro header __param0__, __param1__, __param2__, __param3__, __param4__, __param5__, __param6__, __param7__, __param8__, __param9__, __param10__, __param11__, __param12__, __param13__, __param14__, __param15__, __param16__, __param17__, __param18__
     ; scope confined enums
     e_prgrom      = 0
     e_chrrom      = 1 
@@ -620,6 +623,10 @@
         __header_paramset __param17__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
     .endif
 
+    .ifnblank __param18__
+        __header_paramset __param18__, prgrom, chrrom, mapper, system, altnt, trainer, battery, submapper, prgram, chrram, mirror, eeprom, cpu, vssystem, vsppu, extended, misc, expansion, chrnvram
+    .endif
+
     null_coalset prgrom,    1   ; 1x16KiB Mirrored
     null_coalset chrrom,    0   ; No CHR ROM
     null_coalset mapper,    0   ; NROM
@@ -664,6 +671,17 @@
     .define LIBCORE_WRITEONLY        PPUCTRL, PPUMASK, PPUSCROLL, OAMADDR, OAMDATA, OAMDMA, PPUADDR, PPUDATA
     .define LIBCORE_STRICT_READONLY  PPUSTAT, PPUSTATUS, IODATA, IODATA2, IODAT1, IODAT2
     .define LIBCORE_STRICT_WRITEONLY PPUOPENBUS, IOSTROBE, FRAMECTRL
+    
+    .ifndef noshadow
+        .define LIBCORE_SHADOWACESS  PPUCTRL, PPUMASK, PPUDATA, FRAMECTRL
+
+        shadow PPUCTRL,   SPPUCTRL
+        shadow PPUMASK,   SPPUMASK
+        shadow PPUDATA,   SPPUDATA
+        shadow FRAMECTRL, SFRAMECTRL
+    .else
+        .undefine noshadow
+    .endif
 
     ; ALLOW STORED WRITES TO ROM (without overrule) IF IDTABLE INCLUDED
 

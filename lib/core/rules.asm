@@ -1,42 +1,5 @@
 ; rules : Complex CPU Access rule enforcer
 
-/*
-    Access Mask:
-        ins $100        ; [optional] block access to stack (unless overruled)
-        ins !$100       ; overruled access to stack
-
-    Read Mask:
-        ldr PPUCTRL
-        ldr PPUMASK
-        ldr PPUOPENBUS
-        ldr PPUSCROLL
-        ldr OAMADDR
-        ldr OAMDATA
-        ldr PPUADDR     ; will NOT generate shadow
-        ldr PPUDATA     ; will generate shadow
-
-        ldr PPUREGS, x  ; dummy read risk
-
-        ldr APUREGS     ; safe
-        ldr OPENBUS     ; block
-        ldr !OPENBUS    ; overruled access to $4000-$6000
-
-    Write Mask:
-    str PPUSTAT         ; strictly forbidden
-    str PPUOPENBUS      ; allowed
-    str !PPUSTAT        ; error
-
-    APU Space is treated as reg 'hunk'
-
-    ; TODO: generate labels for FDS (conditionally)
-    ; TODO: preents access to nesbrette allocated RAM if allocated at that time
-
-    ; GENERATE SEPERATE RULES FOR INDEXING as Mapper Defines
-    new access:
-        ins [ptr]
-
-*/
-
 .macro SYSREAD __target__, __index__
     .local resp, aets, aea, aira
 
@@ -46,6 +9,7 @@
     ;       lda [cpuscpace_reg], y
     ; Any loads that could dummy read cpuspace reg
     ; TODO: add read shadow support
+    ; TODO: add support for read reg shadows where the read has function (the shadow wont) use *prefix
 
     aets .set null
     aea  .set null
@@ -256,4 +220,19 @@
     .else
         .fatal "string"
     .endif
+.endmacro
+
+.macro shadow __foo__, __bar__
+    .define __shadowtemp LIBCORE_SHADOWACESS
+    .undefine LIBCORE_SHADOWACESS
+
+    .define LIBCORE_SHADOWACESS __shadowtemp, __foo__
+    .undefine __shadowtemp
+
+    __bar__ .set null                           ; create variable for shadow register
+    malloc __bar__, 1, slow                     ; allocate slow RAM for it
+    ; do not deallocate, defines restored
+
+    ; normnalized access reference
+    .ident(.sprintf("__S%s", .string(__foo__))) .set __bar__
 .endmacro

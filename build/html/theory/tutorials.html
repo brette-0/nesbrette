@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorials &#8212; nesbrette 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">Tutorials</span></code></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tutorials">
+<h1><code class="docutils literal notranslate"><span class="pre">Tutorials</span></code><a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<section id="setup">
+<h2><code class="docutils literal notranslate"><span class="pre">1.</span> <span class="pre">Setup</span></code><a class="headerlink" href="#setup" title="Link to this heading">¶</a></h2>
+<p>To start your first project using <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code>, download the latest <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> source from github, ensure your using one of the mappers described as having compatibility. If you need a mapper that currently is not suppoted, create a Gihtub issue with the Mapper tag and I should be able to devise a solution within a reasonable timeframe.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">include</span> <span class="s2">&quot;../../lib/core/include.asm&quot;</span>   <span class="p">;</span> <span class="n">include</span> <span class="n">the</span> <span class="n">include</span> <span class="n">system</span>
+
+<span class="n">__libroot__</span> <span class="s2">&quot;../../lib&quot;</span>                 <span class="p">;</span> <span class="n">access</span> <span class="n">include</span> <span class="n">system</span>
+
+<span class="o">.</span><span class="n">segment</span> <span class="s2">&quot;HEADER&quot;</span>
+    <span class="n">header</span> \                            <span class="p">;</span> <span class="n">call</span> <span class="n">easy</span> <span class="n">header</span> <span class="n">setup</span>
+        <span class="n">prgrom</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> \
+        <span class="n">mapper</span><span class="p">:</span> <span class="n">nrom</span>
+</pre></div>
+</div>
+<p>The first line is only required if you haven’t passed <code class="docutils literal notranslate"><span class="pre">nesbrette/core/include.asm</span></code> to the assembler as an include. The function <code class="docutils literal notranslate"><span class="pre">__libroot__</span></code> will ‘locate’ the <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> modules root and include the core depenancies. This will not take up any space in ROM. The only other thing that has been performed at this point is the definition of two assembler variables <code class="docutils literal notranslate"><span class="pre">TEMP_RAM_START</span></code> and <code class="docutils literal notranslate"><span class="pre">TEMP_RAM_END</span></code> that poitn to Zero Page.</p>
+<p>These exist so that features that depend on RAM may automatically resolve fragmentation, conflicts and handle allocation with miniminal to no user input</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">header</span></code> macro is <em>very</em> useful and <em>very</em> simple to use. By default it assumes you want a completely empty cartridge and with the user of optional keyword argumenets in no particular order it will modify the default to provided specififics. For certain elements, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> accepts non-numerical responses like ‘nrom’ for Mapper but for unsupported mappers you may use a number instead but it is reccomended to wait for official support.</p>
+<p>The reason why you <em>must</em> use this is because it generate many defines that are required by <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> as functions may require information on the present hardware to determine the appropriate outcome.</p>
+</section>
+<section id="syntax">
+<h2><code class="docutils literal notranslate"><span class="pre">2.</span> <span class="pre">Syntax</span></code><a class="headerlink" href="#syntax" title="Link to this heading">¶</a></h2>
+<p>In order to use <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> you will need to use typed labels, to type a label simply do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Label = $200
+typeas Label, u32
+</pre></div>
+</div>
+<p>Then each time you pass <code class="docutils literal notranslate"><span class="pre">Label</span></code> it’s context of being an unsigned 32 bit integer is made aware to any macro accessing it. Similarly we can use the use of the type prefix character to specify a type, consider this casting from original type or <code class="docutils literal notranslate"><span class="pre">void</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add</span> <span class="n">u32</span><span class="p">:</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span>
+</pre></div>
+</div>
+<p>It should be noted that <code class="docutils literal notranslate"><span class="pre">ca65hl</span></code> uses colons for multi-line instruction for its <code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">elseif</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code> and <code class="docutils literal notranslate"><span class="pre">while</span></code> macros and therefore <em>will</em> not work here. Despite this, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> can still type deduce labels that have been pre-typed.</p>
+<p>As part of <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code>’s safety oriented features, <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> will forbid erroneous interaction with registers in CPU Space as well as stack. While the <code class="docutils literal notranslate"><span class="pre">rule</span></code> macro does exist to modify these safety nets in the current scope, there exists an overrule prefix that will modify the behavior of the instruction.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sta PPUCTRL     ; store PPUCTRL, SPPUCTRL
+sta !PPUCTRL    ; store PPUCTRL
+
+lda PPUCTRL     ; loads SPPUCTRL
+lda !PPUCTRL    ; loads PPUCTRL
+
+lda IODATA1     ; loads IODATA1
+lda !IODATA1    ; loads IODATA1
+
+sta IODATA1     ; invalid
+sta !IODATA1    ; stores IODATA1 (FRAMECTRL, no shadow)
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> uses square brackets for indirectness and supports nothing else for it, <code class="docutils literal notranslate"><span class="pre">ca65hl</span></code> ‘Custom Syntax’ has been adjsuted to avoid indexing nothing allowing <code class="docutils literal notranslate"><span class="pre">jmp</span> <span class="pre">inabs</span></code> to return, illegal isntruction support has also been established.</p>
+</section>
+<section id="optimisation">
+<h2><code class="docutils literal notranslate"><span class="pre">3.</span> <span class="pre">Optimisation</span></code><a class="headerlink" href="#optimisation" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> is designed register parameterised where possible, meaning if you currently do not wish to corrupt the contents of a register but depend on a feature that by default will use the register in question you can and should pass the free register an argument into the function. If needed, pass <code class="docutils literal notranslate"><span class="pre">null</span></code> into the spaces leading up to it in order to not specify something potentially inappropriate. It should be noted that chained instructions in a <code class="docutils literal notranslate"><span class="pre">ca65hl</span></code> header for <code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">elseif</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code> or <code class="docutils literal notranslate"><span class="pre">while</span></code> do not accept multiple argumenets which may force you to adjust your solution.</p>
+<p>Review the function in the documentation as there will be information on how to optimise the use of a specific function. <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> prefers CPU optimisation with reasonable RAM consumption at low code side, but it may be that the solution we provide may not align with your requirements. In such a situation you may <code class="docutils literal notranslate"><span class="pre">.delmacro</span> <span class="pre">feature</span></code> and begin working on your own to replace it.</p>
+<p>Some features benefit from Identity Tables being present, in order to generate one of those use <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">id</span></code> or <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">poly,</span> <span class="pre">x</span></code> to generate the needed table. When generating a table you should only ever generate for the spaces needed which is why <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> offers range specification. If you require an interlaced table, <code class="docutils literal notranslate"><span class="pre">nesbette</span></code> does not offer support.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Tutorials</span></code></a><ul>
+<li><a class="reference internal" href="#setup"><code class="docutils literal notranslate"><span class="pre">1.</span> <span class="pre">Setup</span></code></a></li>
+<li><a class="reference internal" href="#syntax"><code class="docutils literal notranslate"><span class="pre">2.</span> <span class="pre">Syntax</span></code></a></li>
+<li><a class="reference internal" href="#optimisation"><code class="docutils literal notranslate"><span class="pre">3.</span> <span class="pre">Optimisation</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/theory/tutorials.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">Tutorials</span></code></a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Brette.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

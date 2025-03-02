@@ -22,6 +22,7 @@ typeas Temp2, i16
 
 ; TODO: fix libcore::overload::lax
 reset:
+    lda PPUCTRL
 
 .segment "VECTORS"
     .addr $0000

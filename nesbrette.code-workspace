@@ -5,6 +5,17 @@
         }
     ],
     "settings": {
-        "workbench.colorTheme": "Cool Cowboy Theme"
+        "workbench.colorTheme": "Cool Cowboy Theme",
+        "hide-files.files": [
+            "source",
+            "archives",
+            "archive",
+            ".obsidian",
+            "build",
+            "nesbrette.code-workspace",
+            "Makefile",
+            "make.bat",
+            ".readthedocs.yaml"
+        ]
     }
 }

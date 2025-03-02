@@ -4,6 +4,8 @@ Phase 3
 Mapper
     - Flop
 
+FDS BIOS
+
 
 Flop will use ``f16`` floating point math inside EDN8P.
 Has MMC3 Limitations otherwise.

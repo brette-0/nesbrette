@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Errors" href="errors.html" />
-    <link rel="prev" title="math" href="../modules/math/math.html" /> 
+    <link rel="prev" title="Syntax" href="../modules/dev/safe.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -28,7 +28,7 @@
           <a href="errors.html" title="Errors"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../modules/math/math.html" title="math"
+          <a href="../modules/dev/safe.html" title="Syntax"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">theory</span></code></a></li> 
@@ -75,6 +75,7 @@
 <p>Unfortunately both are terribly impractical, the former is bad because it’s simply wastes RAM by not sharing the temorary space between functions and the latter is terrible because temporary functions run the risk of overwriting the other’s contents if a complex hierachy of features are used.</p>
 <p><code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> solves this in a <em>fairly</em> classy way by creating a system in which a preprocessor function will allocate an offset in temp ram to a label as it’s being evaluated. At the end of a feature that uses RAM, a feature is also used to de-allocate the label from RAM to ensure that RAM is only marked as used where the function has lifetime.</p>
 <p>Because of how preprocessor works, it seems reasonable that zero fragmentation will occur with no loss of functionality or loss of performance by any metric from this method. This is because <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> provides the features <code class="docutils literal notranslate"><span class="pre">malloc</span></code> and <code class="docutils literal notranslate"><span class="pre">dealloc</span></code> to log when ram has a consistent semantic within the context.</p>
+<p>There are three regions <code class="docutils literal notranslate"><span class="pre">nesbrette</span></code> accepts for RAM allocation. <code class="docutils literal notranslate"><span class="pre">fast</span></code> for faster RAM, always preferrred but if inaccessible will have to go to <code class="docutils literal notranslate"><span class="pre">slow</span></code>. <code class="docutils literal notranslate"><span class="pre">fast</span></code> can be empty if the user needs as much Zero Page as possible. <code class="docutils literal notranslate"><span class="pre">fast</span></code> is intended for short life macros that can be invalidated quickly after short time use, whereas <code class="docutils literal notranslate"><span class="pre">slow</span></code> is intended for functions that spend most of their time not being used but must have a static target. Lastly <code class="docutils literal notranslate"><span class="pre">zp</span></code> is for zero page with no fallbacks, this is either for code that must inherently be fast or else it does not work or should be for advanced memory address modes.</p>
 </section>
 <section id="register-parameterisation">
 <h2><code class="docutils literal notranslate"><span class="pre">Register</span> <span class="pre">Parameterisation</span></code><a class="headerlink" href="#register-parameterisation" title="Link to this heading">¶</a></h2>
@@ -107,8 +108,8 @@
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../modules/math/math.html"
-                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">math</span></code></a></p>
+    <p class="topless"><a href="../modules/dev/safe.html"
+                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">Syntax</span></code></a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -146,7 +147,7 @@
           <a href="errors.html" title="Errors"
              >next</a> |</li>
         <li class="right" >
-          <a href="../modules/math/math.html" title="math"
+          <a href="../modules/dev/safe.html" title="Syntax"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">nesbrette 0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">theory</span></code></a></li> 

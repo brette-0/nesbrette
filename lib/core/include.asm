@@ -45,6 +45,8 @@
     .include .concat(libroot, "/core/register.asm")         ; register macro paramterisation
     .include .concat(libroot, "/core/synth.asm")            ; qol for dev time
     .include .concat(libroot, "/core/defines.asm")          ; defines
+    .include .concat(libroot, "/core/memory.asm")           ; Preproc Label Management
+    .include .concat(libroot, "/core/rules.asm")            ; Rule System for safe development
     .include .concat(libroot, "/core/typing.asm")           ; Variable Type System
     
     .ifblank __sys$__
@@ -58,20 +60,17 @@
         .include .concat(libroot, "/core/fds/header.asm")   ; Header and lib config
     .endif
     
-    .include .concat(libroot, "/core/memory.asm")           ; Preproc Label Management
-    .include .concat(libroot, "/core/rules.asm")            ; Rule System for safe development
     .include .concat(libroot, "/core/overload.asm")         ; overloaded instruction mnemonics
-
     .include .concat(libroot, "/ca65hl/ca65hl.h")
 
-    ::TEMP_FAST_RAM_START   .set $c0
-    ::TEMP_FAST_RAM_END     .set $100                       ; fast ram for small payloads
+    ::FAST_RAM_START   .set $c0
+    ::FAST_RAM_END     .set $100                            ; fast ram for small payloads
 
-    ::TEMP_ZP_START         .set $b0
-    ::TEMP_ZP_END           .set $c0                        ; ZP exclusive
+    ::ZP_START         .set $b0
+    ::ZP_END           .set $c0                             ; ZP exclusive
 
-    ::TEMP_SLOW_RAM_START   .set $300
-    ::TEMP_SLOW_RAM_END     .set $320                       ; slow ram for functions
+    ::SLOW_RAM_START   .set $300
+    ::SLOW_RAM_END     .set $320                            ; slow ram for functions, reasonable to be permanant
 
     
 .endmacro

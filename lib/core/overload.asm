@@ -201,7 +201,17 @@
     .if overrule
         ___EvalInstrList lda .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList lda operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList lda .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList lda operand, index
+        .endif
     .endif
 .endmacro
 .macro sta operand, index

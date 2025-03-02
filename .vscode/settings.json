@@ -1,4 +1,21 @@
 {
     "C_Cpp.default.compilerPath": "C:\\msys64\\mingw64\\bin\\g++.exe",
-    "iis.configDir": ""
+    "iis.configDir": "",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "source": true,
+        "archives": true,
+        "archive": true,
+        ".obsidian": true,
+        "build": true,
+        "nesbrette.code-workspace": true,
+        "Makefile": true,
+        "make.bat": true,
+        ".readthedocs.yaml": true
+    }
 }

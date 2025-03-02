@@ -46,6 +46,10 @@ Unfortunately both are terribly impractical, the former is bad because it's simp
 
 Because of how preprocessor works, it seems reasonable that zero fragmentation will occur with no loss of functionality or loss of performance by any metric from this method. This is because ``nesbrette`` provides the features ``malloc`` and ``dealloc`` to log when ram has a consistent semantic within the context.
 
+There are three regions ``nesbrette`` accepts for RAM allocation. ``fast`` for faster RAM, always preferrred but if inaccessible will have to go to ``slow``. ``fast`` can be empty if the user needs as much Zero Page as possible. ``fast`` is intended for short life macros that can be invalidated quickly after short time use, whereas ``slow`` is intended for functions that spend most of their time not being used but must have a static target. Lastly ``zp`` is for zero page with no fallbacks, this is either for code that must inherently be fast or else it does not work or should be for advanced memory address modes.
+
+.. TODO: offer memory location specificism 
+
 ``Register Parameterisation``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
