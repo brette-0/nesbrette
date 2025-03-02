@@ -64,8 +64,16 @@
 
     .include .concat(libroot, "/ca65hl/ca65hl.h")
 
-    ::TEMP_RAM_START .set 0
-    ::TEMP_RAM_END   .set $100
+    ::TEMP_FAST_RAM_START   .set $c0
+    ::TEMP_FAST_RAM_END     .set $100                       ; fast ram for small payloads
+
+    ::TEMP_ZP_START         .set $b0
+    ::TEMP_ZP_END           .set $c0                        ; ZP exclusive
+
+    ::TEMP_SLOW_RAM_START   .set $300
+    ::TEMP_SLOW_RAM_END     .set $320                       ; slow ram for functions
+
+    
 .endmacro
 
 ; error case: when you are trying to include something that doesn't exist from something that does
