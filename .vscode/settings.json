@@ -9,13 +9,13 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "source": true,
-        "archives": true,
-        "archive": true,
         ".obsidian": true,
         "build": true,
         "nesbrette.code-workspace": true,
         "Makefile": true,
         "make.bat": true,
-        ".readthedocs.yaml": true
+        ".readthedocs.yaml": true,
+        "archive": true,
+        "archives": true
     }
 }

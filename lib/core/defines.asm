@@ -64,31 +64,3 @@ null = (1 << 30)    ; can be viewed as type negative typeless
     ((__mode__ = inabsx)    * 1) | \
     ((__mode__ = inabsy)    * 2) | \
     ((__mode__ = inabs)     * 0)
-
-PPUCTRL = $2000
-PPUMASK = $2001
-PPUSTAT = $2002
-OAMADDR = $2003
-OAMDATA = $2004
-
-PPUSCROLL = $2005
-
-PPUADDR = $2006
-PPUDATA = $2007
-
-OAMDMA  = $4017
-
-PPUOPENBUS = $2002
-    ; block reads always
-    ; always allow writes
-PPUSTATUS  = $2002
-
-; TODO: Block writes to PPUSTAT, PPUSTATUS
-; TODO: Always write to shaodw reg aswell, unless the fist character is !
-/*
-
-    Nothing for APU as we assume famistudio will handle all that
-    If you don't use fasmistudio, your taking it upon yourself
-    to do this.
-
-*/

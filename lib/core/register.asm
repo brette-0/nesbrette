@@ -416,7 +416,6 @@
     .endif
 .endmacro
 
-; TODO: Consider migrating from recusrsive to collection parameter
 .macro ralloc __send__, __used1__, __used2__
     .ifblank __send__
         .fatal  ; needs target

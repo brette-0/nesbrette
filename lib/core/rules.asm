@@ -3,14 +3,6 @@
 .macro SYSREAD __target__, __index__
     .local resp, aets, aea, aira
 
-    ; TODO: FORBID:
-    ;       lda cpuspace_reg, r
-    ;       lda [cpuspcace_reg, x]
-    ;       lda [cpuscpace_reg], y
-    ; Any loads that could dummy read cpuspace reg
-    ; TODO: add read shadow support
-    ; TODO: add support for read reg shadows where the read has function (the shadow wont) use *prefix
-
     aets .set null
     aea  .set null
     aira .set null
@@ -153,12 +145,6 @@
 
 .macro RMWDUMMYWRITECHECK __operand__, __index__
     .local resp
-    ; TODO: Add Profile Options
-
-    ; writes checks for tolerable dummy writes
-    ; RAM & Serial CPU Space Register
-    ; Serial means Serial in access AND semantics
-
     deferror asisa, error
 
     .ifdef ::AllowSingleInstructionSerialAccess
@@ -177,8 +163,6 @@
     .endif
 .endmacro
 
-
-; TODO: add rules for use/not shadow registers, lax safety
 .macro rule __rule__, __param0__
     ; no variables are local to the macro, but the to the macro caller
     .if     .xmatch(__rule__, AllowAccessToStack)
@@ -210,6 +194,16 @@
             PROFILE_AllowIndexedRegisterAccess .set allow
         .else
             deferror PROFILE_AllowIndexedRegisterAccess, __param0__
+        .endif
+    .elseif .xmatch(__rule__, AllowSingleInstructionSerialAccess)
+        .ifndef __param0__
+            AllowSingleInstructionSerialAccess .set allow
+        .elseif .xmatch(__param0__, -)
+            AllowSingleInstructionSerialAccess .set error
+        .elseif .xmatch(__param0__, +)
+            AllowSingleInstructionSerialAccess .set allow
+        .else
+            deferror AllowSingleInstructionSerialAccess, __param0__
         .endif
     .elseif .xmatch(__rule__, AllowSingleInstructionSerialAccess)
         .ifndef __param0__

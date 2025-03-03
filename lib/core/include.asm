@@ -21,7 +21,7 @@
 
 /*
 
-    TODO: Globally including procedures shoulld have a warning circumstance
+    TODO: Globally including procedures should have a warning circumstance
     TODO: All modules to have .ifndef=>def
     TODO: Modules to include depenancies (warn when doing so)
             AutomaticDependancyInclusionException level
