@@ -36,6 +36,7 @@
 .feature underline_in_numbers   ; there is no reason to disable this
 .feature bracket_as_indirect    ; used to indicate indirect (duh)
 .feature dollar_in_identifiers  ; used to indicate optional parameter
+.feature ubiquitous_idents      ; enables the overloading
 
 ; sets libroot define path and includes libcore
 .macro __libroot__ __path__, __sys$__

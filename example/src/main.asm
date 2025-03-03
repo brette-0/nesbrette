@@ -7,22 +7,9 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
         prgrom: 1, \
         mapper: nrom
 
-.segment "MEMORY"
-
 .segment "CODE"
 
-Temp1:
-    .byte $00, $80
-
-Temp2:
-    .byte $00, $00
-
-typeas Temp1, i16
-typeas Temp2, i16
-
-; TODO: fix libcore::overload::lax
 reset:
-    nop $1000, y
 
 .segment "VECTORS"
     .addr $0000

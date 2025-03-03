@@ -1,31 +1,3 @@
-.macro __lax __operand__, __index__
-    .if .xmatch(.left(1, __operand__), #) && .right(.tcount(__operand__)-1, __operand__)
-            lda __operand__
-            tax
-            .exitmacro
-    .endif
-
-    overrule .set .xmatch(.left(1, operand), !)
-    .if overrule
-        ___EvalInstrList lax .right(.tcount(operand)-1, operand), index
-    .else
-
-        resp .set 0
-        
-        contains resp, operand, LIBCORE_SHADOWACESS
-
-        .if resp
-            ; use normalized access reference to fetch shadow
-            ___EvalInstrList lax .ident(.sprintf("__S%s", .string(operand))), index
-        .else
-            ___EvalInstrList lax operand, index
-        .endif
-    .endif
-
-.endmacro
-
-.feature ubiquitous_idents +
-
 ; TODO: dev these
 .macro sed __target__
     .ifblank __target__
@@ -33,15 +5,25 @@
         .exitmacro
     .endif
 .endmacro
-
 .macro cld __target__
     .ifblank __target__
         jsr __fromBCD
         .exitmacro
     .endif
 .endmacro
+.macro lax __operand__, __index__
+    .if .xmatch(.left(1, __operand__), #)
+        .if .right(.tcount(__operand__)-1, __operand__)
+            lda __operand__
+            tax
+        .else
+            .feature ubiquitous_idents -
+            lax #$00
+            .feature ubiquitous_idents +
+        .endif
+        .exitmacro
+    .endif
 
-.macro lax operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList lax .right(.tcount(operand)-1, operand), index
@@ -59,62 +41,17 @@
         .endif
     .endif
 .endmacro
-
-; break with aligned return support
-.macro brk __operand__, __ptr__, __data__
-    .local loptr_reg, hiptr_reg, d_reg
-
-    loptr_reg .set null
-    hiptr_reg .set null
-    d_reg     .set null
-
-    .ifnblank __ptr__
-        loptr_reg .set .left( 1, __ptr__)
-        hiptr_reg .set .right(1, __ptr__)
-
-        .if (loptr_reg <> null) && (hiptr_reg <> null)
-            loptr_reg .set setreg loptr_reg
-            hiptr_reg .set setreg hiptr_reg
-
-            .if     is_null loptr_reg
-                .fatal ""
-            .elseif is_null hiptr_reg
-                .fatal ""
-            .endif
-
-            .if     loptr_reg = xr
-                ldx #.lobyte(* + 2 + (2 * .blank(__data__)))
-            .elseif loptr_reg = yr
-                ldy #.lobyte(* + 2 + (2 * .blank(__data__)))
-            .else
-                lda #.lobyte(* + 2 + (2 * .blank(__data__)))
-            .endif
-
-            .if     hiptr_reg = xr
-                ldx #.hibyte(* + 2 + (2 * .blank(__data__)))
-            .elseif hiptr_reg = yr
-                ldy #.hibyte(* + 2 + (2 * .blank(__data__)))
-            .else
-                lda #.hibyte(* + 2 + (2 * .blank(__data__)))
-            .endif
-        .endif
-
-        .ifnblank __data__
-            ralloc d_reg, loptr_reg, hiptr_reg
-            ldr imm: d_reg, __data__
-        .endif
-
-        .byte $00
-        .ifnblank __operand__
-            .byte __operand__
-        .else
-            .ifdef  CONFIG_DEFAULT_BRK_OPERAND
-                .if CONFIG_DEFAULT_BRK_OPERAND
-                    .byte $00
-                .endif
-            .else
+.macro brk __operand__
+    .byte $00
+    .ifnblank __operand__
+        .byte __operand__
+    .else
+        .ifdef  CONFIG_DEFAULT_BRK_OPERAND
+            .if CONFIG_DEFAULT_BRK_OPERAND
                 .byte $00
             .endif
+        .else
+            .byte $00
         .endif
     .endif
 .endmacro
@@ -210,6 +147,10 @@
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList lda .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+        lda operand
+        .feature ubiquitous_idents +
     .else
 
         resp .set 0
@@ -253,6 +194,10 @@
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList ldx .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+        ldx operand
+        .feature ubiquitous_idents +
     .else
 
         resp .set 0
@@ -274,6 +219,10 @@
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList ldy .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+        ldy operand
+        .feature ubiquitous_idents +
     .else
 
         resp .set 0
@@ -311,6 +260,10 @@
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList adc .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+        adc operand
+        .feature ubiquitous_idents +
     .else
 
         resp .set 0
@@ -345,6 +298,10 @@
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList and .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+        and operand
+        .feature ubiquitous_idents +
     .else
 
         resp .set 0
@@ -359,7 +316,6 @@
         .endif
     .endif
 .endmacro
-; add implied mode a register operand
 .macro asl operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
@@ -377,6 +333,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList asl .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            asl operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList asl operand, index
         .endif
@@ -411,6 +371,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList cmp .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            cmp operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList cmp operand, index
         .endif
@@ -463,6 +427,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList eor .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            eor operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList eor operand, index
         .endif
@@ -504,6 +472,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList lsr .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            lsr operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList lsr operand, index
         .endif
@@ -538,6 +510,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList ora .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            ora operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList ora operand, index
         .endif
@@ -572,7 +548,7 @@
         ___EvalInstrList ror .right(.tcount(operand)-1, operand), index
     .elseif .xmatch(operand, a)
         .feature ubiquitous_idents -
-        asl
+        ror
         .feature ubiquitous_idents +
         .exitmacro
     .else
@@ -618,6 +594,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList sbc .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            sbc operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList sbc operand, index
         .endif
@@ -660,6 +640,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList cpx .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            cpx operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList cpx operand, index
         .endif
@@ -678,6 +662,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList cpy .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            cpy operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList cpy operand, index
         .endif
@@ -805,6 +793,10 @@
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList nop .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+        nop operand
+        .feature ubiquitous_idents +
     .else
         ___EvalInstrList nop operand, index
     .endif
@@ -822,6 +814,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList slo .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            slo operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList slo operand, index
         .endif
@@ -840,6 +836,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList rla .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+        .feature ubiquitous_idents -
+            rla operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList rla operand, index
         .endif
@@ -858,6 +858,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList sre .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            sre operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList sre operand, index
         .endif
@@ -876,6 +880,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList rra .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            rra operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList rra operand, index
         .endif
@@ -894,6 +902,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList sax .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            sax operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList sax operand, index
         .endif
@@ -912,6 +924,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList dcp .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            dcp operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList dcp operand, index
         .endif
@@ -930,6 +946,10 @@
         .if resp
             ; use normalized access reference to fetch shadow
             ___EvalInstrList isc .ident(.sprintf("__S%s", .string(operand))), index
+        .elseif .xmatch(.left(1, operand), #)
+            .feature ubiquitous_idents -
+            isc operand
+            .feature ubiquitous_idents +
         .else
             ___EvalInstrList isc operand, index
         .endif
