@@ -278,6 +278,16 @@
     ;    RMWDUMMYWRITECHECK op, index
     ;.endif
 
+    .if .xmatch(index, y) && .xmatch(instr, nop)
+        .byte $1c
+        .if op > $ff
+            .word op
+        .else
+            .byte op
+        .endif
+        .exitmacro
+    .endif
+
     _OUT                            ; output instruction as standard ca65 6502 syntax
     .feature ubiquitous_idents +    ; allow overloading mnemonics again
     ; --------------------------------------------------------------------------------------------

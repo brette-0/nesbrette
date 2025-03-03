@@ -17,7 +17,11 @@
 
     deferror warning, aats
     deferror error,   aea
-    deferror error,   aira    ; indexed register locations
+    deferror error,   aira      ; indexed register locations
+
+    .if wantmirror              ; mirrors exist only in RAM, no check needed even if PRGRAM in ROM-RAM switchable cart region (thats decided at shadow declare)
+        .exitmacro
+    .endif
 
     .ifdef ::PROFILE_AllowAccessToStack
         deferror ::PROFILE_AllowAccessToStack, aats
@@ -223,10 +227,10 @@
 .endmacro
 
 .macro shadow __foo__, __bar__
-    .define __shadowtemp LIBCORE_SHADOWACESS
-    .undefine LIBCORE_SHADOWACESS
+    .define __shadowtemp LIBCORE_WRITEONLYSHADOWACCESS
+    .undefine LIBCORE_WRITEONLYSHADOWACCESS
 
-    .define LIBCORE_SHADOWACESS __shadowtemp, __foo__
+    .define LIBCORE_WRITEONLYSHADOWACCESS __shadowtemp, __foo__
     .undefine __shadowtemp
 
     __bar__ .set null                           ; create variable for shadow register

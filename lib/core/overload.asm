@@ -1,27 +1,27 @@
 .macro __lax __operand__, __index__
-    .if .match(.left(1, __operand__), #)
-        .out "Alpha"
-        .ifnblank __index__
-            .byte $ab, __operand__
-        .elseif .right(.tcount(__operand__) - 1, __operand__) = $00
-            .byte $ab, $00
-        .else
+    .if .xmatch(.left(1, __operand__), #) && .right(.tcount(__operand__)-1, __operand__)
             lda __operand__
             tax
-        .endif
-        .exitmacro
+            .exitmacro
     .endif
 
-    .feature ubiquitous_idents -
-    .ifblank __index__
-        lax __operand__
-    .elseif  .xmatch(__index__, y)
-        lax __operand__, y
+    overrule .set .xmatch(.left(1, operand), !)
+    .if overrule
+        ___EvalInstrList lax .right(.tcount(operand)-1, operand), index
     .else
-        .fatal
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList lax .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList lax operand, index
+        .endif
     .endif
 
-    .feature ubiquitous_idents +
 .endmacro
 
 .feature ubiquitous_idents +
@@ -38,6 +38,25 @@
     .ifblank __target__
         jsr __fromBCD
         .exitmacro
+    .endif
+.endmacro
+
+.macro lax operand, index
+    overrule .set .xmatch(.left(1, operand), !)
+    .if overrule
+        ___EvalInstrList lax .right(.tcount(operand)-1, operand), index
+    .else
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList lax .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList lax operand, index
+        .endif
     .endif
 .endmacro
 
@@ -99,7 +118,6 @@
         .endif
     .endif
 .endmacro
-
 .macro beq __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -111,7 +129,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bne __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -123,7 +140,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bpl __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -135,7 +151,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bmi __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -147,7 +162,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bcs __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -159,7 +173,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bcc __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -171,7 +184,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bvs __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -183,7 +195,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro bvc __relative__ 
     .if .match(__relative__, 0)
         .byte $f0, __relative__
@@ -195,7 +206,6 @@
         .byte $f0, __relative__
     .endif
 .endmacro
-
 .macro lda operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
@@ -244,7 +254,17 @@
     .if overrule
         ___EvalInstrList ldx .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList ldx operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList ldx .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList ldx operand, index
+        .endif
     .endif
 .endmacro
 .macro stx operand, index
@@ -255,7 +275,17 @@
     .if overrule
         ___EvalInstrList ldy .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList ldy operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList ldy .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList ldy operand, index
+        .endif
     .endif
 .endmacro
 .macro sty operand, index
@@ -282,7 +312,17 @@
     .if overrule
         ___EvalInstrList adc .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList adc operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList adc .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList adc operand, index
+        .endif
     .endif
 .endmacro
 .macro and operand, index
@@ -306,15 +346,40 @@
     .if overrule
         ___EvalInstrList and .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList and operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList and .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList and operand, index
+        .endif
     .endif
 .endmacro
+; add implied mode a register operand
 .macro asl operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList asl .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(operand, a)
+        .feature ubiquitous_idents -
+        asl
+        .feature ubiquitous_idents +
+        .exitmacro
     .else
-        ___EvalInstrList asl operand, index
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList asl .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList asl operand, index
+        .endif
     .endif
 .endmacro
 .macro cmp operand, index
@@ -338,7 +403,17 @@
     .if overrule
         ___EvalInstrList cmp .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList cmp operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList cmp .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList cmp operand, index
+        .endif
     .endif
 .endmacro
 .macro dec operand, index
@@ -346,7 +421,17 @@
     .if overrule
         ___EvalInstrList dec .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList dec operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList dec .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList dec operand, index
+        .endif
     .endif
 .endmacro
 .macro eor operand, index
@@ -370,7 +455,17 @@
     .if overrule
         ___EvalInstrList eor .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList eor operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList eor .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList eor operand, index
+        .endif
     .endif
 .endmacro
 .macro inc operand, index
@@ -378,15 +473,40 @@
     .if overrule
         ___EvalInstrList inc .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList inc operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList inc .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList inc operand, index
+        .endif
     .endif
 .endmacro
 .macro lsr operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList lsr .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(operand, a)
+        .feature ubiquitous_idents -
+        lsr
+        .feature ubiquitous_idents +
+        .exitmacro
     .else
-        ___EvalInstrList lsr operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList lsr .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList lsr operand, index
+        .endif
     .endif
 .endmacro
 .macro ora operand, index
@@ -410,23 +530,63 @@
     .if overrule
         ___EvalInstrList ora .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList ora operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList ora .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList ora operand, index
+        .endif
     .endif
 .endmacro
 .macro rol operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList rol .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(operand, a)
+        .feature ubiquitous_idents -
+        rol
+        .feature ubiquitous_idents +
+        .exitmacro
     .else
-        ___EvalInstrList rol operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList rol .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList rol operand, index
+        .endif
     .endif
 .endmacro
 .macro ror operand, index
     overrule .set .xmatch(.left(1, operand), !)
     .if overrule
         ___EvalInstrList ror .right(.tcount(operand)-1, operand), index
+    .elseif .xmatch(operand, a)
+        .feature ubiquitous_idents -
+        asl
+        .feature ubiquitous_idents +
+        .exitmacro
     .else
-        ___EvalInstrList ror operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList ror .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList ror operand, index
+        .endif
     .endif
 .endmacro
 .macro sbc operand, index
@@ -450,7 +610,17 @@
     .if overrule
         ___EvalInstrList sbc .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList sbc operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList sbc .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList sbc operand, index
+        .endif
     .endif
 .endmacro
 .macro bit operand, index
@@ -458,7 +628,22 @@
     .if     .xmatch(.left(1, operand), #)
         bit TABLE_ID + .right(.tcount(operand) - 1, operand)
     .else
-        ___EvalInstrList and operand, index
+            overrule .set .xmatch(.left(1, operand), !)
+            .if overrule
+                ___EvalInstrList bit .right(.tcount(operand)-1, operand), index
+            .else
+
+                resp .set 0
+                
+                contains resp, operand, LIBCORE_SHADOWACESS
+
+                .if resp
+                    ; use normalized access reference to fetch shadow
+                    ___EvalInstrList bit .ident(.sprintf("__S%s", .string(operand))), index
+                .else
+                    ___EvalInstrList bit operand, index
+                .endif
+            .endif
     .endif
     .feature ubiquitous_idents +
 .endmacro
@@ -467,7 +652,17 @@
     .if overrule
         ___EvalInstrList cpx .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList cpx operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList cpx .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList cpx operand, index
+        .endif
     .endif
 .endmacro
 .macro cpy operand, index
@@ -475,11 +670,19 @@
     .if overrule
         ___EvalInstrList cpy .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList cpy operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList cpy .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList cpy operand, index
+        .endif
     .endif
 .endmacro
-
-; TODO: Make jmp foo[y|x] work
 .macro jmp operand, index
     .local ptr
 
@@ -509,6 +712,15 @@
         overrule .set .xmatch(.left(1, operand), !)
         .if overrule
             ___EvalInstrList jmp .right(.tcount(operand)-1, operand), index
+        .else
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList jmp .ident(.sprintf("__S%s", .string(operand))), index
         .else
             ___EvalInstrList jmp operand, index
         .endif
@@ -576,6 +788,15 @@
         .if overrule
             ___EvalInstrList jsr .right(.tcount(operand)-1, operand), index
         .else
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList jsr .ident(.sprintf("__S%s", .string(operand))), index
+        .else
             ___EvalInstrList jsr operand, index
         .endif
     .endif
@@ -593,7 +814,17 @@
     .if overrule
         ___EvalInstrList slo .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList slo operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList slo .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList slo operand, index
+        .endif
     .endif
 .endmacro
 .macro rla operand, index
@@ -601,7 +832,17 @@
     .if overrule
         ___EvalInstrList rla .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList rla operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList rla .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList rla operand, index
+        .endif
     .endif
 .endmacro
 .macro sre operand, index
@@ -609,7 +850,17 @@
     .if overrule
         ___EvalInstrList sre .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList sre operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList sre .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList sre operand, index
+        .endif
     .endif
 .endmacro
 .macro rra operand, index
@@ -617,7 +868,17 @@
     .if overrule
         ___EvalInstrList rra .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList rra operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList rra .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList rra operand, index
+        .endif
     .endif
 .endmacro
 .macro sax operand, index
@@ -625,15 +886,17 @@
     .if overrule
         ___EvalInstrList sax .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList sax operand, index
-    .endif
-.endmacro
-.macro lax operand, index
-    overrule .set .xmatch(.left(1, operand), !)
-    .if overrule
-        ___EvalInstrList lax .right(.tcount(operand)-1, operand), index
-    .else
-        ___EvalInstrList lax operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList sax .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList sax operand, index
+        .endif
     .endif
 .endmacro
 .macro dcp operand, index
@@ -641,7 +904,17 @@
     .if overrule
         ___EvalInstrList dcp .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList dcp operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList dcp .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList dcp operand, index
+        .endif
     .endif
 .endmacro
 .macro isc operand, index
@@ -649,6 +922,16 @@
     .if overrule
         ___EvalInstrList isc .right(.tcount(operand)-1, operand), index
     .else
-        ___EvalInstrList isc operand, index
+
+        resp .set 0
+        
+        contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if resp
+            ; use normalized access reference to fetch shadow
+            ___EvalInstrList isc .ident(.sprintf("__S%s", .string(operand))), index
+        .else
+            ___EvalInstrList isc operand, index
+        .endif
     .endif
 .endmacro
