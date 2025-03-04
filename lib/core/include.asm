@@ -60,6 +60,8 @@
         .define LIBCORE_ROM FDS
         .include .concat(libroot, "/core/fds/header.asm")   ; Header and lib config
     .endif
+
+    .include .concat(libroot, "/core/table.asm")
     
     .include .concat(libroot, "/core/overload.asm")         ; overloaded instruction mnemonics
     .include .concat(libroot, "/ca65hl/ca65hl.h")

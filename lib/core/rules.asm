@@ -11,10 +11,6 @@
     deferror error,   aea
     deferror error,   aira      ; indexed register locations
 
-    .if wantmirror              ; mirrors exist only in RAM, no check needed even if PRGRAM in ROM-RAM switchable cart region (thats decided at shadow declare)
-        .exitmacro
-    .endif
-
     .ifdef ::PROFILE_AllowAccessToStack
         deferror ::PROFILE_AllowAccessToStack, aats
     .endif
@@ -215,6 +211,17 @@
         .else
             deferror AllowSingleInstructionSerialAccess, __param0__
         .endif
+    .elseif .xmatch(__rule__, PerformAutomaticShadowWrites)
+        .ifndef __param0__
+            PerformAutomaticShadowWrites .set allow
+        .elseif .xmatch(__param0__, -)
+            PerformAutomaticShadowWrites .set error
+        .elseif .xmatch(__param0__, +)
+            PerformAutomaticShadowWrites .set allow
+        .else
+            deferror PerformAutomaticShadowWrites, __param0__
+        .endif
+    .else
     .else
         .fatal "string"
     .endif

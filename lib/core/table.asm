@@ -1,58 +1,42 @@
-/*
 
-    Sine, Cosine, Tangent, Arcsine, Arcosine, Arctangent, Secant, Cosecant, cotangent, Arcsecant, Arcosecant, Arcotangent
-    
-    Wave (Custom Wave)
+.macro poly __func__, __il$__, __ih$__
+    .local il, ih
 
-    Linear table
-    X = Y
-    X + 1 = Y
+    il .set 0
+    ih .set 256
 
-    TODO: Consider nan, inf, ninf, 
+    .ifnblank __il$__
+        il .set __il$__
+    .endif
 
-    If the user can gaurantee that the index will lie within foo and bar, then we can exclusively generate information for those regions.
+    .ifnblank __ih$__
+        ih .set __ih$__
+    .endif
 
-    table Sine
-    
-    table Polynomial -(2i / 3), (i ^ 0.5), 4i
-        ; f(x) = -(2x/3)^3 + 5i
-
-    NOTE:
-        Indicies will *always* yield positive results, even if there are negative roots.
-
-
-    The process can depend on define evaluation if we use define abuse
-    this way we wont need to calculate much, but we will need a clever way of handling indicies
-*/
-
-.macro gen __func__,  il, ih, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, z
-    .local resp
-    
-    .repeat ih - il, iter
-        math resp, __func__ a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, iter, z 
-        .byte resp
+    .define i()  (il + ir)
+    .repeat (ih - il), ir
+        .byte __func__
     .endrepeat
 .endmacro
 
-.macro math __resp__, __func__, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, z
-    .local resp
-    __resp__ .set null
+.macro table __name__, __il$__, __ih$__, __func$__
+    .local il, ih
 
-    __rest__ .set resp
-.endmacro
+    il .set 0
+    ih .set 256
 
-/*
+    .ifnblank __il$__
+        il .set __il$__
+    .endif
 
-    TABLE_NAME
-    TABLE_SIZE
+    .ifnblank __ih$__
+        ih .set __ih$__
+    .endif
 
-
-*/
-
-.macro table __name__, __il$__, __ih$__
     .if     .xmatch(__name__, id)
         ; generate idtable
-        gen x, 0, 256               ; y = x (limit 0 <+ x < 256)
+        table poly, i, 0, 256
+        .exitmacro               ; y = x (limit 0 <+ x < 256)
     .elseif .xmatch(__name__, sin)
         ; generate sin table
     .elseif .xmatch(__name__, cos)
@@ -79,6 +63,8 @@
         ; generate acot table
     .elseif .xmatch(__name__, bcd)
         ; generate bcd table
+    .elseif .xmatch(__name__, poly)
+        
     .else
     .endif
 .endmacro

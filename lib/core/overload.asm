@@ -1,4 +1,5 @@
 ; TODO: dev these
+; TODO: chane 0 (do) 1 (overrule) 2 (DONOTEVALUTE) into enums
 .macro sed __target__
     .ifblank __target__
         jsr __toBCD
@@ -156,6 +157,12 @@
         resp .set 0
         
         contains resp, operand, LIBCORE_SHADOWACESS
+
+        .if .xmatch(.left(1, operand), [)
+            overrule .set 2
+        .elseif .xmatch(.right(1, operand), ])
+            overrule .set 2
+        .endif
 
         .if resp
             ; use normalized access reference to fetch shadow
@@ -675,6 +682,7 @@
     .local ptr
 
     .if .xmatch(.left(1, operand), [)
+        .feature ubiquitous_idents -
         .ifblank index
             jmp operand
         .elseif .xmatch(.right(1, operand), ])
@@ -686,7 +694,7 @@
             pla
 
             jmp [ptr]
-        .elseif
+        .elseif .xmatch(.right(1, operand), y)
             pha
             lda operand, y
             sta ptr
@@ -696,11 +704,13 @@
 
             jmp [ptr]
         .endif
+        .feature ubiquitous_idents +
     .else
         overrule .set .xmatch(.left(1, operand), !)
         .if overrule
             ___EvalInstrList jmp .right(.tcount(operand)-1, operand), index
-        .else
+            .exitmacro
+        .endif
 
         resp .set 0
         
