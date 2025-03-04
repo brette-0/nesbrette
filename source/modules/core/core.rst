@@ -503,17 +503,65 @@ The following instructions overload the existing ``6502`` mnemonics, be it enabl
 
     jmp [ptr]   ; jump to location at ptr
 
-``defines``
-**********
-
 ``include``
 **********
+
+``include`` Include module
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+``includefrom module, feature`` Include feature
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+``report level, message`` Report Exception
+"""""""""""""""""""""""""""""""""""""""""""""""
 
 ``report``
 **********
 
+``report level, message`` Report Exception
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+``deferror level, out`` Define Error Level
+"""""""""""""""""""""""""""""""""""""""""""""""
+
 ``table``
 **********
 
+``poly function, start, amount, paramx ...`` Precompute Polynomials
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+.. code-block::
+    
+    poly i                              ; generate table of formula y = x
+    poly expo 2, i, 0, 64               ; limit range to 64
+    poly expo b, 2, 0, 256, expo 2, i   ; add a dependant parameter
+
 ``typing``
 **********
+
+``memory``
+**********
+
+``malloc target, amount, type`` Allocate RAM
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+This is used to fetch the next available ram address for a function. Fast ram should be ZP by default, but may at times not be available depending on what the code is doing. ZP is for code that requires it to function and Slow ram is for functions that are permanent that do not rquire immense speed performance.
+
+.. code-block::
+    
+    malloc foo, 2, fast     ; request 2 bytes of fast RAM if possible
+    malloc foo, bar, zp     ; request bar bytes of ZP ram
+    malloc foo, 10, slow    ; request 10 bytes of slow ram
+
+``dealloc target, amount, type`` Deallocate RAM
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+RAM should be deallocated at the end of its lifetime. This way RAM is used efficiently and safely.
+
+.. code-block::
+    
+    dealloc foo, 2, fast    ; revoke 2 bytes of fast RAM if possible
+    dealloc foo, bar, zp    ; revoke bar bytes of ZP ram
+    dealloc foo, 10, slow   ; revoke 10 bytes of slow ram
