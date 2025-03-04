@@ -1,5 +1,5 @@
 
-.macro poly __func__, __il$__, __ih$__
+.macro poly __func__, __il$__, __ih$__, __b$__, __c$__, __d$__, __e$__, __f$__, __g$__, __h$__, __j$__, __k$__, __l$__, __m$__, __n$__, __o$__, __p$__, __q$__, __r$__, __s$__, __t$__, __u$__, __v$__, __w$__, __z$__
     .local il, ih
 
     il .set 0
@@ -14,57 +14,34 @@
     .endif
 
     .define i()  (il + ir)
+    .define b()  (__b$__)
+    .define c()  (__c$__)
+    .define d()  (__d$__)
+    .define e()  (__e$__)
+    .define f()  (__f$__)
+    .define g()  (__g$__)
+    .define h()  (__h$__)
+    .define i()  (__i$__)
+    .define j()  (__j$__)
+    .define k()  (__k$__)
+    .define l()  (__l$__)
+    .define m()  (__m$__)
+    .define n()  (__n$__)
+    .define o()  (__o$__)
+    .define p()  (__p$__)
+    .define q()  (__q$__)
+    .define r()  (__r$__)
+    .define s()  (__s$__)
+    .define t()  (__t$__)
+    .define u()  (__u$__)
+    .define v()  (__v$__)
+    .define w()  (__w$__)
+    .define z()  (__z$__)
+
     .repeat (ih - il), ir
         .byte __func__
     .endrepeat
-.endmacro
 
-.macro table __name__, __il$__, __ih$__, __func$__
-    .local il, ih
-
-    il .set 0
-    ih .set 256
-
-    .ifnblank __il$__
-        il .set __il$__
-    .endif
-
-    .ifnblank __ih$__
-        ih .set __ih$__
-    .endif
-
-    .if     .xmatch(__name__, id)
-        ; generate idtable
-        table poly, i, 0, 256
-        .exitmacro               ; y = x (limit 0 <+ x < 256)
-    .elseif .xmatch(__name__, sin)
-        ; generate sin table
-    .elseif .xmatch(__name__, cos)
-        ; generate cos table
-    .elseif .xmatch(__name__, tan)
-        ; generate tan table
-    .elseif .xmatch(__name__, asin)
-        ; generate asin table
-    .elseif .xmatch(__name__, acos)
-        ; generate acos table
-    .elseif .xmatch(__name__, atan)
-        ; generate atan table
-    .elseif .xmatch(__name__, sct)
-        ; generate sct table
-    .elseif .xmatch(__name__, csc)
-        ; generate csc table
-    .elseif .xmatch(__name__, cot)
-        ; generate cot table
-    .elseif .xmatch(__name__, asct)
-        ; generate asct table
-    .elseif .xmatch(__name__, acsc)
-        ; generate acsc table
-    .elseif .xmatch(__name__, acot)
-        ; generate acot table
-    .elseif .xmatch(__name__, bcd)
-        ; generate bcd table
-    .elseif .xmatch(__name__, poly)
-        
-    .else
-    .endif
+    .undefine i
+    .undefine b
 .endmacro

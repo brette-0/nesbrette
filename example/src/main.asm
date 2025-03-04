@@ -10,10 +10,10 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
 
 .segment "CODE"
 
-
+table:
+    poly (b + 1) * (b + 1), 0, 256, expo i, 2
 
 reset:
-
     jmp reset
 
 .segment "VECTORS"
