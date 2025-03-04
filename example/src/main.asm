@@ -10,18 +10,9 @@ __libroot__ "../../lib"                 ; specify location of libroot (includes 
 
 .segment "CODE"
 
-foo = $00
 
-idtable:
-    poly (i * i + i) / 2
 
 reset:
-    ldx #$00
-
-    loop:
-        lda idtable, x
-        inx
-        bne loop
 
     jmp reset
 

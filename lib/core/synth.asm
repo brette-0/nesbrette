@@ -95,6 +95,39 @@
                 .endif
         .endif
 .endmacro
+
+.macro strindex __out__, __ctx__, __array__, __last$__
+    .local foo, last
+
+    last .set 0
+    .ifnblank __last$__
+        last .set __last$__
+    .endif
+
+    .repeat .strlen(__array__), iter
+        .if .strat(__array__, iter) = __ctx__ && (!.def(foo))
+            .if !last
+                foo := null
+            .endif
+            __out__ .set iter
+            .exitmacro
+        .endif
+    .endrepeat
+.endmacro
+
+; I seriously doubt we will raise anything ot the 8th exponent, but if you do
+; feel free to let me know in a bug report because I can arrange this to be longer
+.define expo(__base__, __exp__)\
+        1                          * \
+        ((__base__ * (__exp__ > 0)) | (__exp__ <= 0)) * \
+        ((__base__ * (__exp__ > 1)) | (__exp__ <= 1)) * \
+        ((__base__ * (__exp__ > 2)) | (__exp__ <= 2)) * \
+        ((__base__ * (__exp__ > 3)) | (__exp__ <= 3)) * \
+        ((__base__ * (__exp__ > 4)) | (__exp__ <= 4)) * \
+        ((__base__ * (__exp__ > 5)) | (__exp__ <= 5)) * \
+        ((__base__ * (__exp__ > 6)) | (__exp__ <= 6)) * \
+        ((__base__ * (__exp__ > 7)) | (__exp__ <= 7)) 
+
 ; TAKEN FROM CC65 SRC AS IS AND IS TESTED
 
 ; bge - jump if unsigned greater or equal
