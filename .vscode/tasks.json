@@ -4,7 +4,7 @@
         {
             "label": "Build Example ROM",
             "type": "shell",
-            "command": "c:/cc65/bin/cl65 --verbose --target none -C ./example/config.cfg -o ./example/example.nes -g -Wl --dbgfile,./example/example.dbg ./example/src/main.asm",
+            "command": "c:/cc65/bin/cl65 --verbose --target none -C ./example/config.cfg -o ./example/example.nes -g -Wl --dbgfile,./example/example.dbg ./example/src/nb.asm",
             "problemMatcher": [
                 "$ca65",
                 "$ld65"

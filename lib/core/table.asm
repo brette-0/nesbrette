@@ -1,4 +1,4 @@
-
+; TODO: perform checks to identify if its poly i (idtable)
 .macro poly __func__, __il$__, __ih$__, __b$__, __c$__, __d$__, __e$__, __f$__, __g$__, __h$__, __j$__, __k$__, __l$__, __m$__, __n$__, __o$__, __p$__, __q$__, __r$__, __s$__, __t$__, __u$__, __v$__, __w$__, __z$__
     .local il, ih
 
@@ -6,22 +6,24 @@
     ih .set 256
 
     .ifnblank __il$__
-        il .set __il$__
+        .if !is_null __il$__
+            il .set __il$__
+        .endif
     .endif
 
     .ifnblank __ih$__
-        ih .set __ih$__
+        .if !is_null __ih$__
+            ih .set __ih$__
+        .endif
     .endif
 
     .define i()  (il + ir)
     .define b()  (__b$__)
-    .define c()  (__c$__)
     .define d()  (__d$__)
     .define e()  (__e$__)
     .define f()  (__f$__)
     .define g()  (__g$__)
     .define h()  (__h$__)
-    .define i()  (__i$__)
     .define j()  (__j$__)
     .define k()  (__k$__)
     .define l()  (__l$__)
@@ -44,4 +46,24 @@
 
     .undefine i
     .undefine b
+    .undefine d
+    .undefine e
+    .undefine f
+    .undefine g
+    .undefine h
+    .undefine j
+    .undefine k
+    .undefine l
+    .undefine m
+    .undefine n
+    .undefine o
+    .undefine p
+    .undefine q
+    .undefine r
+    .undefine s
+    .undefine t
+    .undefine u
+    .undefine v
+    .undefine w
+    .undefine z
 .endmacro
