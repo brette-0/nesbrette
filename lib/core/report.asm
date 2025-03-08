@@ -1,5 +1,5 @@
 ; tested working
-.macro deferror __error__, __level__
+.macro deferror __level__, __error__ 
     /*
         (nb_error)__error__
         (token)__level__

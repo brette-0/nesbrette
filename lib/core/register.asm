@@ -1,406 +1,86 @@
-; teseted and working
-.macro inr __target__
-    .ifblank __target__
-        .fatal "Register must be specified"
-    .elseif __target__ = xr
-        inx
-    .elseif __target__ = yr
-        iny
-    .else
-        .fatal "Invalid register specified"
-    .endif
-.endmacro
+.define setmam(__mam__) \
+        ((__mam__ = imp)    * imp   ) | \
+        ((__mam__ = imm)    * imm   ) | \
+        ((__mam__ = zp)     * zp    ) | \
+        ((__mam__ = zpx)    * zpx   ) | \
+        ((__mam__ = zpy)    * zpy   ) | \
+        ((__mam__ = wabs)   * wabs  ) | \
+        ((__mam__ = wabsx)  * wabsx ) | \
+        ((__mam__ = wabsy)  * wabsy ) | \
+        ((__mam__ = abst)   * abst  ) | \
+        ((__mam__ = absx)   * absx  ) | \
+        ((__mam__ = absy)   * absy  ) | \
+        ((__mam__ = inabs)  * inabs ) | \
+        ((__mam__ = inabsx) * inabsx) | \
+        ((__mam__ = inabsy) * inabsy) | \
+        (((__mam__ <> imp   ) && \
+          (__mam__ <> imm   ) && \
+          (__mam__ <> zp    ) && \
+          (__mam__ <> zpx   ) && \
+          (__mam__ <> zpy   ) && \
+          (__mam__ <> wabs  ) && \
+          (__mam__ <> wabsx ) && \
+          (__mam__ <> wabsy ) && \
+          (__mam__ <> abst  ) && \
+          (__mam__ <> absx  ) && \
+          (__mam__ <> absy  ) && \
+          (__mam__ <> inabs ) && \
+          (__mam__ <> inabsx) && \
+          (__mam__ <> inabsy)  ) \
+          * null)
 
-; teseted and working
-.macro der __target__
-    .ifblank __target__
-        .fatal "Register must be specified"
-    .elseif __target__ = xr
-        dex
-    .elseif __target__ = yr
-        dey
-    .else
-        .fatal "Invalid register specified"
-    .endif
-.endmacro
+.define mamreg(__mam__) \
+        ((__mam__ = imp)    * null) | \
+        ((__mam__ = imm)    * null) | \
+        ((__mam__ = zp)     * null) | \
+        ((__mam__ = zpx)    * xr  ) | \
+        ((__mam__ = zpy)    * yr  ) | \
+        ((__mam__ = wabs)   * null) | \
+        ((__mam__ = wabsx)  * xr  ) | \
+        ((__mam__ = wabsy)  * yr  ) | \
+        ((__mam__ = abst)   * null) | \
+        ((__mam__ = absx)   * xr  ) | \
+        ((__mam__ = absy)   * yr  ) | \
+        ((__mam__ = inabs)  * null) | \
+        ((__mam__ = inabsx) * xr  ) | \
+        ((__mam__ = inabsy) * yr  )
 
-.macro ner __target__, __dir$__
-    .ifblank __dir$__
-        .if __target__ > 0
-            inr __target__
-        .else
-            der .max(__target__, -__target__)
-        .endif
-    .else
-        .if __dir$__
-            der __target__
-        .else
-            inr __target__
-        .endif
-    .endif
-.endmacro
+; tested working
+; returns (gpr?)
+; params : (ca65_int)
+.define setreg(__reg__) \ 
+     ((__reg__ = yr) * yr) | \
+     ((__reg__ = xr) * xr) | \
+     ((__reg__ = ar) * ar) | \
+    (((__reg__ <> yr) && (__reg__ <> xr) && (__reg__ <> ar)) * null)
 
-; teseted and working
-.macro tar __target__
-    .ifblank __target__
-        .fatal "Register must be specified"
-    .elseif __target__ = xr
-        tax
-    .elseif __target__ = yr
-        tay
-    .else
-        .fatal "Invalid register specified"
-    .endif
-.endmacro
+; tested working
+; returns (gpr?)
+; params : (ca65_int)
+.define csetreg(__reg__) \ 
+     (.xmatch(__reg__, y) * yr) | \
+     (.xmatch(__reg__, x) * xr) | \
+     (.xmatch(__reg__, a) * ar) | \
+     ((!(.xmatch(__reg__, a) ||.xmatch(__reg__, x) ||.xmatch(__reg__, y))) * null)
 
-; teseted and working
-.macro tra __target__
-    .ifblank __target__
-        .fatal "Register must be specified"
-    .elseif __target__ = xr
-        txa
-    .elseif __target__ = yr
-        tya
-    .else
-        .fatal "Invalid register specified"
-    .endif
-.endmacro
+; returns (ca65_int)
+; params : (ca65_int)
+.define setmreg(__regsnum__) \
+     ( (__regsnum__ = yr) * yr)                         | \
+     ( (__regsnum__ = xr) * xr)                         | \
+     ( (__regsnum__ = (yr + xr)) * (yr + xr))           | \
+     ( (__regsnum__ = ar) * ar)                         | \
+     ( (__regsnum__ = (yr + ar)) * (yr + ar))           | \
+     ( (__regsnum__ = (xr + ar)) * (xr + ar))           | \
+     ( (__regsnum__ = (xr + ar + yr)) * (xr + ar + yr)) | \
+     ( ((__regsnum__ <> (xr + ar + yr)) && (__regsnum__ <> (xr + yr)) && (__regsnum__ <> (ar + xr)) && (__regsnum__ <> (ar + yr)) && (__regsnum__ <> yr) && (__regsnum__ <> xr) && (__regsnum__ <> ar)) * null)
 
-.macro ldr __typed__, __value__, __cpre$__
-    .local _reg, _mode, _temp, cpre
-
-    _reg    .set null
-    _mode   .set null
-
-    .if .paramcount < 2
-        .fatal "ldr requires two operands : (__mode__ : __reg__) & __value__"
-    .endif
-
-    .ifblank __cpre$__
-        .ifdef ConstantParameterRangeException
-            deferror ConstantParameterRangeException, cpre
-        .else
-            deferror fatal, cpre
-        .endif
-    .else
-        deferror __cpre$__, cpre
-    .endif
-
-    _reg    .set  .left(1, __typed__)
-    _mode   .set .right(1, __typed__)
-
-    ; parameter 'hotswap' for mode:reg
-    .if _reg < ar
-        .if _mode < ar
-            .fatal .sprintf("ConstantParameterValueException: neither l:%x or r:%x is large enough to be either a register or a memory address mode.", _reg, _mode)
-        .endif
-        _temp .set _mode
-        _mode .set _reg
-        _reg  .set _temp
-    .elseif _mode > inabs
-        .if _reg > yr
-            .fatal .sprintf("ConstantParameterValueException: both l:%x amd r:%x is too large to be either a register or a memory address mode.", _reg, _mode)
-        .endif
-        _temp .set _mode
-        _mode .set _reg
-        _reg  .set _temp
-    .endif
-
-    .if (_mode = inabs) || (_mode = imp)
-        .fatal "InvalidMemoryAddressModeException : ldr cannot load by indirect unindexed or with implied operand"
-    .endif
-
-    .if ((_mode = zp) || (_mode = zpx) || (_mode = zpy) || (_mode = inabsy) || (_mode = inabsx) || (_mode = imm)) && (__value__ > $ff)
-        report cpre, "ConstantParameterRangeException: The provided value will cannot fit entirely within the operand length of the requested memory address mode."
-    .endif
-
-    .if     _reg = ar
-        .if     _mode = inabsy
-            lda [__value__], y
-        .elseif _mode = inabsx
-            lda [__value__, x]
-        .elseif _mode = abst
-            lda (__value__ | $800)
-        .elseif _mode = absy
-            lda (__value__ | $800), y
-        .elseif _mode = absx
-            lda (__value__ | $800), x
-        .elseif _mode = imm
-            lda #__value__
-        .elseif (_mode = zp) || (_mode = wabs)
-            lda __value__
-        .elseif (_mode = zpx) || (_mode = wabsx)
-            lda __value__, x
-        .elseif (_mode = zpy) || (_mode = wabsy)
-            lda __value__, y
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-
-    .elseif _reg = xr
-        .if (_mode = zpx) || (_mode = wabsx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
-            .fatal "InvalidMemoryAddressModeException : ldr(x) cannot load by indirect unindexed or with implied operand"
-        .endif
-
-        .if     _mode = abst
-            ldx (__value__ || $800)
-        .elseif _mode = absy
-            ldx (__value__ || $800), y
-        .elseif _mode = imm
-            ldx #__value__
-        .elseif (_mode = zp) || (_mode = wabs)
-            ldx __value__
-        .elseif (_mode = zpy) || (_mode = wabsy)
-            ldx __value__, y
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-    
-    .elseif _reg = yr
-
-                .if (_mode = zpx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
-            .fatal "InvalidMemoryAddressModeException : ldr(y) cannot load by indirect unindexed or with implied operand"
-        .endif
-
-        .if     _mode = abst
-            ldy (__value__ || $800)
-        .elseif _mode = absy
-            ldy (__value__ || $800), x
-        .elseif _mode = imm
-            ldy #__value__
-        .elseif (_mode = zp) || (_mode = wabs)
-            ldy __value__
-        .elseif (_mode = zpx) || (_mode = wabsx)
-            ldy __value__, x
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-    .else
-        .fatal "InvalidGeneralPurposeRegister: ldr requires use of singular GPRs (a xOR x xor Y)"
-    .endif
-.endmacro
-
-.macro str __typed__, __address__, __cpre$__, __iwle$__
-    .local _reg, _mode, _temp, cpre, iwle
-
-    .if .paramcount < 2
-        .fatal "str requires two operands : (__mode__ : __reg__) & __address__"
-    .endif
-
-    .ifblank __cpre$__
-        .ifdef ConstantParameterRangeException
-            deferror ConstantParameterRangeException, cpre
-        .else
-            deferror fatal, cpre
-        .endif
-    .else
-        deferror __cpre$__, cpre
-    .endif
-
-    .ifblank __iwle$__
-        .ifdef InvalidWriteLocationException
-            deferror InvalidWriteLocationException, iwle
-        .else
-            deferror fatal, iwle
-        .endif
-    .else
-        deferror __iwle$__, iwle
-    .endif
-
-    _reg    .set  .left(1, __typed__)
-    _mode   .set .right(1, __typed__)
-
-    ; parameter 'hotswap' for mode:reg
-    .if _reg < ar
-        .if _mode < ar
-            .fatal .sprintf("ConstantParameterValueException: neither l:%x or r:%x is large enough to be either a register or a memory address mode.", _reg, _mode)
-        .endif
-        _temp .set _mode
-        _mode .set _reg
-        _reg  .set _temp
-    .elseif _mode > inabs
-        .if _reg > yr
-            .fatal .sprintf("ConstantParameterValueException: both parameters l:%x or r:%x are too large to be either a register or a memory address mode.", _reg, _mode)
-        .endif
-        _temp .set _mode
-        _mode .set _reg
-        _reg  .set _temp
-    .endif
-    
-    .if (_mode = inabs) || (_mode = imp) || (_mode = imm)
-        .fatal "InvalidMemoryAddressModeException : str cannot load by indirect unindexed, immediate or with implied operand"
-    .endif
-
-    .if ((_mode = zp) || (_mode = zpx) || (_mode = zpy) || (_mode = inabsy) || (_mode = inabsx) || (_mode = imm)) && (__address__ > $ff)
-        report cpre, "ConstantParameterRangeException: The provided value will cannot fit entirely within the operand length of the requested memory address mode."
-    .endif
-
-    .if     _reg = ar
-        .if     _mode = inabsy
-            sta [__address__], y
-        .elseif _mode = inabsx
-            sta [__address__, x]
-        .elseif _mode = abst
-            sta (__address__ | $800)
-        .elseif _mode = absy
-            sta (__address__ | $800), y
-        .elseif _mode = absx
-            sta (__address__ | $800), x
-        .elseif (_mode = zp) || (_mode = wabs)
-            sta __address__
-        .elseif (_mode = zpx) || (_mode = wabsx)
-            sta __address__, x
-        .elseif (_mode = zpy) || (_mode = wabsy)
-            sta __address__, y
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-
-    .elseif _reg = xr
-        .if (_mode = zpx) || (_mode = wabsy) || (_mode = absy) || (_mode = wabsx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
-            .fatal "InvalidMemoryAddressModeException : str(x) cannot load by indexed wabs/abs or indirect"
-        .endif
-
-        .if     _mode = abst
-            stx (__address__ | $800)
-        .elseif (_mode = zp) || (_mode = wabs)
-            stx __address__
-        .elseif (_mode = zpy)
-            stx __address__, y
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-    
-    .elseif _reg = yr
-        .if (_mode = zpx) || (_mode = wabsy) || (_mode = absy) || (_mode = wabsx) || (_mode = absx) || (_mode = inabsy) || (_mode = inabsx)
-            .fatal "InvalidMemoryAddressModeException : str(y) cannot load by indirect unindexed or with implied operand"
-        .endif
-
-        .if     _mode = abst
-            sty (_mode | $800)
-        .elseif (_mode = zp) || (_mode = wabs)
-            sty __address__
-        .elseif (_mode = zpx)
-            sty __address__, x
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-    .else
-        .fatal "InvalidGeneralPurposeRegister: str requires use of singular GPRs (a xOR x xor Y)"
-    .endif
-
-    prg8000 .set is_prgram8000 LIBCORE_MAPPER
-
-    .if iwle && (__address__ >= $8000) && (!prg8000)
-        report iwle, "InvalidWriteLocationException: Target is read only memory!"
-    .endif
-
-.endmacro
-
-.macro cpr __typed__, __value__, __cpre$__
-
-    _cpr_reg    .set null
-    _cpr_mode   .set null
-
-    .if .paramcount < 2
-        .fatal "cpr requires two operands : (__mode__ : __reg__) & __value__"
-    .endif
-
-    .ifblank __cpre$__
-        .ifdef ConstantParameterRangeException
-            deferror ConstantParameterRangeException, cpre
-        .else
-            deferror fatal, cpre
-        .endif
-    .else
-        deferror __cpre$__, cpre
-    .endif
-
-    _cpr_reg    .set  .left(1, __typed__)
-    _cpr_mode   .set .right(1, __typed__)
-
-    ; parameter 'hotswap' for mode:reg
-    .if _cpr_reg < ar
-        .if _cpr_mode < ar
-            .fatal .sprintf("ConstantParameterValueException: neither l:%x or r:%x is large enough to be either a register or a memory address mode.", _reg, _mode)
-        .endif
-        _cpr_temp .set _cpr_mode
-        _cpr_mode .set _cpr_reg
-        _cpr_reg  .set _cpr_temp
-    .elseif _cpr_mode > inabs
-        .if _reg > yr
-            .fatal .sprintf("ConstantParameterValueException: both l:%x amd r:%x is too large to be either a register or a memory address mode.", _reg, _mode)
-        .endif
-        _cpr_temp .set _cpr_mode
-        _cpr_mode .set _cpr_reg
-        _cpr_reg  .set _cpr_temp
-    .endif
-
-    .if (_cpr_mode = inabs) || (_cpr_mode = imp)
-        .fatal "InvalidMemoryAddressModeException : cpr cannot load by indirect unindexed or with implied operand"
-    .endif
-
-    .if ((_cpr_mode = zp) || (_cpr_mode = zpx) || (_cpr_mode = zpy) || (_cpr_mode = inabsy) || (_cpr_mode = inabsx) || (_cpr_mode = imm)) && (__value__ > $ff)
-        report cpre, "ConstantParameterRangeException: The provided value will cannot fit entirely within the operand length of the requested memory address mode."
-    .endif
-
-    .if     _cpr_reg = ar
-        .if     _cpr_mode = inabsy
-            cmp [__value__], y
-        .elseif _cpr_mode = inabsx
-            cmp [__value__, x]
-        .elseif _cpr_mode = abst
-            cmp (_mode | $800)
-        .elseif _cpr_mode = absy
-            cmp (_mode | $800), y
-        .elseif _cpr_mode = absx
-            cmp (_mode | $800), x
-        .elseif _cpr_mode = imm
-            cmp #__value__
-        .elseif (_cpr_mode = zp) || (_cpr_mode = wabs)
-            cmp __value__
-        .elseif (_cpr_mode = zpx) || (_cpr_mode = wabsx)
-            cmp __value__, x
-        .elseif (_cpr_mode = zpy) || (_cpr_mode = wabsy)
-            cmp __value__, y
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-
-    .elseif _cpr_reg = xr
-        .if (_cpr_mode = zpy) || (_cpr_mode = absy) || (_cpr_mode = wabsy) || (_cpr_mode = zpx) || (_cpr_mode = wabsx) || (_cpr_mode = absx) || (_cpr_mode = inabsy) || (_cpr_mode = inabsx)
-            .fatal "InvalidMemoryAddressModeException : cpr(x) cannot load by indirect unindexed or with implied operand"
-        .endif
-
-        .if     _cpr_mode = abst
-            cpx (_mode || $800)
-        .elseif _cpr_mode = imm
-            cpx #__value__
-        .elseif (_cpr_mode = zp) || (_cpr_mode = wabs)
-            cpx __value__
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-    
-    .elseif _cpr_reg = yr
-
-                .if (_cpr_mode = zpx) || (_cpr_mode = absx) || (_cpr_mode = wabsx) || (_cpr_mode = zpy) || (_cpr_mode = wabsx) || (_cpr_mode = absx) || (_cpr_mode = inabsy) || (_cpr_mode = inabsx)
-            .fatal "InvalidMemoryAddressModeException : cpr(y) cannot load by indirect unindexed or with implied operand"
-        .endif
-
-        .if     _cpr_mode = abst
-            cpy (_mode || $800)
-        .elseif _cpr_mode = imm
-            cpy #__value__
-        .elseif (_cpr_mode = zp) || (_cpr_mode = wabs)
-            cpy __value__
-        .else
-            .fatal "InvalidMemoryAddressModeException: Could not recognize the provided memory address mode."
-        .endif
-    .else
-        .fatal "InvalidGeneralPurposeRegister: cpr requires use of singular GPRs (a xOR x xor Y)"
-    .endif
-.endmacro
+; returns (igpr?)
+; params : (ca65_int)
+.define setireg(__regenum__) \
+     ((__regenum__ = yr) * yr) | \
+     ((__regenum__ = xr) * xr) | \
+    (((__regenum__ <> yr) && (__regenum__ <> xr) * null)
 
 .macro iralloc __send__, __used__
     .ifblank __send__
@@ -437,4 +117,167 @@
     .ifnblank __used2__
         ralloc __send__, __used2__
     .endif
+.endmacro
+
+; TODO: Decode syntax here, or else __operand__ will evaluate 
+.macro ld __reg__, __operand__, __index__
+    .ifblank    __reg__
+        .fatal 
+    .endif
+
+    overrule .set .xmatch(.left(1, {__operand__}), !)
+    .if overrule
+        .out .string(.right(1, __operand__))
+    .endif
+
+    .if     .xmatch(__reg__, a)
+        lda .right(.tcount(__operand__) - overrule, __operand__), __index__
+    .elseif .xmatch(__reg__, x)
+        ldx .right(.tcount(__operand__) - overrule, __operand__), __index__
+    .elseif .xmatch(__reg__, y)
+        ldy .right(.tcount(__operand__) - overrule, __operand__), __index__
+    .elseif __reg__ = ar
+        lda .right(.tcount(__operand__) - overrule, __operand__), __index__
+    .elseif __reg__ = xr
+        ldx .right(.tcount(__operand__) - overrule, __operand__), __index__
+    .elseif __reg__ = yr
+        ldy .right(.tcount(__operand__) - overrule, __operand__), __index__
+    .else
+        .fatal
+    .endif
+.endmacro
+
+.macro st __reg__, __operand__, __index__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, a)
+        sta __operand__, __index__
+    .elseif .xmatch(__reg__, x)
+        stx __operand__, __index__
+    .elseif .xmatch(__reg__, y)
+        sty __operand__, __index__
+    .elseif __reg__ = ar
+        sta __operand__, __index__
+    .elseif __reg__ = xr
+        stx __operand__, __index__
+    .elseif __reg__ = yr
+        sty __operand__, __index__
+    .else
+        .fatal
+    .endif
+.endmacro
+
+.macro cp __reg__, __operand__, __index__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, a)
+        cmp __operand__, __index__
+    .elseif .xmatch(__reg__, x)
+        cpx __operand__, __index__
+    .elseif .xmatch(__reg__, y)
+        cpy __operand__, __index__
+    .elseif __reg__ = ar
+        cmp __operand__, __index__
+    .elseif __reg__ = xr
+        cpx __operand__, __index__
+    .elseif __reg__ = yr
+        cpy __operand__, __index__
+    .else
+        .fatal
+    .endif
+.endmacro
+
+.macro in __reg__, __operand__, __index__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, x)
+        inx __operand__, __index__
+    .elseif .xmatch(__reg__, y)
+        iny __operand__, __index__
+    .elseif __reg__ = xr
+        inx __operand__, __index__
+    .elseif __reg__ = yr
+        iny __operand__, __index__
+    .else
+        inc __operand__, __index__
+    .endif
+.endmacro
+
+.macro de __reg__, __operand__, __index__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, x)
+        dex __operand__, __index__
+    .elseif .xmatch(__reg__, y)
+        dey __operand__, __index__
+    .elseif __reg__ = xr
+        dex __operand__, __index__
+    .elseif __reg__ = yr
+        dey __operand__, __index__
+    .else
+        dec __operand__, __index__
+    .endif
+.endmacro
+
+.macro ta __reg__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, x)
+        tax __operand__, __index__
+    .elseif .xmatch(__reg__, y)
+        tay __operand__, __index__
+    .elseif __reg__ = xr
+        tax __operand__, __index__
+    .elseif __reg__ = yr
+        tay __operand__, __index__
+    .else
+        sta __operand__, __index__
+    .endif
+.endmacro
+
+.macro tx __reg__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, x)
+        txa __operand__, __index__
+    .elseif .xmatch(__reg__, y) && .defined(ID_TABLE)
+        txy __operand__, __index__
+    .elseif __reg__ = xr 
+        txa __operand__, __index__
+    .elseif __reg__ = yr && .defined(ID_TABLE)
+        txy __operand__, __index__
+    .else
+        stx __operand__, __index__
+    .endif
+.endmacro
+
+.macro ty __reg__
+    .ifblank    __reg__
+        .fatal 
+    .elseif .xmatch(__reg__, a)
+        tya __operand__, __index__
+    .elseif .xmatch(__reg__, x) && .defined(ID_TABLE)
+        tyx __operand__, __index__
+    .elseif __reg__ = ar 
+        tya __operand__, __index__
+    .elseif __reg__ = xr && .defined(ID_TABLE)
+        txy __operand__, __index__
+    .else
+        tyx __operand__, __index__
+    .endif
+.endmacro
+
+.macro t __src__, __tar__
+    .if     .xmatch(__src__, __tar__)
+        .fatal
+    .elseif .xmatch(__src__, a)
+        .define __t_op ta
+    .elseif .xmatch(__src__, x)
+        .define __t_op ta
+    .elseif .xmatch(__src__, y)
+        .define __t_op ta
+    .endif
+
+    __t_op __tar__
+    .undefine __t_op
 .endmacro

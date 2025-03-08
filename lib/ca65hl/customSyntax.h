@@ -262,9 +262,8 @@
     
     resp .set 0
     contains resp, instr, __READINSTRUCTIONS
-
     .if (overrule <> 2)
-        .if resp && .def(op) && .const(op)
+        .if resp && .const(op)
             SYSREAD op, index
         .endif
     .endif
@@ -273,13 +272,10 @@
     resp .set 0
     contains resp, instr, __WRITEINSTRUCTIONS
     .if resp && (overrule <> 2)
-        SYSWRITE op, index
+        .if resp && .const(op)
+            SYSWRITE op, index
+        .endif
     .endif
-
-    ;contains resp, instr, __RMWINSTRUCTIONS
-    ;,if resp && (overrule <> 2)
-    ;    RMWDUMMYWRITECHECK op, index
-    ;.endif
 
     .if .xmatch(index, y) && .xmatch(instr, nop)
         .byte $1c

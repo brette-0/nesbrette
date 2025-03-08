@@ -1,5 +1,14 @@
+deferror ::PROFILE_AllowAccessToStack, error
+deferror ::PROFILE_AllowErroneousAccess, error
+deferror ::PROFILE_AllowIndexedRegisterAccess, error
+
+
 .macro lds __offset$__, __reg$__
-    txs
+    .local stacksafety
+
+    stacksafety = PROFILE_AllowAccessToStack
+    rule AllowAccessToStack, allow
+    tsx
 
     _lds_reg .set ar
 
@@ -21,12 +30,12 @@
         .fatal ""
     .endif
 
-
-    ldr absx: _lds_reg, ($100 + _lds_offset)
+    ld _lds_reg, $100 + _lds_offset, x
+    rule AllowAccessToStack, stacksafety
 .endmacro
 
 .macro sts __offset$__
-    txs
+    tsx
 
     .ifblank __offset$__
         _lds_offset = $00
@@ -42,7 +51,7 @@
 .endmacro
 
 .macro cps __offset$__
-    txs
+    tsx
 
     _lds_reg .set ar
 

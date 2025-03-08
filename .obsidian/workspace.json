@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "source/theory/ir.md",
+                "file": "Syntax.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ir"
+              "title": "Syntax"
             }
           }
         ]
@@ -165,19 +165,26 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "source/modules/memory/compare.rst",
-    "example/src/main.o",
-    "lib/memory/compare.asm",
+    "example/src/nb.o",
     "build/html/searchindex.js.tmp",
-    "source/modules/memory/memcpy.rst",
-    "build/html/_sources/theory/instructionreference.rst.txt",
-    "build/html/theory/instructionreference.html",
-    "build/doctrees/theory/instructionreference.doctree",
-    "lib/synth/stack.asm",
-    "lib/synth/idtable.asm",
-    "lib/synth/generic.asm",
-    "Pasted image 20250202202940.png",
+    "theory/crashdump.md",
+    "README.md",
+    "Syntax.md",
+    "build/html/_static/haiku.css",
+    "build/html/_static/bullet_orange.png",
+    "build/html/_static/bg-page.png",
+    "build/html/_static/alert_warning_32.png",
+    "build/html/_static/alert_info_32.png",
+    "theory/luatalk.asm",
+    "theory/debug.lua.md",
+    "example/post/adfc.json",
+    "example/post/equs.json",
+    "example/post/dfc.json",
+    "example/post",
+    "post/debug.py",
+    "post",
     "source/theory/ir.md",
+    "Pasted image 20250202202940.png",
     "archives/docs/modules/synthetic/Stack.md",
     "archives/docs/modules/synthetic/s6502.md",
     "archives/docs/modules/synthetic/i6502.md",
@@ -201,15 +208,7 @@
     "archives/docs/exclusions.md",
     "archives/profiling/math/cmult_results/cmult_accumulator_mode_unbiased_complexity_profiling.png",
     "archives/profiling/math/cmult_results/cmult_accumulator_mode_multiplier_profiling.png",
-    "archives/profiling/math/cmult_results/cmult_accumulator_mode_biased_complexity_profiling.png",
     "archives/thoughts/trig.md",
-    "archives/thoughts/TODO.md",
-    "archives/thoughts/sqrt.md",
-    "thoughts/trig.md",
-    "thoughts/TODO.md",
-    "thoughts/sqrt.md",
-    "profiling/math/cmult_results/cmult_accumulator_mode_unbiased_complexity_profiling.png",
-    "profiling/math/cmult_results/cmult_accumulator_mode_multiplier_profiling.png",
-    "profiling/math/cmult_results/cmult_accumulator_mode_biased_complexity_profiling.png"
+    "archives/thoughts/TODO.md"
   ]
 }

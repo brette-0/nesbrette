@@ -66,15 +66,15 @@ includefrom synth, generic
     srcdelta .set null
     tardelta .set null
 
-    malloc srcdelta, 1
-    malloc tardelta, 1
+    malloc srcdelta, 1, fast
+    malloc tardelta, 1, fast
 
     fill .set null
     .if !skip
         .if     s_source && (w_source < w_target)
-            malloc fill, 1
+            malloc fill, 1, fast
         .elseif s_target && (w_target < w_source)
-            malloc fill, 1
+            malloc fill, 1, fast
         .else
             fill .set $00
         .endif
@@ -265,10 +265,10 @@ includefrom synth, generic
 
     ; memory cleanup
     .if w_source <> w_target
-        dealloc fill, 1
+        dealloc fill, 1, fast
     .endif
 
-    dealloc tardelta, 1
-    dealloc srcdelta, 1
+    dealloc tardelta, 1, fast
+    dealloc srcdelta, 1, fast
 .endmacro
 .endif

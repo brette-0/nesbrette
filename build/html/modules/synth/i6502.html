@@ -6,42 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>i6502 &amp; i6502x &#8212; nesbrette 0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
-    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=47202671" />
+    <link rel="stylesheet" type="text/css" href="../../_static/haiku.css?v=fce32b03" />
     <script src="../../_static/documentation_options.js?v=2709fde1"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="stack" href="stack.html" />
     <link rel="prev" title="s6502" href="s6502.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="stack.html" title="stack"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="s6502.html" title="s6502"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="synth.html" accesskey="U"><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a></li> 
-      </ul>
-    </div>  
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>nesbrette 0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>i6502 &amp; i6502x</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="Top">
+      
+        <p>
+        «&#160;&#160;<a href="s6502.html"><code class="docutils literal notranslate"><span class="pre">s6502</span></code></a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="stack.html"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a>&#160;&#160;»
+        </p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+      </div>
+      <div class="content" role="main">
+        
+        
   <section id="i6502-i6502x">
 <h1><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code><a class="headerlink" href="#i6502-i6502x" title="Link to this heading">¶</a></h1>
 <p>Because the value at any index in an <a class="reference external" href="https://www.nesdev.org/wiki/Identity_table">Identity Table</a> is the same as the index, it is possible to use our GPRs as operands for read only instructions. The table required is only <code class="docutils literal notranslate"><span class="pre">256</span></code> bytes in size, if page aligned they should all complete in <code class="docutils literal notranslate"><span class="pre">4</span></code> cycles taking up <code class="docutils literal notranslate"><span class="pre">3</span></code> bytes except for <code class="docutils literal notranslate"><span class="pre">laxi</span></code> which only takes <code class="docutils literal notranslate"><span class="pre">3</span></code> cycles.</p>
@@ -120,79 +112,19 @@ tyx         ; x =&gt; $10
 </section>
 
 
-            <div class="clearer"></div>
-          </div>
-        </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a><ul>
-<li><a class="reference internal" href="#txy-transfer-x-to-y"><code class="docutils literal notranslate"><span class="pre">txy</span></code> - Transfer X to Y</a></li>
-<li><a class="reference internal" href="#tyx-transfer-y-to-x"><code class="docutils literal notranslate"><span class="pre">tyx</span></code> - Transfer Y to X</a></li>
-<li><a class="reference internal" href="#sev-set-overflow"><code class="docutils literal notranslate"><span class="pre">sev</span></code> - Set Overflow</a></li>
-<li><a class="reference internal" href="#adc-r-add-r-with-carry"><code class="docutils literal notranslate"><span class="pre">adc</span> <span class="pre">r</span></code> - Add R with Carry</a></li>
-<li><a class="reference internal" href="#sbc-r-subtract-r-with-carry"><code class="docutils literal notranslate"><span class="pre">sbc</span> <span class="pre">r</span></code> - Subtract R with Carry</a></li>
-<li><a class="reference internal" href="#cmp-r-compare-against-r"><code class="docutils literal notranslate"><span class="pre">cmp</span> <span class="pre">r</span></code> - Compare against R</a></li>
-<li><a class="reference internal" href="#and-r-mask-by-r"><code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">r</span></code> - Mask by R</a></li>
-<li><a class="reference internal" href="#ora-r-set-bits-r"><code class="docutils literal notranslate"><span class="pre">ora</span> <span class="pre">r</span></code> - Set bits R</a></li>
-<li><a class="reference internal" href="#eor-r-bitflip-by-r"><code class="docutils literal notranslate"><span class="pre">eor</span> <span class="pre">r</span></code> - Bitflip by R</a></li>
-</ul>
-</li>
-</ul>
+      <div class="bottomnav" role="navigation" aria-label="Bottom">
+      
+        <p>
+        «&#160;&#160;<a href="s6502.html"><code class="docutils literal notranslate"><span class="pre">s6502</span></code></a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="stack.html"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a>&#160;&#160;»
+        </p>
 
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="s6502.html"
-                          title="previous chapter"><code class="docutils literal notranslate"><span class="pre">s6502</span></code></a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="stack.html"
-                          title="next chapter"><code class="docutils literal notranslate"><span class="pre">stack</span></code></a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/synth/i6502.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="stack.html" title="stack"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="s6502.html" title="s6502"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">nesbrette 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" ><code class="docutils literal notranslate"><span class="pre">Modules</span></code></a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="synth.html" ><code class="docutils literal notranslate"><span class="pre">synth</span></code></a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><code class="docutils literal notranslate"><span class="pre">i6502</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">i6502x</span></code></a></li> 
-      </ul>
-    </div>
+
     <div class="footer" role="contentinfo">
     &#169; Copyright 2025, Brette.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.

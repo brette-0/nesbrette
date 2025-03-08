@@ -12,6 +12,14 @@ Math
     - Hardware Multiplication
     - Hardware Trig Functions
 
+Compression:
+    - Compression Algorithms
+
+Random:
+    - LFSR
+    - Biasing
+        - RLE Biasing
+
 Synthetics
     - Review
 

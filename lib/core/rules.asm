@@ -7,32 +7,32 @@
     aea  .set null
     aira .set null
 
-    deferror warning, aats
-    deferror error,   aea
-    deferror error,   aira      ; indexed register locations
+    deferror aats, warning
+    deferror aea,  error
+    deferror aira, error        ; indexed register locations
 
     .ifdef ::PROFILE_AllowAccessToStack
-        deferror ::PROFILE_AllowAccessToStack, aats
+        deferror aats, ::PROFILE_AllowAccessToStack
     .endif
 
     .ifdef PROFILE_AllowAccessToStack
-        deferror PROFILE_AllowAccessToStack, aats
+        deferror aats, PROFILE_AllowAccessToStack
     .endif
     
     .ifdef ::PROFILE_AllowErroneousAccess
-        deferror ::PROFILE_AllowErroneousAccess, aea
+        deferror aea, ::PROFILE_AllowErroneousAccess
     .endif
 
     .ifdef PROFILE_AllowErroneousAccess
-        deferror PROFILE_AllowErroneousAccess, aea
+        deferror aea, PROFILE_AllowErroneousAccess
     .endif
 
     .ifdef ::PROFILE_AllowIndexedRegisterAccess
-        deferror ::PROFILE_AllowIndexedRegisterAccess, aira
+        deferror aira, ::PROFILE_AllowIndexedRegisterAccess
     .endif
 
     .ifdef PROFILE_AllowIndexedRegisterAccess
-        deferror PROFILE_AllowIndexedRegisterAccess, aira
+        deferror aira, PROFILE_AllowIndexedRegisterAccess
     .endif
 
     .if (.hibyte(__target__) & %1110_0111) = $01
@@ -46,9 +46,9 @@
     .endif
 
     resp .set 0
-    contains resp, __target__, LIBCORE_WRITEONLY
+    contains resp, __target__, LIBCORE_WRITEONLY#
     
-    .if (__target__ >= $2000) && (__target__ < $4000) && (!.blank(__index__))
+    .if (__target__ >= $2000) && (__target__ < $4000); && (!.blank(__index__))
         ; Throw error on indexed access
     .endif
 
@@ -69,13 +69,8 @@
         report aea, "string"
     .endif
 
-    .if .xmatch(LIBCORE_ROM, nes)
+    .if __target__ & $fff0 = $4020 && .xmatch(LIBCORE_ROM, nes)
         report aea, "string"
-    .else
-        .if __target__ & $fff0 = $4020
-            report aea, "string"
-        .endif
-        ; $403x is read only
     .endif
 .endmacro
 
@@ -139,35 +134,15 @@
     .endif
 .endmacro
 
-.macro RMWDUMMYWRITECHECK __operand__, __index__
-    .local resp
-    deferror asisa, error
-
-    .ifdef ::AllowSingleInstructionSerialAccess
-        deferror ::AllowSingleInstructionSerialAccess, asisa
-    .endif
-
-    .ifdef AllowSingleInstructionSerialAccess
-        deferror AllowSingleInstructionSerialAccess, asisa
-    .endif
-
-    resp .set 0
-    contains resp, __operand__, LIBCORE_READONLY;, LIBCORE_WRITEONLY, LIBCORE_STRICT_READONLY, LIBCORE_STRICT_WRITEONLY
-    .if resp
-        report error, "Invalid Access"
-        .exitmacro
-    .endif
-.endmacro
-
 .macro rule __rule__, __param0__
     ; no variables are local to the macro, but the to the macro caller
     .if     .xmatch(__rule__, AllowAccessToStack)
         .ifndef __param0__
-            PROFILE_AllowWriteToStack .set allow
+            deferror PROFILE_AllowAccessToStack, allow
         .elseif .xmatch(__param0__, -)
-            PROFILE_AllowWriteToStack .set error
+            deferror PROFILE_AllowAccessToStack, error
         .elseif .xmatch(__param0__, +)
-            PROFILE_AllowWriteToStack .set allow
+            deferror PROFILE_AllowAccessToStack, allow
         .else
             deferror PROFILE_AllowAccessToStack, __param0__
         .endif
@@ -222,8 +197,7 @@
             deferror PerformAutomaticShadowWrites, __param0__
         .endif
     .else
-    .else
-        .fatal "string"
+        .fatal .sprintf("InvalidIdentifierException: rule '%s' does not exist", .string(__rule__))
     .endif
 .endmacro
 

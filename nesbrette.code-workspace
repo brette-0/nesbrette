@@ -5,7 +5,7 @@
         }
     ],
     "settings": {
-        "workbench.colorTheme": "Cool Cowboy Theme",
+        "workbench.colorTheme": "Default Dark+",
         "hide-files.files": [
             "source",
             ".obsidian",
