@@ -15,6 +15,16 @@
     ; read
     lda PPUCTRL
 
+``ins ##ZP`` - Access Mirror
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    ; store
+    sta ##$00
+    ; read
+    lda ##foo
+
 ``ins !IRQSTATUS`` - Access Erroneous (with Shadow?)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

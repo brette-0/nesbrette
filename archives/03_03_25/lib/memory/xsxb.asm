@@ -17,7 +17,7 @@
 .endmacro
 
 .macro mssb __target__, __reg$__,  __inv$__
-    .local l_target, t_target, w_target
+    .local l_target, t_target, w_target, ahead, exit, loop, l_reg, h_reg
 
     /*
         l ?? yr => mssb
@@ -51,13 +51,13 @@
 
     l_target = .right(1, __target__)
 
-    ldr imm: h_reg, w_target    ; load regs with needed values
+    ld h_reg, #w_target    ; load regs with needed values
 
     ; rolled cost (10d) && 6b, unrolled cost (8d) - 1c && (6d)b
     .repeat w_target, iter
-        ldr ar: wabs, eindex l_target, w_target, iter, (!endian t_target)
+        lda eindex l_target, w_target, iter, (!endian t_target)
         bne ahead
-        der h_reg
+        de h_reg
     .endrepeat
 
     ; failure case, becomes known only on evaluation.
@@ -66,12 +66,12 @@
     bcc exit
     
     ahead:
-        ldr imm: l_reg, $09
+        ld l_reg, #$09
 
     ; the reason this is looped is because speedwise its not bad against its unrolled counterpart at all
     ; unrolled is (6a) + 1c, whereas rolled its only (7a) - 1c.
     loop:
-        der l_reg
+        de  l_reg
         rol
         bcc loop
         
@@ -82,14 +82,14 @@
     ldr imm: __reg__, $00
 
     loop:
-        inr __reg__
+        in __reg__
         ror
         bcc loop
         
 .endmacro
 
 .macro lssb __target__, __reg$__, __inv$__
-    .local l_target, t_target, w_target
+    .local l_target, t_target, w_target, ahead, exit, loop, l_reg, h_reg
 
     /*
         l ?? yr => mssb
@@ -132,12 +132,12 @@
 
     l_target = .right(1, __target__)
 
-    ldr imm: h_reg, w_target    ; load regs with needed values
+    ld h_reg, #w_target    ; load regs with needed values
 
     .repeat w_target, iter
-        ldr ar: wabs, eindex l_target, w_target, iter, (endian t_target)
+        lda eindex l_target, w_target, iter, (endian t_target)
         bne ahead
-        der h_reg
+        de  h_reg
     .endrepeat
 
     ; failure case, becomes known only on evaluation.
@@ -146,10 +146,10 @@
     bcc exit
     
     ahead:
-        ldr imm: l_reg, $00
+        ld l_reg, #$00
 
     loop:
-        inr l_reg
+        in  l_reg
         ror
         bcc loop
         
@@ -157,7 +157,7 @@
 .endmacro
 
 .macro msub __target__, __reg$__,  __inv$__
-    .local l_target, t_target, w_target
+    .local l_target, t_target, w_target, ahead, exit, loop, l_reg, h_reg
 
     /*
         l ?? yr => mssb
@@ -188,13 +188,13 @@
 
     l_target = .right(1, __target__)
 
-    ldr imm: h_reg, w_target    ; load regs with needed values
+    ld h_reg, #w_target    ; load regs with needed values
 
     .repeat w_target, iter
-        ldr ar: wabs, eindex l_target, w_target, iter, (!endian t_target)
+        lda eindex l_target, w_target, iter, (!endian t_target)
         cmp #$ff
         bne ahead
-        der h_reg
+        de  h_reg
     .endrepeat
 
     ; failure case, becomes known only on evaluation.
@@ -203,10 +203,10 @@
     bcs exit
     
     ahead:
-        ldr imm: l_reg, $09
+        ld l_reg, #$09
 
     loop:
-        der l_reg
+        de  l_reg
         rol
         bcs loop
         
@@ -214,7 +214,7 @@
 .endmacro
 
 .macro lsub __target__, __reg$__, __inv$__
-    .local l_target, t_target, w_target
+    .local l_target, t_target, w_target, ahead, exit, loop, l_reg, h_reg
 
     /*
         l ?? yr => mssb
@@ -245,13 +245,13 @@
 
     l_target = .right(1, __target__)
 
-    ldr imm: h_reg, w_target    ; load regs with needed values
+    ld h_reg, #w_target    ; load regs with needed values
 
     .repeat w_target, iter
-        ldr ar: wabs, eindex l_target, w_target, iter, (endian t_target)
+        lda eindex l_target, w_target, iter, (endian t_target)
         cmp #$ff
         bne ahead
-        der h_reg
+        de  h_reg
     .endrepeat
 
     ; failure case, becomes known only on evaluation.
@@ -260,10 +260,10 @@
     bcs exit
     
     ahead:
-        ldr imm: l_reg, $00
+        ld l_reg, #$00
 
     loop:
-        inr l_reg
+        in l_reg
         rol
         bcc loop
         

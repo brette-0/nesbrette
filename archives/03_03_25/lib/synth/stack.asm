@@ -2,6 +2,15 @@ deferror ::PROFILE_AllowAccessToStack, error
 deferror ::PROFILE_AllowErroneousAccess, error
 deferror ::PROFILE_AllowIndexedRegisterAccess, error
 
+.macro ldstack
+    php
+    pla
+.endmacro
+
+.macro ldstack
+    pha
+    plp
+.endmacro
 
 .macro lds __offset$__, __reg$__
     .local stacksafety
@@ -35,22 +44,27 @@ deferror ::PROFILE_AllowIndexedRegisterAccess, error
 .endmacro
 
 .macro sts __offset$__
+    .local stacksafety
+
+    stacksafety = PROFILE_AllowAccessToStack
+    rule AllowAccessToStack, allow
     tsx
 
     .ifblank __offset$__
-        _lds_offset = $00
+        _sts_offset = $00
     .else
-        _lds_offset = null_coalesce __offset$__, $00
+        _sts_offset = null_coalesce __offset$__, $00
     .endif
 
-    .if _lds_reg = null
-        .fatal ""
-    .endif
-
-    sta $100 + _lds_offset, x
+    sta $100 + _sts_offset, x
+    rule AllowAccessToStack, stacksafety
 .endmacro
 
 .macro cps __offset$__
+    .local stacksafety
+
+    stacksafety = PROFILE_AllowAccessToStack
+    rule AllowAccessToStack, allow
     tsx
 
     _lds_reg .set ar
@@ -62,4 +76,5 @@ deferror ::PROFILE_AllowIndexedRegisterAccess, error
     .endif
     
     cmp $100 + _lds_offset, x
+    rule AllowAccessToStack, stacksafety
 .endmacro

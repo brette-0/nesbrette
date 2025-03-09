@@ -10,5 +10,4 @@ It should also be noted that by using SMC (Self-Modifying Code) you can improve 
    :caption: Contents:
    
    s6502
-   i6502
    stack

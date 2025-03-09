@@ -221,7 +221,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 ``register``
 ************
 
-``inr gpr`` - Incrment Register
+``in gpr`` - Incrment Register
 """""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -235,7 +235,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
         bne @timer
 
 
-``der gpr`` - Decrment Register
+``de gpr`` - Decrment Register
 """""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -247,7 +247,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
         der
         bne @timer
 
-``tar gpr`` - Transfer A to Register
+``ta gpr`` - Transfer A to Register
 """"""""""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -256,7 +256,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     tar inreg   ; a -> x
 
-``tyr gpr`` - Transfer Y to Register
+``ty gpr`` - Transfer Y to Register
 """"""""""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -265,7 +265,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     tyr inreg   ; y -> x
 
-``txr gpr`` - Transfer X to Register
+``tx gpr`` - Transfer X to Register
 """"""""""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -274,34 +274,8 @@ Simply encaging your code within a page can reduce the amount of updates needed,
 
     txr inreg   ; x -> y
 
-``tra gpr`` - Transfer Register to a
-""""""""""""""""""""""""""""""""""""
 
-.. code-block:: 
-
-    inreg = yr
-
-    tra inreg   ; y -> a
-
-``try gpr`` - Transfer Register to Y
-""""""""""""""""""""""""""""""""""""
-
-.. code-block:: 
-
-    inreg = xr
-
-    try inreg   ; x -> y
-
-``trx gpr`` - Transfer Register to X
-""""""""""""""""""""""""""""""""""""
-
-.. code-block:: 
-
-    inreg = yr
-
-    trx inreg   ; y -> x
-
-``trr gpr: gpr`` - Transfer Register to Register
+``t gpr, gpr`` - Transfer Register to Register
 """"""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -312,7 +286,7 @@ Simply encaging your code within a page can reduce the amount of updates needed,
     trr yr::xr  ; y -> x
 
 
-``ldr mode: reg, int, error`` - Load Register
+``ld mode: reg, operand, index, error`` - Load Register
 """"""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
@@ -336,7 +310,7 @@ This instruction *may* throw a ``ConstantParameterRangeException`` which indicat
     ldr zpx: yr, $ea, warning
 
 
-``str mode: reg, int, error, error`` - Store Register
+``st reg, operand, index, error, error`` - Store Register
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
@@ -360,7 +334,7 @@ Store any GPR into any address with any memory address mode. Same as ``ldr`` thi
     str zpx: yr, $ea, warning
     str zpx: yr, $ea, warning, fatal
 
-``cpr mode: reg, int, error`` - Compare Register
+``cp reg, operand, index, error`` - Compare Register
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block::
@@ -427,7 +401,7 @@ Creates or modifies the rules in the local environment for potentially harmful a
 
 The following instructions overload the existing ``6502`` mnemonics, be it enabling illegal instruction support for ``ca65hl/CustomSyntax``, or enabling safety features for ``lax``, fixing the quirks of ``brk``'s ungenerated but thrown-away operand or attatching whole new functions to the unused ``sed`` and ``cld`` there is a world to be gained from mnemonic overloading.
 
-``brk byte, reg: reg, byte`` - Break with Options
+``brk byte`` - Break
 """""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: 
@@ -435,10 +409,7 @@ The following instructions overload the existing ``6502`` mnemonics, be it enabl
     brk                 ; brk $00
     brk $02             ; brk $02
     brk null            ; brk
-    brk $02, yr: xr     ; ldxy PC : brk $02
-    brk $02, ar: xr, 3  ; ldax PC : ldy #$03 : brk
     
-
 ``bit abs, zp, #imm`` - Bitcheck with idtable Immediate
 """""""""""""""""""""""""""""""""""""""""""""""""""
 

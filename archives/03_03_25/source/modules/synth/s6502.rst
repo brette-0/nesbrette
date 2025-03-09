@@ -1,0 +1,59 @@
+``s6502``
+---------
+
+The following instructions are synthetic instructions mostly found and created elsewhere but given a mneumonic by ``nesbrette``. These should **not** be used for the majority case as they complete typical functions with additional overhead suited for few use cases.
+
+``sasl`` - Signed Arithmetic Left Shift
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    lda #$f4
+    sasl        ; a => $f8
+
+``slsr`` - Signed Arithmetic Right Shift
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    lda #$f8
+    slsr        ; a => $f4
+
+``neg`` - Make Negative
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    lda #$05
+    neg         ; a => $fb, -$05
+
+.. note::
+    This is different to simply ``eor #$ff`` as that yields a difference of ``1`` from the target, this process normally takes ``6`` cycles but if carry is passed with ``neg 0/1`` then it only takes ``4`` cycles.
+
+``ccf`` - Complement Carry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    clc
+    ccf         ; c => 1 
+    ccf         ; c => 0
+
+``iror`` - Inner Right Roll
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    lda #$81
+    iror        ; a => $50
+
+``irol`` - Inner Left Roll
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: 
+
+    lda #$81
+    irol        ; a => $03
+
+.. note::
+    It should be noted that ``irol`` is twice as fast as ``iror`` and this cannot be helped.

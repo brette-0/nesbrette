@@ -1,4 +1,4 @@
-includefrom synth, stack
+includefrom memory, xsxb
 
 .segment "HEADER"
     header \
@@ -8,17 +8,15 @@ includefrom synth, stack
 
 .segment "MEMORY"
 
-foo: .res 4
-bar: .res 4
+
 
 .segment "CODE"
 
-typeas foo, u32
-typeas bar, u32
 
 reset:
-    lds
-    lda $100
+
+explicit "MEMORY", u8 foo = #$80   ; target is decided by .res
+
 
 ; TODO: work on LUA scripts (we need devtools
 ; TODO: Use "+op" to indicate determinstic positive and "-op" for determinsitic negative

@@ -187,35 +187,35 @@
     .endif
 .endmacro
 
-.macro in __reg__, __operand__, __index__
+.macro in __reg__
     .ifblank    __reg__
         .fatal 
     .elseif .xmatch(__reg__, x)
-        inx __operand__, __index__
+        inx
     .elseif .xmatch(__reg__, y)
-        iny __operand__, __index__
+        iny
     .elseif __reg__ = xr
-        inx __operand__, __index__
+        inx
     .elseif __reg__ = yr
-        iny __operand__, __index__
+        iny
     .else
-        inc __operand__, __index__
+        inc __reg__
     .endif
 .endmacro
 
-.macro de __reg__, __operand__, __index__
+.macro de __reg__
     .ifblank    __reg__
         .fatal 
     .elseif .xmatch(__reg__, x)
-        dex __operand__, __index__
+        dex
     .elseif .xmatch(__reg__, y)
-        dey __operand__, __index__
+        dey
     .elseif __reg__ = xr
-        dex __operand__, __index__
+        dex
     .elseif __reg__ = yr
-        dey __operand__, __index__
+        dey
     .else
-        dec __operand__, __index__
+        dec __reg__
     .endif
 .endmacro
 

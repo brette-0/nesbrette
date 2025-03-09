@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Syntax.md",
-                "mode": "source",
+                "file": "README.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Syntax"
+              "title": "README"
             }
           }
         ]
@@ -165,24 +165,29 @@
   },
   "active": "b0061fb007547c07",
   "lastOpenFiles": [
-    "example/src/nb.o",
-    "build/html/searchindex.js.tmp",
+    "archives/03_03_25/source/modules/synth/stack.rst",
+    "archives/03_03_25/source/modules/synth/synth.rst",
+    "archives/03_03_25/source/modules/synth/s6502.rst",
+    "archives/03_03_25/source/modules/synth/overload.rst",
+    "archives/03_03_25/source/modules/memory/memory.rst",
+    "archives/03_03_25/source/modules/math/math.rst",
+    "archives/03_03_25/source/modules/math/div.rst",
+    "archives/03_03_25/source/modules/dev/safe.rst",
+    "archives/03_03_25/source/modules/dev/dev.rst",
+    "archives/03_03_25/source/modules/core/header.rst",
+    "archives/03_03_25/source/modules/core/theory.rst",
+    "archives/03_03_25/source/theory/ir.md",
+    "archives/03_03_25/lib/ca65hl/README.md",
+    "archives/03_03_25/lib/ca65hl/manual.md",
+    "archives/03_03_25/theory/crashdump.md",
+    "Syntax.md",
     "theory/crashdump.md",
     "README.md",
-    "Syntax.md",
-    "build/html/_static/haiku.css",
     "build/html/_static/bullet_orange.png",
     "build/html/_static/bg-page.png",
     "build/html/_static/alert_warning_32.png",
     "build/html/_static/alert_info_32.png",
-    "theory/luatalk.asm",
     "theory/debug.lua.md",
-    "example/post/adfc.json",
-    "example/post/equs.json",
-    "example/post/dfc.json",
-    "example/post",
-    "post/debug.py",
-    "post",
     "source/theory/ir.md",
     "Pasted image 20250202202940.png",
     "archives/docs/modules/synthetic/Stack.md",
@@ -204,11 +209,7 @@
     "archives/docs/concepts/template.md",
     "archives/docs/concepts/smc.md",
     "archives/docs/Typing, Templating & Call Handlers.md",
-    "archives/docs/Table.md",
-    "archives/docs/exclusions.md",
     "archives/profiling/math/cmult_results/cmult_accumulator_mode_unbiased_complexity_profiling.png",
-    "archives/profiling/math/cmult_results/cmult_accumulator_mode_multiplier_profiling.png",
-    "archives/thoughts/trig.md",
-    "archives/thoughts/TODO.md"
+    "archives/profiling/math/cmult_results/cmult_accumulator_mode_multiplier_profiling.png"
   ]
 }

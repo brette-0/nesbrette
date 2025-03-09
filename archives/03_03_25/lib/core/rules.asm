@@ -77,32 +77,32 @@
 .macro SYSWRITE __target__, __index__
     .local resp
 
-    deferror warning, aats
-    deferror error,   aea
-    deferror error,   aira    ; indexed register locations
+    deferror aats, warning
+    deferror aea,  error
+    deferror aira, error        ; indexed register locations
 
     .ifdef ::PROFILE_AllowAccessToStack
-        deferror ::PROFILE_AllowAccessToStack, aats
+        deferror aats, ::PROFILE_AllowAccessToStack
     .endif
 
     .ifdef PROFILE_AllowAccessToStack
-        deferror PROFILE_AllowAccessToStack, aats
+        deferror aats, PROFILE_AllowAccessToStack
     .endif
     
     .ifdef ::PROFILE_AllowErroneousAccess
-        deferror ::PROFILE_AllowErroneousAccess, aea
+        deferror aea, ::PROFILE_AllowErroneousAccess
     .endif
 
     .ifdef PROFILE_AllowErroneousAccess
-        deferror PROFILE_AllowErroneousAccess, aea
+        deferror aea, PROFILE_AllowErroneousAccess
     .endif
 
     .ifdef ::PROFILE_AllowIndexedRegisterAccess
-        deferror ::PROFILE_AllowIndexedRegisterAccess, aira
+        deferror aira, ::PROFILE_AllowIndexedRegisterAccess
     .endif
 
     .ifdef PROFILE_AllowIndexedRegisterAccess
-        deferror PROFILE_AllowIndexedRegisterAccess, aira
+        deferror aira, PROFILE_AllowIndexedRegisterAccess
     .endif
 
     TODO: Depend on LIBCORE::BUSCONFLICT
